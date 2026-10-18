@@ -56,7 +56,28 @@ python $E init <id>          # creates projects/<id>/episode.json
 5. `python $E keyframes <id>` then `python $E sheet <id>` → ✋ review `review/_contact.jpg`.
 6. `python $E clips <id>` and `python $E music <id>` (pick one into `music.selected`).
 7. `python $E sfx <id>` (only fetches cues the library lacks) → `build` → `mix` → `render`.
-8. `python $E credits <id>` → paste `renders/CREDITS.txt` into the description; `python $E cost <id>`.
+8. `python $E publish <id>` → `renders/deliverables/` (see below); `python $E cost <id>`.
+
+## Tiers and escalation
+
+`"tier": "premium"` (default — V2: Nano Banana Pro + Kling v2.1) or `"tier": "budget"`
+(Nano Banana 2 + MiniMax H3-max). When a budget shot fails review, escalate just that shot:
+`python $E keyframes <id> sh14 --premium` / `python $E clips <id> sh09 --premium`.
+
+## Deliverables (`publish` step)
+
+| File | Use |
+|---|---|
+| `short.mp4` | 1080×1920, -14 LUFS, **seamless loop**: last 0.5 s dissolves into frame 0 and the music crossfades into its own start |
+| `cover.jpg` | 1080×1920 cover for Shorts (custom thumbnail where available), TikTok, Reels, Facebook; title kept inside the centred 1080×1350 band |
+| `cover-crops.jpg` | check of the 9:16 / IG grid 3:4 / 4:5 / TikTok-UI crops |
+| `captions.srt` | upload as subtitles (accessibility, search, auto-translate) |
+| `publish.md` / `.json` | per-platform title, description (with credits + sources), tags, pinned comment, captions, upload checklist |
+| `CREDITS.txt` | CC-BY attributions required in every description |
+
+Fill `episode.json` → `"publish"` with `cover` (`image`, `kicker`, `title`, `accent`, `scale`, `y`),
+`youtube` (`title`, `description`, `hashtags`, `tags`, `pinned_comment`, `playlist`) and
+`tiktok` / `instagram` / `facebook` `caption`.
 
 ## `episode.json` reference
 

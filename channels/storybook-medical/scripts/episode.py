@@ -16,10 +16,14 @@ Steps (in order):
     mix         narration + ducked music + SFX cues, -14 LUFS                             (free)
     render      Remotion render through video_compose (atelier) + final review           (free)
     credits     renders/CREDITS.txt for the video description                            (free)
+    publish     renders/deliverables/: looping short.mp4, cover.jpg + crop check, captions.srt,
+                per-platform titles/captions, upload checklist, credits                  (free)
     cost        print the paid-call ledger
 
-Models: the V2 defaults (Nano Banana Pro + Kling v2.1) apply unless episode.json sets
-"models": {"image": "nano-banana-2", "clip": "h3-max"}; a single keyframe/clip may also set "model".
+Tiers: "tier": "premium" (default, V2: Nano Banana Pro + Kling v2.1) or "budget" (Nano Banana 2 +
+MiniMax H3-max). Escalate a failed shot to premium without editing JSON:
+    episode.py keyframes <id> sh14 --premium      episode.py clips <id> sh09 --premium
+A single keyframe/clip may also pin "model"; "models": {...} overrides the tier.
 
 Optional names limit refs/keyframes/clips/music to those entries (e.g. re-roll one keyframe).
 Every paid call is appended to artifacts/cost_log.json.
@@ -48,6 +52,7 @@ from tools.tool_registry import registry  # noqa: E402
 
 PLAYBOOK = "storybook-medical"
 VOICE = {"voice": "Liam", "model_id": "eleven-v3", "stability": 0.4, "speed": 1.2}
+LOOP_SECONDS = 0.5  # Shorts/TikTok/Reels loop: last 0.5 s dissolves (picture) and crossfades (music) into the start
 TEMPO = 1.14
 CLIP_VARIANT = "v2.1/standard"
 PRICES = {"image": 0.15, "clip": 0.28, "music": 0.03, "tts_per_1k_chars": 0.10}
@@ -55,11 +60,23 @@ PRICES = {"image": 0.15, "clip": 0.28, "music": 0.03, "tts_per_1k_chars": 0.10}
 # "models": {"image": "nano-banana-2", "clip": "h3-max"} in episode.json.
 IMAGE_MODELS = {"gemini-3-pro-image": 0.15, "nano-banana-2": 0.08}
 CLIP_MODELS = {"kling-v2.1-standard": 0.28, "h3-max": 0.0325 * 5}
+TIERS = {
+    "premium": ("gemini-3-pro-image", "kling-v2.1-standard"),  # V2 pilot setup (default)
+    "budget": ("nano-banana-2", "h3-max"),                      # tested on episode 2, ~$2.60
+}
+PREMIUM = TIERS["premium"]
 
 
 def model_choice(ep: dict) -> tuple[str, str]:
+    image, clip = TIERS[ep.get("tier", "premium")]
     m = ep.get("models", {})
-    return m.get("image", "gemini-3-pro-image"), m.get("clip", "kling-v2.1-standard")
+    return m.get("image", image), m.get("clip", clip)
+
+
+def split_premium(only) -> tuple[list[str], bool]:
+    """`--premium` re-rolls the named items with the premium-tier model (escalation after a failed review)."""
+    names = [n for n in only if n != "--premium"]
+    return names, "--premium" in only
 
 
 # ── helpers ──────────────────────────────────────────────────────────────
@@ -131,6 +148,7 @@ TAIL = " No text, no labels, no captions, no watermark."
 
 
 def gen_images(pid: str, section: str, out_dir: str, only: list[str]):
+    only, premium = split_premium(only)
     ep = load_ep(pid)
     items = ep.get(section, {})
     names = [n for n in items if not only or n in only]
@@ -149,7 +167,7 @@ def gen_images(pid: str, section: str, out_dir: str, only: list[str]):
             return name, False, f"missing refs {missing}"
         frame = " Single frame from an animated film, not a model sheet." if section == "keyframes" else ""
         prompt = LOCK + spec.get("roles", "") + " " + spec["prompt"] + frame + f" Aspect {spec.get('aspect', '9:16')}." + TAIL + " " + style
-        model = spec.get("model", image_model)
+        model = PREMIUM[0] if premium else spec.get("model", image_model)
         r = nb.execute({"model": model, "prompt": prompt, "image_paths": refs,
                         "aspect_ratio": spec.get("aspect", "9:16"), "resolution": "2K", "output_format": "png",
                         "safety_tolerance": "5", "output_path": str(out / f"{name}.png")})
@@ -229,6 +247,7 @@ def step_keyframes(pid, *only):
 
 
 def step_clips(pid, *only):
+    only, premium = split_premium(only)
     ep, p = load_ep(pid), proj(pid)
     t = tools()
     _, clip_model = model_choice(ep)
@@ -238,7 +257,7 @@ def step_clips(pid, *only):
     def run(sid):
         kf = p / "assets/images/keyframes" / f"{sid}.png"
         out = p / "assets/video" / f"{sid}.mp4"
-        model = ep["clips"][sid].get("model", clip_model)
+        model = PREMIUM[1] if premium else ep["clips"][sid].get("model", clip_model)
         prompt = ep["clips"][sid]["motion"] + keep
         if model == "h3-max":
             r = t["h3_max_video"].execute({"model": "h3-max", "prompt": prompt, "image_path": str(kf), "duration": 5,
@@ -373,7 +392,7 @@ def step_build(pid, *_):
                       "punch": re.sub(r"\W", "", t.lower()) in punch,
                       "breakAfter": bool(re.search(r"[.,?!]$", t)) and t.lower() != "st."})
     props = {"totalSeconds": total, "shots": shots, "overlays": ep["overlays"], "words": words,
-             "wordsPerPage": 3, "captionY": 1180}
+             "wordsPerPage": 3, "captionY": 1180, "loopSeconds": ep.get("loop_seconds", LOOP_SECONDS)}
     json.dump(props, open(rem / "props.json", "w", encoding="utf-8"), indent=1)
     gaps = [(a["id"], b["id"]) for a, b in zip(shots, shots[1:]) if abs(a["end"] - b["start"]) > 0.02]
     edit = {
@@ -395,11 +414,22 @@ def step_mix(pid, *_):
     tmp = p / "assets/audio/_mix"
     tmp.mkdir(exist_ok=True)
     src = p / "assets/music" / f"{ep['music']['selected']}.mp3"
-    if duration(src) < total + 1:
+    L = ep.get("loop_seconds", LOOP_SECONDS)
+    if duration(src) < total + L + 1:
         ff("-i", str(src), "-i", str(src), "-filter_complex", "[0:a][1:a]acrossfade=d=2:c1=tri:c2=tri[a]", "-map", "[a]",
            "-ar", "48000", str(tmp / "loop.wav"))
         src = tmp / "loop.wav"
-    ff("-i", str(src), "-af", f"atrim=0:{total},afade=t=in:d=0.4,afade=t=out:st={total - 1.6}:d=1.6", "-ar", "48000", "-ac", "2", str(tmp / "m.wav"))
+    if L:
+        # Bed plays source[L : L+total]; its last L seconds crossfade into source[0:L], so when the platform
+        # loops back to 0 (which plays source[L...]) the music continues without a seam.
+        ff("-i", str(src), "-filter_complex",
+           f"[0:a]asplit=2[a][b];"
+           f"[a]atrim={L}:{L + total},asetpts=PTS-STARTPTS,afade=t=out:st={total - L}:d={L}[body];"
+           f"[b]atrim=0:{L},asetpts=PTS-STARTPTS,afade=t=in:d={L},adelay={int((total - L) * 1000)}|{int((total - L) * 1000)}[head];"
+           f"[body][head]amix=inputs=2:duration=first:normalize=0[m]",
+           "-map", "[m]", "-ar", "48000", "-ac", "2", str(tmp / "m.wav"))
+    else:
+        ff("-i", str(src), "-af", f"atrim=0:{total},afade=t=in:d=0.4,afade=t=out:st={total - 1.6}:d=1.6", "-ar", "48000", "-ac", "2", str(tmp / "m.wav"))
     i, _ = loudness(tmp / "m.wav")
     ff("-i", str(tmp / "m.wav"), "-af", f"volume={ep['music'].get('lufs', -22) - i:.2f}dB", str(tmp / "bed.wav"))
     inputs = ["-i", str(narr), "-i", str(tmp / "bed.wav")]
@@ -414,8 +444,10 @@ def step_mix(pid, *_):
         inputs += ["-i", str(f)]
         gain = c.get("gain_db", -12) - 1 - peak_db(f)
         chain = f"[{n + 2}:a]aformat=sample_rates=48000:channel_layouts=stereo"
-        if c.get("dur"):
-            chain += f",aloop=loop=-1:size=2e9,atrim=0:{c['dur']},afade=t=out:st={max(0, c['dur'] - 0.25)}:d=0.25"
+        # Library files can hold several hits or long beds; without an explicit "dur" cap one-shots at 3 s.
+        d = c.get("dur") or min(3.0, duration(f))
+        loop = ",aloop=loop=-1:size=2e9" if c.get("dur") and c["dur"] > duration(f) else ""
+        chain += f"{loop},atrim=0:{d},afade=t=out:st={max(0, d - 0.2)}:d=0.2"
         ms = int(round(c["at"] * 1000))
         chain += f",volume={gain:.2f}dB,adelay={ms}|{ms}[s{n}]"
         parts.append(chain)
@@ -466,6 +498,125 @@ def step_credits(pid, *_):
         lines += ["", "Sources:"] + [f"- {s.split(' (')[0]}" for s in ep["sources"]]
     (p / "renders/CREDITS.txt").write_text("\n".join(lines), encoding="utf-8")
     print("\n".join(lines))
+
+
+def _srt_time(t: float) -> str:
+    ms = int(round(t * 1000))
+    return f"{ms // 3600000:02d}:{ms // 60000 % 60:02d}:{ms // 1000 % 60:02d},{ms % 1000:03d}"
+
+
+def _write_srt(words: list[dict], path: Path):
+    """Caption cues of up to 7 words / 3 s, broken at sentence punctuation."""
+    cues, cur = [], []
+    for w in words:
+        cur.append(w)
+        if re.search(r"[.?!,]$", w["word"]) and len(cur) >= 3 or len(cur) >= 7 or cur[-1]["end"] - cur[0]["start"] > 3.0:
+            cues.append(cur)
+            cur = []
+    if cur:
+        cues.append(cur)
+    lines = []
+    for i, c in enumerate(cues, 1):
+        lines += [str(i), f"{_srt_time(c[0]['start'])} --> {_srt_time(c[-1]['end'] + 0.15)}", " ".join(w["word"] for w in c), ""]
+    path.write_text("\n".join(lines), encoding="utf-8")
+
+
+def _cover_crops(cover: Path, out: Path):
+    """Preview how the cover survives each platform crop: full 9:16, IG grid 3:4, 4:5 feed, TikTok UI overlay."""
+    im = Image.open(cover).convert("RGB")
+    W, H = im.size
+    tiles = [("9:16 full", im.copy())]
+    for label, h in (("IG grid 3:4", int(W * 4 / 3)), ("4:5 feed", int(W * 5 / 4))):
+        top = (H - h) // 2
+        tiles.append((label, im.crop((0, top, W, top + h))))
+    tk = im.copy()
+    d = ImageDraw.Draw(tk, "RGBA")
+    d.rectangle([0, H - 320, W, H], fill=(255, 0, 0, 90))        # caption/UI zone
+    d.rectangle([W - 140, H - 900, W, H - 320], fill=(255, 0, 0, 90))  # action buttons
+    tiles.append(("TikTok UI", tk))
+    th = 640
+    row = [t.resize((int(t.width * th / t.height), th)) for _, t in tiles]
+    sheet = Image.new("RGB", (sum(r.width + 12 for r in row), th + 40), "white")
+    dd, x = ImageDraw.Draw(sheet), 0
+    for (label, _), r in zip(tiles, row):
+        sheet.paste(r, (x, 40))
+        dd.text((x + 4, 10), label, fill="black")
+        x += r.width + 12
+    sheet.save(out, quality=86)
+
+
+CHECKLIST = """## Upload checklist
+
+**YouTube Shorts** (Studio on desktop)
+- Upload `short.mp4`; paste title, description, tags.
+- Thumbnail: upload `cover.jpg` if your account shows the custom-thumbnail option for Shorts; otherwise pick the frame closest to the cover.
+- Subtitles → upload `captions.srt` (English).
+- Audience: **No, it's not made for kids**. Category: Education. Add to the series playlist.
+- Altered or synthetic content: our illustrated style is not realistic, so disclosure is not required; ticking it is harmless if unsure.
+- After publishing: post and pin the pinned comment. When a long video exists, set it as the Short's **Related video**.
+
+**TikTok**
+- Upload `short.mp4`; Edit cover → upload `cover.jpg`; paste the TikTok caption.
+- Turn on **AI-generated content** label (safe default for AI-assisted visuals). Allow Duet/Stitch.
+
+**Instagram Reels**
+- Upload `short.mp4`; Edit cover → Add from camera roll → `cover.jpg`; check the profile-grid preview.
+- Paste the Instagram caption; add the AI label if Instagram prompts for it.
+
+**Facebook Reels**
+- Upload `short.mp4` with the Facebook caption and `cover.jpg`.
+
+Credits: every description must include `CREDITS.txt` (CC-BY sound effects).
+"""
+
+
+def step_publish(pid, *_):
+    """Assemble renders/deliverables/: short.mp4, cover.jpg, cover-crops.jpg, captions.srt, publish.md/json, CREDITS.txt."""
+    ep, p = load_ep(pid), proj(pid)
+    pub = ep.get("publish")
+    if not pub:
+        raise SystemExit('episode.json needs a "publish" section (cover, youtube, tiktok, instagram, facebook)')
+    out = p / "renders/deliverables"
+    out.mkdir(parents=True, exist_ok=True)
+    shutil.copy(p / "renders/final.mp4", out / "short.mp4")
+
+    # cover via the Remotion StorybookCover still (same fonts/colours as the video)
+    c = pub["cover"]
+    rem = p / "remotion"
+    for f in ("StorybookShort.tsx", "Root.tsx", "index.tsx"):
+        shutil.copy(KIT / "remotion" / f, rem / f)
+    Image.open(resolve_ref(pid, c["image"])).convert("RGB").resize((1440, 2560), Image.LANCZOS).save(
+        rem / "public/img/cover.jpg", "JPEG", quality=92)
+    props = {"image": "img/cover.jpg", "title": c["title"], "kicker": c.get("kicker", ""),
+             "accentWords": c.get("accent", []), "scale": c.get("scale", 1.05), "x": c.get("x", 0), "y": c.get("y", 0)}
+    json.dump(props, open(rem / "cover-props.json", "w", encoding="utf-8"))
+    composer = REPO / "remotion-composer"
+    entry = tools()["video_compose"]._stage_atelier_project((rem / "index.tsx").resolve(), composer.resolve())
+    png = out / "cover.png"
+    subprocess.run(["npx", "remotion", "still", str(entry), "StorybookCover", str(png), f"--props={(rem / 'cover-props.json').resolve()}",
+                    f"--public-dir={(rem / 'public').resolve()}", "--log=error"], cwd=composer, check=True, shell=sys.platform == "win32")
+    Image.open(png).convert("RGB").save(out / "cover.jpg", "JPEG", quality=88, optimize=True)
+    png.unlink()
+    _cover_crops(out / "cover.jpg", out / "cover-crops.jpg")
+
+    _write_srt(json.load(open(p / "artifacts/word_timestamps.json", encoding="utf-8")), out / "captions.srt")
+    step_credits(pid)
+    shutil.copy(p / "renders/CREDITS.txt", out / "CREDITS.txt")
+    credits = (p / "renders/CREDITS.txt").read_text(encoding="utf-8")
+
+    yt = pub["youtube"]
+    desc = yt["description"].strip() + "\n\n" + " ".join(yt.get("hashtags", [])) + "\n\n" + credits
+    md = [f"# {ep['title']}", "", f"Length {duration(out / 'short.mp4'):.1f}s · 1080×1920 · -14 LUFS · loops seamlessly", "",
+          "## YouTube Shorts", f"**Title:** {yt['title']}", "", "**Description:**", "```", desc, "```",
+          f"**Tags:** {', '.join(yt.get('tags', []))}", "", f"**Pinned comment:** {yt.get('pinned_comment', '')}", ""]
+    for plat in ("tiktok", "instagram", "facebook"):
+        if plat in pub:
+            md += [f"## {plat.title()}", "```", pub[plat]["caption"].strip(), "```", ""]
+    md += [CHECKLIST]
+    (out / "publish.md").write_text("\n".join(md), encoding="utf-8")
+    json.dump({**pub, "youtube": {**yt, "full_description": desc}}, open(out / "publish.json", "w", encoding="utf-8"), indent=2)
+    size = (out / "cover.jpg").stat().st_size / 1e6
+    print(f"deliverables -> {out}\n  short.mp4, cover.jpg ({size:.2f} MB), cover-crops.jpg, captions.srt, publish.md, publish.json, CREDITS.txt")
 
 
 def step_cost(pid, *_):

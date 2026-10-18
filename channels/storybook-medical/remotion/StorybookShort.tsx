@@ -2,6 +2,7 @@ import React from "react";
 import {
   AbsoluteFill,
   Easing,
+  Freeze,
   Img,
   interpolate,
   OffthreadVideo,
@@ -66,6 +67,8 @@ export interface StorybookShortProps {
   words: Word[];
   wordsPerPage?: number;
   captionY?: number;
+  /** Seconds at the end that dissolve into frame 0 so a looping player wraps without a jump. */
+  loopSeconds?: number;
 }
 
 const ease = Easing.bezier(0.33, 0, 0.2, 1);
@@ -379,20 +382,87 @@ const Captions: React.FC<{ words: Word[]; per: number; y: number }> = ({ words, 
 
 // ── Composition ──────────────────────────────────────────────────────────
 
-export const StorybookShort: React.FC<StorybookShortProps> = ({ shots, overlays, words, wordsPerPage, captionY }) => (
-  <AbsoluteFill style={{ backgroundColor: CHARCOAL }}>
-    {shots.map((s) => (
-      <Sequence key={s.id} from={Math.round(s.start * FPS)} durationInFrames={Math.max(1, Math.round((s.end - s.start) * FPS))}>
-        <ShotLayer shot={s} />
-      </Sequence>
-    ))}
-    {/* Painterly vignette */}
-    <AbsoluteFill style={{ background: "radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0) 55%, rgba(10,12,14,0.55) 100%)" }} />
-    {overlays.map((o, i) => (
-      <Sequence key={i} from={Math.round(o.start * FPS)} durationInFrames={Math.max(1, Math.round((o.end - o.start) * FPS))}>
-        <OverlayLayer o={o} />
-      </Sequence>
-    ))}
-    <Captions words={words} per={wordsPerPage ?? 3} y={captionY ?? 1180} />
-  </AbsoluteFill>
-);
+export const StorybookShort: React.FC<StorybookShortProps> = ({ totalSeconds, shots, overlays, words, wordsPerPage, captionY, loopSeconds }) => {
+  const frame = useCurrentFrame();
+  const total = Math.round(totalSeconds * FPS);
+  const loopFrames = Math.round((loopSeconds ?? 0) * FPS);
+  const loopIn = loopFrames
+    ? interpolate(frame, [total - loopFrames, total - 1], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: ease })
+    : 0;
+  return (
+    <AbsoluteFill style={{ backgroundColor: CHARCOAL }}>
+      {shots.map((s) => (
+        <Sequence key={s.id} from={Math.round(s.start * FPS)} durationInFrames={Math.max(1, Math.round((s.end - s.start) * FPS))}>
+          <ShotLayer shot={s} />
+        </Sequence>
+      ))}
+      {/* Loop seam: the opening frame fades in over the tail, so frame N-1 ≈ frame 0. */}
+      {loopIn > 0 && shots.length ? (
+        <AbsoluteFill style={{ opacity: loopIn }}>
+          <Freeze frame={0}>
+            <ShotLayer shot={shots[0]} />
+          </Freeze>
+        </AbsoluteFill>
+      ) : null}
+      {/* Painterly vignette */}
+      <AbsoluteFill style={{ background: "radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0) 55%, rgba(10,12,14,0.55) 100%)" }} />
+      <AbsoluteFill style={{ opacity: 1 - loopIn }}>
+        {overlays.map((o, i) => (
+          <Sequence key={i} from={Math.round(o.start * FPS)} durationInFrames={Math.max(1, Math.round((o.end - o.start) * FPS))}>
+            <OverlayLayer o={o} />
+          </Sequence>
+        ))}
+        <Captions words={words} per={wordsPerPage ?? 3} y={captionY ?? 1180} />
+      </AbsoluteFill>
+    </AbsoluteFill>
+  );
+};
+
+// ── Cover (1080×1920; title kept inside the centred 1080×1350 band for 3:4 / 4:5 grid crops) ──
+
+export interface StorybookCoverProps {
+  image: string;
+  kicker?: string;
+  title: string;
+  accentWords?: string[];
+  scale?: number;
+  x?: number;
+  y?: number;
+}
+
+export const StorybookCover: React.FC<StorybookCoverProps> = ({ image, kicker, title, accentWords, scale, x, y }) => {
+  const accent = new Set((accentWords ?? []).map((w) => w.toUpperCase()));
+  return (
+    <AbsoluteFill style={{ backgroundColor: CHARCOAL, overflow: "hidden" }}>
+      <Img
+        src={staticFile(image)}
+        style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover",
+                 transform: `translate(${x ?? 0}%, ${y ?? 0}%) scale(${scale ?? 1.05})` }}
+      />
+      <AbsoluteFill style={{ background: "linear-gradient(to bottom, rgba(10,12,14,0.0) 30%, rgba(10,12,14,0.55) 62%, rgba(10,12,14,0.0) 85%)" }} />
+      <AbsoluteFill style={{ background: "radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0) 55%, rgba(10,12,14,0.55) 100%)" }} />
+      {/* Safe band: y 285..1635. Text block sits in its lower-middle. */}
+      <div style={{ position: "absolute", left: 90, right: 150, top: 1010, display: "flex", flexDirection: "column", alignItems: "center", gap: 18 }}>
+        {kicker ? (
+          <div style={{ background: AMBER, color: CHARCOAL, fontFamily, fontWeight: 900, fontSize: 52, letterSpacing: 6, padding: "8px 28px", borderRadius: 12, transform: "rotate(-2deg)" }}>
+            {kicker}
+          </div>
+        ) : null}
+        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "0 30px", textAlign: "center" }}>
+          {title.toUpperCase().split(" ").map((w, i) => (
+            <span
+              key={i}
+              style={{
+                fontFamily, fontWeight: 900, fontSize: 124, lineHeight: 1.02,
+                color: accent.has(w.replace(/[^A-Z0-9$]/g, "")) ? PUNCH : BONE,
+                WebkitTextStroke: `16px ${CHARCOAL}`, paintOrder: "stroke fill", textShadow: "0 10px 0 rgba(0,0,0,0.45)",
+              }}
+            >
+              {w}
+            </span>
+          ))}
+        </div>
+      </div>
+    </AbsoluteFill>
+  );
+};
