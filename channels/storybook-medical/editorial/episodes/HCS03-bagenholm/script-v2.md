@@ -39,4 +39,4 @@ advice."
 | 2 | Her 1990s neon ski suit (pink/teal), which also helps viewers track her in the white | period-plausible |
 | 2 | Reindeer watching from a ridge; **no aurora** (Norway in May is light all night) | period-true |
 | 10 | A heart-lung machine with lots of colourful dials and a 'MAY 1999' ward calendar | plausible |
-| 8 | The raven on a snowy rock as the helicopter arrives | spot it |
+| 8 | Matt's spectacles on a snowy rock as the helicopter arrives | spot it |

@@ -35,4 +35,4 @@ gold. **Restraint:** no vomit shown; illness is shown with comedy and reaction s
 | 4 | An overhead projector; Marshall in huge 1980s glasses | period-true |
 | 4 | A kookaburra on the windowsill, with a kookaburra LAUGH on 'Almost nobody believed him' | plausible audio gag |
 | 6 | A beige 1980s home computer on his desk (his hobby, per his memoir) | true |
-| 2 | An Australian raven on the hospital sign | spot it |
+| 2 | Matt's spectacles on the hospital reception counter | spot it |

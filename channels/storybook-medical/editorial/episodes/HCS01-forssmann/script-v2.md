@@ -36,4 +36,4 @@ Cardiol* 1997)."
 | 4 | Nurse's starched winged cap; a ring of oversized keys | period-true |
 | 3 | A crank wall telephone, and a skull paperweight on the chief's desk | period-true / plausible |
 | all | Forssmann's one rolled-up sleeve (the experiment arm), from shot 5 on | continuity |
-| 2 | The raven on the hospital windowsill | spot it |
+| 2 | Matt's spectacles on the hospital windowsill | spot it |

@@ -123,7 +123,7 @@ Every Short gets 3–5 **eye-catching details** that reward a second look withou
    rolled-up sleeve).
 7. **The red rule.** Saturated red belongs to each story's motif (Alexis's tuque, the red shoes). Other props
    stay out of pure red, so the motif still pops.
-8. **One hidden "spot it" item per Short.** This is the channel's **recurring raven**, perched somewhere in
-   every film. Ravens are believable in every setting we have (Mackinac, Vermont, Strasbourg, Germany, Perth's
-   Australian raven, Norway). It's a comment magnet ("found the raven at 0:23!"), and it's never in the
-   story's way.
+8. **One hidden "spot it" item per film: Matt's spectacles.** These are round wire spectacles with amber lenses
+   and a small "?" glint, left somewhere in every scene set. A long video may also include **one cameo** of
+   Matt, the time-travelling onlooker (teal scarf, amber notebook, era-appropriate clothes). Both are defined
+   in `plan/brand-signature.md`. Neither is ever in the story's way.

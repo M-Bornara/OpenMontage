@@ -32,7 +32,7 @@ Chilean sun (S2).
 | 2 | Crew wardrobe: braces, rolled sleeves, one worker with a rabbit's foot on his belt; kegs of BLASTING POWDER (not dynamite) | period-true |
 | 8 | Dr. Williams in a tall hat with an oversized medical bag; Gage calmly seated, legs crossed, as if waiting for a train | plausible deadpan |
 | 9 | In the portrait, the iron bar is held like a walking stick, as proud as a sword | from the real portrait |
-| 6 | The raven on a boulder above the rock cut | spot it |
+| 6 | Matt's spectacles on a boulder above the rock cut | spot it |
 
 ---
 
@@ -64,4 +64,4 @@ Chilean sun (S2).
 | 3 | A Barnum's American Museum poster on the wall: "ADMITTANCE 12½ CENTS" | true (Gage appeared at Barnum's) |
 | 6 | Coach roof piled high with trunks and a birdcage; Gage in a poncho and straw hat, Chilean coachman style | plausible |
 | 8 | Gage telling wild stories to wide-eyed children, hands flying (Harlow says he told 'fabulous' tall tales) | true |
-| 6 | The raven riding on the coach luggage | spot it |
+| 6 | Matt's spectacles tucked in the coach luggage straps | spot it |

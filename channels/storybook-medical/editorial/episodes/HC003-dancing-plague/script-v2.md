@@ -36,7 +36,7 @@ at the shrine.
 | 1 | Strasbourg Cathedral's spire over the rooftops (finished 1439) | period-true |
 | 6 | A pretzel seller working the crowd; a pig wandering through the onlookers | plausible |
 | all | Wardrobe: Troffea in blue with a white coif. **No red until the red shoes.** | colour rule |
-| 11 | The raven on a chimney above the night streets | spot it |
+| 11 | Matt's spectacles on a window ledge above the night streets | spot it |
 
 ---
 
@@ -68,4 +68,4 @@ at the shrine.
 | 4 | Strong men in leather guild aprons, one holding two dancers at once | plausible |
 | 8 | A drummer sitting glumly on his drum outside the wedding where a lone lute plays | plausible gag |
 | 5 | Horses in the horse market watching the dancers, ears forward | plausible |
-| 10 | The raven on the dismantled stage beam | spot it |
+| 10 | Matt's spectacles left on the dismantled stage beam | spot it |

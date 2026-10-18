@@ -52,7 +52,7 @@ Asset types (see `plan/formats-16x9-9x16.md`):
 | 2 | Trading-post shelves crammed with real fur-trade goods: beaver pelts hung like laundry, tin kettles, trade-silver brooches, a bear trap on the wall | period-true |
 | 2 | A voyageur in a woven arrow sash with a clay pipe, frozen mid-bite of bread as the shot rings out | plausible reaction |
 | 4 | Beaumont's surgeon kit open on the counter: a bone saw, brass syringe, a jar of leeches | period-true |
-| 12 | The raven on the fort palisade above the river | spot it |
+| 12 | Matt's spectacles resting on the fort palisade above the river | spot it |
 | all | Wardrobe: Alexis's red tuque (the story's only red); Beaumont's watch chain always visible | continuity |
 
 ---
@@ -88,7 +88,7 @@ Asset types (see `plan/formats-16x9-9x16.md`):
 | 5–7 | An hourglass beside the pocket watch: the doctor who times everything twice | plausible gag |
 | 6 | Alexis in the background carrying a ridiculous armful of firewood while the experiment runs | true (his usual work) |
 | 9 | Beaumont's notebook margins full of little stomach doodles | plausible |
-| 9 | The raven at the window, head tilted at the string | spot it |
+| 9 | Matt's spectacles on the windowsill beside the experiment | spot it |
 
 ---
 
@@ -120,4 +120,4 @@ Asset types (see `plan/formats-16x9-9x16.md`):
 | 4 | The family canoe loaded with a whole life: a cradle, a kettle, a crate with a hen | plausible |
 | 8 | Letters with different coloured wax seals; a small coin purse on top for the 'bigger offers' | symbolic, no text claims |
 | 10 | A rooster on Alexis's fence; his red tuque hanging on a nail by the door | plausible / continuity |
-| 10 | The raven on the rider's fence post | spot it |
+| 10 | Matt's spectacles hanging on the rider's fence post | spot it |
