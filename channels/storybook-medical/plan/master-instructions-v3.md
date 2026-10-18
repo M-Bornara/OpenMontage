@@ -1,4 +1,7 @@
-# The Human Casebook — Master Project Instructions (v3.0)
+# Oddly Matt — Master Project Instructions (v3.0 + v3.1)
+
+> **Channel name decided 2026-10-18: Oddly Matt** (@oddlymatt) — "True stories from the strange side of being human."
+> "The Human Casebook" below was the working name and is retired.
 
 Owner: Bornara · Received 2026-10-18 · **This document governs the channel.** Where the older kit
 docs (README, launch plan v1, playbook) disagree with it, this wins. Formatting condensed; content kept.

@@ -63,3 +63,16 @@ Only after that: logo, banner and the Google account.
 - **Oddly Liam** is advised against: Liam is ElevenLabs' stock voice. That ties the brand to a voice we don't
   own and many channels use, and the name breaks if the voice changes or for dubbing.
 - **Oddly Matt** is viable as a persona brand (like Zack D Films) if "Matt" is the owner's own name.
+
+## DECISION (2026-10-18): **Oddly Matt**
+
+Tagline: "True stories from the strange side of being human." Matt is the owner's own nickname. The channel
+is the owner's persona, narrated in Liam's voice; there is no invented host.
+
+| Platform | Handle | Status |
+|---|---|---|
+| YouTube | @oddlymatt | created |
+| Facebook | Page "Oddly Matt", username oddlymatt | Page to be created from the owner's single real-name profile |
+| Instagram | @oddlymatt.tv (or @oddly.matt) | @oddlymatt taken; creator account |
+| TikTok | @oddlymatt | to reserve |
+| Domain | oddlymatt.com / .ca | free at check, to register |

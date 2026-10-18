@@ -1,4 +1,4 @@
-# Storybook Medical — channel kit (working brand: The Human Casebook)
+# Storybook Medical — channel kit (channel: **Oddly Matt**, @oddlymatt)
 
 > **Governing document: [`plan/master-instructions-v3.md`](plan/master-instructions-v3.md).** Current plan:
 > [`plan/probe-plan.md`](plan/probe-plan.md). Editorial logs and templates: [`editorial/`](editorial/).
