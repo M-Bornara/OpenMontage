@@ -48,7 +48,18 @@ Marshall), mysterious (dancing), human (walked away).
 | "Gage became a monster" | An early change, then about 7 years driving six-horse coaches in Chile | The core of HC002 |
 | "the dancers died 15 a day" | Only later chronicles say so; the city's records don't | DISPUTED, the core of HC003 ch.6 |
 
-## Decisions needed from you
+## Review result (2026-10-18)
+All 10 Shorts were reviewed against `story-craft.md` (hooks, causal chain, payoff, no trailers, Liam rhythm,
+humour rules, people-first) and the new `cinematography.md`. They were revised to **`script-v2.md`**, each
+with a shot-by-shot plan (size, angle, move, cut and sound, asset type) and an estimated 49–55 s.
+
+The owner delegated approval to this review, so the v2 scripts are **approved for production**, subject to the
+narration listen. The decisions below were taken as recommended; the owner can override any of them:
+- Forssmann's Nazi line is kept, factual, with no imagery.
+- Long videos run ~6–8 min.
+- Marshall's title is "The Doctor Who Drank Bacteria".
+
+## Decisions needed from you (original list)
 1. **Approve, or edit, the 10 Short scripts.** They are in each package's `script-v1.md`, or `research.md`
    for the three standalones.
 2. **Forssmann's Nazi Party membership (1932–45).** I recommend keeping one factual closing line plus a
