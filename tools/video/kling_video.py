@@ -69,7 +69,7 @@ class KlingVideo(BaseTool):
             },
             "model_variant": {
                 "type": "string",
-                "enum": ["v3/standard", "v2.1/master", "v2.1/pro", "v2.1/standard"],
+                "enum": ["v3/standard", "v2.5-turbo/pro", "v2.1/master", "v2.1/pro", "v2.1/standard"],
                 "default": "v3/standard",
             },
             "duration": {
@@ -107,11 +107,15 @@ class KlingVideo(BaseTool):
     def estimate_cost(self, inputs: dict[str, Any]) -> float:
         variant = inputs.get("model_variant", "v3/standard")
         duration = int(inputs.get("duration", "5"))
-        if "master" in variant:
-            return 0.30 * (duration / 5)
-        if "pro" in variant:
-            return 0.20 * (duration / 5)
-        return 0.10 * (duration / 5)  # standard
+        # Per-second fal rates from https://api.fal.ai/v1/models/pricing (2026-10-17).
+        per_second = {
+            "v3/standard": 0.14,
+            "v2.5-turbo/pro": 0.07,
+            "v2.1/master": 0.28,
+            "v2.1/pro": 0.098,
+            "v2.1/standard": 0.056,
+        }
+        return round(per_second.get(variant, 0.14) * duration, 2)
 
     def estimate_runtime(self, inputs: dict[str, Any]) -> float:
         return 60.0  # ~1 minute typical

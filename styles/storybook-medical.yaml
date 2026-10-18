@@ -1,0 +1,136 @@
+identity:
+  name: "Storybook Medical"
+  category: custom
+  mood: curious, astonishing, warm, slightly suspenseful
+  pace: fast
+  best_for: "Vertical 30-60s true-story shorts about the human body, medicine and medical history, told by one narrator over hand-painted 2.5D illustration"
+
+visual_language:
+  color_palette:
+    primary: ["#E8A33D", "#1F4E5A"]       # Warm amber key light, deep teal shadows
+    # Oxblood for blood/anatomy accents, bone white for highlights and paper, soft pink for clean anatomy.
+    accent: ["#7A2E2A", "#EFE6D2", "#E9A6A0"]
+    background: "#22262A"                  # Charcoal
+    text: "#EFE6D2"                        # Bone white
+    muted: "#6B7A7F"
+  composition: vertical 9:16, subject in the centre two-thirds, clear foreground / midground / background layers for parallax, title-safe top and bottom 15%
+  texture: hand-inked outlines of even medium weight, gouache brush grain, two-tone cel shading, atmospheric haze between layers
+
+typography:
+  headings:
+    font: "Montserrat"
+    weight: 800
+    tracking: "0.01em"
+  body:
+    font: "Montserrat"
+    weight: 600
+    line_height: 1.25
+  code:
+    font: "Fira Code"
+    weight: 400
+  stat_card:
+    font: "Montserrat"
+    weight: 900
+    size_multiplier: 3.0
+  scale_system: "perfect_fourth"
+  weight_matrix:
+    title: 900
+    heading: 800
+    body: 600
+    caption: 800
+
+motion:
+  transitions: [hard_cut, whip, crossfade]
+  animation_style: "slow camera push or layered parallax on every still; AI video only for character actions"
+  pacing_rules:
+    min_scene_hold_seconds: 1.2
+    max_scene_hold_seconds: 3.5
+    text_card_hold_seconds: 1.5
+    stat_card_hold_seconds: 1.8
+    transition_duration_seconds: 0.15
+  entrance: "word-by-word caption pop (scale 0.85->1 over 0.12s)"
+  exit: "hard cut"
+
+audio:
+  voice_style: >
+    ElevenLabs eleven-v3 via fal (fal_elevenlabs_tts), voice Liam, stability 0.4, speed 1.2; excited storyteller
+    who pulls the viewer in, mischievous then whispered on the twist. Use v3 audio tags ([excited], [curious],
+    [mischievously], [whispers]) and CAPS on one punch word per line. Record the whole script as ONE take.
+    Post chain is speed + volume ONLY: ffmpeg atempo (uniform, max 1.15x) -> volume gain to -14 LUFS ->
+    transparent peak limiter (alimiter, -2 dBFS ceiling) for consonant spikes. No EQ, no compressor, no
+    rubberband/formant processing (it sounded hollow). Never trim silences inside the take.
+    Edges: ~15 ms fade-in, ~80 ms fade-out on the tail (ElevenLabs files end abruptly), then 0.5 s silence pad.
+  music_mood: "low suspenseful pulse, soft plucked strings, period-appropriate colour for history stories; never louder than the voice"
+  music_volume: 0.12
+  sfx_style: "diegetic and tactile: candle crackle, footsteps on planks, cloth, squelch kept subtle, whoosh on hard cuts, low boom on reveals"
+  ducking_threshold_db: -3
+
+asset_generation:
+  image_prompt_prefix: >
+    STYLE: hand-painted 2.5D storybook illustration for an animated short. Confident hand-inked outlines
+    of even medium weight, painterly gouache textures with visible soft brush grain, flat-to-soft cel
+    shading with two tones of shadow, no photographic detail. Characters are grounded and believable with
+    slightly simplified proportions (normal-sized eyes, natural anatomy, no chibi, no cartoon exaggeration).
+    Scene clearly separated into foreground, midground and background layers with atmospheric haze between
+    them, ready for parallax. Warm amber key light from the upper left, cool teal shadows, gentle rim light.
+    Locked channel palette: warm amber #E8A33D, deep teal #1F4E5A, bone white #EFE6D2, oxblood red #7A2E2A,
+    charcoal #22262A, soft skin tones.
+  image_negative_prompt: "photorealistic, 3D render, CGI, plastic skin, chibi, oversized eyes, gore, text, labels, captions, watermark, extra people"
+  scene_type: "anime_scene"
+  default_particles: "none"
+  default_particle_color: "#E8A33D"
+  default_vignette: true
+  consistency_anchors:
+    - "Every story starts with a character sheet per person (front, 3/4, profile, back + 3 expressions) and one empty plate per location; nothing is generated from text alone after that"
+    - "Shot images are made with Nano Banana Pro edit from: the previous approved shot of the same scene + the location plate + the character sheets; close-ups add a face crop from the sheet"
+    - "Each prompt names what every reference is for and lists the identity details to keep (costume colours, signature props)"
+    - "Characters wear one bold signature item that never changes (e.g. red tuque, arrow sash) so drift is easy to spot"
+    - "Anatomy inside the body is clean, soft-pink and educational: no blood pools, no gore, no exposed bone"
+    - "One action per shot; AI video clips are 5s, camera locked, motion described explicitly, 'no morphing, no new objects'"
+    - "Close-ups keep other people out of frame or out of focus"
+    - "Any keyframe that drifts from its references is regenerated before it is animated"
+  multi_image_per_scene: false
+  images_per_scene: 1
+  image_variation_guidance: >
+    Do not vary characters between shots. Vary only camera distance, angle and the single action.
+    New camera angles are chained from the nearest approved shot of the same scene.
+
+overlays:
+  stat_card:
+    bg: "rgba(34, 38, 42, 0.78)"
+    border: "#E8A33D"
+    radius: 14
+    shadow: "0 4px 24px rgba(0, 0, 0, 0.35)"
+  key_term:
+    bg: "rgba(122, 46, 42, 0.85)"
+    text: "#EFE6D2"
+    radius: 8
+  section_title:
+    bg: "rgba(31, 78, 90, 0.8)"
+    text: "#EFE6D2"
+    accent: "#E8A33D"
+
+quality_rules:
+  - "Hook lands in the first 1.5 seconds: striking image + first narrated line"
+  - "Narration is one continuous processed track; the edit never cuts, trims or re-times inside it. Visuals are cut to the narration using word timestamps"
+  - "Final mix: music ducked about 12 dB under speech, measured at -14 LUFS integrated and -1 dBTP before publishing"
+  - "Target length 38-48 seconds; get there by tighter writing and a uniform time-stretch, never by chopping pauses"
+  - "A new shot every 1.2-3.5 seconds; never hold a still without camera motion"
+  - "Burned-in captions on every word, bold, centred in the lower-middle safe zone"
+  - "Facts must be verifiable; date, place and names checked against at least two sources"
+  - "Ending loops back to the opening line or teases the next story"
+  - "Minimum contrast ratio 4.5:1 for all caption text"
+  - "No text burned into generated images; all text is a Remotion overlay"
+
+chart_palette:
+  - "#E8A33D"
+  - "#1F4E5A"
+  - "#7A2E2A"
+  - "#E9A6A0"
+  - "#EFE6D2"
+  - "#6B7A7F"
+
+color_rules:
+  harmony_type: "complementary"
+  contrast_validation: true
+  colorblind_safe: true
