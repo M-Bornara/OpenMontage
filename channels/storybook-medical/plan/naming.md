@@ -52,3 +52,14 @@ we would share the name with several channels. "Oddly Human History" already doe
 4. TikTok, Instagram and Facebook handles.
 
 Only after that: logo, banner and the Google account.
+
+## Owner check + new ideas (2026-10-18)
+
+- The owner searched USPTO and CIPO and found no match for the candidates.
+- thecuriousrecord.com and thecurious.com/.ca are taken. **curiousrecord.com** (without "the") and the .ca
+  domains are free.
+- **Oddly Matt** and **Oddly Liam** are fully clear on the checks we can run: the YouTube @handle (plus the
+  "tv" variant), .com and .ca are all free.
+- **Oddly Liam** is advised against: Liam is ElevenLabs' stock voice. That ties the brand to a voice we don't
+  own and many channels use, and the name breaks if the voice changes or for dubbing.
+- **Oddly Matt** is viable as a persona brand (like Zack D Films) if "Matt" is the owner's own name.
