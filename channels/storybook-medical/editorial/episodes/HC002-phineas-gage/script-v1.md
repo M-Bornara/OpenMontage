@@ -4,7 +4,7 @@
 `[excited]` In 1848, an iron rod shot straight through a man's skull… and he sat up and talked. [C04–C05]
 Phineas Gage. Twenty-five. Railroad foreman in Vermont. [C01]
 He was packing blasting powder into a rock with an iron bar. More than a meter long. Six kilos. [C02]
-Then the powder went off. [C03]
+His men called out. He glanced over his shoulder… and the iron struck the rock. A spark. [C03]
 The bar went in under his left cheekbone… behind his eye… and out through the top of his head. It landed about twenty-five meters away. [C04]
 `[curious]` Within minutes… Phineas was talking. His men put him in an ox cart, and he rode into town sitting up. [C05]
 When the doctor arrived, Phineas greeted him: "Doctor, here is business enough for you." [C06]

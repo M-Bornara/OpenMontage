@@ -8,7 +8,7 @@ Status: **draft v1, not approved.**
 
 ## S1 — He Survived a Hole in His Stomach
 `[excited]` In 1822, a musket went off less than a meter from Alexis St. Martin. [C02]
-He was eighteen. A canoe-man for the fur trade, on Mackinac Island. [C01]
+He was about eighteen. A canoe-man for the fur trade, on Mackinac Island. [C01]
 The shot tore open his left side.
 Half an hour later, the army surgeon arrived… and could see straight into his stomach. [C03]
 `[curious]` For seventeen days, everything Alexis swallowed came back out… through the wound. [C04]

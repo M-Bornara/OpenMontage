@@ -1,7 +1,7 @@
 episode_id,claim_id,script_timestamp,exact_claim,claim_tier,source_1,source_2,primary_source,source_type,dispute_status,medical_risk,visual_rights,review_status,notes
 HC002,C01,S1 0:00,"13 Sep 1848, near Cavendish, Vermont; railroad construction foreman Phineas Gage, 25",B,Macmillan 2000,,Harlow 1868 p.4,primary,,0,,VERIFIED,
 HC002,C02,S1 0:06,"Tamping iron: 3 ft 7 in long, 1 1/4 in diameter, 13 1/4 lb, pointed",A,,,Harlow 1868 p.5,primary,,0,,VERIFIED,"Smooth tamping iron, not a crowbar"
-HC002,C03,S1 0:10,"A spark ignited the powder while he tamped",B,Macmillan 2000 / Wikipedia,,,scholarly,usual explanation,0,,ATTRIBUTED,"'the powder went off' is the safest wording"
+HC002,C03,S1 0:10,"Distracted by his men, he looked over his shoulder; the iron struck fire on the rock and the powder exploded",B,Macmillan 2000,,Harlow 1868 pp.4-5,primary,,0,,VERIFIED,"Harlow: 'it struck fire upon the rock'"
 HC002,C04,S1 0:13,"The iron entered below the left cheekbone, passed behind the left eye and exited through the top of the skull, landing ~80 ft away",A,Macmillan 2000,Bigelow 1850,Harlow 1868 p.5,primary,,1,,VERIFIED,"Show as a clean diagram"
 HC002,C05,S1 0:20,"He spoke within minutes and rode sitting up in an ox cart about 3/4 mile to his hotel",A,,,Harlow 1868 pp.5-6,primary,,0,,VERIFIED,
 HC002,C06,S1 0:26,"To Dr. Williams: 'Doctor, here is business enough for you.'",B,Macmillan 2000,,Williams statement (in Bigelow 1850),primary,,0,,ATTRIBUTED,
