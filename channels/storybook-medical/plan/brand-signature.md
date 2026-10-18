@@ -29,7 +29,7 @@ signatures live *in* the world, the way Hitchcock appeared in his own films.
   2. a **teal scarf** (a scarf exists in every era; teal is our house colour);
   3. a small **amber notebook** he's always writing in (the storyteller taking notes).
 - **Rules:**
-  - Exactly **one cameo per film**, in the background.
+  - **One cameo per long video**, in the background. In Shorts, only when a natural crowd or background allows it (the spectacles are always there).
   - He never touches the story, never speaks, never stands where a fact happens, and isn't mentioned in
     narration.
   - He's an artistic signature, not a historical person. The description says so once in the channel's
