@@ -20,7 +20,7 @@ channels/storybook-medical/
 | Look | Illustrated 2.5D storybook, amber/teal palette | – |
 | Images | Nano Banana Pro edit, chained from sheets/plates/previous shot | $0.15 / image |
 | Motion | Kling v2.1 standard, 5 s, one action, camera locked; all other shots free camera moves | $0.28 / clip |
-| Voice | ElevenLabs v3 "Liam" (stability 0.4, speed 1.2), one take | ~$0.07 |
+| Voice | ElevenLabs v3 "Liam" (stability 0.4, speed 1.2), one take, then re-voiced with the channel owner's voice via Chatterbox speech-to-speech (reference `projects/voice/ref-hook.mp3`, kept out of git). `"narration": {"convert": false}` publishes Liam's voice. | ~$0.08 |
 | Audio post | atempo 1.14 → gain to -14 LUFS → peak limiter → edge fades. Nothing else. | – |
 | Music | MiniMax Music v2, structure-tags-only lyrics, verify no vocals | $0.03 / track |
 | SFX | Freesound CC0 / CC-BY library, credits in description | free |

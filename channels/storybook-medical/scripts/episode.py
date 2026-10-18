@@ -52,6 +52,11 @@ from tools.tool_registry import registry  # noqa: E402
 
 PLAYBOOK = "storybook-medical"
 VOICE = {"voice": "Liam", "model_id": "eleven-v3", "stability": 0.4, "speed": 1.2}
+# Channel narrator: Liam's eleven-v3 performance re-voiced with the owner's voice (Chatterbox
+# speech-to-speech, ~$0.015/min). The reference lives outside git; set "narration": {"convert": false}
+# to publish Liam's own voice. Liam's raw take is always kept as narration_raw.mp3.
+VOICE_REF = REPO / "projects/voice/ref-hook.mp3"
+VC_PER_MIN = 0.015
 LOOP_SECONDS = 0.5  # Shorts/TikTok/Reels loop: last 0.5 s dissolves (picture) and crossfades (music) into the start
 TEMPO = 1.14
 CLIP_VARIANT = "v2.1/standard"
@@ -233,9 +238,23 @@ def step_narrate(pid: str, *_):
     if not r.success:
         raise SystemExit(r.error)
     log_cost(pid, "narration", len(text) / 1000 * PRICES["tts_per_1k_chars"])
+    take = raw
+    ref = Path(ep["narration"].get("voice_ref", VOICE_REF))
+    if ep["narration"].get("convert", True) and ref.exists():
+        conv = p / "assets/audio/narration_converted.wav"
+        to_uri = lambda f: "data:audio/mpeg;base64," + base64.b64encode(Path(f).read_bytes()).decode()
+        r = tools()["chatterbox_fal"].execute({
+            "model": "chatterbox", "operation": "speech_to_speech", "output_path": str(conv),
+            "provider_params": {"source_audio_url": to_uri(raw), "target_voice_audio_url": to_uri(ref)}})
+        if r.success:
+            take = conv
+            log_cost(pid, "narration-voice-convert", duration(raw) / 60 * VC_PER_MIN)
+            print("voice converted with", ref.name)
+        else:
+            print("voice conversion failed, using Liam:", (r.error or "")[:200])
     # speed + loudness only (see memory: narration-audio-processing)
     sped = p / "assets/audio/_sped.wav"
-    ff("-i", str(raw), "-af", f"atempo={ep['narration'].get('tempo', TEMPO)}", "-ar", "48000", "-c:a", "pcm_s16le", str(sped))
+    ff("-i", str(take), "-af", f"atempo={ep['narration'].get('tempo', TEMPO)}", "-ar", "48000", "-ac", "1", "-c:a", "pcm_s16le", str(sped))
     i, _ = loudness(sped)
     stage = p / "assets/audio/_stage.wav"
     lim = "alimiter=limit=0.79:attack=1:release=40:level=disabled:asc=1"
