@@ -29,6 +29,16 @@ channels/storybook-medical/
 
 Typical episode: 6 new sheets/plates + ~20 keyframes + ~7 clips + voice + music ≈ **$6–7**.
 
+### Budget mode (tested on Episode 2, *Human Test Tube*)
+
+Add to `episode.json`: `"models": {"image": "nano-banana-2", "clip": "h3-max"}`.
+Nano Banana 2 edit ($0.08) held faces/costumes/sets almost as well as Pro; MiniMax H3-max
+($0.16 per 5 s, 768p) gave cleaner single actions than Kling in the A/B. Episode 2 cost
+**$2.60** in production (2 refs, 16 keyframes, 3 clips, voice, music) by also reusing Part 1
+assets. Known weak spot: NB2 writes fake "Lorem ipsum" on paper props — give that shot
+`"model": "gemini-3-pro-image"` and ask for squiggle lines. Seedream 4.5 and Seedance v1 Pro
+Fast were rejected (style drift, duplicate props). The V2 setup stays the default.
+
 ## Workflow (approval gates marked ✋)
 
 ```bash
@@ -46,7 +56,7 @@ python $E init <id>          # creates projects/<id>/episode.json
 5. `python $E keyframes <id>` then `python $E sheet <id>` → ✋ review `review/_contact.jpg`.
 6. `python $E clips <id>` and `python $E music <id>` (pick one into `music.selected`).
 7. `python $E sfx <id>` (only fetches cues the library lacks) → `build` → `mix` → `render`.
-8. `python $E cost <id>`; paste `CREDITS` (music + CC-BY SFX) into the description.
+8. `python $E credits <id>` → paste `renders/CREDITS.txt` into the description; `python $E cost <id>`.
 
 ## `episode.json` reference
 

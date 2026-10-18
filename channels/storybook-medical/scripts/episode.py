@@ -15,7 +15,11 @@ Steps (in order):
     build       props.json (shots, overlays, captions) + edit_decisions.json             (free)
     mix         narration + ducked music + SFX cues, -14 LUFS                             (free)
     render      Remotion render through video_compose (atelier) + final review           (free)
+    credits     renders/CREDITS.txt for the video description                            (free)
     cost        print the paid-call ledger
+
+Models: the V2 defaults (Nano Banana Pro + Kling v2.1) apply unless episode.json sets
+"models": {"image": "nano-banana-2", "clip": "h3-max"}; a single keyframe/clip may also set "model".
 
 Optional names limit refs/keyframes/clips/music to those entries (e.g. re-roll one keyframe).
 Every paid call is appended to artifacts/cost_log.json.
@@ -47,6 +51,15 @@ VOICE = {"voice": "Liam", "model_id": "eleven-v3", "stability": 0.4, "speed": 1.
 TEMPO = 1.14
 CLIP_VARIANT = "v2.1/standard"
 PRICES = {"image": 0.15, "clip": 0.28, "music": 0.03, "tts_per_1k_chars": 0.10}
+# Channel defaults are the V2 setup. An episode may override them for experiments with
+# "models": {"image": "nano-banana-2", "clip": "h3-max"} in episode.json.
+IMAGE_MODELS = {"gemini-3-pro-image": 0.15, "nano-banana-2": 0.08}
+CLIP_MODELS = {"kling-v2.1-standard": 0.28, "h3-max": 0.0325 * 5}
+
+
+def model_choice(ep: dict) -> tuple[str, str]:
+    m = ep.get("models", {})
+    return m.get("image", "gemini-3-pro-image"), m.get("clip", "kling-v2.1-standard")
 
 
 # ── helpers ──────────────────────────────────────────────────────────────
@@ -124,6 +137,7 @@ def gen_images(pid: str, section: str, out_dir: str, only: list[str]):
     out = proj(pid) / "assets/images" / out_dir
     out.mkdir(parents=True, exist_ok=True)
     nb = tools()["gemini_fal_image"]
+    image_model, _ = model_choice(ep)
     style = style_prefix()
     done: set[str] = {n for n in items if (out / f"{n}.png").exists() and n not in names}
 
@@ -135,11 +149,12 @@ def gen_images(pid: str, section: str, out_dir: str, only: list[str]):
             return name, False, f"missing refs {missing}"
         frame = " Single frame from an animated film, not a model sheet." if section == "keyframes" else ""
         prompt = LOCK + spec.get("roles", "") + " " + spec["prompt"] + frame + f" Aspect {spec.get('aspect', '9:16')}." + TAIL + " " + style
-        r = nb.execute({"model": "gemini-3-pro-image", "prompt": prompt, "image_paths": refs,
+        model = spec.get("model", image_model)
+        r = nb.execute({"model": model, "prompt": prompt, "image_paths": refs,
                         "aspect_ratio": spec.get("aspect", "9:16"), "resolution": "2K", "output_format": "png",
                         "safety_tolerance": "5", "output_path": str(out / f"{name}.png")})
         if r.success:
-            log_cost(pid, f"{section}:{name}", PRICES["image"])
+            log_cost(pid, f"{section}:{name}:{model}", IMAGE_MODELS.get(model, PRICES["image"]))
         return name, r.success, (r.error or "")[:200]
 
     # dependency waves: an item waits for any kf:/ref: it references that is still being generated
@@ -215,21 +230,31 @@ def step_keyframes(pid, *only):
 
 def step_clips(pid, *only):
     ep, p = load_ep(pid), proj(pid)
-    kl = tools()["kling_video"]
+    t = tools()
+    _, clip_model = model_choice(ep)
     keep = (" Hand-painted 2D storybook animation. The camera stays completely still. Keep the art style, faces, costumes, "
             "colours and the room exactly as in the image. No new objects, no new people, no morphing, no text.")
 
     def run(sid):
-        im = Image.open(p / "assets/images/keyframes" / f"{sid}.png").convert("RGB").resize((1080, 1920), Image.LANCZOS)
-        buf = io.BytesIO()
-        im.save(buf, "JPEG", quality=92)
-        r = kl.execute({"prompt": ep["clips"][sid]["motion"] + keep, "operation": "image_to_video",
-                        "image_url": "data:image/jpeg;base64," + base64.b64encode(buf.getvalue()).decode(),
-                        "model_variant": CLIP_VARIANT, "duration": "5", "aspect_ratio": "9:16",
-                        "output_path": str(p / "assets/video" / f"{sid}.mp4")})
+        kf = p / "assets/images/keyframes" / f"{sid}.png"
+        out = p / "assets/video" / f"{sid}.mp4"
+        model = ep["clips"][sid].get("model", clip_model)
+        prompt = ep["clips"][sid]["motion"] + keep
+        if model == "h3-max":
+            r = t["h3_max_video"].execute({"model": "h3-max", "prompt": prompt, "image_path": str(kf), "duration": 5,
+                                           "resolution": "768P", "prompt_expansion_mode": "balanced",
+                                           "enable_safety_checker": False, "output_path": str(out)})
+        else:
+            im = Image.open(kf).convert("RGB").resize((1080, 1920), Image.LANCZOS)
+            buf = io.BytesIO()
+            im.save(buf, "JPEG", quality=92)
+            r = t["kling_video"].execute({"prompt": prompt, "operation": "image_to_video",
+                                          "image_url": "data:image/jpeg;base64," + base64.b64encode(buf.getvalue()).decode(),
+                                          "model_variant": CLIP_VARIANT, "duration": "5", "aspect_ratio": "9:16",
+                                          "output_path": str(out)})
         if r.success:
-            log_cost(pid, f"clip:{sid}", r.cost_usd or PRICES["clip"])
-        return sid, r.success, (r.error or "")[:200]
+            log_cost(pid, f"clip:{sid}:{model}", r.cost_usd or CLIP_MODELS.get(model, PRICES["clip"]))
+        return sid, model, r.success, (r.error or "")[:200]
 
     ids = [s for s in ep["clips"] if not only or s in only]
     with ThreadPoolExecutor(7) as ex:
@@ -294,6 +319,8 @@ def step_sheet(pid, *_):
     d = ImageDraw.Draw(s)
     for i, (sid, src) in enumerate(items):
         path = Path(resolve_ref(pid, src))
+        if path.suffix == ".mp4" and not path.exists():
+            path = p / "assets/images/keyframes" / f"{path.stem}.png"  # clip not made yet: show its keyframe
         if path.suffix == ".mp4":
             frame = p / "review" / f"_{sid}.jpg"
             ff("-ss", "0.5", "-i", str(path), "-frames:v", "1", str(frame))
@@ -341,7 +368,7 @@ def step_build(pid, *_):
     words = []
     for w in words_raw:
         t = w["word"]
-        shown = "ST." if t.lower() == "st." else re.sub(r"[^\w'?]", "", t)
+        shown = "ST." if t.lower() == "st." else re.sub(r"[^\w'?$]", "", t)
         words.append({"word": shown, "start": round(w["start"], 3), "end": round(w["end"], 3),
                       "punch": re.sub(r"\W", "", t.lower()) in punch,
                       "breakAfter": bool(re.search(r"[.,?!]$", t)) and t.lower() != "st."})
@@ -418,6 +445,27 @@ def step_render(pid, *_):
     if r.success:
         li, lp = loudness(out)
         print(f"{out}  {duration(out):.2f}s  {li} LUFS  peak {lp} dBFS")
+
+
+def step_credits(pid, *_):
+    """Write renders/CREDITS.txt (music + CC-BY sound effects + sources) for the video description."""
+    ep, p = load_ep(pid), proj(pid)
+    credits = json.load(open(KIT / "library/sfx-credits.json"))
+    used = sorted({c["name"] for c in ep["sfx"]})
+    lines = ["CREDITS", ""]
+    lines.append(f"Music: original, generated with MiniMax Music v2 ({ep['music']['selected']})")
+    lines.append("Narration: ElevenLabs v3. Illustrations/animation: AI-assisted, art-directed.")
+    lines += ["", "Sound effects from Freesound.org (Creative Commons Attribution 4.0):"]
+    for n in used:
+        m = credits.get(n)
+        if m and "zero" not in m["license"]:
+            lines.append(f'- "{m["title"]}" by {m["author"]} - {m["url"]}')
+    cc0 = [n for n in used if credits.get(n) and "zero" in credits[n]["license"]]
+    lines.append(f"- plus {len(cc0)} CC0 (public domain) sounds")
+    if ep.get("sources"):
+        lines += ["", "Sources:"] + [f"- {s.split(' (')[0]}" for s in ep["sources"]]
+    (p / "renders/CREDITS.txt").write_text("\n".join(lines), encoding="utf-8")
+    print("\n".join(lines))
 
 
 def step_cost(pid, *_):

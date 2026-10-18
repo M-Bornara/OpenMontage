@@ -250,5 +250,113 @@
   "license": "http://creativecommons.org/publicdomain/zero/1.0/",
   "duration": 0.499977,
   "url": "https://freesound.org/s/117280/"
+ },
+ "axe-chop": {
+  "file": "axe-chop.mp3",
+  "freesound_id": 753925,
+  "title": "Axe chopping wood",
+  "author": "xkeril",
+  "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+  "duration": 12.9226,
+  "url": "https://freesound.org/s/753925/"
+ },
+ "canoe-paddle": {
+  "file": "canoe-paddle.mp3",
+  "freesound_id": 702386,
+  "title": "Water Paddle Splashing rowing in a canoe",
+  "author": "egeexyz",
+  "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+  "duration": 8.112,
+  "url": "https://freesound.org/s/702386/"
+ },
+ "cash-register": {
+  "file": "cash-register.mp3",
+  "freesound_id": 360453,
+  "title": "Cash Register",
+  "author": "GowlerMusic",
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "duration": 10.6757,
+  "url": "https://freesound.org/s/360453/"
+ },
+ "door-knock": {
+  "file": "door-knock.mp3",
+  "freesound_id": 799457,
+  "title": "Wooden door open knocks",
+  "author": "copyc4t",
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "duration": 3.23746,
+  "url": "https://freesound.org/s/799457/"
+ },
+ "glass-clink": {
+  "file": "glass-clink.mp3",
+  "freesound_id": 798151,
+  "title": "GLASImpt_Glass Clink 01_KVV AUDIO_FREE",
+  "author": "KVV_Audio",
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "duration": 6.84146,
+  "url": "https://freesound.org/s/798151/"
+ },
+ "key-lock": {
+  "file": "key-lock.mp3",
+  "freesound_id": 118232,
+  "title": "hotel_room_door_locking.wav",
+  "author": "joedeshon",
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "duration": 0.250794,
+  "url": "https://freesound.org/s/118232/"
+ },
+ "paper-slide": {
+  "file": "paper-slide.mp3",
+  "freesound_id": 464302,
+  "title": "PaperSlide.wav",
+  "author": "eyesonlegs",
+  "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+  "duration": 1.6434,
+  "url": "https://freesound.org/s/464302/"
+ },
+ "rain-window": {
+  "file": "rain-window.mp3",
+  "freesound_id": 346641,
+  "title": "Rain on Windows, Interior, B.wav",
+  "author": "InspectorJ",
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "duration": 31.9081,
+  "url": "https://freesound.org/s/346641/"
+ },
+ "running-footsteps": {
+  "file": "running-footsteps.mp3",
+  "freesound_id": 682771,
+  "title": "Running footsteps on pavement.WAV",
+  "author": "thomasanthony321",
+  "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+  "duration": 10.3212,
+  "url": "https://freesound.org/s/682771/"
+ },
+ "wood-pile-fall": {
+  "file": "wood-pile-fall.mp3",
+  "freesound_id": 554128,
+  "title": "Foley_Wood_Log_Small_Fall_CloseGround_Stereo_DR05.wav",
+  "author": "Nox_Sound",
+  "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+  "duration": 14.6453,
+  "url": "https://freesound.org/s/554128/"
+ },
+ "bugle-call": {
+  "file": "bugle-call.mp3",
+  "freesound_id": 194624,
+  "title": "Trumpet2.wav",
+  "author": "Harbour11",
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "duration": 3.68383,
+  "url": "https://freesound.org/s/194624/"
+ },
+ "coins-drop": {
+  "file": "coins-drop.mp3",
+  "freesound_id": 728418,
+  "title": "Thewoodlandnomad_coins-being-dropped-assorted Rain version",
+  "author": "Sadiquecat",
+  "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+  "duration": 58.8344,
+  "url": "https://freesound.org/s/728418/"
  }
 }
