@@ -104,3 +104,7 @@ venv/
 
 # Local Wan / diffusers GPU environment
 .venv-wan/
+
+# Storybook channel kit: downloaded SFX/music are re-downloadable; credits.json stays tracked
+channels/*/library/sfx/
+channels/*/library/music/
