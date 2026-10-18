@@ -25,7 +25,7 @@ reusable; their narration and packaging are not.
 ## Package (first production milestone)
 | ID | Format | Working title | Hook | Reuses |
 |---|---|---|---|---|
-| HC001-L | long ~5–10 min (the map decides) | The Man With a Window Into His Stomach | "In June 1822, a young fur trader… a shotgun went off less than a meter away." → "A window into a living human stomach." | pilot + ep 2 art, re-framed 16:9 |
+| HC001-L | long ~5–10 min (the map decides) | The Man With a Window Into His Stomach | "In June 1822, a musket went off less than a meter from an eighteen-year-old canoe-man." → "A window into a living human stomach." | pilot + ep 2 art, re-framed 16:9 |
 | HC001-S1 | Case Short | He Survived a Hole in His Stomach | accident → expected death → survival → the opening that never closed | pilot shots |
 | HC001-S2 | Case Short | The Doctor Who Put Food on a String | the experiment → what came out → "and that was one of hundreds" | pilot experiment shots |
 | HC001-S3 | Case Short | The Human Experiment Who Walked Away | arrangement → servant, army, contract → he leaves; Beaumont's letters | ep 2 shots |
