@@ -44,6 +44,17 @@ Asset types (see `plan/formats-16x9-9x16.md`):
 | 13 | `[curious]` And his doctor, William Beaumont, had just realised what it could teach him. | MCU Beaumont at a lamp-lit desk looks up from his notebook | push in, hold 2 s | quill scratch | R/W |
 
 
+
+**Fun layer** (rules: `plan/cinematography.md` §10)
+
+| Shot | Item | Type |
+|---|---|---|
+| 2 | Trading-post shelves crammed with real fur-trade goods: beaver pelts hung like laundry, tin kettles, trade-silver brooches, a bear trap on the wall | period-true |
+| 2 | A voyageur in a woven arrow sash with a clay pipe, frozen mid-bite of bread as the shot rings out | plausible reaction |
+| 4 | Beaumont's surgeon kit open on the counter: a bone saw, brass syringe, a jar of leeches | period-true |
+| 12 | The raven on the fort palisade above the river | spot it |
+| all | Wardrobe: Alexis's red tuque (the story's only red); Beaumont's watch chain always visible | continuity |
+
 ---
 
 ## S2 — The Doctor Who Put Food on a String
@@ -68,6 +79,17 @@ Asset types (see `plan/formats-16x9-9x16.md`):
 | 10 | And that was experiment number ONE… of two hundred thirty-eight. | counter "1" rolls to "238" over a shelf of notebooks | pull out, hold 2 s | counter ticks accelerate | G + W |
 
 
+
+**Fun layer** (rules: `plan/cinematography.md` §10)
+
+| Shot | Item | Type |
+|---|---|---|
+| 4 | Each food arrives with a tiny paper tag tied to the string, Beaumont-style tidiness | plausible |
+| 5–7 | An hourglass beside the pocket watch: the doctor who times everything twice | plausible gag |
+| 6 | Alexis in the background carrying a ridiculous armful of firewood while the experiment runs | true (his usual work) |
+| 9 | Beaumont's notebook margins full of little stomach doodles | plausible |
+| 9 | The raven at the window, head tilted at the string | spot it |
+
 ---
 
 ## S3 — The Human Experiment Who Walked Away
@@ -89,3 +111,13 @@ Asset types (see `plan/formats-16x9-9x16.md`):
 | 9 | "Don't disappoint me more," he wrote. | ECU the last letter's line, Beaumont's hand | push in | quill stops | I |
 | 10 | Alexis never went back. | EWS Alexis on his own farm at sunset turns away; the rider tiny on the road | pull out, hold 2 s | wind, music resolves | T/W |
 
+
+
+**Fun layer** (rules: `plan/cinematography.md` §10)
+
+| Shot | Item | Type |
+|---|---|---|
+| 4 | The family canoe loaded with a whole life: a cradle, a kettle, a crate with a hen | plausible |
+| 8 | Letters with different coloured wax seals; a small coin purse on top for the 'bigger offers' | symbolic, no text claims |
+| 10 | A rooster on Alexis's fence; his red tuque hanging on a nail by the door | plausible / continuity |
+| 10 | The raven on the rider's fence post | spot it |

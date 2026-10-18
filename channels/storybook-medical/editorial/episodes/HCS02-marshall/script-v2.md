@@ -26,3 +26,13 @@ gold. **Restraint:** no vomit shown; illness is shown with comedy and reaction s
 
 **Description:** cite the Nobel 2005 press release and Marshall et al., *Med J Aust* 1985. Add
 "Not medical advice."
+
+**Fun layer** (rules: `plan/cinematography.md` §10)
+
+| Shot | Item | Type |
+|---|---|---|
+| 2 | Robin Warren's strong black coffee and cigarillo (from Marshall's own memoir) | true |
+| 4 | An overhead projector; Marshall in huge 1980s glasses | period-true |
+| 4 | A kookaburra on the windowsill, with a kookaburra LAUGH on 'Almost nobody believed him' | plausible audio gag |
+| 6 | A beige 1980s home computer on his desk (his hobby, per his memoir) | true |
+| 2 | An Australian raven on the hospital sign | spot it |

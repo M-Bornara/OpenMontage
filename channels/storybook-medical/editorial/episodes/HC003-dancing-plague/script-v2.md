@@ -28,6 +28,16 @@ at the shrine.
 | 11 | `[whispers]` Strasbourg wasn't so lucky. | EWS the city at night, many tiny figures still dancing in the lanes | hold 2 s | distant drums | T |
 
 
+
+**Fun layer** (rules: `plan/cinematography.md` §10)
+
+| Shot | Item | Type |
+|---|---|---|
+| 1 | Strasbourg Cathedral's spire over the rooftops (finished 1439) | period-true |
+| 6 | A pretzel seller working the crowd; a pig wandering through the onlookers | plausible |
+| all | Wardrobe: Troffea in blue with a white coif. **No red until the red shoes.** | colour rule |
+| 11 | The raven on a chimney above the night streets | spot it |
+
 ---
 
 ## S2 — The City Hired Musicians. It Made Things Worse.
@@ -48,3 +58,14 @@ at the shrine.
 | 9 | The worst dancers were taken in wagons to a saint's shrine… given red shoes… and blessed. | wagons on a forest road → ECU **red shoes** + holy water drops | slide R→L → push | wagon wheels, chant | W + I |
 | 10 | `[whispers]` It finally stopped. Nobody can agree on why it started. | EWS an empty market square at dawn, the stage gone, one red shoe on the stones | pull out, hold 2 s | wind | T |
 
+
+
+**Fun layer** (rules: `plan/cinematography.md` §10)
+
+| Shot | Item | Type |
+|---|---|---|
+| 4 | Real period instruments: a hurdy-gurdy, bagpipes, a shawm and drums | period-true |
+| 4 | Strong men in leather guild aprons, one holding two dancers at once | plausible |
+| 8 | A drummer sitting glumly on his drum outside the wedding where a lone lute plays | plausible gag |
+| 5 | Horses in the horse market watching the dancers, ears forward | plausible |
+| 10 | The raven on the dismantled stage beam | spot it |

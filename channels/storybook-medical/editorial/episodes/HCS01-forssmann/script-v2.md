@@ -27,3 +27,13 @@ grey for the last line.
 
 **Description note:** "Forssmann was a member of the Nazi Party from 1932 to 1945 (Siegel, *Am J
 Cardiol* 1997)."
+
+**Fun layer** (rules: `plan/cinematography.md` §10)
+
+| Shot | Item | Type |
+|---|---|---|
+| 7–8 | A 1929 X-ray machine: wooden cabinet, glowing glass tube, cables like a mad-science prop | period-true |
+| 4 | Nurse's starched winged cap; a ring of oversized keys | period-true |
+| 3 | A crank wall telephone, and a skull paperweight on the chief's desk | period-true / plausible |
+| all | Forssmann's one rolled-up sleeve (the experiment arm), from shot 5 on | continuity |
+| 2 | The raven on the hospital windowsill | spot it |

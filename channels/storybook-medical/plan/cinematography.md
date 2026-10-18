@@ -100,3 +100,30 @@ Each story has its own palette inside our house style. The palette shifts with t
   - the letters piling up.
 - **One playful device per Short at most**, e.g. a look to camera, an item slamming into frame, or a stamp.
 - **The joke is always on the situation** or the era, never on the person.
+
+## 10. The fun layer: props, wardrobe and set dressing
+Every Short gets 3–5 **eye-catching details** that reward a second look without touching the story.
+
+**Rules**
+1. **Real but weird beats invented.** The best props are true to the period and surprising today (a hurdy-gurdy,
+   a leech jar, a Barnum's poster, a 1929 X-ray machine). Anything else must be *plausible* for the place and
+   year. **No anachronisms:**
+   - no dynamite before 1867 (Gage used blasting powder);
+   - no aurora in a Norwegian May (it's light all night);
+   - no mobile phones in 1984 Perth.
+2. **Background and foreground layers only.** The subject and the line's key image stay clean. Fun items sit
+   at the edges or in the depth, so the eye finds them on a second look.
+3. **Reveal on holds.** Put the funniest detail in the deadpan or static shots, where the eye has time to
+   wander.
+4. **Props make no claims.** No invented documents, labels or inscriptions that read like facts. Text on props
+   is either real (from our sources) or generic.
+5. **Never at anyone's expense.** Animals and onlookers may react to the absurd situation, but never to
+   anyone's suffering.
+6. **Continuity.** Once introduced, a prop or wardrobe signature stays (Beaumont's watch, Forssmann's one
+   rolled-up sleeve).
+7. **The red rule.** Saturated red belongs to each story's motif (Alexis's tuque, the red shoes). Other props
+   stay out of pure red, so the motif still pops.
+8. **One hidden "spot it" item per Short.** This is the channel's **recurring raven**, perched somewhere in
+   every film. Ravens are believable in every setting we have (Mackinac, Vermont, Strasbourg, Germany, Perth's
+   Australian raven, Norway). It's a comment magnet ("found the raven at 0:23!"), and it's never in the
+   story's way.
