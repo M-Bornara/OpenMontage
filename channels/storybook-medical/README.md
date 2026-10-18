@@ -1,4 +1,9 @@
-# Storybook Medical — channel kit
+# Storybook Medical — channel kit (working brand: The Human Casebook)
+
+> **Governing document: [`plan/master-instructions-v3.md`](plan/master-instructions-v3.md).** Current plan:
+> [`plan/probe-plan.md`](plan/probe-plan.md). Editorial logs and templates: [`editorial/`](editorial/).
+> The kit below is the production engine; editorial judgment, claim review and the final publish decision
+> stay human. No new automation until a manual step is a measured bottleneck (§49).
 
 Everything needed to make another episode in the same look and sound as the pilot
 (*The Man With a Window Into His Stomach*, V2). Style rules live in
@@ -10,6 +15,8 @@ channels/storybook-medical/
 ├── remotion/          StorybookShort composition (shots, kinetic overlays, captions)
 ├── refs/              style-anchor.jpg, plate-stomach.jpg — reused by every episode
 ├── library/           sfx/ (gitignored, re-downloadable) + sfx-credits.json (tracked)
+├── editorial/         claim + rights logs per episode, pronunciation.csv, dashboard, templates
+├── plan/              master instructions v3, probe plan, naming shortlist, archive/
 └── scripts/episode.py one command per production step
 ```
 
@@ -20,12 +27,13 @@ channels/storybook-medical/
 | Look | Illustrated 2.5D storybook, amber/teal palette | – |
 | Images | Nano Banana Pro edit, chained from sheets/plates/previous shot | $0.15 / image |
 | Motion | Kling v2.1 standard, 5 s, one action, camera locked; all other shots free camera moves | $0.28 / clip |
-| Voice | ElevenLabs v3 "Liam" (stability 0.4, speed 1.2), one take, then re-voiced with the channel owner's voice via Chatterbox speech-to-speech (reference `projects/voice/ref-hook.mp3`, kept out of git). `"narration": {"convert": false}` publishes Liam's voice. | ~$0.08 |
+| Voice | One licensed AI narrator for the whole experiment: ElevenLabs v3 "Liam" (stability 0.4, speed 1.2) until the documentary-register re-audition picks the final one. Optional `"narration": {"convert": true}` re-voices it with the owner's voice (Chatterbox, reference kept out of git). | ~$0.08 |
 | Audio post | atempo 1.14 → gain to -14 LUFS → peak limiter → edge fades. Nothing else. | – |
 | Music | MiniMax Music v2, structure-tags-only lyrics, verify no vocals | $0.03 / track |
 | SFX | Freesound CC0 / CC-BY library, credits in description | free |
 | Edit | Remotion StorybookShort (atelier) + ffmpeg mix, music ducked under voice | free |
-| Length | 38–48 s, shot change every 1.1–2.7 s, 3-word captions | – |
+| Length | Shorts 35–55 s (visual change every 1.5–3 s, 3-word captions); long-form 8–12 min (StorybookLong, to build) | – |
+| Loop | Off by default; `"loop": true` only when the ending naturally returns to the opening | – |
 
 Typical episode: 6 new sheets/plates + ~20 keyframes + ~7 clips + voice + music ≈ **$6–7**.
 
@@ -46,8 +54,11 @@ E=channels/storybook-medical/scripts/episode.py
 python $E init <id>          # creates projects/<id>/episode.json
 ```
 
-1. **Research + script** (free). Fill `narration.v3_text` (Eleven v3 tags like `[excited]`,
-   `[whispers]`, CAPS punch words) and `punch_words`. Every fact needs two sources. ✋ approve script.
+0. **Brief + verdict** (free). `editorial/episodes/<EP>/episode-brief.md` from the template, with an editorial thesis and topic score.
+   Verdict: APPROVE / RESEARCH MORE / REWRITE / HOLD / REJECT.
+1. **Research + script** (free). Log every claim in `claims.csv` (tiers A–D, statuses VERIFIED / ATTRIBUTED /
+   DISPUTED / UNKNOWN / REMOVE). Fill `narration.v3_text` (tags used sparingly) and `punch_words`.
+   ✋ Full script edit and approval.
 2. `python $E narrate <id>` → listen to `assets/audio/narration.wav`; word timings land in
    `artifacts/word_timestamps.json`. ✋ approve voice.
 3. Write the shot list into `episode.json` (`references`, `keyframes`, `clips`, `shots`,
@@ -56,7 +67,8 @@ python $E init <id>          # creates projects/<id>/episode.json
 5. `python $E keyframes <id>` then `python $E sheet <id>` → ✋ review `review/_contact.jpg`.
 6. `python $E clips <id>` and `python $E music <id>` (pick one into `music.selected`).
 7. `python $E sfx <id>` (only fetches cues the library lacks) → `build` → `mix` → `render`.
-8. `python $E publish <id>` → `renders/deliverables/` (see below); `python $E cost <id>`.
+8. `python $E publish <id>` → `renders/deliverables/` (see below); `python $E cost <id>`. Log assets in `rights.csv`.
+9. ✋ Stage 7 final review. Upload as Private, then publish by hand. Fill `analytics-review.md` at 24 h, 7 d and 28 d.
 
 ## Tiers and escalation
 
@@ -68,11 +80,11 @@ python $E init <id>          # creates projects/<id>/episode.json
 
 | File | Use |
 |---|---|
-| `short.mp4` | 1080×1920, -14 LUFS, **seamless loop**: last 0.5 s dissolves into frame 0 and the music crossfades into its own start |
+| `short.mp4` | 1080×1920, -14 LUFS; with `"loop": true` the last 0.5 s dissolves into frame 0 and the music crossfades into its own start |
 | `cover.jpg` | 1080×1920 cover for Shorts (custom thumbnail where available), TikTok, Reels, Facebook; title kept inside the centred 1080×1350 band |
 | `cover-crops.jpg` | check of the 9:16 / IG grid 3:4 / 4:5 / TikTok-UI crops |
 | `captions.srt` | upload as subtitles (accessibility, search, auto-translate) |
-| `publish.md` / `.json` | per-platform title, description (with credits + sources), tags, pinned comment, captions, upload checklist |
+| `publish.md` / `.json` | per-platform title, description (`youtube.sources` + credits + AI-reconstruction transparency line + "Not medical advice"), tags, pinned comment, captions, upload checklist |
 | `CREDITS.txt` | CC-BY attributions required in every description |
 
 Fill `episode.json` → `"publish"` with `cover` (`image`, `kicker`, `title`, `accent`, `scale`, `y`),
@@ -118,4 +130,5 @@ Motion types: `push`, `pull` (`from`/`to` scale, optional `x`/`y` drift %), `til
 - New camera angles chain from the nearest approved shot of the same scene + a face crop.
 - Close-ups keep other people out of frame. One bold signature item per character.
 - Check facts that show on screen (season, side of the body, ages) before animating.
-- Anatomy is clean and educational: no blood, no gore. General audience, not "made for kids".
+- Anatomy is clean and educational: no blood, no gore. Teens and adults; "not made for kids"; nothing toy-like.
+- People first: invent no thoughts, dialogue or motives; show documents, not fake archival footage.

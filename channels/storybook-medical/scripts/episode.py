@@ -52,12 +52,12 @@ from tools.tool_registry import registry  # noqa: E402
 
 PLAYBOOK = "storybook-medical"
 VOICE = {"voice": "Liam", "model_id": "eleven-v3", "stability": 0.4, "speed": 1.2}
-# Channel narrator: Liam's eleven-v3 performance re-voiced with the owner's voice (Chatterbox
-# speech-to-speech, ~$0.015/min). The reference lives outside git; set "narration": {"convert": false}
-# to publish Liam's own voice. Liam's raw take is always kept as narration_raw.mp3.
+# Channel narrator: one licensed AI voice (master instructions s.12-14). Optional: "narration": {"convert": true}
+# re-voices the take with the owner's voice (Chatterbox speech-to-speech, ~$0.015/min, reference kept
+# outside git). The raw take is always kept as narration_raw.mp3.
 VOICE_REF = REPO / "projects/voice/ref-hook.mp3"
 VC_PER_MIN = 0.015
-LOOP_SECONDS = 0.5  # Shorts/TikTok/Reels loop: last 0.5 s dissolves (picture) and crossfades (music) into the start
+LOOP_SECONDS = 0.5  # opt-in ("loop": true) only when the story ends naturally on its opening: last 0.5 s dissolves into the start
 TEMPO = 1.14
 CLIP_VARIANT = "v2.1/standard"
 PRICES = {"image": 0.15, "clip": 0.28, "music": 0.03, "tts_per_1k_chars": 0.10}
@@ -240,7 +240,7 @@ def step_narrate(pid: str, *_):
     log_cost(pid, "narration", len(text) / 1000 * PRICES["tts_per_1k_chars"])
     take = raw
     ref = Path(ep["narration"].get("voice_ref", VOICE_REF))
-    if ep["narration"].get("convert", True) and ref.exists():
+    if ep["narration"].get("convert", False) and ref.exists():
         conv = p / "assets/audio/narration_converted.wav"
         to_uri = lambda f: "data:audio/mpeg;base64," + base64.b64encode(Path(f).read_bytes()).decode()
         r = tools()["chatterbox_fal"].execute({
@@ -427,7 +427,7 @@ def step_build(pid, *_):
                       "punch": re.sub(r"\W", "", t.lower()) in punch,
                       "breakAfter": bool(re.search(r"[.,?!]$", t)) and t.lower() != "st."})
     props = {"totalSeconds": total, "shots": shots, "overlays": ep["overlays"], "words": words,
-             "wordsPerPage": 3, "captionY": 1180, "loopSeconds": ep.get("loop_seconds", LOOP_SECONDS)}
+             "wordsPerPage": 3, "captionY": 1180, "loopSeconds": loop_len(ep)}
     json.dump(props, open(rem / "props.json", "w", encoding="utf-8"), indent=1)
     gaps = [(a["id"], b["id"]) for a, b in zip(shots, shots[1:]) if abs(a["end"] - b["start"]) > 0.02]
     edit = {
@@ -449,7 +449,7 @@ def step_mix(pid, *_):
     tmp = p / "assets/audio/_mix"
     tmp.mkdir(exist_ok=True)
     src = p / "assets/music" / f"{ep['music']['selected']}.mp3"
-    L = ep.get("loop_seconds", LOOP_SECONDS)
+    L = loop_len(ep)
     if duration(src) < total + L + 1:
         ff("-i", str(src), "-i", str(src), "-filter_complex", "[0:a][1:a]acrossfade=d=2:c1=tri:c2=tri[a]", "-map", "[a]",
            "-ar", "48000", str(tmp / "loop.wav"))
@@ -580,6 +580,16 @@ def _cover_crops(cover: Path, out: Path):
     sheet.save(out, quality=86)
 
 
+DISCLOSURE = ("Illustrations are AI-assisted artistic reconstructions based on the cited historical record. "
+              "Research, scripting, editorial decisions and final production are human-directed.\n\n"
+              "Educational historical content. Not medical advice.")
+
+
+def loop_len(ep):
+    """Seamless-loop length: 0 unless the episode opts in with "loop": true (only when the ending is natural)."""
+    return ep.get("loop_seconds", LOOP_SECONDS) if ep.get("loop") else 0
+
+
 CHECKLIST = """## Upload checklist
 
 **YouTube Shorts** (Studio on desktop)
@@ -587,12 +597,16 @@ CHECKLIST = """## Upload checklist
 - Thumbnail: upload `cover.jpg` if your account shows the custom-thumbnail option for Shorts; otherwise pick the frame closest to the cover.
 - Subtitles → upload `captions.srt` (English).
 - Audience: **No, it's not made for kids**. Category: Education. Add to the series playlist.
-- Altered or synthetic content: our illustrated style is not realistic, so disclosure is not required; ticking it is harmless if unsure.
+- Altered or synthetic content: tick it only if a scene could be mistaken for real footage or a real event; illustrated
+  reconstructions are covered by the transparency line in the description.
+- Before publishing: Stage 7 review (whole video watched; claims.csv has no UNKNOWN/REMOVE claims left in the script;
+  rights.csv complete). Upload as Private first; never auto-publish.
 - After publishing: post and pin the pinned comment. When a long video exists, set it as the Short's **Related video**.
 
 **TikTok**
 - Upload `short.mp4`; Edit cover → upload `cover.jpg`; paste the TikTok caption.
-- Turn on **AI-generated content** label (safe default for AI-assisted visuals). Allow Duet/Stitch.
+- Turn on the **AI-generated content** label (safe default for AI-assisted visuals). Allow Duet/Stitch.
+- During the YouTube probe cross-posting is optional: keep the watermark-free master and post natively later.
 
 **Instagram Reels**
 - Upload `short.mp4`; Edit cover → Add from camera roll → `cover.jpg`; check the profile-grid preview.
@@ -640,8 +654,9 @@ def step_publish(pid, *_):
     credits = (p / "renders/CREDITS.txt").read_text(encoding="utf-8")
 
     yt = pub["youtube"]
-    desc = yt["description"].strip() + "\n\n" + " ".join(yt.get("hashtags", [])) + "\n\n" + credits
-    md = [f"# {ep['title']}", "", f"Length {duration(out / 'short.mp4'):.1f}s · 1080×1920 · -14 LUFS · loops seamlessly", "",
+    desc = "\n\n".join(x for x in (yt["description"].strip(), yt.get("sources", "").strip(), credits.strip(), DISCLOSURE,
+                                    " ".join(yt.get("hashtags", []))) if x)
+    md = [f"# {ep['title']}", "", f"Length {duration(out / 'short.mp4'):.1f}s · 1080×1920 · -14 LUFS" + (" · loops seamlessly" if loop_len(ep) else ""), "",
           "## YouTube Shorts", f"**Title:** {yt['title']}", "", "**Description:**", "```", desc, "```",
           f"**Tags:** {', '.join(yt.get('tags', []))}", "", f"**Pinned comment:** {yt.get('pinned_comment', '')}", ""]
     for plat in ("tiktok", "instagram", "facebook"):

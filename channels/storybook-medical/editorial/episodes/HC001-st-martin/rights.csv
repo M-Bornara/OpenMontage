@@ -1,0 +1,8 @@
+asset_id,episode,asset_type,source,creator,license,commercial_use,modification_allowed,attribution_required,license_date,license_copy_location,notes
+R01,HC001,images,fal.ai Nano Banana Pro / Nano Banana 2 (Google),AI output directed by Bornara,fal.ai ToS + Google generative AI terms,TO CONFIRM,yes,no,,PENDING - save PDF of both terms,
+R02,HC001,video clips,fal.ai Kling v2.1 / MiniMax H3-max,AI output,fal.ai ToS + model provider terms,TO CONFIRM,yes,no,,PENDING,
+R03,HC001,narration,fal.ai ElevenLabs eleven-v3 voice Liam,AI output,fal.ai ToS + ElevenLabs terms,TO CONFIRM,yes,no,,PENDING,"fal's ElevenLabs page says API output can be used commercially; save the actual clause. Narrator licence must be confirmed before launch (s.79)"
+R04,HC001,voice conversion,fal.ai Chatterbox (Resemble AI) speech-to-speech,MIT model; output watermarked,fal.ai ToS,TO CONFIRM,yes,no,,PENDING,Only if the owner-voice option is used
+R05,HC001,music,fal.ai MiniMax Music v2,AI output,fal.ai ToS + MiniMax terms,TO CONFIRM,yes,no,,PENDING,
+R06,HC001,sound effects,Freesound.org,see library/sfx-credits.json,CC0 / CC-BY 4.0,yes,yes,CC-BY items: yes,,channels/storybook-medical/library/sfx-credits.json,Credits in every description
+R07,HC001,fonts,Google Fonts Montserrat,Julieta Ulanovsky et al.,SIL OFL 1.1,yes,yes,no,,,
