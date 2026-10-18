@@ -27,12 +27,12 @@ channels/storybook-medical/
 | Look | Illustrated 2.5D storybook, amber/teal palette | – |
 | Images | Nano Banana Pro edit, chained from sheets/plates/previous shot | $0.15 / image |
 | Motion | Kling v2.1 standard, 5 s, one action, camera locked; all other shots free camera moves | $0.28 / clip |
-| Voice | One licensed AI narrator for the whole experiment: ElevenLabs v3 "Liam" (stability 0.4, speed 1.2) until the documentary-register re-audition picks the final one. Optional `"narration": {"convert": true}` re-voices it with the owner's voice (Chatterbox, reference kept out of git). | ~$0.08 |
+| Voice | **Liam** (ElevenLabs v3, stability 0.4, speed 1.2), the channel's voice for every format, one take. | ~$0.08 |
 | Audio post | atempo 1.14 → gain to -14 LUFS → peak limiter → edge fades. Nothing else. | – |
 | Music | MiniMax Music v2, structure-tags-only lyrics, verify no vocals | $0.03 / track |
 | SFX | Freesound CC0 / CC-BY library, credits in description | free |
 | Edit | Remotion StorybookShort (atelier) + ffmpeg mix, music ducked under voice | free |
-| Length | Shorts 35–55 s (visual change every 1.5–3 s, 3-word captions); long-form 8–12 min (StorybookLong, to build) | – |
+| Length | Shorts 35–55 s complete mini-stories (visual change every 1.5–3 s, 3-word captions); long-form ~5–10 min, story decides, never padded (StorybookLong, to build) | – |
 | Loop | Off by default; `"loop": true` only when the ending naturally returns to the opening | – |
 
 Typical episode: 6 new sheets/plates + ~20 keyframes + ~7 clips + voice + music ≈ **$6–7**.
@@ -54,7 +54,7 @@ E=channels/storybook-medical/scripts/episode.py
 python $E init <id>          # creates projects/<id>/episode.json
 ```
 
-0. **Brief + verdict** (free). `editorial/episodes/<EP>/episode-brief.md` from the template, with an editorial thesis and topic score.
+0. **Brief + Story Expansion Map + verdict** (free); the map decides long vs Short-only. `editorial/episodes/<EP>/episode-brief.md` from the template, with an editorial thesis and topic score.
    Verdict: APPROVE / RESEARCH MORE / REWRITE / HOLD / REJECT.
 1. **Research + script** (free). Log every claim in `claims.csv` (tiers A–D, statuses VERIFIED / ATTRIBUTED /
    DISPUTED / UNKNOWN / REMOVE). Fill `narration.v3_text` (tags used sparingly) and `punch_words`.

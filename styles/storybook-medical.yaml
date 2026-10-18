@@ -1,9 +1,9 @@
 identity:
   name: "Storybook Medical"
   category: custom
-  mood: intelligent, curious, cinematic, slightly mysterious, historically grounded, warm; never childish, grotesque or sensationalist
+  mood: fun, exciting, curious, cinematic, slightly mysterious, warm and intelligent ("Wait... WHAT? This actually happened?"); about 7/10 toward entertainment, 100% factual; never childish, grotesque or clickbait
   pace: fast  # Shorts; long-form runs "moderate" (StorybookLong)
-  best_for: "True documented stories of medicine, history and survival (working brand: The Human Casebook) told by one narrator over hand-painted 2.5D illustration: 8-12 min 16:9 cases and 35-55 s vertical Shorts. Governing rules: channels/storybook-medical/plan/master-instructions-v3.md"
+  best_for: "True documented stories of medicine, history and survival (working brand: The Human Casebook) told by one narrator over hand-painted 2.5D illustration: 5-10 min 16:9 stories and 35-55 s vertical Shorts. Governing rules: channels/storybook-medical/plan/master-instructions-v3.md"
 
 visual_language:
   color_palette:
@@ -55,19 +55,20 @@ motion:
 
 audio:
   voice_style: >
-    ONE licensed AI narrator for the whole experiment (pilot used ElevenLabs eleven-v3 "Liam" via fal,
-    stability 0.4, speed 1.2; re-audition in a documentary register before HC001). Sound: intelligent, curious,
-    energetic without shouting, warm, credible - "someone telling you an unbelievable true story they cannot
-    wait to explain". Not TikTok-excited, not movie-trailer, not childish. Use v3 tags sparingly ([curious],
-    [serious], [whispers] at most once) and CAPS rarely. Check names against editorial/pronunciation.csv;
-    regenerate single sentences rather than accept a bad read. Record each script section as one take.
+    Narrator is LIAM, always (Shorts, long videos, trailers, intros): ElevenLabs eleven-v3 via fal
+    (fal_elevenlabs_tts), stability 0.4, speed 1.2. Excited storyteller who pulls the viewer in - "someone
+    telling you an unbelievable true story they cannot wait to explain" - energetic but never shouting or
+    movie-trailer. Use v3 audio tags ([excited], [curious], [mischievously], [whispers]) and CAPS on one punch
+    word per line. Long videos use the same voice, slightly more breathing room. Check names against
+    editorial/pronunciation.csv; regenerate single sentences rather than accept a bad read. Record each
+    script (or long-video section) as ONE take.
     Post chain is speed + volume ONLY: ffmpeg atempo (uniform, max 1.15x) -> volume gain to -14 LUFS ->
     transparent peak limiter (alimiter, -2 dBFS ceiling) for consonant spikes. No EQ, no compressor, no
     rubberband/formant processing (it sounded hollow). Never trim silences inside the take.
     Edges: ~15 ms fade-in, ~80 ms fade-out on the tail (ElevenLabs files end abruptly), then 0.5 s silence pad.
   music_mood: "low suspenseful pulse, soft plucked strings, period-appropriate colour for history stories; never louder than the voice"
   music_volume: 0.12
-  sfx_style: "restrained and diegetic: room tone, footsteps on planks, cloth, paper, quill, period ambience; soft whoosh on hard cuts, low swell on reveals. No cartoon or comedic SFX (cash registers, boings), no gore sounds"
+  sfx_style: "fun and tactile: whooshes on cuts, booms and risers on reveals, diegetic hits (gunshot, footsteps, cloth, paper, quill, crowd), period ambience. One hit per moment - never stacked or repeated (the cash-register lesson); no gore sounds"
   ducking_threshold_db: -3
 
 asset_generation:
@@ -119,7 +120,7 @@ quality_rules:
   - "Hook lands in the first 1.5 seconds: striking image + first narrated line"
   - "Narration is one continuous processed track; the edit never cuts, trims or re-times inside it. Visuals are cut to the narration using word timestamps"
   - "Final mix: music ducked about 12 dB under speech, measured at -14 LUFS integrated and -1 dBTP before publishing"
-  - "Shorts 35-55 s, long-form 8-12 min; get there by writing, never by chopping pauses or stretching content"
+  - "Shorts 35-55 s, complete mini-stories (question -> answer -> bigger question), never trailers. Long-form ~5-10 min, length set by the Story Expansion Map, never padded; something new every 30-60 s"
   - "Shorts: a meaningful visual change every 1.5-3 s; long-form: every 3-8 s plus a new question, document or reveal every 45-90 s. Never hold a still without camera motion, never move without purpose"
   - "Burned-in captions on every word, bold, centred in the lower-middle safe zone"
   - "Every claim in the script is in the episode claims.csv with tier and status; nothing UNKNOWN or REMOVE reaches the narration; evidence-sensitive wording (records show / later accounts claimed / historians still disagree)"

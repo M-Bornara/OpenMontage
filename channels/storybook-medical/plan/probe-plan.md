@@ -1,79 +1,63 @@
-# Probe plan (replaces the 25-Short launch plan)
+# Probe plan — first 12 uploads
 
-Governing document: [`master-instructions-v3.md`](master-instructions-v3.md). The old slate is kept in
-[`archive/launch-plan-v1.md`](archive/launch-plan-v1.md) for reference only; **it is not a production queue.**
-Updated 2026-10-18.
+Governing document: [`master-instructions-v3.md`](master-instructions-v3.md), with the **v3.1 amendments**
+taking priority. The old 25-Short slate is kept in [`archive/launch-plan-v1.md`](archive/launch-plan-v1.md)
+as an idea bank only. Updated 2026-10-18.
 
-## Phase 1 — production probe (Gate 0, ≤ $350 cumulative)
+**Format:** fun, cinematic, illustrated true stories with documentary-level fact standards. Liam narrates
+everything. Shorts run 35–55 s and are complete mini-stories. Long videos are usually 5–10 min, as long as
+the story needs and never padded.
 
-**HC001 Alexis St. Martin.** Brief, claim log and rights log are in `../editorial/episodes/HC001-st-martin/`.
+## The first 12
+
+| # | Fmt | Type | Title | Research package | Status |
+|---|---|---|---|---|---|
+| 1 | L | – | The Man With a Window Into His Stomach | HC001 | research |
+| 2 | S | Case | He Survived a Hole in His Stomach | HC001 | rewrite of pilot (art reused) |
+| 3 | S | Case | The Doctor Who Put Food on a String | HC001 | new script; pilot experiment shots reused |
+| 4 | S | Case | The Human Experiment Who Walked Away | HC001 | rewrite of ep 2 (art reused) |
+| 5 | S | Story | He Pushed a Tube Into His Own Heart (Forssmann) | HC-S01 | research |
+| 6 | L | – | Phineas Gage: The Story Everyone Gets Wrong | HC002 | research |
+| 7 | S | Case | An Iron Rod Went Through His Skull | HC002 | |
+| 8 | S | Case | Did Phineas Gage Really Become a Different Person? | HC002 | |
+| 9 | S | Story | He Drank Bacteria to Prove a Doctor Wrong (Marshall) | HC-S02 | research |
+| 10 | L | – | The Dancing Plague: What Actually Happened? | HC003 | research more |
+| 11 | S | Case | The Woman Who Couldn't Stop Dancing | HC003 | |
+| 12 | S | Case | The City Hired Musicians. It Made Things Worse. | HC003 | |
+
+The release order is a guideline, not a funnel. Each Case Short points its **Related Video** at its long
+video. Story Shorts point at whichever long video fits best.
+
+## Steps per research package
 
 | Step | Output | Cost |
 |---|---|---|
-| 1. Research | `research.md`. Close every Tier A claim in `claims.csv` from Beaumont 1833 (public domain) and scholarly sources. | free |
-| 2. Scripts | `script-v1.md` for L (~1,300–1,600 words), S1, S2, S3. ≥60% of the long narration is new vs the Shorts. | free |
-| 3. ✋ Your review | `script-approved.md` (Stage 3 full edit). | – |
-| 4. Narrator audition | Same 40 s passage in 3–4 licensed voices/settings, documentary register. ✋ pick one narrator for the whole experiment. | ≈ $0.50 |
-| 5. StorybookLong template | 16:9 Remotion composition: chapter cards, labels (The Case / The Evidence / The Myth…), document and map inserts, 3 thumbnail stills, end screen. | free |
-| 6. Production | Reuse pilot and ep 2 art wherever the claims survive. New shots only for new content (book pages, documents, Fort Mackinac, later life). Budget tier, escalate failures. | ≈ $15–30 |
-| 7. Packaging | 3 thumbnails per long video (Test & Compare), description from the template, chapters, Related Video, end screen. | ≈ $1 |
-| 8. ✋ Final review | Stage 7 checklist, then a private upload, then you publish. | – |
+| 1. Research | `research.md` + `claims.csv` (Tier A claims closed) | free |
+| 2. Story Expansion Map | decides long vs Short-only, and the Short angles | free |
+| 3. Scripts | long + Shorts, each one its own story. Roughly 140 spoken words per minute, so 5–10 min ≈ 700–1,400 words | free |
+| 4. ✋ Your approval | `script-approved.md` | – |
+| 5. Production | reuse art first; budget tier, with premium escalation for failed shots | ≈ $8–20 per long, $2–4 per Short |
+| 6. ✋ Final review | Private upload first, then you publish | – |
 
-The pilot and ep 2 Shorts are **not published as they are**. Their narration carries claims marked
-REMOVE/UNKNOWN (tasted the stomach, burial, "keep him forever", "human test tube"). They become S1 and S2:
-- re-scripted;
-- re-narrated (cheap);
-- re-cut from the existing art.
+The long video also needs a one-time **StorybookLong** 16:9 template, which is free to build:
+- chapter cards;
+- maps, documents and diagrams;
+- the same caption and SFX energy as the Shorts;
+- 3 thumbnail stills;
+- an end screen.
 
-The only new generation is for shots whose content changes.
+## Gates
+- **Gate 0, up to $350:** HC001, plus the Forssmann Short.
+- **Gate 1, up to $600:** HC002, HC003 and Marshall, once HC001 works end to end.
+- **Gate 2, up to $800:** the rest of the 90 days.
 
-Publishing sequence: Day 1 L · Day 2 strongest Short (Related Video → L) · Day 4 · Day 6/7.
-Long on Sunday morning MT, Shorts late afternoon/evening MT (a hypothesis to test, not "best times").
-
-## Phase 2 — audience probe (Gate 1, ≤ $600 cumulative)
-
-Unlocks when the HC001 package is complete, the workflow and rights process work, there are no policy
-problems, and the cost is understood.
-
-| Cluster | Tests | Long | Shorts |
-|---|---|---|---|
-| HC002 Phineas Gage | famous case + myth correction | Phineas Gage: What Really Happened After the Iron Rod | An Iron Rod Went Through His Skull · The Personality-Change Story May Be Wrong · What Happened to Phineas Gage Afterward |
-| HC003 Dancing Plague | historical mystery + uncertainty | The Dancing Plague of 1518: What Do We Actually Know? | The Woman Who Wouldn't Stop Dancing · The City Tried Music—and Made It Worse · What Caused the Dancing Plague? |
-
-Phase 2 is followed by Gate 2 (≤ $800 cumulative): ~2–3 Shorts/week and one long every two weeks, only if
-the quality holds.
-
-## Topic pipeline (verdicts on every old slate item)
-
-| Old ID | Topic | List | Verdict | Reason |
-|---|---|---|---|---|
-| A1–A4 | St. Martin | READY | **APPROVE** → HC001 | Strongest evidence; A3 becomes S3 "What the Evidence Actually Says"; A4 burial claim held |
-| A4 | "Buried 8 feet deep" | HOLD | **HOLD** | Later-account claim; usable only as "later accounts claimed…" inside S3/L ch7 |
-| D1–D3 | Phineas Gage | READY | **APPROVE** → HC002 | Famous + myth correction; Macmillan's scholarship is available |
-| B1–B3 | Dancing Plague | RESEARCH | **RESEARCH MORE** → HC003 | Death toll and the "band made it worse" detail rest on later sources; uncertainty is the story |
-| E1 | Jean Hilliard | RESEARCH | RESEARCH MORE | Strong survival story; "frozen solid" wording must match the medical record |
-| E2 | Anna Bågenholm | RESEARCH | RESEARCH MORE | Good evidence (Lancet 2000 report); Level 2 medical explanation needs a qualified check |
-| E5 | Juliane Koepcke | RESEARCH | RESEARCH MORE | Global, well documented (her memoir, Herzog's film); a living person, so treat with care |
-| C1–C6 | Self-experimenters (Forssmann, Marshall, Ffirth, Pettenkofer, Lazear, Carrión) | RESEARCH | RESEARCH MORE | Good later cluster. Carrión (Peru) and Marshall (Australia) help the global mix; Lazear's intent is DISPUTED |
-| C7 | St. Martin recap | – | REJECT | Covered by HC001 |
-| E3 | Vesna Vulović | HOLD | **HOLD** | Fall height disputed by later investigation |
-| E4 | Roy Sullivan | HOLD | **HOLD** | Weak evidence base, novelty only |
-| F1 | Why your stomach doesn't digest itself | – | HOLD | Body-science; secondary family for now |
-| F2 | Never hold in a sneeze | HOLD | **REJECT** | Tier D behavioural advice from one case report |
-| F3 | Brain freeze | – | HOLD | Body-science; later |
-| L3 / L5 | "7 doctors…", "5 people whose bodies refused to die" list videos | – | HOLD | List compilations dilute the case-file identity; revisit after Phase 2 |
-
-After the three clusters, deliberately look for cases outside North America and Western Europe.
-
-## What changed from v1 and why
-
-| v1 | Now | Instruction |
-|---|---|---|
-| Shorts first, long assembled from Shorts | Long-form first; Shorts from the same research, ≥60% new material in the long | §2, §36 |
-| 25 Shorts + 5 longs before launch | 1 long + 3 Shorts, then two test clusters | §27, §80 |
-| 38–48 s, forced seamless loop | 35–55 s, loop only when natural | §32 |
-| "Two sources for every fact" | Tier A/B/C/D claim review + claim log | §17, §47 |
-| Excited storyteller | Documentary storyteller, energetic without shouting | §13 |
-| Owner's converted voice as default | One licensed AI narrator; owner voice optional | §12 |
-| "General audience 10+" | Teens and adults, not made for kids, no cartoon SFX | §10 |
-| ≈ $110 for 10 weeks | Gate 0 ≤ $350 for the probe; spend only what is needed | §64 |
+## Topic pipeline
+- **READY:** St. Martin, Phineas Gage.
+- **RESEARCH:** Dancing Plague, Forssmann, Marshall, Jean Hilliard, Anna Bågenholm, Juliane Koepcke,
+  Pettenkofer, Ffirth, Carrión.
+  - Lazear is DISPUTED, because his intent is unclear.
+- **CURIOSITY SHORT ideas:** why your stomach doesn't digest itself; brain freeze.
+- **HOLD:** the burial-depth claim (usable only as "later accounts claimed…"), Vulović (the fall height is
+  disputed), Roy Sullivan (weak evidence).
+- **REJECT:** the sneeze-advice Short (behavioural medical advice).
+- **HOLD:** the "7 doctors" and "5 survivors" list videos. Revisit after the first 12.

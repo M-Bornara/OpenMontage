@@ -8,6 +8,74 @@ docs (README, launch plan v1, playbook) disagree with it, this wins. Formatting 
 - Validation horizon 90 days. Experiment budget up to US$800, released in stages. Do not assume the
   full $2,000–5,000 is available; more capital requires evidence.
 
+## v3.1 amendments (2026-10-18) — these override anything below that conflicts
+
+The research should improve the business model and the accuracy **without changing the personality** of the
+product. The channel is **not** a documentary channel.
+
+1. **Positioning.** Fun, cinematic, illustrated true-story channel with documentary-level factual standards:
+   "beautifully illustrated true stories about the strangest things humans have experienced, survived,
+   discovered and misunderstood". Internal creative direction is "cinematic illustrated true-story
+   entertainment", and the word "documentary" is dropped from it. Tone is about **7/10** on a scale from
+   academic documentary (1) to pure viral entertainment (10): 70% entertainment, 30% educational depth,
+   100% factual responsibility.
+   - Keep: excitement, wonder, mystery, occasional respectful humour, surprise, emotion, beauty, intelligence.
+   - The viewer's arc is "Wait… WHAT? This actually happened?" → "Okay, tell me the rest." → "Wow."
+   - Not a TED-Ed, History Channel, medical-lecture, AI-facts, Zack D. Films or Wikipedia-with-animation clone.
+   - Research and sourcing work behind the scenes; the viewer never feels they are reading a paper.
+2. **Narrator: Liam**, a firm decision for Shorts, long videos, trailers and intros. Do not experiment with
+   the owner's voice. Liam stays energetic and exciting (not shouting, not trailer-voice).
+3. **Formats are complementary.** Shorts drive discovery and fast topic tests; long videos build the
+   relationship, watch time and monetisation. Neither is the parent of the other. **One research package is
+   the parent of both.**
+4. **Long videos: no minimum.** Target about **5–10 min** during validation; the story decides. Never pad.
+   Every 30–60 s brings new information, evidence, conflict, surprise, explanation or consequence. Write the
+   strongest complete version, then measure it: 5:40 is fine, 9:10 is fine if every section earns its place,
+   and at 12:00 ask whether it is padded.
+5. **Story Expansion Map before any long video** (`editorial/templates/story-expansion-map.md`): core
+   premise, main question, numbered story beats (each answer opens the next question), Short angles. If the
+   map is only event → result → end, the story is **Short-only**. A long video needs character, conflict,
+   progression, consequences, open questions and aftermath.
+6. **Shorts are complete standalone mini-stories, never trailers.** Use question → answer → bigger question,
+   never question → no answer → "watch the full video". Three types:
+   - **Story Shorts:** independent tales.
+   - **Case Shorts:** one angle of a long case, linked with Related Video.
+   - **Curiosity Shorts:** body, science or history questions. A strong performer can inspire a long video.
+
+   Keep all the fun parts: fast pacing, exciting narration, reveals, camera moves, SFX, music, punchy
+   captions, twists, and loops where natural.
+7. **Long videos are fun too.** They are fast and visual ("Beaumont had a problem no doctor had ever had
+   before.") and never lecture prose. One generated scene yields many beats: wide, push-in, character crop,
+   object crop, parallax, lighting change, document overlay, map, diagram.
+8. **Launch architecture is story universes plus independent Shorts, not a mechanical funnel.**
+   The first 12 uploads are:
+
+   | # | Format | Title |
+   |---|---|---|
+   | 1 | L | The Man With a Window Into His Stomach |
+   | 2 | S | He Survived a Hole in His Stomach |
+   | 3 | S | The Doctor Who Put Food on a String |
+   | 4 | S | The Human Experiment Who Walked Away |
+   | 5 | S, independent | He Pushed a Tube Into His Own Heart (Forssmann) |
+   | 6 | L | Phineas Gage: The Story Everyone Gets Wrong |
+   | 7 | S | An Iron Rod Went Through His Skull |
+   | 8 | S | Did Phineas Gage Really Become a Different Person? |
+   | 9 | S, independent | He Drank Bacteria to Prove a Doctor Wrong (Marshall) |
+   | 10 | L | The Dancing Plague: What Actually Happened? |
+   | 11 | S | The Woman Who Couldn't Stop Dancing |
+   | 12 | S | The City Hired Musicians. It Made Things Worse. |
+
+   The brand can be broad, but the first 10–15 videos cluster around extraordinary medical, history and
+   survival cases.
+9. **Naming brief.** The name should be fun, memorable and story-led, not an institution. It should hold
+   strange history, medicine, survival, science, unbelievable people, mysteries and global stories.
+   - Name the personality first, then the channel.
+   - "Storybook" stays an internal style name; publicly the style is "illustrated cinematic storytelling".
+
+The editorial standard is unchanged by the amendment: claim tiers and logs, evidence-sensitive wording, no
+invented facts, people-first, advertiser safety, no auto-publishing and budget gates. It now serves a fun
+product rather than shaping it.
+
 ## 1. Mission
 Evidence-driven storytelling brand about extraordinary true stories: medicine, the human body, survival,
 medical history, unusual historical cases, scientific discoveries, disputed historical claims, myths that

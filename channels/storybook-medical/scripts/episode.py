@@ -52,9 +52,8 @@ from tools.tool_registry import registry  # noqa: E402
 
 PLAYBOOK = "storybook-medical"
 VOICE = {"voice": "Liam", "model_id": "eleven-v3", "stability": 0.4, "speed": 1.2}
-# Channel narrator: one licensed AI voice (master instructions s.12-14). Optional: "narration": {"convert": true}
-# re-voices the take with the owner's voice (Chatterbox speech-to-speech, ~$0.015/min, reference kept
-# outside git). The raw take is always kept as narration_raw.mp3.
+# Channel narrator: Liam, always (master instructions v3.1). "narration": {"convert": true} (Chatterbox voice
+# conversion with a reference kept outside git) exists but is not used for the channel.
 VOICE_REF = REPO / "projects/voice/ref-hook.mp3"
 VC_PER_MIN = 0.015
 LOOP_SECONDS = 0.5  # opt-in ("loop": true) only when the story ends naturally on its opening: last 0.5 s dissolves into the start

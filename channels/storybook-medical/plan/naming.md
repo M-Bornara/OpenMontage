@@ -1,37 +1,37 @@
-# Channel naming shortlist (instructions §3–4)
+# Channel naming shortlist (v3.1 brief)
 
-**Status: draft. Nothing has been bought or registered.** Scores are first-pass judgment calls. The
-clearance columns are what still has to be checked. Each check is free and takes a few minutes per name:
-- **YT:** a YouTube search, plus @handle availability in Studio.
-- **TM:** CIPO and USPTO trademark searches.
-- **Dom:** domain availability.
+**Status: draft. Nothing has been bought or registered.**
 
-Scale is 1–5; ★ means very high importance (×2 in the total).
+**Brief:** a fun, memorable, story-led name for "beautifully illustrated true stories about the strangest
+things humans have experienced, survived, discovered and misunderstood".
+- It should not sound like a medical institution, a kids' channel or a keyword farm.
+- "Storybook" stays an internal style word only.
 
-| Name | Memorable★ | Pronounce★ | Spell | Distinct★ | Global | Fits beyond medicine★ | Not childish | No medical-advice vibe★ | Visual idea | Total | YT | TM | Dom |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| **The Human Casebook** (working) | 4 | 5 | 5 | 3 | 4 | 4 | 5 | 4 | open casebook | 61 | adjacent channel reported | ? | ? |
-| **The Living Record** | 4 | 5 | 5 | 4 | 5 | 5 | 5 | 5 | ledger with a pulse of ink | 67 | ? | ? | ? |
-| **Lantern Archive** | 5 | 5 | 5 | 5 | 4 | 5 | 4 | 5 | lantern lighting a shelf of files (matches our amber/teal look) | 69 | ? | ? | ? |
-| **The Uncommon Record** | 4 | 5 | 4 | 4 | 5 | 5 | 5 | 5 | stamped file | 66 | ? | ? | ? |
-| **Ink & Bone** | 5 | 5 | 5 | 5 | 4 | 3 | 4 | 4 | quill + bone silhouette | 63 | ? | ? | ? |
-| **Casefiles of the Curious** | 3 | 4 | 3 | 3 | 4 | 5 | 4 | 5 | magnifier on a file | 57 | ? | ? | ? |
-| **Human Annals** | 3 | 3 | 4 | 4 | 4 | 5 | 5 | 5 | bound volume | 58 | ? | ? | ? |
-| **The Margin Notes** | 4 | 5 | 5 | 4 | 4 | 5 | 5 | 5 | handwriting in a book margin ("the myth vs the record") | 66 | ? | ? | ? |
+**Quick web check (2026-10-18):** this is a first pass only, not a clearance.
+- **The Human Casebook:** an adjacent real-case channel is reported. Don't get attached.
+- **Oddly Human:** no channel by that exact name was found. The giant "Oddly Satisfying" channels
+  (about 1.2M subscribers) and "TheOdd1sOut" sit nearby, so searches may blur together.
+- **CaseLore / HumanLore / Curious Casefiles:** no exact channel found. "-Lore" names sit close to the
+  well-known *Lore* podcast brand, which is a trademark risk.
 
-My pick to clear first: **Lantern Archive**, then **The Living Record**, then **The Margin Notes**.
-- **Lantern Archive** fits the illustrated look and the "evidence brought to light" promise, and has no
-  medicine lock-in.
-- **The Margin Notes** fits the myth-vs-record angle best, but it's the weakest as a logo.
+Scores are 1–5. ★ marks the criteria that count double in the total.
 
-Rejected outright: generic keyword names (Medical Facts, Amazing Humans, Weird History Stories…), and
-anything with "Doctor", "Clinic", "Health", "Med" or "Body", which suggest medical advice or a medicine-only
-channel.
+| Name | Fun / personality★ | Memorable★ | Say & spell | Distinct★ | Fits history + medicine + survival★ | No medical-advice vibe | Total | Notes |
+|---|---|---|---|---|---|---|---|---|
+| **Oddly Human** | 5 | 5 | 5 | 3 | 5 | 5 | 51 | Best fit for the tone; search adjacency to "Oddly Satisfying" |
+| **It Actually Happened** | 5 | 4 | 5 | 3 | 5 | 5 | 49 | Mirrors the viewer reaction "this actually happened?"; probably crowded |
+| **Remarkably Human** | 4 | 4 | 5 | 4 | 5 | 5 | 49 | Warmer and less mysterious |
+| **The Curious Record** | 4 | 4 | 5 | 4 | 5 | 5 | 48 | Keeps the "record vs myth" angle |
+| **Lantern Archive** | 3 | 5 | 5 | 5 | 5 | 5 | 51 | Matches the amber-lit art; more mysterious than fun |
+| **Unbelievably Human** | 4 | 4 | 4 | 4 | 5 | 5 | 47 | Long handle |
+| **The Human Casebook** | 3 | 4 | 5 | 2 | 4 | 4 | 41 | Conflict risk |
 
-Clearance order for the chosen name:
+**Suggested shortlist for full checks:** Oddly Human, Lantern Archive, The Curious Record.
+
+**Clearance order:**
 1. YouTube search, plus @handle in Studio.
-2. CIPO and USPTO (classes 41 and 9).
-3. A .com, or an acceptable alternative.
+2. CIPO and USPTO, classes 41 and 9.
+3. Domain.
 4. TikTok, Instagram and Facebook handles.
 
-Only after that: logo, banner, domain.
+Only after that: logo, banner and the Google account.

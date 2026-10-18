@@ -25,10 +25,12 @@ reusable; their narration and packaging are not.
 ## Package (first production milestone)
 | ID | Format | Working title | Hook | Reuses |
 |---|---|---|---|---|
-| HC001-L | long 8–11 min | The Man Who Lived With a Window Into His Stomach | Food disappears through an opening in a man's side while a doctor watches the clock. "And somehow, this wasn't surgery." | pilot + ep 2 art, re-framed 16:9 |
-| HC001-S1 | Short | The Accident | "In 1822, a gun went off less than a meter from Alexis St. Martin—and left doctors staring directly into his stomach." | pilot shots |
-| HC001-S2 | Short | The Human Experiment | Beaumont's experiments + contract/servant/army, told people-first | pilot + ep 2 shots |
-| HC001-S3 | Short | What the Evidence Actually Says | what Beaumont wrote vs what retellings add | new: book pages, documents |
+| HC001-L | long ~5–10 min (the map decides) | The Man With a Window Into His Stomach | "In June 1822, a young fur trader… a shotgun went off less than a meter away." → "A window into a living human stomach." | pilot + ep 2 art, re-framed 16:9 |
+| HC001-S1 | Case Short | He Survived a Hole in His Stomach | accident → expected death → survival → the opening that never closed | pilot shots |
+| HC001-S2 | Case Short | The Doctor Who Put Food on a String | the experiment → what came out → "and that was one of hundreds" | pilot experiment shots |
+| HC001-S3 | Case Short | The Human Experiment Who Walked Away | arrangement → servant, army, contract → he leaves; Beaumont's letters | ep 2 shots |
+
+The two existing Shorts were never uploaded (there is no YouTube account yet), so no corrections are needed.
 
 ## Risks
 - **Tier A claims still open:** date, weapon and distance; experiment count; "tasted"; the burial. All are
