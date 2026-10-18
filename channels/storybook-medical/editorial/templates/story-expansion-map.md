@@ -1,30 +1,47 @@
 # Story Expansion Map — <case>
 
-Fill this in from the research before writing any script. It decides whether the story becomes a long
-video, a set of Shorts, or a single Short.
+Fill this in from the research before writing any script (see `plan/story-craft.md`).
 
-**CORE PREMISE** (one sentence):
+**Thumbnail sentence** (why it's fascinating, in one sentence):
+**Family:** Strange Medical Case / Impossible Survival / History Got It Wrong / Weirdest Moment /
+Crazy Science / Wildcard
+**Emotional colour:** strange / funny / inspiring / mysterious / shocking / clever / tragic
 
-**MAIN QUESTION** (what the long video answers):
+## Score (1–5, weighted)
+| WTF 20% | Character 15% | Progression 15% | Visual 15% | Evidence 15% | Twist 10% | Global 5% | Brand 5% | **Weighted** |
+|---|---|---|---|---|---|---|---|---|
+| | | | | | | | | |
+
+≥ 4.0 produce · 3.0–3.9 research more · < 3.0 drop.
 
 ## Story beats
-Each beat answers the previous question and opens the next one.
-
-| # | Beat | Question it opens | Evidence (claim IDs) | Visual idea |
+| Role | Beat | Question it opens | Claim IDs | Visual idea |
 |---|---|---|---|---|
-| 1 | | | | |
-| 2 | | | | |
+| Impossible premise | | | | |
+| Character | | | | |
+| Inciting event | | | | |
+| Unexpected development | | | | |
+| New problem | | | | |
+| Opportunity / escalation | | | | |
+| Human conflict | | | | |
+| Discovery | | | | |
+| Myth / what retellings got wrong | | | | |
+| Aftermath | | | | |
+| Meaning | | | | |
 
-## Verdict
-- **Long candidate** needs all six: character, conflict, progression, consequences, open questions, aftermath.
-  → Long (est. narration ~140 words/min → ___ words ≈ ___ min)
-- **Short-only:** the beats are just event → result → end.
-- **No angle strong enough to stand alone:** fold the story into another case.
+**WHAT?! / HOW?! / WAIT… / WOW.** Name the beat that delivers each.
+
+## Classification
+- **S** (Short only): event → result → end.
+- **L** (Long only): loses too much when compressed.
+- **U** (Story Universe): one long + 2–3 standalone Shorts.
+
+Long estimate: about 140 words/min → ___ words ≈ ___ min (target ~5–10, the shortest complete version).
 
 ## Short angles
-Each Short is a complete mini-story. Write each one as question → answer → bigger question. It is never a
-trailer.
+Each Short is a complete mini-story: premise → who/where/why → because/therefore/but/so → reveal → bigger
+curiosity. No trailers.
 
-| ID | Type (Story / Case / Curiosity) | Angle | Hook (first 1.5 s) | Payoff | Bigger question at the end |
-|---|---|---|---|---|---|
-| S1 | | | | | |
+| ID | Angle | Hook (first 1.5 s) | Reveal | Bigger curiosity after the answer |
+|---|---|---|---|---|
+| S1 | | | | |

@@ -28,6 +28,9 @@ the story needs and never padded.
 The release order is a guideline, not a funnel. Each Case Short points its **Related Video** at its long
 video. Story Shorts point at whichever long video fits best.
 
+**Next universe** if Season Zero supports it: Anna Bågenholm (survival). Keep the family mix and emotional
+colours in [`story-craft.md`](story-craft.md) in mind, and let the results by family choose the direction.
+
 ## Steps per research package
 
 | Step | Output | Cost |
@@ -56,7 +59,7 @@ The long video also needs a one-time **StorybookLong** 16:9 template, which is f
 - **RESEARCH:** Dancing Plague, Forssmann, Marshall, Jean Hilliard, Anna Bågenholm, Juliane Koepcke,
   Pettenkofer, Ffirth, Carrión.
   - Lazear is DISPUTED, because his intent is unclear.
-- **CURIOSITY SHORT ideas:** why your stomach doesn't digest itself; brain freeze.
+- **Generic body-science ideas** (why your stomach doesn't digest itself, brain freeze): only inside a human story.
 - **HOLD:** the burial-depth claim (usable only as "later accounts claimed…"), Vulović (the fall height is
   disputed), Roy Sullivan (weak evidence).
 - **REJECT:** the sneeze-advice Short (behavioural medical advice).

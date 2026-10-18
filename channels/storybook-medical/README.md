@@ -1,7 +1,7 @@
 # Storybook Medical — channel kit (channel: **Oddly Matt**, @oddlymatt)
 
 > **Governing document: [`plan/master-instructions-v3.md`](plan/master-instructions-v3.md).** Current plan:
-> [`plan/probe-plan.md`](plan/probe-plan.md). Editorial logs and templates: [`editorial/`](editorial/).
+> [`plan/probe-plan.md`](plan/probe-plan.md). How to write stories: [`plan/story-craft.md`](plan/story-craft.md). Editorial logs and templates: [`editorial/`](editorial/).
 > The kit below is the production engine; editorial judgment, claim review and the final publish decision
 > stay human. No new automation until a manual step is a measured bottleneck (§49).
 

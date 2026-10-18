@@ -2,6 +2,9 @@
 
 > **Channel name decided 2026-10-18: Oddly Matt** (@oddlymatt) — "True stories from the strange side of being human."
 > "The Human Casebook" below was the working name and is retired.
+> **v3.2 story craft** (how we pick, classify and write stories, Liam's writing style, the weighted topic score,
+> story families and the content formula) lives in [`story-craft.md`](story-craft.md) and overrides conflicting
+> details here. In particular, stand-alone "Curiosity Shorts" are replaced by curiosity told through a person.
 
 Owner: Bornara · Received 2026-10-18 · **This document governs the channel.** Where the older kit
 docs (README, launch plan v1, playbook) disagree with it, this wins. Formatting condensed; content kept.

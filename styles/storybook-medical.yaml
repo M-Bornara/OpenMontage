@@ -58,7 +58,8 @@ audio:
     Narrator is LIAM, always (Shorts, long videos, trailers, intros): ElevenLabs eleven-v3 via fal
     (fal_elevenlabs_tts), stability 0.4, speed 1.2. Excited storyteller who pulls the viewer in - "someone
     telling you an unbelievable true story they cannot wait to explain" - energetic but never shouting or
-    movie-trailer. Use v3 audio tags ([excited], [curious], [mischievously], [whispers]) and CAPS on one punch
+    movie-trailer, never professor or news anchor. Scripts use short sentences with mixed rhythm (see
+    channels/storybook-medical/plan/story-craft.md). Use v3 audio tags ([excited], [curious], [mischievously], [whispers]) and CAPS on one punch
     word per line. Long videos use the same voice, slightly more breathing room. Check names against
     editorial/pronunciation.csv; regenerate single sentences rather than accept a bad read. Record each
     script (or long-video section) as ONE take.
