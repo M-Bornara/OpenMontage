@@ -171,9 +171,25 @@ def gen_images(pid: str, section: str, out_dir: str, only: list[str]):
         r = nb.execute({"model": model, "prompt": prompt, "image_paths": refs,
                         "aspect_ratio": spec.get("aspect", "9:16"), "resolution": "2K", "output_format": "png",
                         "safety_tolerance": "5", "output_path": str(out / f"{name}.png")})
-        if r.success:
-            log_cost(pid, f"{section}:{name}:{model}", IMAGE_MODELS.get(model, PRICES["image"]))
-        return name, r.success, (r.error or "")[:200]
+        if not r.success:
+            return name, False, (r.error or "")[:200]
+        log_cost(pid, f"{section}:{name}:{model}", IMAGE_MODELS.get(model, PRICES["image"]))
+        if section == "keyframes" and ep.get("dual_format", True):
+            # Same moment recomposed for long-form 16:9, anchored on the approved 9:16 frame.
+            wide = proj(pid) / "assets/images/keyframes16x9"
+            wide.mkdir(parents=True, exist_ok=True)
+            w = nb.execute({"model": model, "image_paths": [str(out / f"{name}.png")] + refs, "aspect_ratio": "16:9",
+                            "resolution": "2K", "output_format": "png", "safety_tolerance": "5",
+                            "output_path": str(wide / f"{name}.png"),
+                            "prompt": ("Reference 1 is an approved vertical frame. Recompose EXACTLY this moment as a 16:9 "
+                                       "widescreen frame from a slightly wider camera: same characters, faces, costumes, props, "
+                                       "lighting and art style; extend the set naturally to the left and right; keep the main "
+                                       "action centred. Other references are for identity only." + TAIL + " " + style)})
+            if w.success:
+                log_cost(pid, f"{section}16x9:{name}:{model}", IMAGE_MODELS.get(model, PRICES["image"]))
+            else:
+                return name, True, f"9:16 ok, 16:9 failed: {(w.error or '')[:150]}"
+        return name, True, ""
 
     # dependency waves: an item waits for any kf:/ref: it references that is still being generated
     pending = list(names)
