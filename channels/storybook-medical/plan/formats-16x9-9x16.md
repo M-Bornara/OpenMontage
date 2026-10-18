@@ -50,6 +50,25 @@ The money saved is modest because images are already cheap. The bigger wins are:
 3. **More shots per image** (reverse shots and punch-ins come from one master), which keeps Shorts fast
    without more generations.
 
+## Quality rule (owner decision 2026-10-18)
+- **Quality comes before the saving.** Every frame that reaches either format must have at least native
+  1080 px on its short side without upscaling: 4K wide masters, 2K square inserts. Never crop a 1K image.
+- If a window looks cramped or soft in review, generate that shot natively for the format instead.
+- Planned production route: **Gemini API Batch** (Google direct, half price). It makes 4K cost about what
+  1K costs on fal. See "Access and cost" below.
+
+## Access and cost (checked 2026-10-18 on ai.google.dev/gemini-api/docs/pricing)
+| Per image | fal (now) | Google direct | Google **Batch** |
+|---|---|---|---|
+| Nano Banana 2, 1K / 2K / 4K | $0.08 / $0.12 / $0.16 | $0.067 / $0.101 / $0.151 | **$0.034 / $0.050 / $0.076** |
+| Nano Banana Pro, 1K–2K / 4K | $0.15 / $0.30 | $0.134 / $0.24 | **$0.067 / $0.12** |
+
+- Batch results arrive asynchronously (target within 24 h), which fits our review-gated workflow.
+- `tools/graphics/google_imagen.py` already calls these models directly with reference images and
+  resolution. Batch submission would be a small addition.
+- This needs a Google API key with billing enabled. That is pay-as-you-go and separate from the Google AI
+  Pro subscription.
+
 ## Optional: free local upscaling
 The repo already has `tools/enhancement/upscale.py` (Real-ESRGAN, including an **anime/illustration
 model**). It isn't installed yet. Installing it (free, runs on your NVIDIA GPU) would let us generate
