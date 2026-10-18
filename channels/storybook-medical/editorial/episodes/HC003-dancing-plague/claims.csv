@@ -1,0 +1,16 @@
+episode_id,claim_id,script_timestamp,exact_claim,claim_tier,source_1,source_2,primary_source,source_type,dispute_status,medical_risk,visual_rights,review_status,notes
+HC003,C01,S1 0:00,"Strasbourg, July 1518: a dancing epidemic lasting into late August/September",A,Waller 2008,Waller 2009 Lancet,chronicles + council notes,scholarly,,0,,VERIFIED,
+HC003,C02,S1 0:02,"Began with Frau Troffea on about 14 July, dancing alone without music",A,Waller 2008,Pennant-Rea 2018,Paracelsus; chronicles,scholarly+primary-derived,4 of 6 chronicles name her,0,,ATTRIBUTED,"'According to the chronicles'"
+HC003,C03,S1 0:10,"She danced for 4-6 days; her husband begged her to stop",B,Pennant-Rea 2018,Waller 2008,,scholarly,,0,,ATTRIBUTED,
+HC003,C04,S1 0:20,"Within days, more than thirty people were dancing",A,Pennant-Rea 2018,Waller 2008,,scholarly,,0,,ATTRIBUTED,
+HC003,C05,S1 0:26,"One chronicle counted 400 afflicted within a month",A,Waller 2008,,Imlin family chronicle,primary-derived,estimates 50-400,0,,DISPUTED,"Always 'one chronicle says'"
+HC003,C06,S1 0:32,"Frau Troffea was taken to the shrine of St. Vitus (Saverne)",B,Pennant-Rea 2018,Waller 2008,,scholarly,,0,,ATTRIBUTED,
+HC003,C07,S2 0:06,"Physicians: 'a natural disease, which comes from overheated blood'; prescribed dancing it out",A,Pennant-Rea 2018,Waller 2008,,scholarly,,1,,ATTRIBUTED,
+HC003,C08,S2 0:12,"Council converted guild halls, built stages in the horse and grain markets, hired musicians (drums, pipes, horns) and strong men to hold dancers up",A,Midelfort 1999,Pennant-Rea 2018,Specklin chronicle,primary-derived,,0,,ATTRIBUTED,
+HC003,C09,S2 0:24,"It backfired; more people joined",A,Waller 2008,Pennant-Rea 2018,,scholarly,,0,,ATTRIBUTED,
+HC003,C10,S2 0:30,"Stages pulled down; public music and dancing banned until September; at weddings only strings, no tambourines or drums",A,Waller 2008,,Brant Annales,primary-derived,,0,,ATTRIBUTED,
+HC003,C11,S2 0:38,"Worst cases sent by wagon to St. Vitus shrine; red shoes, crosses, holy water",B,Pennant-Rea 2018,Waller 2008,,scholarly,,0,,ATTRIBUTED,
+HC003,C12,L,"Deaths ('as many as 15 a day')",A,Wikipedia (dispute note),Pennant-Rea 2018,later chronicles (e.g. 1636),later account,DISPUTED,0,,DISPUTED,"Only as: later chronicles claimed it; the city's records of the time don't mention deaths"
+HC003,C13,S2 0:44 / L,"Cause unknown; one leading interpretation is stress-induced mass psychogenic illness; the ergot theory is contested",A,Waller 2009 Lancet,Waller 2008,,scholarly,DISPUTED,2,,ATTRIBUTED,"Never 'proven'"
+HC003,C14,L,"More than ten dancing outbreaks along the Rhine and Moselle since 1374",B,Pennant-Rea 2018,Waller 2009,,scholarly,,0,,VERIFIED,
+HC003,C15,L,"Paracelsus claimed Troffea danced to annoy her husband",C,Pennant-Rea 2018,,Paracelsus Opus Paramirum,primary-derived,,0,,ATTRIBUTED,"Humour beat; flag as his opinion"

@@ -33,8 +33,7 @@ reusable; their narration and packaging are not.
 The two existing Shorts were never uploaded (there is no YouTube account yet), so no corrections are needed.
 
 ## Risks
-- **Tier A claims still open:** date, weapon and distance; experiment count; "tasted"; the burial. All are
-  UNKNOWN until checked.
+- **Tier A claims: resolved 2026-10-18** from Beaumont 1833 and Osler 1902 (see `research.md`, `claims.csv`).
 - **Medical level 1** (basic digestion physiology): needs one authoritative physiology source.
 - **Advertiser safety:** the opening is always shown as a clean illustrated port, never a wound.
 - **People-first:** St. Martin is the protagonist, not "the stomach".

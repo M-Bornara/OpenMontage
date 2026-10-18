@@ -1,0 +1,17 @@
+episode_id,claim_id,script_timestamp,exact_claim,claim_tier,source_1,source_2,primary_source,source_type,dispute_status,medical_risk,visual_rights,review_status,notes
+HC002,C01,S1 0:00,"13 Sep 1848, near Cavendish, Vermont; railroad construction foreman Phineas Gage, 25",B,Macmillan 2000,,Harlow 1868 p.4,primary,,0,,VERIFIED,
+HC002,C02,S1 0:06,"Tamping iron: 3 ft 7 in long, 1 1/4 in diameter, 13 1/4 lb, pointed",A,,,Harlow 1868 p.5,primary,,0,,VERIFIED,"Smooth tamping iron, not a crowbar"
+HC002,C03,S1 0:10,"A spark ignited the powder while he tamped",B,Macmillan 2000 / Wikipedia,,,scholarly,usual explanation,0,,ATTRIBUTED,"'the powder went off' is the safest wording"
+HC002,C04,S1 0:13,"The iron entered below the left cheekbone, passed behind the left eye and exited through the top of the skull, landing ~80 ft away",A,Macmillan 2000,Bigelow 1850,Harlow 1868 p.5,primary,,1,,VERIFIED,"Show as a clean diagram"
+HC002,C05,S1 0:20,"He spoke within minutes and rode sitting up in an ox cart about 3/4 mile to his hotel",A,,,Harlow 1868 pp.5-6,primary,,0,,VERIFIED,
+HC002,C06,S1 0:26,"To Dr. Williams: 'Doctor, here is business enough for you.'",B,Macmillan 2000,,Williams statement (in Bigelow 1850),primary,,0,,ATTRIBUTED,
+HC002,C07,S1 0:32,"He kept the iron as his 'constant companion' for the rest of his life (after reclaiming it from Harvard's museum)",B,Macmillan 2000,,Harlow 1868 p.14,primary,,0,,VERIFIED,
+HC002,C08,S1 0:36 / S2 0:08,"Friends said he was 'no longer Gage'; Harlow: 'fitful, irreverent… grossest profanity'",A,,,Harlow 1868 pp.13-14,primary,,1,,VERIFIED,
+HC002,C09,S2 0:00,"Many textbook/popular accounts exaggerate him into a violent, dishonest drifter",A,Macmillan 2000,Macmillan & Lena 2010,,scholarly,,1,,VERIFIED,"Say 'many retellings', not 'every textbook'"
+HC002,C10,S2 0:16,"About seven years in Chile driving six-horse coaches between Valparaiso and Santiago",A,Macmillan 2000,,Harlow 1868 p.14,primary,,0,,VERIFIED,"Harlow's dates are slightly off; 1852-1859"
+HC002,C11,S2 0:26,"Macmillan argues he made a surprisingly good psychosocial adaptation, helped by the structure of his work",A,Macmillan & Lena 2010 (PMID 20480430),,,scholarly,leading interpretation,2,,ATTRIBUTED,"'One leading interpretation'"
+HC002,C12,S2 0:34,"Portraits of Gage holding the iron identified in 2009 and 2010",B,Wilgus & Wilgus 2009,,,scholarly,,0,TBD - use our own illustration based on it,VERIFIED,"Don't reproduce the photo without checking rights; illustrate instead"
+HC002,C13,L,"Died 21 May 1860 of seizures in California, about 36",B,Macmillan 2000,,Harlow 1868 (gives 1861 in error),primary+scholarly,,1,,VERIFIED,
+HC002,C14,L,"Skull exhumed (1867) and with the iron given to Harlow; both now at Harvard's Warren Anatomical Museum",B,Macmillan 2000,,Harlow 1868,primary,,0,,VERIFIED,
+HC002,C15,L,"Exhibited at Barnum's museum in New York with his iron",B,Macmillan 2000,,Harlow 1868 p.14,primary,,0,,VERIFIED,
+HC002,C16,L,"Lost his foreman job: contractors 'could not give him his place again'",B,,,Harlow 1868 p.13,primary,,0,,VERIFIED,

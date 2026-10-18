@@ -24,6 +24,10 @@ the story needs and never padded.
 | 10 | L | – | The Dancing Plague: What Actually Happened? | HC003 | research more |
 | 11 | S | Case | The Woman Who Couldn't Stop Dancing | HC003 | |
 | 12 | S | Case | The City Hired Musicians. It Made Things Worse. | HC003 | |
+| 13 | S | Story | She Was Trapped Under Ice for 80 Minutes (Bågenholm) | HCS03 | research done |
+
+**Researched and drafted:** see [`season-zero-slate.md`](season-zero-slate.md). All 13 now have research,
+claim logs, story maps and v1 scripts (or long-video outlines).
 
 The release order is a guideline, not a funnel. Each Case Short points its **Related Video** at its long
 video. Story Shorts point at whichever long video fits best.
