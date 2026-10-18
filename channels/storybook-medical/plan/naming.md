@@ -28,6 +28,23 @@ Scores are 1–5. ★ marks the criteria that count double in the total.
 
 **Suggested shortlist for full checks:** Oddly Human, Lantern Archive, The Curious Record.
 
+## Final 3 — availability check (2026-10-18)
+
+The final three from the owner's research are Oddly Human, The Curious Record and The Strange Record.
+- Domains were checked with RDAP.
+- YouTube handles were checked on the live pages.
+- TikTok and Instagram blocked the automated check.
+- The web search found no trademarks for any of the three, but USPTO and CIPO were not queried directly.
+
+| Name | Existing YouTube channels with this name | Free handle | Domains |
+|---|---|---|---|
+| **Oddly Human** | Crowded, all small. @oddlyhuman (a Twitch streamer, 164 subs), @oddlyhumantales (47 subs), @oddlyhumantv (58 subs), @oddlyhumanchannel, @itsoddlyhuman "Oddly Human Explained", @oddlyhumanstories (33 Shorts on odd stories), and **@oddlyhumanhistory: "the strangest true stories from the past come to life through animation" (3 videos), which is our exact concept** | @weareoddlyhuman, @oddly.human, @oddlyhuman.tv | .com and .net taken (live sites); .tv, .ca and weareoddlyhuman.com free |
+| **The Curious Record** | @thecuriousrecord (history/mythology, 6 subs, 2 videos), @curiousrecord (2 subs), @thecuriousrecordtv (empty) | @curiousrecordtv | **curiousrecord.com free**, plus .net, .tv and .ca; thecuriousrecord.tv and .ca free |
+| **The Strange Record** | @thestrangerecord (empty), @strangerecordtv (4 subs), @strangerecord "STRANGE RECORD: …the bizarre, the brutal, and the buried" (dark history, 3 videos) | none of the plain forms | strangerecord.com, .net, .tv and .ca free; thestrangerecord.net, .tv and .ca free |
+
+No channel is established, so there is no legal blocker visible. The problem is distinctiveness: on YouTube
+we would share the name with several channels. "Oddly Human History" already does our exact format.
+
 **Clearance order:**
 1. YouTube search, plus @handle in Studio.
 2. CIPO and USPTO, classes 41 and 9.
