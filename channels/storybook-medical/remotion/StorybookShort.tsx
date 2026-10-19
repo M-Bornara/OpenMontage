@@ -428,9 +428,11 @@ export interface StorybookCoverProps {
   scale?: number;
   x?: number;
   y?: number;
+  textY?: number; // top of the title block: ~330 (top band) or ~1240 (bottom band); default 1010
 }
 
-export const StorybookCover: React.FC<StorybookCoverProps> = ({ image, kicker, title, accentWords, scale, x, y }) => {
+export const StorybookCover: React.FC<StorybookCoverProps> = ({ image, kicker, title, accentWords, scale, x, y, textY = 1010 }) => {
+  const band = Math.round((textY / 1920) * 100);
   const accent = new Set((accentWords ?? []).map((w) => w.toUpperCase()));
   return (
     <AbsoluteFill style={{ backgroundColor: CHARCOAL, overflow: "hidden" }}>
@@ -439,10 +441,10 @@ export const StorybookCover: React.FC<StorybookCoverProps> = ({ image, kicker, t
         style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover",
                  transform: `translate(${x ?? 0}%, ${y ?? 0}%) scale(${scale ?? 1.05})` }}
       />
-      <AbsoluteFill style={{ background: "linear-gradient(to bottom, rgba(10,12,14,0.0) 30%, rgba(10,12,14,0.55) 62%, rgba(10,12,14,0.0) 85%)" }} />
+      <AbsoluteFill style={{ background: `linear-gradient(to bottom, rgba(10,12,14,0.0) ${band - 12}%, rgba(10,12,14,0.55) ${band + 10}%, rgba(10,12,14,0.0) ${band + 32}%)` }} />
       <AbsoluteFill style={{ background: "radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0) 55%, rgba(10,12,14,0.55) 100%)" }} />
       {/* Safe band: y 285..1635. Text block sits in its lower-middle. */}
-      <div style={{ position: "absolute", left: 90, right: 150, top: 1010, display: "flex", flexDirection: "column", alignItems: "center", gap: 18 }}>
+      <div style={{ position: "absolute", left: 90, right: 150, top: textY, display: "flex", flexDirection: "column", alignItems: "center", gap: 18 }}>
         {kicker ? (
           <div style={{ background: AMBER, color: CHARCOAL, fontFamily, fontWeight: 900, fontSize: 52, letterSpacing: 6, padding: "8px 28px", borderRadius: 12, transform: "rotate(-2deg)" }}>
             {kicker}

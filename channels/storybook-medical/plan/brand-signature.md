@@ -24,10 +24,11 @@ signatures live *in* the world, the way Hitchcock appeared in his own films.
   - a face in the Strasbourg crowd;
   - a visitor in a 1929 hospital corridor;
   - a hiker on the ridge in Norway.
-- **Matt's face is never shown** (owner decision 2026-10-18). He always wears an era-appropriate hat whose brim
-  keeps his face in shadow. Only the **amber lenses with the "?" glint** catch the light. No race, age or
-  identity is shown. It keeps the owner private, matches a global channel, and makes the glasses his "face"
-  (the same symbol as the logo). A mask was rejected: it reads as sinister in historical scenes.
+- **Look (decided 2026-10-18): "The Quiet Witness".** Tall and slim, long charcoal coat, wide-brimmed felt hat,
+  calm small smile, writing in his notebook. His face is shown (eyes visible through the amber lenses): the owner
+  tried a version with the eyes hidden in hat shadow and preferred the open face. He is a painted character, not
+  a likeness of the owner. Character sheet: `projects/oddly-matt-mascot/assets/images/refs/matt-a-witness.png`
+  (Nano Banana Pro, chained from the kit style anchor); every cameo is chained from this sheet.
 - **Wardrobe:** dressed for each era (so he never breaks history), but with **three constant signatures**:
   1. the amber spectacles;
   2. a **teal scarf** (a scarf exists in every era; teal is our house colour);
@@ -50,7 +51,7 @@ signatures live *in* the world, the way Hitchcock appeared in his own films.
   YouTube's own branding watermark (the spectacles icon, bottom-right).
 
 ## Open choices for the owner
-1. ~~Cameo look~~ **Decided:** the face stays hidden in the hat's shadow; only the glowing amber glasses show.
+1. ~~Cameo look~~ **Decided:** the Quiet Witness sheet, face shown (the hidden-face and vector-silhouette versions were rejected).
 2. **Should the "?" glint and amber lenses become the logo?** (Final logo design is in the branding phase.)
 3. **Where to announce the game:** in the About page only (subtle), or occasionally in the pinned comment
    ("Did you spot Matt's glasses?").

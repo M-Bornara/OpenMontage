@@ -13,7 +13,9 @@ render template, shared references, the SFX library and the production script.
 ```
 channels/storybook-medical/
 ├── remotion/          StorybookShort composition (shots, kinetic overlays, captions)
-├── refs/              style-anchor.jpg, plate-stomach.jpg — reused by every episode
+├── refs/              style-anchor.jpg, plate-stomach.jpg, matt-sheet.jpg, matt-eras.jpg,
+│                      glasses-sheet.jpg, glasses-front.jpg — reused by every episode
+├── brand/             upload/ (profile, banner, covers), SETUP.md, public/ + video/ (sting, end screen)
 ├── library/           sfx/ (gitignored, re-downloadable) + sfx-credits.json (tracked)
 ├── editorial/         claim + rights logs per episode, pronunciation.csv, dashboard, templates
 ├── plan/              master instructions v3, probe plan, naming shortlist, archive/
@@ -25,7 +27,7 @@ channels/storybook-medical/
 | Layer | Choice | Cost |
 |---|---|---|
 | Look | Illustrated 2.5D storybook, amber/teal palette | – |
-| Images | Nano Banana Pro edit, chained from sheets/plates/previous shot | $0.15 / image |
+| Images | Nano Banana Pro edit via the direct Google Gemini API, chained from sheets/plates/previous shot | ~$0.13 / image (2K), half with `--batch` |
 | Motion | Kling v2.1 standard, 5 s, one action, camera locked; all other shots free camera moves | $0.28 / clip |
 | Voice | **Liam** (ElevenLabs v3, stability 0.4, speed 1.2), the channel's voice for every format, one take. | ~$0.08 |
 | Audio post | atempo 1.14 → gain to -14 LUFS → peak limiter → edge fades. Nothing else. | – |
@@ -65,6 +67,7 @@ python $E init <id>          # creates projects/<id>/episode.json
    `overlays`, `sfx`), timing every cut to the word timestamps. ✋ approve shot list.
 4. `python $E refs <id>` → ✋ review sheets/plates. Re-roll one: `python $E refs <id> sheet-hero`.
 5. `python $E keyframes <id>` then `python $E sheet <id>` → ✋ review `review/_contact.jpg`.
+   Add `--batch` to steps 4–5 for the Gemini Batch API (half price; each dependency wave waits a few minutes).
 6. `python $E clips <id>` and `python $E music <id>` (pick one into `music.selected`).
 7. `python $E sfx <id>` (only fetches cues the library lacks) → `build` → `mix` → `render`.
 8. `python $E publish <id>` → `renders/deliverables/` (see below); `python $E cost <id>`. Log assets in `rights.csv`.
@@ -132,3 +135,21 @@ Motion types: `push`, `pull` (`from`/`to` scale, optional `x`/`y` drift %), `til
 - Check facts that show on screen (season, side of the body, ages) before animating.
 - Anatomy is clean and educational: no blood, no gore. Teens and adults; "not made for kids"; nothing toy-like.
 - People first: invent no thoughts, dialogue or motives; show documents, not fake archival footage.
+
+## Images: Google route and brand references
+
+- Images go to the direct Google Gemini API (`google_imagen`, `GOOGLE_API_KEY`). `"image_route": "fal"` in
+  episode.json switches back to fal. `"image_resolution"`: `1K` | `2K` (default) | `4K`.
+- `--batch` on `refs` / `keyframes` uses the Gemini Batch API at half price (code: `scripts/google_images.py`).
+- Matt cameos: add `kit:matt-sheet.jpg` (and `kit:matt-eras.jpg` for the era outfit) to a keyframe's refs.
+  Hidden glasses: add `kit:glasses-sheet.jpg`. Rules: `plan/brand-signature.md`.
+- Brand video pieces: `python $E brandkit -` renders `brand/video/sting.mp4`, `sting-outro.mp4`,
+  `endscreen.mp4` (20 s) and `thumb-example.png` from `remotion/Brand.tsx` (`OddlySting`, `OddlyEndScreen`,
+  `OddlyThumbnail`). Credit the sting sound effects from `brand/video/CREDITS.txt`.
+
+## Narration spacing
+Write `narration.v3_text` with **a line break after every sentence**, so Liam leaves a clean silence there. Long
+videos are recorded one chapter per take. After each take, `narrate` prints the silence after every sentence and
+flags anything under 0.30 s as `TIGHT` (`"min_gap"` in `narration` changes the threshold). Re-record that
+sentence's section; never cut inside the take (the speed + loudness-only chain).
+

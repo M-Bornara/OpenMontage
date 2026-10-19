@@ -29,3 +29,11 @@ HC001,C27,L ch5,"Comrades called him 'the man with a lid on his stomach'; at tim
 HC001,C28,L ch7,"His age at death",B,,,,,DISPUTED,0,,REMOVE,"Sources give ages that are mutually inconsistent - don't state an age at death"
 HC001,C29,L ch4,"Beaumont planned to take him to Paris/Europe; London society reportedly raised GBP 300-400 to bring him over (1840)",C,,,Osler 1902,primary-derived,,0,,ATTRIBUTED,
 HC001,C30,L ch7,"Beaumont died 25 Apr 1853 in St. Louis after a fall",B,Wikipedia (lead),,,secondary,details vary,0,,VERIFIED,"Don't specify how he fell"
+HC001,C31,L ch5,"1832: cholera epidemic in Canada; St. Martin survived it",B,,,Beaumont 1833 pp.19-20,primary,,0,,VERIFIED,
+HC001,C32,L ch7,"Some suspect Beaumont deliberately left the opening exposed for his experiments; the reason is 'subject to conjecture and speculation'",B,S2 Becker Library (holds the Beaumont papers),,,secondary (archive holding the primary papers),SPECULATION,0,,ATTRIBUTED,"Checked 2026-10-18 on becker.wustl.edu. Say 'some suspect... nobody can prove it'; never state as fact"
+HC001,C33,L ch5,"The 1833 contract was drafted by Beaumont, his employer",B,,,Beaumont papers quoted by Osler 1902,primary-derived,,0,,VERIFIED,"Contract text is in Beaumont's terms ('the said William shall direct')"
+HC001,C34,L ch7,"Records give inconsistent ages (about 18 in 1822; 28 in the 1833 army record; 83 at death per Judge Baby)",B,,,Beaumont 1833 p.9; Osler 1902,primary,,0,,VERIFIED,"Say 'the records disagree by years'; no age at death"
+HC001,C35,L ch2,"No surgical anaesthesia existed in the 1820s (ether first demonstrated publicly in 1846)",B,general history of medicine,,,secondary,,0,,VERIFIED,"Generic context; no claim about St. Martin's motive"
+HC001,C36,L ch6,"Beaumont published 'Experiments and Observations on the Gastric Juice, and the Physiology of Digestion' in 1833",A,,,Beaumont 1833 title page,primary,,0,PD title page,VERIFIED,
+HC001,C37,L ch8,"St. Martin died at St-Thomas de Joliette, Quebec (24 June 1880)",B,,,Osler 1902 (Judge Baby),primary-derived,,0,,VERIFIED,"Say 'in Quebec'"
+HC001,C38,L ch8,"William Osler, then in Montreal, later became one of the most famous physicians of his era",B,general (Osler biography),,,secondary,,0,,VERIFIED,

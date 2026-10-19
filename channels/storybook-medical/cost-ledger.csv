@@ -1,0 +1,47 @@
+time,project,item,usd,note
+2026-10-17 20:44:19,human-test-tube,narration,0.0694,from cost_log.json
+2026-10-17 20:51:14,human-test-tube,references:plate-fort-yard,0.1500,from cost_log.json
+2026-10-17 20:51:15,human-test-tube,references:sheet-young-family,0.1500,from cost_log.json
+2026-10-17 20:52:02,human-test-tube,abtest:sh13-nb2,0.0800,from cost_log.json
+2026-10-17 20:52:05,human-test-tube,abtest:sh06-nb2,0.0800,from cost_log.json
+2026-10-17 20:52:15,human-test-tube,abtest:sh06-pro,0.1500,from cost_log.json
+2026-10-17 20:52:15,human-test-tube,abtest:sh13-pro,0.1500,from cost_log.json
+2026-10-17 20:52:31,human-test-tube,abtest:sh06-seedream45,0.0400,from cost_log.json
+2026-10-17 20:52:36,human-test-tube,abtest:sh13-seedream45,0.0400,from cost_log.json
+2026-10-17 20:53:30,human-test-tube,abtest:sh06-h3max,0.1600,from cost_log.json
+2026-10-17 20:54:03,human-test-tube,abtest:sh06-seedance,0.1100,from cost_log.json
+2026-10-17 20:54:45,human-test-tube,clip:sh06,0.2800,from cost_log.json
+2026-10-17 20:57:45,human-test-tube,keyframes:sh09:nano-banana-2,0.0800,from cost_log.json
+2026-10-17 20:57:46,human-test-tube,keyframes:sh08:nano-banana-2,0.0800,from cost_log.json
+2026-10-17 20:57:48,human-test-tube,keyframes:sh07:nano-banana-2,0.0800,from cost_log.json
+2026-10-17 20:57:54,human-test-tube,keyframes:sh04:nano-banana-2,0.0800,from cost_log.json
+2026-10-17 20:57:54,human-test-tube,keyframes:sh05:nano-banana-2,0.0800,from cost_log.json
+2026-10-17 20:57:57,human-test-tube,keyframes:sh03:nano-banana-2,0.0800,from cost_log.json
+2026-10-17 20:58:11,human-test-tube,keyframes:sh10:nano-banana-2,0.0800,from cost_log.json
+2026-10-17 20:58:19,human-test-tube,keyframes:sh16:nano-banana-2,0.0800,from cost_log.json
+2026-10-17 20:58:20,human-test-tube,keyframes:sh11:nano-banana-2,0.0800,from cost_log.json
+2026-10-17 20:58:30,human-test-tube,keyframes:sh14:nano-banana-2,0.0800,from cost_log.json
+2026-10-17 20:58:32,human-test-tube,keyframes:sh12:nano-banana-2,0.0800,from cost_log.json
+2026-10-17 20:58:33,human-test-tube,keyframes:sh20:nano-banana-2,0.0800,from cost_log.json
+2026-10-17 20:58:35,human-test-tube,keyframes:sh17:nano-banana-2,0.0800,from cost_log.json
+2026-10-17 20:59:06,human-test-tube,keyframes:sh21:nano-banana-2,0.0800,from cost_log.json
+2026-10-17 21:00:11,human-test-tube,keyframes:sh14:nano-banana-2,0.0800,from cost_log.json
+2026-10-17 21:00:23,human-test-tube,keyframes:sh12:nano-banana-2,0.0800,from cost_log.json
+2026-10-17 21:01:15,human-test-tube,keyframes:sh14:gemini-3-pro-image,0.1500,from cost_log.json
+2026-10-17 21:01:37,human-test-tube,clip:sh04:h3-max,0.1625,from cost_log.json
+2026-10-17 21:01:40,human-test-tube,clip:sh09:h3-max,0.1625,from cost_log.json
+2026-10-17 21:01:41,human-test-tube,clip:sh14:h3-max,0.1625,from cost_log.json
+2026-10-17 21:02:34,human-test-tube,music:m-pizzicato-2,0.0300,from cost_log.json
+2026-10-18,oddly-matt-mascot,refs-edit:matt-a-witness-v2:gemini-3-pro-image (google direct),0.1340,from cost_log.json
+2026-10-18 15:30:58,oddly-matt-mascot,references:matt-b-reporter:gemini-3-pro-image,0.1500,from cost_log.json
+2026-10-18 15:30:58,oddly-matt-mascot,references:matt-a-witness:gemini-3-pro-image,0.1500,from cost_log.json
+2026-10-18 15:31:00,oddly-matt-mascot,references:matt-c-wanderer:gemini-3-pro-image,0.1500,from cost_log.json
+2026-10-18 21:14:03,kit-route-test,references:t-sync:nano-banana-2:google,0.0670,from cost_log.json
+2026-10-18 21:17:12,kit-route-test,keyframes:t-batch:nano-banana-2:google-batch,0.0335,from cost_log.json
+2026-10-18 21:53:24,oddly-matt-mascot,brand-batch:7 images (3 edits 2K/4K + 4 upscales 4K):gemini-3-pro-image:google-batch,0.7340,"Gemini Batch, half price"
+2026-10-18 22:25:57,hc001-window-into-his-stomach,thumbnails:B:gemini-3-pro-image:google-batch,0.0670,
+2026-10-18 22:25:57,hc001-window-into-his-stomach,thumbnails:A:gemini-3-pro-image:google-batch,0.0670,
+2026-10-18 22:25:57,hc001-window-into-his-stomach,thumbnails:C:gemini-3-pro-image:google-batch,0.0670,
+2026-10-18 22:29:44,hc001-window-into-his-stomach,thumbnails:A:gemini-3-pro-image:google-batch,0.0670,
+2026-10-18 22:29:44,hc001-window-into-his-stomach,thumbnails:C:gemini-3-pro-image:google-batch,0.0670,
+2026-10-18 22:33:03,hc001-window-into-his-stomach,thumbnails:A:gemini-3-pro-image:google-batch,0.0670,

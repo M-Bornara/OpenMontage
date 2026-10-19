@@ -6,8 +6,8 @@ Run from the repo root:
 Steps (in order):
     init        create the project workspace and an episode.json skeleton
     narrate     ElevenLabs v3 take -> speed + loudness + edge fades -> word timestamps   (~$0.07)
-    refs        character sheets / location plates from episode.json "references"       ($0.15 each)
-    keyframes   shot keyframes from episode.json "keyframes" (dependency-ordered)        ($0.15 each)
+    refs        character sheets / location plates from episode.json "references"       (~$0.13 each)
+    keyframes   shot keyframes from episode.json "keyframes" (dependency-ordered)        (~$0.13 each)
     clips       Kling v2.1 standard 5 s clips from episode.json "clips"                  ($0.28 each)
     music       MiniMax Music v2 candidates from episode.json "music.prompts"            ($0.03 each)
     sfx         fetch any SFX missing from the channel library (Freesound, CC0/CC-BY)    (free)
@@ -18,7 +18,12 @@ Steps (in order):
     credits     renders/CREDITS.txt for the video description                            (free)
     publish     renders/deliverables/: looping short.mp4, cover.jpg + crop check, captions.srt,
                 per-platform titles/captions, upload checklist, credits                  (free)
-    cost        print the paid-call ledger
+    thumbs      long-video thumbnails A/B/C + phone-size check (plan/thumbnail-craft.md)  (~$0.07 each, batch)
+    covers      Shorts cover poster art, 1 per Short                                      (~$0.07, batch)
+    cost        print the paid-call ledger (episode, then the whole channel vs the budget gates)
+
+Every paid step prints an ESTIMATE line before it starts and a COST line after each paid call, with running
+totals for the episode and the channel. All calls also go to cost-ledger.csv (scripts/cost_ledger.py).
 
 Tiers: "tier": "premium" (default, V2: Nano Banana Pro + Kling v2.1) or "budget" (Nano Banana 2 +
 MiniMax H3-max). Escalate a failed shot to premium without editing JSON:
@@ -26,6 +31,11 @@ MiniMax H3-max). Escalate a failed shot to premium without editing JSON:
 A single keyframe/clip may also pin "model"; "models": {...} overrides the tier.
 
 Optional names limit refs/keyframes/clips/music to those entries (e.g. re-roll one keyframe).
+
+Images go straight to the Google Gemini API (google_imagen, GOOGLE_API_KEY) unless episode.json sets
+"image_route": "fal". Add --batch to refs/keyframes for the Gemini Batch API: half price, each dependency
+wave waits for its batch (usually minutes):   episode.py keyframes <id> --batch
+"image_resolution": "1K" | "2K" (default) | "4K"; a single item may pin "resolution".
 Every paid call is appended to artifacts/cost_log.json.
 """
 from __future__ import annotations
@@ -50,6 +60,10 @@ from PIL import Image, ImageDraw  # noqa: E402
 
 from tools.tool_registry import registry  # noqa: E402
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import google_images as gimg  # noqa: E402
+import cost_ledger  # noqa: E402
+
 PLAYBOOK = "storybook-medical"
 VOICE = {"voice": "Liam", "model_id": "eleven-v3", "stability": 0.4, "speed": 1.2}
 # Channel narrator: Liam, always (master instructions v3.1). "narration": {"convert": true} (Chatterbox voice
@@ -69,6 +83,7 @@ TIERS = {
     "budget": ("nano-banana-2", "h3-max"),                      # tested on episode 2, ~$2.60
 }
 PREMIUM = TIERS["premium"]
+KIT_REMOTION = ("StorybookShort.tsx", "Brand.tsx", "Root.tsx", "index.tsx")
 
 
 def model_choice(ep: dict) -> tuple[str, str]:
@@ -117,10 +132,13 @@ def peak_db(path) -> float:
 
 
 def log_cost(pid: str, item: str, usd: float):
-    p = proj(pid) / "artifacts/cost_log.json"
-    rows = json.load(open(p)) if p.exists() else []
-    rows.append({"time": time.strftime("%Y-%m-%d %H:%M:%S"), "item": item, "usd": round(usd, 4)})
-    json.dump(rows, open(p, "w"), indent=1)
+    """Every paid call: the episode's cost_log.json, the channel ledger, and a COST line on screen."""
+    with cost_ledger._lock:
+        p = proj(pid) / "artifacts/cost_log.json"
+        rows = json.load(open(p)) if p.exists() else []
+        rows.append({"time": time.strftime("%Y-%m-%d %H:%M:%S"), "item": item, "usd": round(usd, 4)})
+        json.dump(rows, open(p, "w"), indent=1)
+    print(cost_ledger.record(pid, item, usd), flush=True)
 
 
 def tools():
@@ -152,61 +170,105 @@ TAIL = " No text, no labels, no captions, no watermark."
 
 
 def gen_images(pid: str, section: str, out_dir: str, only: list[str]):
+    """Generate references or keyframes. Route: "image_route" in episode.json, "google" (default, direct Gemini API)
+    or "fal". `--batch` sends each dependency wave through the Gemini Batch API at half price (Google route only)."""
     only, premium = split_premium(only)
+    use_batch = "--batch" in only
+    only = [n for n in only if n != "--batch"]
     ep = load_ep(pid)
     items = ep.get(section, {})
     names = [n for n in items if not only or n in only]
     out = proj(pid) / "assets/images" / out_dir
     out.mkdir(parents=True, exist_ok=True)
-    nb = tools()["gemini_fal_image"]
+    route = ep.get("image_route", "google")
+    if use_batch and route != "google":
+        raise SystemExit('--batch needs "image_route": "google"')
+    resolution = ep.get("image_resolution", "2K")
+    t = tools()
     image_model, _ = model_choice(ep)
     style = style_prefix()
-    done: set[str] = {n for n in items if (out / f"{n}.png").exists() and n not in names}
+    wide = proj(pid) / "assets/images/keyframes16x9"
+    dual = section == "keyframes" and ep.get("dual_format", True)
 
-    def run(name):
+    def main_spec(name):
         spec = items[name]
-        refs = [resolve_ref(pid, r) for r in spec["refs"]]
-        missing = [r for r in refs if not Path(r).exists()]
-        if missing:
-            return name, False, f"missing refs {missing}"
         frame = " Single frame from an animated film, not a model sheet." if section == "keyframes" else ""
-        prompt = LOCK + spec.get("roles", "") + " " + spec["prompt"] + frame + f" Aspect {spec.get('aspect', '9:16')}." + TAIL + " " + style
-        model = PREMIUM[0] if premium else spec.get("model", image_model)
-        r = nb.execute({"model": model, "prompt": prompt, "image_paths": refs,
-                        "aspect_ratio": spec.get("aspect", "9:16"), "resolution": "2K", "output_format": "png",
-                        "safety_tolerance": "5", "output_path": str(out / f"{name}.png")})
-        if not r.success:
-            return name, False, (r.error or "")[:200]
-        log_cost(pid, f"{section}:{name}:{model}", IMAGE_MODELS.get(model, PRICES["image"]))
-        if section == "keyframes" and ep.get("dual_format", True):
-            # Same moment recomposed for long-form 16:9, anchored on the approved 9:16 frame.
-            wide = proj(pid) / "assets/images/keyframes16x9"
-            wide.mkdir(parents=True, exist_ok=True)
-            w = nb.execute({"model": model, "image_paths": [str(out / f"{name}.png")] + refs, "aspect_ratio": "16:9",
-                            "resolution": "2K", "output_format": "png", "safety_tolerance": "5",
-                            "output_path": str(wide / f"{name}.png"),
-                            "prompt": ("Reference 1 is an approved vertical frame. Recompose EXACTLY this moment as a 16:9 "
-                                       "widescreen frame from a slightly wider camera: same characters, faces, costumes, props, "
-                                       "lighting and art style; extend the set naturally to the left and right; keep the main "
-                                       "action centred. Other references are for identity only." + TAIL + " " + style)})
-            if w.success:
-                log_cost(pid, f"{section}16x9:{name}:{model}", IMAGE_MODELS.get(model, PRICES["image"]))
-            else:
-                return name, True, f"9:16 ok, 16:9 failed: {(w.error or '')[:150]}"
-        return name, True, ""
+        return {"name": name, "model": PREMIUM[0] if premium else spec.get("model", image_model),
+                "refs": [resolve_ref(pid, r) for r in spec["refs"]], "aspect": spec.get("aspect", "9:16"),
+                "resolution": spec.get("resolution", resolution), "out": out / f"{name}.png",
+                "prompt": LOCK + spec.get("roles", "") + " " + spec["prompt"] + frame + f" Aspect {spec.get('aspect', '9:16')}." + TAIL + " " + style}
+
+    def wide_spec(name):
+        # Same moment recomposed for long-form 16:9, anchored on the approved 9:16 frame.
+        m = main_spec(name)
+        return {**m, "name": name + ":16x9", "refs": [str(m["out"])] + m["refs"], "aspect": "16:9", "out": wide / f"{name}.png",
+                "prompt": ("Reference 1 is an approved vertical frame. Recompose EXACTLY this moment as a 16:9 "
+                           "widescreen frame from a slightly wider camera: same characters, faces, costumes, props, "
+                           "lighting and art style; extend the set naturally to the left and right; keep the main "
+                           "action centred. Other references are for identity only." + TAIL + " " + style)}
+
+    def cost_of(s, batched):
+        if route == "google":
+            return gimg.price(s["model"], s["resolution"], batched)
+        return IMAGE_MODELS.get(s["model"], PRICES["image"])
+
+    def log(s, batched):
+        kind = section + ("16x9" if s["name"].endswith(":16x9") else "")
+        tag = f"{route}{'-batch' if batched else ''}"
+        log_cost(pid, f"{kind}:{s['name'].split(':')[0]}:{s['model']}:{tag}", cost_of(s, batched))
+
+    def run_one(s):
+        missing = [r for r in s["refs"] if not Path(r).exists()]
+        if missing:
+            return s["name"], False, f"missing refs {missing}"
+        if route == "google":
+            ok, err = gimg.generate(s, t["google_imagen"])
+        else:
+            r = t["gemini_fal_image"].execute({"model": s["model"], "prompt": s["prompt"], "image_paths": s["refs"],
+                                               "aspect_ratio": s["aspect"], "resolution": s["resolution"], "output_format": "png",
+                                               "safety_tolerance": "5", "output_path": str(s["out"])})
+            ok, err = r.success, (r.error or "")[:200]
+        if ok:
+            log(s, False)
+        return s["name"], ok, err
+
+    def run_wave(specs):
+        if not specs:
+            return
+        if use_batch:
+            ready = [s for s in specs if all(Path(r).exists() for r in s["refs"])]
+            for s in specs:
+                if s not in ready:
+                    print((s["name"], False, "missing refs"))
+            res = gimg.batch(ready, f"{pid}-{section}", state_file=proj(pid) / "artifacts/batch_jobs.json")
+            for s in ready:
+                ok, err = res.get(s["name"], (False, "no result"))
+                if ok:
+                    log(s, True)
+                print((s["name"], ok, err))
+        else:
+            with ThreadPoolExecutor(6) as ex:
+                for res in ex.map(run_one, specs):
+                    print(res)
 
     # dependency waves: an item waits for any kf:/ref: it references that is still being generated
+    first = main_spec(names[0]) if names else None
+    if first:
+        n = len(names) * (2 if dual else 1)
+        cost_ledger.estimate(f"{section} ({route}{' batch' if use_batch else ''}, {first['model']}, {first['resolution']})",
+                             n, cost_of(first, use_batch))
     pending = list(names)
+    if dual:
+        wide.mkdir(parents=True, exist_ok=True)
     while pending:
         def ready(n):
             deps = [r.split(":", 1)[1] for r in items[n]["refs"] if r.startswith(("kf:", "ref:"))]
             return all(d not in pending or d == n for d in deps)
         wave = [n for n in pending if ready(n)] or pending[:1]
-        with ThreadPoolExecutor(6) as ex:
-            for res in ex.map(run, wave):
-                print(res)
+        run_wave([main_spec(n) for n in wave])
+        if dual:
+            run_wave([wide_spec(n) for n in wave if (out / f"{n}.png").exists()])
         pending = [n for n in pending if n not in wave]
-        done.update(wave)
 
 
 # ── steps ────────────────────────────────────────────────────────────────
@@ -233,6 +295,7 @@ def step_narrate(pid: str, *_):
     ep, p = load_ep(pid), proj(pid)
     text = ep["narration"]["v3_text"]
     raw = p / "assets/audio/narration_raw.mp3"
+    cost_ledger.estimate(f"narration ({len(text)} characters, ElevenLabs v3)", 1, len(text) / 1000 * PRICES["tts_per_1k_chars"])
     r = tools()["fal_elevenlabs_tts"].execute({"text": text, **VOICE, "output_path": str(raw)})
     if not r.success:
         raise SystemExit(r.error)
@@ -270,6 +333,50 @@ def step_narrate(pid: str, *_):
     words = r.data.get("word_timestamps") or [w for s in r.data.get("segments", []) for w in s.get("words", [])]
     json.dump(words, open(p / "artifacts/word_timestamps.json", "w", encoding="utf-8"), indent=1)
     print(f"{len(words)} words timed ->", " ".join(f"{w['word']}@{w['start']:.2f}" for w in words))
+    check_spacing(text, words, ep["narration"].get("min_gap", MIN_SENTENCE_GAP))
+
+
+MIN_SENTENCE_GAP = 0.30  # seconds of silence wanted after every sentence, so edits never land inside the voice
+
+
+def check_spacing(text: str, words: list[dict], min_gap: float = MIN_SENTENCE_GAP) -> list[tuple[str, float]]:
+    """Measure the silence after each sentence of the script in the timed take; print the ones that run together.
+    Fix a tight one by writing a line break or '…' after that sentence in v3_text and re-recording that section."""
+    import difflib
+    clean = re.sub(r"\[[^\]]*\]", " ", text)
+    tokens = re.findall(r"[\w'’$.,]+[.?!…]*|[.?!…]+", clean)
+    script, ends = [], set()
+    for tkn in tokens:
+        w = re.sub(r"[^\w$]", "", tkn.lower())
+        if not w:
+            if script:
+                ends.add(len(script) - 1)
+            continue
+        script.append(w)
+        if re.search(r"[.?!…]$", tkn):
+            ends.add(len(script) - 1)
+    heard = [re.sub(r"[^\w$]", "", w["word"].lower()) for w in words]
+    match = {}
+    for blk in difflib.SequenceMatcher(None, script, heard, autojunk=False).get_matching_blocks():
+        for k in range(blk.size):
+            match[blk.a + k] = blk.b + k
+    tight, gaps = [], []
+    for e in sorted(ends):
+        j = match.get(e)
+        if j is None or j + 1 >= len(words):
+            continue
+        gap = words[j + 1]["start"] - words[j]["end"]
+        gaps.append(gap)
+        if gap < min_gap:
+            tight.append((" ".join(script[max(0, e - 4):e + 1]), round(gap, 2)))
+    if gaps:
+        gs = sorted(gaps)
+        print(f"sentence gaps: {len(gaps)} measured, min {gs[0]:.2f}s, median {gs[len(gs) // 2]:.2f}s, wanted >= {min_gap:.2f}s")
+    for t, g in tight:
+        print(f"  TIGHT {g:.2f}s after: ...{t}")
+    if not tight and gaps:
+        print("  every sentence has a clean gap for cutting")
+    return tight
 
 
 def step_refs(pid, *only):
@@ -310,6 +417,8 @@ def step_clips(pid, *only):
         return sid, model, r.success, (r.error or "")[:200]
 
     ids = [s for s in ep["clips"] if not only or s in only]
+    m = PREMIUM[1] if premium else clip_model
+    cost_ledger.estimate(f"clips ({m}, 5 s)", len(ids), CLIP_MODELS.get(m, PRICES["clip"]))
     with ThreadPoolExecutor(7) as ex:
         for res in ex.map(run, ids):
             print(res)
@@ -318,6 +427,8 @@ def step_clips(pid, *only):
 def step_music(pid, *only):
     ep, p = load_ep(pid), proj(pid)
     t = tools()
+    todo = [n for n in ep["music"]["prompts"] if not only or n in only]
+    cost_ledger.estimate("music (MiniMax Music v2)", len(todo), PRICES["music"])
     for name, prompt in ep["music"]["prompts"].items():
         if only and name not in only:
             continue
@@ -393,7 +504,7 @@ def step_build(pid, *_):
     ep, p = load_ep(pid), proj(pid)
     rem = p / "remotion"
     if rem.exists():
-        for f in ("StorybookShort.tsx", "Root.tsx", "index.tsx", "art-direction.md"):
+        for f in KIT_REMOTION + ("art-direction.md",):
             shutil.copy(KIT / "remotion" / f, rem / f)
     else:
         shutil.copytree(KIT / "remotion", rem)
@@ -631,12 +742,13 @@ def step_publish(pid, *_):
     # cover via the Remotion StorybookCover still (same fonts/colours as the video)
     c = pub["cover"]
     rem = p / "remotion"
-    for f in ("StorybookShort.tsx", "Root.tsx", "index.tsx"):
+    for f in KIT_REMOTION:
         shutil.copy(KIT / "remotion" / f, rem / f)
     Image.open(resolve_ref(pid, c["image"])).convert("RGB").resize((1440, 2560), Image.LANCZOS).save(
         rem / "public/img/cover.jpg", "JPEG", quality=92)
     props = {"image": "img/cover.jpg", "title": c["title"], "kicker": c.get("kicker", ""),
-             "accentWords": c.get("accent", []), "scale": c.get("scale", 1.05), "x": c.get("x", 0), "y": c.get("y", 0)}
+             "accentWords": c.get("accent", []), "scale": c.get("scale", 1.05), "x": c.get("x", 0), "y": c.get("y", 0),
+             "textY": c.get("textY", 1010)}
     json.dump(props, open(rem / "cover-props.json", "w", encoding="utf-8"))
     composer = REPO / "remotion-composer"
     entry = tools()["video_compose"]._stage_atelier_project((rem / "index.tsx").resolve(), composer.resolve())
@@ -668,6 +780,124 @@ def step_publish(pid, *_):
     print(f"deliverables -> {out}\n  short.mp4, cover.jpg ({size:.2f} MB), cover-crops.jpg, captions.srt, publish.md, publish.json, CREDITS.txt")
 
 
+def step_covers(pid, *only):
+    """Shorts cover art as a movie poster (plan/thumbnail-craft.md): one image per entry in episode.json "covers"
+    (same fields as keyframes, 9:16, prompt reserves the text band). Point publish.cover.image at
+    "proj:assets/images/covers/<name>.png" and set publish.cover.textY to that band (~330 top, ~1240 bottom)."""
+    gen_images(pid, "covers", "covers", list(only))
+
+
+def step_thumbs(pid, *only):
+    """Long-video thumbnails (plan/thumbnail-craft.md): generate the 3 concepts in episode.json "thumbnails"
+    (same fields as keyframes, plus "text": {kicker, lines, side, accentLine}), then lay the text on with the
+    OddlyThumbnail template -> renders/thumbnails/thumb-<name>.jpg (1280x720) and thumb-check.jpg (phone sizes).
+    `--compose` skips generation and only re-lays the text (free)."""
+    only = list(only)
+    compose_only = "--compose" in only
+    only = [n for n in only if n != "--compose"]
+    if not compose_only:
+        gen_images(pid, "thumbnails", "thumbnails", only)
+    ep, p = load_ep(pid), proj(pid)
+    names = [n for n in ep.get("thumbnails", {}) if (p / "assets/images/thumbnails" / f"{n}.png").exists()]
+    rem = p / "remotion"
+    (rem / "public/img").mkdir(parents=True, exist_ok=True)
+    for f in KIT_REMOTION:
+        shutil.copy(KIT / "remotion" / f, rem / f)
+    composer = REPO / "remotion-composer"
+    entry = tools()["video_compose"]._stage_atelier_project((rem / "index.tsx").resolve(), composer.resolve())
+    out = p / "renders/thumbnails"
+    out.mkdir(parents=True, exist_ok=True)
+    finals = []
+    for n in names:
+        Image.open(p / "assets/images/thumbnails" / f"{n}.png").convert("RGB").resize((2560, 1440), Image.LANCZOS).save(
+            rem / f"public/img/thumb-{n}.jpg", "JPEG", quality=92)
+        props = {"image": f"img/thumb-{n}.jpg", "kicker": "", **ep["thumbnails"][n].get("text", {"lines": []})}  # no kicker = none, not the template sample
+        pf = rem / f"thumb-{n}-props.json"
+        json.dump(props, open(pf, "w", encoding="utf-8"))
+        png = out / f"thumb-{n}.png"
+        subprocess.run(["npx", "remotion", "still", str(entry), "OddlyThumbnail", str(png), f"--props={pf.resolve()}",
+                        f"--public-dir={(rem / 'public').resolve()}", "--log=error"], cwd=composer, check=True, shell=sys.platform == "win32")
+        jpg = out / f"thumb-{n}.jpg"
+        Image.open(png).convert("RGB").save(jpg, "JPEG", quality=90, optimize=True)
+        png.unlink()
+        finals.append((n, jpg))
+    # phone test: full size, then the sizes YouTube actually shows on phones (246x138 home, 168x94 suggested)
+    if finals:
+        row_h = 720 + 40
+        sheet = Image.new("RGB", (1280 + 40 + 246 + 40 + 168 + 40, row_h * len(finals) + 20), "#0f0f0f")
+        d = ImageDraw.Draw(sheet)
+        for i, (n, jpg) in enumerate(finals):
+            im = Image.open(jpg)
+            y = 20 + i * row_h
+            sheet.paste(im, (0, y))
+            sheet.paste(im.resize((246, 138), Image.LANCZOS), (1320, y))
+            sheet.paste(im.resize((168, 94), Image.LANCZOS), (1320 + 246 + 40, y))
+            d.text((1320, y + 150), f"{n}  ({jpg.stat().st_size / 1e6:.2f} MB)", fill="white")
+        sheet.save(out / "thumb-check.jpg", quality=88)
+        print("thumbnails ->", out, "| check:", out / "thumb-check.jpg")
+
+
+def step_brandkit(_pid="-", *_):
+    """Render the reusable brand video pieces once into brand/video/ (run: episode.py brandkit -).
+    sting.mp4 / sting-outro.mp4 (3840x2160, 1.8 s, with SFX), endscreen.mp4 (20 s, silent), thumb-example.png."""
+    brand = KIT / "brand"
+    out = brand / "video"
+    out.mkdir(parents=True, exist_ok=True)
+    stage = REPO / "projects/_brandkit/remotion"
+    stage.mkdir(parents=True, exist_ok=True)
+    for f in KIT_REMOTION:
+        shutil.copy(KIT / "remotion" / f, stage / f)
+    composer = REPO / "remotion-composer"
+    entry = tools()["video_compose"]._stage_atelier_project((stage / "index.tsx").resolve(), composer.resolve())
+    public = (brand / "public").resolve()
+
+    def remotion(kind, comp, dst, props=None):
+        cmd = ["npx", "remotion", kind, str(entry), comp, str(dst), f"--public-dir={public}", "--scale=2", "--log=error"]
+        if props is not None:
+            pf = stage / f"{comp}-props.json"
+            json.dump(props, open(pf, "w"))
+            cmd.append(f"--props={pf.resolve()}")
+        subprocess.run(cmd, cwd=composer, check=True, shell=sys.platform == "win32")
+
+    sfx = KIT / "library/sfx"
+
+    def score(video, cues, dst):
+        """Lay SFX cues [(file, start_s, gain)] under a silent render. Kept subtle: peaks at -14 dBFS, well under
+        the -14 LUFS narration, so the sting never jolts the rhythm of the video."""
+        ins, chains = ["-i", str(video)], []
+        for k, (name, at, gain) in enumerate(cues, 1):
+            ins += ["-i", str(sfx / name)]
+            chains.append(f"[{k}:a]adelay={int(at * 1000)}:all=1,volume={gain}[a{k}]")
+        mix = "".join(f"[a{k}]" for k in range(1, len(cues) + 1))
+        tmp = out / "_score.wav"
+        ff(*ins, "-filter_complex", ";".join(chains) + f";{mix}amix=inputs={len(cues)}:normalize=0,atrim=0:{duration(video):.3f}[m]",
+           "-map", "[m]", "-ar", "48000", str(tmp))
+        gain = -14 - peak_db(tmp)
+        ff("-i", str(video), "-i", str(tmp), "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-af",
+           f"volume={gain:.2f}dB,afade=t=out:st={duration(video) - 0.15:.3f}:d=0.15", "-c:a", "aac", "-b:a", "192k", "-shortest", str(dst))
+        tmp.unlink()
+
+    silent = out / "_sting.mp4"
+    remotion("render", "OddlySting", silent, {"reverse": False})
+    # whoosh on the fall, thud + wire tick on the landing (0.5 s), glass chime on the sparkle (0.9 s)
+    score(silent, [("whoosh.mp3", 0.0, 0.35), ("stamp-thud.mp3", 0.48, 0.6), ("tick-click.mp3", 0.52, 0.5),
+                   ("glass-clink.mp3", 0.88, 0.45)], out / "sting.mp4")
+    remotion("render", "OddlySting", silent, {"reverse": True})
+    # outro: letters go, the sparkle chimes (0.9 s), the glasses lift away with a whoosh (1.3 s)
+    score(silent, [("glass-clink.mp3", 0.86, 0.4), ("whoosh.mp3", 1.25, 0.35)], out / "sting-outro.mp4")
+    silent.unlink()
+    remotion("render", "OddlyEndScreen", out / "endscreen.mp4")
+    remotion("still", "OddlyThumbnail", out / "thumb-example.png")
+    credits = json.load(open(KIT / "library/sfx-credits.json", encoding="utf-8"))
+    lines = ["Sound effects in the Oddly Matt sting (credit in any video that uses sting.mp4 / sting-outro.mp4):"]
+    for k in ("stamp-thud", "tick-click", "glass-clink", "whoosh"):
+        c = credits[k]
+        lines.append(f'- "{c["title"]}" by {c["author"]} ({c["url"]}), {c["license"]}')
+    (out / "CREDITS.txt").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    for f in sorted(out.iterdir()):
+        print(f.name, f"{f.stat().st_size / 1e6:.2f} MB")
+
+
 def step_cost(pid, *_):
     p = proj(pid) / "artifacts/cost_log.json"
     rows = json.load(open(p)) if p.exists() else []
@@ -678,6 +908,8 @@ def step_cost(pid, *_):
     for k, v in sorted(by.items()):
         print(f"{k:12} ${v:.2f}")
     print(f"{'TOTAL':12} ${sum(by.values()):.2f}")
+    print()
+    cost_ledger.summary()
 
 
 STEPS = {name[5:]: fn for name, fn in globals().items() if name.startswith("step_")}

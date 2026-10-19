@@ -108,3 +108,7 @@ venv/
 # Storybook channel kit: downloaded SFX/music are re-downloadable; credits.json stays tracked
 channels/*/library/sfx/
 channels/*/library/music/
+
+# Storybook channel: rendered brand videos are rebuilt by `episode.py brandkit -`
+channels/storybook-medical/brand/video/*.mp4
+channels/storybook-medical/brand/video/*.png

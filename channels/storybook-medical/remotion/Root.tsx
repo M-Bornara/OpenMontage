@@ -1,6 +1,7 @@
 import React from "react";
 import { CalculateMetadataFunction, Composition, Still } from "remotion";
 import { FPS, StorybookCover, StorybookShort, StorybookShortProps } from "./StorybookShort";
+import { OddlyEndScreen, OddlySting, OddlyThumbnail } from "./Brand";
 
 const calculateMetadata: CalculateMetadataFunction<StorybookShortProps> = async ({ props }) => ({
   durationInFrames: Math.ceil(props.totalSeconds * FPS),
@@ -28,5 +29,12 @@ export const Root: React.FC = () => (
       height={1920}
       defaultProps={{ image: "img/cover.jpg", title: "Title", kicker: "" }}
     />
+    {/* Brand pieces for long videos (episode.py brandkit renders them once into brand/video/) */}
+    <Composition id="OddlySting" component={OddlySting} durationInFrames={54} fps={FPS} width={1920} height={1080}
+                 defaultProps={{ reverse: false }} />
+    <Composition id="OddlyEndScreen" component={OddlyEndScreen} durationInFrames={FPS * 20} fps={FPS} width={1920} height={1080}
+                 defaultProps={{ title: "STILL CURIOUS?", line: "Two more true stories too strange to sound true." }} />
+    <Still id="OddlyThumbnail" component={OddlyThumbnail} width={1280} height={720}
+           defaultProps={{ image: "brand/thumb-example.jpg", kicker: "VERMONT · 1848", lines: ["STILL", "TALKING."], side: "left" }} />
   </>
 );
