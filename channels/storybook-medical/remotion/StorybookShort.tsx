@@ -30,7 +30,9 @@ type Motion =
   | { type: "push" | "pull"; from?: number; to?: number; x?: number; y?: number }
   | { type: "tilt"; from?: number; to?: number; scale?: number }
   | { type: "slide"; from?: number; to?: number; scale?: number }
-  | { type: "shake"; scale?: number; seconds?: number };
+  | { type: "shake"; scale?: number; seconds?: number }
+  // pan: slide the visible window across a wider master (objectPosition %, 0 = left edge, 100 = right edge)
+  | { type: "pan"; from?: number; to?: number; scale?: number };
 
 export interface Shot {
   id: string;
@@ -40,7 +42,7 @@ export interface Shot {
   end: number;
   inPoint?: number;
   motion: Motion;
-  transitionIn?: "cut" | "whip" | "flash";
+  transitionIn?: "cut" | "whip" | "flash" | "dissolve";
   darken?: number;
 }
 
@@ -75,7 +77,7 @@ const ease = Easing.bezier(0.33, 0, 0.2, 1);
 
 // ── Shots ────────────────────────────────────────────────────────────────
 
-const ShotLayer: React.FC<{ shot: Shot }> = ({ shot }) => {
+export const ShotLayer: React.FC<{ shot: Shot }> = ({ shot }) => {
   const frame = useCurrentFrame();
   const dur = Math.max(1, Math.round((shot.end - shot.start) * FPS));
   const t = interpolate(frame, [0, dur], [0, 1], { extrapolateRight: "clamp", easing: ease });
@@ -96,6 +98,8 @@ const ShotLayer: React.FC<{ shot: Shot }> = ({ shot }) => {
   } else if (m.type === "slide") {
     scale = m.scale ?? 1.15;
     tx = (m.from ?? 5) + ((m.to ?? -5) - (m.from ?? 5)) * t;
+  } else if (m.type === "pan") {
+    scale = m.scale ?? 1.04;
   } else if (m.type === "shake") {
     scale = m.scale ?? 1.1;
     const s = m.seconds ?? 0.4;
@@ -118,12 +122,14 @@ const ShotLayer: React.FC<{ shot: Shot }> = ({ shot }) => {
     width: "100%",
     height: "100%",
     objectFit: "cover",
+    objectPosition: m.type === "pan" ? `${(m.from ?? 0) + ((m.to ?? 100) - (m.from ?? 0)) * t}% 50%` : undefined,
     transform: `translate(${tx + whipX}%, ${ty}%) scale(${scale})`,
     filter: blur ? `blur(${blur}px)` : undefined,
   };
 
   return (
-    <AbsoluteFill style={{ backgroundColor: CHARCOAL, overflow: "hidden" }}>
+    <AbsoluteFill style={{ backgroundColor: shot.transitionIn === "dissolve" ? "transparent" : CHARCOAL, overflow: "hidden",
+                           opacity: shot.transitionIn === "dissolve" ? interpolate(frame, [0, 15], [0, 1], { extrapolateRight: "clamp" }) : 1 }}>
       {shot.kind === "video" ? (
         <OffthreadVideo src={staticFile(shot.src)} startFrom={Math.round((shot.inPoint ?? 0) * FPS)} muted style={style} />
       ) : (

@@ -2,12 +2,20 @@ import React from "react";
 import { CalculateMetadataFunction, Composition, Still } from "remotion";
 import { FPS, StorybookCover, StorybookShort, StorybookShortProps } from "./StorybookShort";
 import { OddlyEndScreen, OddlySting, OddlyThumbnail } from "./Brand";
+import { StorybookLong, StorybookLongProps } from "./StorybookLong";
 
 const calculateMetadata: CalculateMetadataFunction<StorybookShortProps> = async ({ props }) => ({
   durationInFrames: Math.ceil(props.totalSeconds * FPS),
   fps: FPS,
   width: 1080,
   height: 1920,
+});
+
+const longMetadata: CalculateMetadataFunction<StorybookLongProps> = async ({ props }) => ({
+  durationInFrames: Math.ceil(props.totalSeconds * FPS),
+  fps: FPS,
+  width: 1920,
+  height: 1080,
 });
 
 export const Root: React.FC = () => (
@@ -28,6 +36,16 @@ export const Root: React.FC = () => (
       width={1080}
       height={1920}
       defaultProps={{ image: "img/cover.jpg", title: "Title", kicker: "" }}
+    />
+    <Composition
+      id="StorybookLong"
+      component={StorybookLong}
+      durationInFrames={FPS * 60}
+      fps={FPS}
+      width={1920}
+      height={1080}
+      defaultProps={{ totalSeconds: 60, shots: [], overlays: [], words: [] }}
+      calculateMetadata={longMetadata}
     />
     {/* Brand pieces for long videos (episode.py brandkit renders them once into brand/video/) */}
     <Composition id="OddlySting" component={OddlySting} durationInFrames={54} fps={FPS} width={1920} height={1080}

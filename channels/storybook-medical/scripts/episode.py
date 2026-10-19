@@ -83,7 +83,7 @@ TIERS = {
     "budget": ("nano-banana-2", "h3-max"),                      # tested on episode 2, ~$2.60
 }
 PREMIUM = TIERS["premium"]
-KIT_REMOTION = ("StorybookShort.tsx", "Brand.tsx", "Root.tsx", "index.tsx")
+KIT_REMOTION = ("StorybookShort.tsx", "StorybookLong.tsx", "Brand.tsx", "Root.tsx", "index.tsx")
 
 
 def model_choice(ep: dict) -> tuple[str, str]:
@@ -153,6 +153,8 @@ def style_prefix() -> str:
 def resolve_ref(pid: str, ref: str) -> str:
     """'kit:style-anchor.jpg' | 'ref:<name>' | 'kf:<shot>' | 'proj:<relative path>' | absolute/relative path."""
     p = proj(pid)
+    if ref.startswith("brand:"):
+        return str(KIT / "brand/video" / ref[6:])
     if ref.startswith("kit:"):
         return str(KIT / "refs" / ref[4:])
     if ref.startswith("ref:"):
@@ -291,49 +293,86 @@ def step_init(pid: str, *_):
     print("ready:", p)
 
 
-def step_narrate(pid: str, *_):
-    ep, p = load_ep(pid), proj(pid)
-    text = ep["narration"]["v3_text"]
-    raw = p / "assets/audio/narration_raw.mp3"
-    cost_ledger.estimate(f"narration ({len(text)} characters, ElevenLabs v3)", 1, len(text) / 1000 * PRICES["tts_per_1k_chars"])
+def _voice_take(pid: str, ep: dict, text: str, raw: Path, out: Path):
+    """One ElevenLabs take -> speed + loudness only (memory: narration-audio-processing) -> out (no tail pad)."""
+    cost = len(text) / 1000 * PRICES["tts_per_1k_chars"]
+    cost_ledger.estimate(f"narration {out.stem} ({len(text)} characters, ElevenLabs v3)", 1, cost)
     r = tools()["fal_elevenlabs_tts"].execute({"text": text, **VOICE, "output_path": str(raw)})
     if not r.success:
         raise SystemExit(r.error)
-    log_cost(pid, "narration", len(text) / 1000 * PRICES["tts_per_1k_chars"])
+    log_cost(pid, f"narration:{out.stem}", cost)
     take = raw
     ref = Path(ep["narration"].get("voice_ref", VOICE_REF))
     if ep["narration"].get("convert", False) and ref.exists():
-        conv = p / "assets/audio/narration_converted.wav"
+        conv = raw.with_name(raw.stem + "_converted.wav")
         to_uri = lambda f: "data:audio/mpeg;base64," + base64.b64encode(Path(f).read_bytes()).decode()
         r = tools()["chatterbox_fal"].execute({
             "model": "chatterbox", "operation": "speech_to_speech", "output_path": str(conv),
             "provider_params": {"source_audio_url": to_uri(raw), "target_voice_audio_url": to_uri(ref)}})
         if r.success:
             take = conv
-            log_cost(pid, "narration-voice-convert", duration(raw) / 60 * VC_PER_MIN)
-            print("voice converted with", ref.name)
+            log_cost(pid, f"narration-voice-convert:{out.stem}", duration(raw) / 60 * VC_PER_MIN)
         else:
             print("voice conversion failed, using Liam:", (r.error or "")[:200])
-    # speed + loudness only (see memory: narration-audio-processing)
-    sped = p / "assets/audio/_sped.wav"
+    sped = out.with_name("_sped.wav")
     ff("-i", str(take), "-af", f"atempo={ep['narration'].get('tempo', TEMPO)}", "-ar", "48000", "-ac", "1", "-c:a", "pcm_s16le", str(sped))
     i, _ = loudness(sped)
-    stage = p / "assets/audio/_stage.wav"
+    stage = out.with_name("_stage.wav")
     lim = "alimiter=limit=0.79:attack=1:release=40:level=disabled:asc=1"
     ff("-i", str(sped), "-af", f"volume={-14 - i:.2f}dB,{lim}", str(stage))
     i2, _ = loudness(stage)
     d = duration(stage)
-    out = p / "assets/audio/narration.wav"
-    ff("-i", str(stage), "-af", f"volume={-14 - i2:.2f}dB,{lim},afade=t=in:st=0:d=0.015,afade=t=out:st={d - 0.08:.3f}:d=0.08,apad=pad_dur=0.5",
-       "-ar", "48000", "-c:a", "pcm_s16le", str(out))
+    ff("-i", str(stage), "-af", f"volume={-14 - i2:.2f}dB,{lim},afade=t=in:st=0:d=0.015,afade=t=out:st={d - 0.08:.3f}:d=0.08",
+       "-ar", "48000", "-ac", "1", "-c:a", "pcm_s16le", str(out))
     sped.unlink(); stage.unlink()
+
+
+def _timed_words(path: Path) -> list[dict]:
+    r = tools()["azure_stt"].execute({"input_path": str(path), "language": "en-US"})
+    return r.data.get("word_timestamps") or [w for s in r.data.get("segments", []) for w in s.get("words", [])]
+
+
+def step_narrate(pid: str, *only):
+    """Liam's narration. Shorts: "narration.v3_text" (one take). Long videos: "narration.chapters" =
+    [{"id": "ch0", "v3_text": "...", "gap_after": 2.4}, ...], one take per chapter, joined with gap_after seconds
+    of silence (default 0.8; the sting gap after the cold open is longer). `narrate <id> ch4` re-records one
+    chapter and re-joins. Every take gets the sentence-spacing check."""
+    ep, p = load_ep(pid), proj(pid)
+    n = ep["narration"]
+    chapters = n.get("chapters") or [{"id": "all", "v3_text": n["v3_text"], "gap_after": 0.5}]
+    cdir = p / "assets/audio/chapters"
+    cdir.mkdir(parents=True, exist_ok=True)
+    for c in chapters:
+        wav = cdir / f"{c['id']}.wav"
+        if only and c["id"] not in only and wav.exists():
+            continue
+        _voice_take(pid, ep, c["v3_text"], cdir / f"{c['id']}_raw.mp3", wav)
+        words = _timed_words(wav)
+        json.dump(words, open(cdir / f"{c['id']}.json", "w", encoding="utf-8"), indent=1)
+        print(f"{c['id']}: {duration(wav):.2f}s, {len(words)} words")
+        check_spacing(c["v3_text"], words, n.get("min_gap", MIN_SENTENCE_GAP))
+    # join: chapter, silence, chapter, ... (sample-exact, no crossfades, nothing cut)
+    parts, all_words, marks, t = [], [], [], 0.0
+    for c in chapters:
+        wav = cdir / f"{c['id']}.wav"
+        d = duration(wav)
+        gap = c.get("gap_after", 0.8)
+        for w in json.load(open(cdir / f"{c['id']}.json", encoding="utf-8")):
+            all_words.append({**w, "start": round(w["start"] + t, 3), "end": round(w["end"] + t, 3), "chapter": c["id"]})
+        marks.append({"id": c["id"], "start": round(t, 3), "end": round(t + d, 3), "gap_after": gap})
+        parts.append(str(wav))
+        t += d + gap
+    out = p / "assets/audio/narration.wav"
+    ins, chain = [], []
+    for k, (c, f) in enumerate(zip(chapters, parts)):
+        ins += ["-i", f]
+        chain.append(f"[{k}:a]apad=pad_dur={c.get('gap_after', 0.8)}[a{k}]")
+    ff(*ins, "-filter_complex", ";".join(chain) + ";" + "".join(f"[a{k}]" for k in range(len(parts))) +
+       f"concat=n={len(parts)}:v=0:a=1[m]", "-map", "[m]", "-ar", "48000", "-ac", "1", "-c:a", "pcm_s16le", str(out))
+    json.dump(all_words, open(p / "artifacts/word_timestamps.json", "w", encoding="utf-8"), indent=1)
+    json.dump(marks, open(p / "artifacts/chapters.json", "w", encoding="utf-8"), indent=1)
     li, lp = loudness(out)
-    print(f"narration.wav {duration(out):.2f}s  {li} LUFS  peak {lp} dBFS")
-    r = tools()["azure_stt"].execute({"input_path": str(out), "language": "en-US"})
-    words = r.data.get("word_timestamps") or [w for s in r.data.get("segments", []) for w in s.get("words", [])]
-    json.dump(words, open(p / "artifacts/word_timestamps.json", "w", encoding="utf-8"), indent=1)
-    print(f"{len(words)} words timed ->", " ".join(f"{w['word']}@{w['start']:.2f}" for w in words))
-    check_spacing(text, words, ep["narration"].get("min_gap", MIN_SENTENCE_GAP))
+    print(f"narration.wav {duration(out):.2f}s  {li} LUFS  peak {lp} dBFS  ({len(chapters)} take(s), {len(all_words)} words)")
 
 
 MIN_SENTENCE_GAP = 0.30  # seconds of silence wanted after every sentence, so edits never land inside the voice
@@ -500,6 +539,31 @@ def step_sheet(pid, *_):
     print(out)
 
 
+def fit_frame(src: Path, dst: Path, size: tuple[int, int], focus: float = 0.5, keep_full: bool = False):
+    """Fit a still to the format without distortion. Normally: crop a window of the target aspect, centred on
+    `focus` (0 = left/top edge, 1 = right/bottom), then resize. keep_full (for "pan" shots): keep the whole
+    master and only scale it to the target height, so the template can slide across it."""
+    im = Image.open(src).convert("RGB")
+    W, H = size
+    if keep_full:
+        h = H
+        w = round(im.width * h / im.height)
+        im.resize((w, h), Image.LANCZOS).save(dst, "JPEG", quality=92)
+        return
+    target = W / H
+    if im.width / im.height > target:                       # too wide: choose a horizontal window
+        cw = round(im.height * target)
+        x = round((im.width - cw) * min(1, max(0, focus)))
+        im = im.crop((x, 0, x + cw, im.height))
+    elif im.width / im.height < target:                     # too tall: choose a vertical window
+        ch = round(im.width / target)
+        y = round((im.height - ch) * min(1, max(0, focus)))
+        im = im.crop((0, y, im.width, y + ch))
+    if im.width < W * 0.75:
+        print(f"  WARNING {src.name}: only {im.width}px wide for a {W}px frame (quality rule: no soft crops)")
+    im.resize((W, H), Image.LANCZOS).save(dst, "JPEG", quality=92)
+
+
 def step_build(pid, *_):
     ep, p = load_ep(pid), proj(pid)
     rem = p / "remotion"
@@ -513,6 +577,8 @@ def step_build(pid, *_):
     (pub / "vid").mkdir(parents=True, exist_ok=True)
     words_raw = json.load(open(p / "artifacts/word_timestamps.json", encoding="utf-8"))
     total = round(duration(p / "assets/audio/narration.wav"), 2)
+    long = ep.get("format", "short") == "long"
+    frame_size = (3840, 2160) if long else (1440, 2560)
     shots = []
     for s in ep["shots"]:
         src = Path(resolve_ref(p.name, s["source"]))
@@ -522,12 +588,20 @@ def step_build(pid, *_):
             kind, rel = "video", f"vid/{s['id']}.mp4"
         else:
             dst = pub / "img" / f"{s['id']}.jpg"
-            Image.open(src).convert("RGB").resize((1440, 2560), Image.LANCZOS).save(dst, "JPEG", quality=92)
+            motion = s.get("motion", {"type": "push"})
+            fit_frame(src, dst, frame_size, s.get("focus", 0.5), keep_full=motion.get("type") == "pan")
             kind, rel = "image", f"img/{s['id']}.jpg"
         shots.append({"id": s["id"], "src": rel, "kind": kind, "start": s["start"], "end": s["end"],
                       "inPoint": s.get("in", 0), "motion": s.get("motion", {"type": "push"}),
                       "transitionIn": s.get("transition", "cut"), "darken": s.get("darken", 0)})
-    shots[-1]["end"] = total
+    # a dissolve needs the previous shot underneath it: overlap by 0.5 s
+    for a, b in zip(shots, shots[1:]):
+        if b["transitionIn"] == "dissolve":
+            a["end"] = round(a["end"] + 0.5, 3)
+    if long and shots[-1]["end"] > total:
+        total = round(shots[-1]["end"], 2)        # outro sting + end screen run past the narration
+    else:
+        shots[-1]["end"] = total
     punch = {w.lower() for w in ep["narration"].get("punch_words", [])}
     words = []
     for w in words_raw:
@@ -536,16 +610,22 @@ def step_build(pid, *_):
         words.append({"word": shown, "start": round(w["start"], 3), "end": round(w["end"], 3),
                       "punch": re.sub(r"\W", "", t.lower()) in punch,
                       "breakAfter": bool(re.search(r"[.,?!]$", t)) and t.lower() != "st."})
-    props = {"totalSeconds": total, "shots": shots, "overlays": ep["overlays"], "words": words,
-             "wordsPerPage": 3, "captionY": 1180, "loopSeconds": loop_len(ep)}
+    if long:
+        props = {"totalSeconds": total, "shots": shots, "overlays": ep["overlays"], "words": words,
+                 "wordsPerPage": 4, "captionY": 900, "captions": ep.get("captions", True)}
+    else:
+        props = {"totalSeconds": total, "shots": shots, "overlays": ep["overlays"], "words": words,
+                 "wordsPerPage": 3, "captionY": 1180, "loopSeconds": loop_len(ep)}
     json.dump(props, open(rem / "props.json", "w", encoding="utf-8"), indent=1)
-    gaps = [(a["id"], b["id"]) for a, b in zip(shots, shots[1:]) if abs(a["end"] - b["start"]) > 0.02]
+    gaps = [(a["id"], b["id"]) for a, b in zip(shots, shots[1:])
+            if abs(a["end"] - b["start"]) > 0.02 and b["transitionIn"] != "dissolve"]
     edit = {
         "version": "1.0", "render_runtime": "remotion", "composition_mode": "atelier", "renderer_family": "animation-first",
         "cuts": [{"id": s["id"], "source": s["src"], "in_seconds": s["start"], "out_seconds": s["end"]} for s in shots],
-        "bespoke": {"entry": str((rem / "index.tsx").resolve()), "composition_id": "StorybookShort",
+        "bespoke": {"entry": str((rem / "index.tsx").resolve()), "composition_id": "StorybookLong" if long else "StorybookShort",
                     "props_path": str((rem / "props.json").resolve()), "public_dir": str(pub.resolve()),
-                    "art_direction": str((rem / "art-direction.md").resolve()), "concurrency": 8, "crf": 18},
+                    "art_direction": str((rem / "art-direction.md").resolve()), "concurrency": 8, "crf": 18,
+                    **({"scale": 2} if long else {})},
         "metadata": {"playbook": PLAYBOOK, "audio": "assets/audio/mix.wav"},
     }
     json.dump(edit, open(p / "artifacts/edit_decisions.json", "w", encoding="utf-8"), indent=1)
@@ -556,6 +636,9 @@ def step_mix(pid, *_):
     ep, p = load_ep(pid), proj(pid)
     narr = p / "assets/audio/narration.wav"
     total = round(duration(narr), 2)
+    props_path = p / "remotion/props.json"
+    if props_path.exists():
+        total = max(total, json.load(open(props_path, encoding="utf-8"))["totalSeconds"])
     tmp = p / "assets/audio/_mix"
     tmp.mkdir(exist_ok=True)
     src = p / "assets/music" / f"{ep['music']['selected']}.mp3"
@@ -578,16 +661,17 @@ def step_mix(pid, *_):
     i, _ = loudness(tmp / "m.wav")
     ff("-i", str(tmp / "m.wav"), "-af", f"volume={ep['music'].get('lufs', -22) - i:.2f}dB", str(tmp / "bed.wav"))
     inputs = ["-i", str(narr), "-i", str(tmp / "bed.wav")]
-    parts = ["[0:a]aformat=sample_rates=48000:channel_layouts=stereo,asplit=2[narr][key]",
+    parts = [f"[0:a]aformat=sample_rates=48000:channel_layouts=stereo,apad=whole_dur={total},asplit=2[narr][key]",
              "[1:a][key]sidechaincompress=threshold=0.03:ratio=5:attack=40:release=450:makeup=1[music]"]
     labels = ["[narr]", "[music]"]
     lib = KIT / "library/sfx"
     for n, c in enumerate(ep["sfx"]):
-        f = lib / f"{c['name']}.mp3"
+        # "file": any ref (e.g. "brand:sting.mp4" carries the sting's own sound); otherwise a library name
+        f = Path(resolve_ref(pid, c["file"])) if c.get("file") else lib / f"{c['name']}.mp3"
         if not f.exists():
             raise SystemExit(f"missing sfx {f} - run the sfx step")
         inputs += ["-i", str(f)]
-        gain = c.get("gain_db", -12) - 1 - peak_db(f)
+        gain = c.get("gain_db", -12) - 1 - peak_db(f) if not c.get("as_is") else 0.0
         chain = f"[{n + 2}:a]aformat=sample_rates=48000:channel_layouts=stereo"
         # Library files can hold several hits or long beds; without an explicit "dur" cap one-shots at 3 s.
         d = c.get("dur") or min(3.0, duration(f))
