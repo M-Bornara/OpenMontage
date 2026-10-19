@@ -697,9 +697,16 @@ def step_render(pid, *_):
     pp_path = p / "artifacts/proposal_packet.json"
     out = p / "renders/final.mp4"
     t0 = time.time()
+    ep = load_ep(pid)
+    n = ep.get("narration", {})
+    script = " ".join(c["v3_text"] for c in n.get("chapters") or [{"v3_text": n.get("v3_text", "")}])
+    script = re.sub(r"\[[^\]]*\]", " ", script)   # strip v3 delivery tags before the transcript check
     r = tools()["video_compose"].execute({"operation": "render", "edit_decisions": ed,
                                           "proposal_packet": json.load(open(pp_path)) if pp_path.exists() else None,
-                                          "output_path": str(out), "audio_path": str(p / "assets/audio/mix.wav")})
+                                          "output_path": str(out), "audio_path": str(p / "assets/audio/mix.wav"),
+                                          # final review compares what Liam said with the script (free, catches misreads)
+                                          "narration_transcript_path": str(p / "artifacts/word_timestamps.json"),
+                                          "script_text": script})
     print("render:", r.success, r.error or "", f"{time.time() - t0:.0f}s")
     review = (r.data or {}).get("final_review", {})
     print("final review:", review.get("recommended_action"), review.get("issues_found"))
