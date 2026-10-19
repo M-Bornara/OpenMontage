@@ -44,6 +44,11 @@ Mark each line: ✅ pass · ⚠️ pass with note · ❌ fix before the next gat
 | Cost estimate shown before generation | | |
 
 ## G3 · References and keyframes (visual review, contact sheets)
+**References: PASSED 2026-10-18 after 2 fixes.**
+- `plate-map` had painted river names ("Misssissippi", "Ohio River"), removed by an edit.
+- `plate-washington` had a framed map of the modern USA (anachronism), replaced by a period landscape painting.
+- Notes for the keyframe prompts: Fort Mackinac reads a little castle-like (prompt: "whitewashed stone walls
+  and wooden blockhouses"); the study's vials must be amber, not red (red rule).
 | Check | Result | Note |
 |---|---|---|
 | Likeness matches the character sheets (face, hair, signature item) | | |
