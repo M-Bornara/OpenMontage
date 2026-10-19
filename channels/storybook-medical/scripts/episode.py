@@ -176,11 +176,12 @@ def gen_images(pid: str, section: str, out_dir: str, only: list[str]):
     or "fal". `--batch` sends each dependency wave through the Gemini Batch API at half price (Google route only)."""
     only, premium = split_premium(only)
     use_batch = "--batch" in only
-    only = [n for n in only if n != "--batch"]
+    missing = "--missing" in only          # only items that have no image yet
+    only = [n for n in only if n not in ("--batch", "--missing")]
     ep = load_ep(pid)
     items = ep.get(section, {})
-    names = [n for n in items if not only or n in only]
     out = proj(pid) / "assets/images" / out_dir
+    names = [n for n in items if (not only or n in only) and not (missing and (out / f"{n}.png").exists())]
     out.mkdir(parents=True, exist_ok=True)
     route = ep.get("image_route", "google")
     if use_batch and route != "google":

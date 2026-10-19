@@ -44,6 +44,13 @@ Mark each line: ✅ pass · ⚠️ pass with note · ❌ fix before the next gat
 | Cost estimate shown before generation | | |
 
 ## G3 · References and keyframes (visual review, contact sheets)
+**Keyframes: self-review PASSED 2026-10-19** (owner check pending).
+- 61 generated; 26 re-rolled in one end batch.
+- Cause: the style anchor's red-tuque voyageur was copied into scenes. Fixed by a people-free style plate,
+  explicit cast lists, full-bleed squares and an anchored porthole.
+- Free fixes: M21/I02/I09 mirrored (direction; porthole on the LEFT side). I03a drawn without hands (Remotion
+  animates them). I13 framed to its upper 75% (a signature-like scribble).
+
 **References: PASSED 2026-10-18 after 2 fixes.**
 - `plate-map` had painted river names ("Misssissippi", "Ohio River"), removed by an edit.
 - `plate-washington` had a framed map of the modern USA (anachronism), replaced by a period landscape painting.
