@@ -21,7 +21,7 @@ same moment looks identical everywhere.
 - Style anchor first.
 - Character sheets for every person.
 - Beaumont is always screen-left, Alexis screen-right (180° rule).
-- Alexis's red tuque is the only saturated red.
+- Alexis's red tuque is the only saturated red. **The silk string is cream-white** (the I03a test drew it dark red).
 - Beaumont's watch chain is always visible.
 - **The opening is a small clean brass-rimmed porthole on Alexis's LEFT side.** Never a wound.
 - No text in images.

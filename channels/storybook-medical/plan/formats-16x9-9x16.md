@@ -1,6 +1,6 @@
 # Sharing work between 16:9 (long) and 9:16 (Shorts)
 
-Status: **proposal, to be tested on HC001 before adoption.** It replaces the earlier blanket
+Status: **ADOPTED 2026-10-18** after the HC001 test (M01 4K master: left/right 9:16 windows read as designed shots at 1728×3072 native; I03a 2K square works as 16:9 and 9:16). Pans must travel *between* subjects; a static window that splits two people doesn't work. It replaces the earlier blanket
 "`dual_format`: every keyframe generated twice".
 
 ## The problem

@@ -3,6 +3,7 @@
     python cost_ledger.py summary              totals by month, project and kind, vs the gates
     python cost_ledger.py add <project> <item> <usd> [note]   log a paid call made outside episode.py
     python cost_ledger.py rebuild              re-create the ledger from every projects/*/artifacts/cost_log.json
+    python cost_ledger.py balance              live fal balance (needs FAL_BILLING_KEY, a billing:usage:read key)
 
 episode.py logs through record(); anything else that spends money (brand art, tests) uses `add`.
 """
@@ -57,10 +58,45 @@ def record(project: str, item: str, usd: float, note: str = "") -> str:
     return f"COST +${usd:.3f}  {item}  | {project} ${proj:.2f} | channel {gate_line(total)}"
 
 
-def estimate(label: str, n: int, unit: float) -> None:
-    if n:
-        total = sum(float(r["usd"]) for r in _rows())
-        print(f"ESTIMATE {label}: {n} x ${unit:.3f} = ${n * unit:.2f}  (channel so far ${total:.2f})", flush=True)
+_fal_cache: list = []
+
+
+def fal_balance() -> float | None:
+    """Live fal credit (USD), once per run. Uses the Windows trust store (the local antivirus re-signs TLS)."""
+    if _fal_cache:
+        return _fal_cache[0]
+    import os
+    try:
+        from dotenv import load_dotenv
+        load_dotenv(REPO / ".env")
+        key = os.environ.get("FAL_BILLING_KEY")
+        if not key:
+            return None
+        import requests
+        try:
+            import truststore
+            truststore.inject_into_ssl()
+        except ImportError:
+            pass
+        r = requests.get("https://rest.alpha.fal.ai/billing/user_balance", headers={"Authorization": f"Key {key}"}, timeout=15)
+        _fal_cache.append(float(r.text.strip()) if r.ok else None)
+    except Exception:
+        _fal_cache.append(None)
+    return _fal_cache[0]
+
+
+def estimate(label: str, n: int, unit: float, total_usd: float | None = None, fal: bool = False) -> None:
+    """Print the cost of a paid step before it runs. fal=True also shows the live fal balance and warns if short."""
+    if not n:
+        return
+    cost = total_usd if total_usd is not None else n * unit
+    spent = sum(float(r["usd"]) for r in _rows())
+    line = f"ESTIMATE {label}: {n} item(s) = ${cost:.2f}  (channel so far ${spent:.2f})"
+    if fal:
+        bal = fal_balance()
+        if bal is not None:
+            line += f"  | fal balance ${bal:.2f}" + ("  ** NOT ENOUGH: top up fal **" if bal < cost * 1.2 else "")
+    print(line, flush=True)
 
 
 def summary():
@@ -94,5 +130,9 @@ if __name__ == "__main__":
         print(record(sys.argv[2], sys.argv[3], float(sys.argv[4]), " ".join(sys.argv[5:])))
     elif cmd == "rebuild":
         rebuild()
+    elif cmd == "balance":
+        b = fal_balance()
+        print("fal balance:", f"${b:.2f}" if b is not None else "unavailable (set FAL_BILLING_KEY)")
+        print("Google: check console.cloud.google.com/billing (no API for Gemini credit)")
     else:
         summary()

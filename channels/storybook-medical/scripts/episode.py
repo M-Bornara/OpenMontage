@@ -254,11 +254,11 @@ def gen_images(pid: str, section: str, out_dir: str, only: list[str]):
                     print(res)
 
     # dependency waves: an item waits for any kf:/ref: it references that is still being generated
-    first = main_spec(names[0]) if names else None
-    if first:
-        n = len(names) * (2 if dual else 1)
-        cost_ledger.estimate(f"{section} ({route}{' batch' if use_batch else ''}, {first['model']}, {first['resolution']})",
-                             n, cost_of(first, use_batch))
+    if names:
+        specs = [main_spec(x) for x in names] * (2 if dual else 1)
+        res = sorted({x["resolution"] for x in specs})
+        cost_ledger.estimate(f"{section} ({route}{' batch' if use_batch else ''}, {specs[0]['model']}, {'/'.join(res)})",
+                             len(specs), 0, total_usd=sum(cost_of(x, use_batch) for x in specs), fal=route == "fal")
     pending = list(names)
     if dual:
         wide.mkdir(parents=True, exist_ok=True)
@@ -296,7 +296,7 @@ def step_init(pid: str, *_):
 def _voice_take(pid: str, ep: dict, text: str, raw: Path, out: Path):
     """One ElevenLabs take -> speed + loudness only (memory: narration-audio-processing) -> out (no tail pad)."""
     cost = len(text) / 1000 * PRICES["tts_per_1k_chars"]
-    cost_ledger.estimate(f"narration {out.stem} ({len(text)} characters, ElevenLabs v3)", 1, cost)
+    cost_ledger.estimate(f"narration {out.stem} ({len(text)} characters, ElevenLabs v3)", 1, cost, fal=True)
     r = tools()["fal_elevenlabs_tts"].execute({"text": text, **VOICE, "output_path": str(raw)})
     if not r.success:
         raise SystemExit(r.error)
@@ -457,7 +457,7 @@ def step_clips(pid, *only):
 
     ids = [s for s in ep["clips"] if not only or s in only]
     m = PREMIUM[1] if premium else clip_model
-    cost_ledger.estimate(f"clips ({m}, 5 s)", len(ids), CLIP_MODELS.get(m, PRICES["clip"]))
+    cost_ledger.estimate(f"clips ({m}, 5 s)", len(ids), CLIP_MODELS.get(m, PRICES["clip"]), fal=True)
     with ThreadPoolExecutor(7) as ex:
         for res in ex.map(run, ids):
             print(res)
@@ -467,7 +467,7 @@ def step_music(pid, *only):
     ep, p = load_ep(pid), proj(pid)
     t = tools()
     todo = [n for n in ep["music"]["prompts"] if not only or n in only]
-    cost_ledger.estimate("music (MiniMax Music v2)", len(todo), PRICES["music"])
+    cost_ledger.estimate("music (MiniMax Music v2)", len(todo), PRICES["music"], fal=True)
     for name, prompt in ep["music"]["prompts"].items():
         if only and name not in only:
             continue
