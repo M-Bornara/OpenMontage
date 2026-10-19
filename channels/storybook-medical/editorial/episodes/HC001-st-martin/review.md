@@ -27,7 +27,7 @@ Mark each line: ✅ pass · ⚠️ pass with note · ❌ fix before the next gat
 | Shorts vs long: no conflicts, each Short is a complete story; long ≥ ~60 % new material | ✅ | checked 2026-10-18; S2 "next day", S3 "came a contract" aligned |
 | Owner approval recorded (`script-approved.md`) | ✅ | 2026-10-18 |
 
-## G2 · Shot plan and cinematography (before images)
+## G2 · Shot plan and cinematography (before images): **self-review PASSED 2026-10-18** (`shot-plan.md` §F); owner check pending
 | Check | Result | Note |
 |---|---|---|
 | Every shot serves a beat (why this shot, why now) | | |
