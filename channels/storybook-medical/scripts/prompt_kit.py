@@ -39,6 +39,9 @@ def cast(*people: str, extra: str = "") -> str:
     return f"CAST: exactly {n} {'person' if n == 1 else 'people'}: {who}. Nobody else in the frame.{(' ' + extra) if extra else ''}"
 # L8 · props with writing: the model writes words (labels on maps, "Contract", signatures).
 NO_TEXT = "No text, letters, numbers, labels, signatures or watermark anywhere; any writing is illegible scribble."
+# L15 · "illegible copperplate" came back as readable "Lorem ipsum ... Contract ... signature" (HC001 I13, twice).
+WAVY_WRITING = ("Any handwriting is drawn ONLY as rows of soft wavy ink lines with no letters, words, numbers or signature, "
+                "slightly out of focus, like writing seen from too far away to read. No heading or title on the page.")
 # L9 · red rule and string/vial colours drift.
 RED_RULE = ("Only the story's motif may be saturated red (e.g. Alexis's tuque); everything else avoids pure red. Strings "
             "are cream-white; glass vials hold amber liquid.")
@@ -83,8 +86,9 @@ def lint(name: str, spec: dict) -> list[str]:
         issues.append("L6: body opening without a side (use body_mark(..., side='LEFT'))")
     if re.search(r"\b(and|with)\b[^.]{0,60}\b(alexis|beaumont|osler)\b", p) and "cast:" not in p and not people_free:
         issues.append("L7: several characters but no CAST line (the model adds duplicates/onlookers)")
-    if re.search(r"\b(map|contract|letters?|poster|signpost|label|document|title page)\b", p) and not re.search(r"no (text|lettering)|illegible", p):
-        issues.append("L8: a writing-bearing prop without NO_TEXT / 'illegible'")
+    if re.search(r"\b(map|contract|letters?|poster|signpost|label|document|title page)\b", p) and "wavy ink lines" not in p \
+            and "no lettering" not in p:
+        issues.append("L8/L15: a writing-bearing prop without WAVY_WRITING ('illegible' still produces lorem ipsum)")
     if "spectacles" in p and "amber" not in p and "no spectacles" not in p:
         issues.append("L11: spectacles that aren't Matt's (confuses the spot-the-glasses game)")
     return issues

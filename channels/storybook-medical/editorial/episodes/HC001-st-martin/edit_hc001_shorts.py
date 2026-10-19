@@ -120,7 +120,7 @@ t = c.at("between experiments"); c.shot(t, "projects/human-test-tube/assets/vide
 c.shot(round(t + 2.0, 2), K("M15"), push, focus=R)
 t = c.at("came a contract"); c.shot(t, K("I13"), {"type": "push", "from": 1.3, "to": 1.42, "y": 10})
 t = c.at("one hundred fifty dollars") if "hundred" in c.toks else c.at("a year")
-c.o("stamp", t, t + 2.0, text="$150 / YEAR"); c.s("stamp-thud", t + 0.05, -16)
+c.o("stamp", t, t + 2.0, text="$150"); c.s("stamp-thud", t + 0.05, -16)
 c.shot(c.at("then his wife said no"), K("M26"), static, focus=L)
 t = c.at("years beaumont sent"); c.shot(t, K("M27"), {"type": "push", "from": 1.05, "to": 1.15}, focus=0.2)
 c.o("stamp", t + 0.2, t + 2.4, text="18 YEARS")
