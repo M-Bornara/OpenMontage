@@ -20,9 +20,18 @@ TEXT_SIDE = ("The {side} is the same scene continuing, darker, calmer and out of
 # L5 · clock hands are never exact: draw the watch without hands, animate them in Remotion.
 NO_HANDS = "the watch face has its numerals as simple marks but NO HANDS AT ALL (a centre pin only)"
 # L6 · with two people in frame the model gave the opening to the wrong person / side.
-def body_mark(person: str, what: str, side: str = "LEFT", where: str = "lower abdomen, just below the ribs") -> str:
-    return (f"CRITICAL: {what} is on {person}'s body only, on the {side} side of the {where}; nobody else has it. "
+def body_mark(person: str, what: str, side: str = "LEFT", where: str = "lower abdomen, just below the ribs",
+              facing_camera: bool = False) -> str:
+    view = {"LEFT": "RIGHT", "RIGHT": "LEFT"}[side]
+    mirror_hint = f" Because he faces the camera, his {side} side appears on the VIEWER'S {view} side of the image." if facing_camera else ""
+    return (f"CRITICAL: {what} is on {person}'s body only, on the {side} side of the {where}; nobody else has it.{mirror_hint} "
             f"(Check after generation; mirror the image if it lands on the wrong side.)")
+
+
+# L13 · cover/thumbnail layout: a reserved band alone is ignored (hand drawn through it) or faked (blurred strip + seam).
+def poster_layout(text_band: str, head_at: str, entries: str = "") -> str:
+    return (f"LAYOUT: the {text_band} contains only the calm, darker continuation of the background (no hands, objects or "
+            f"faces there, no blur strip, no seam). The hero's head is at about {head_at} of the frame height. {entries}")
 # L7 · the model adds extra people (a duplicate of the hero, onlookers). Always state the cast.
 def cast(*people: str, extra: str = "") -> str:
     n = len(people)

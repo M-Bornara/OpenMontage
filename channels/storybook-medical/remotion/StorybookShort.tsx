@@ -13,6 +13,7 @@ import {
   useVideoConfig,
 } from "remotion";
 import { loadFont } from "@remotion/google-fonts/Montserrat";
+import { Clock } from "./Clock";
 
 const { fontFamily } = loadFont("normal", { weights: ["700", "800", "900"] });
 
@@ -52,7 +53,8 @@ export type Overlay =
   | { kind: "nameTag"; text: string; sub?: string; start: number; end: number }
   | { kind: "counter"; to: number; label: string; start: number; end: number; countSeconds?: number }
   | { kind: "verdict"; text: string; good: boolean; start: number; end: number }
-  | { kind: "gauge"; to: number; unit: string; start: number; end: number; dropSeconds?: number };
+  | { kind: "gauge"; to: number; unit: string; start: number; end: number; dropSeconds?: number }
+  | { kind: "clock"; cx: number; cy: number; r: number; from: number; to: number; at?: number; spin?: number; start: number; end: number };
 
 export interface Word {
   word: string;
@@ -316,6 +318,8 @@ const OverlayLayer: React.FC<{ o: Overlay }> = ({ o }) => {
       return <Verdict text={o.text} good={o.good} dur={dur} />;
     case "gauge":
       return <Gauge to={o.to} unit={o.unit} dur={dur} dropSeconds={o.dropSeconds} />;
+    case "clock":
+      return <Clock cx={o.cx} cy={o.cy} r={o.r} from={o.from} to={o.to} at={o.at} spin={o.spin} W={1080} H={1920} />;
   }
 };
 

@@ -3,6 +3,7 @@ import { AbsoluteFill, Easing, interpolate, Sequence, spring, useCurrentFrame, u
 import { loadFont } from "@remotion/google-fonts/Montserrat";
 import { loadFont as loadSerif } from "@remotion/google-fonts/LibreBaskerville";
 import { FPS, Shot, ShotLayer, Word } from "./StorybookShort";
+import { Clock } from "./Clock";
 
 // Long-form 16:9 (1920×1080 layout, rendered at --scale=2 for the 4K master). Same shot layer, palette, caption
 // energy and SFX grammar as the Shorts; overlays are re-laid for a wide frame. Spec: plan/probe-plan.md.
@@ -219,28 +220,6 @@ const Stack: React.FC<{ items: string[]; dur: number; every?: number }> = ({ ite
   );
 };
 
-const Clock: React.FC<{ cx: number; cy: number; r: number; from: number; to: number; at?: number; spin?: number }> = ({ cx, cy, r, from, to, at, spin }) => {
-  const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
-  const h = interpolate(frame, [(at ?? 0) * fps, ((at ?? 0) + (spin ?? 1.2)) * fps], [from, to], { ...clamp, easing: Easing.inOut(Easing.cubic) });
-  const hourDeg = (h % 12) * 30;
-  const minDeg = (h % 1) * 360;
-  const x = (cx / 100) * 1920, y = (cy / 100) * 1080;
-  const hand = (deg: number, len: number, w: number) => (
-    <line x1={x} y1={y} x2={x + Math.sin((deg * Math.PI) / 180) * len} y2={y - Math.cos((deg * Math.PI) / 180) * len}
-          stroke="#2E2112" strokeWidth={w} strokeLinecap="round" />
-  );
-  return (
-    <AbsoluteFill>
-      <svg width={1920} height={1080} style={{ position: "absolute", inset: 0, filter: "drop-shadow(2px 3px 2px rgba(0,0,0,0.35))" }}>
-        {hand(hourDeg, r * 0.5, 10)}
-        {hand(minDeg, r * 0.78, 6)}
-        <circle cx={x} cy={y} r={9} fill="#B8861F" stroke="#2E2112" strokeWidth={3} />
-      </svg>
-    </AbsoluteFill>
-  );
-};
-
 const OverlayLayer: React.FC<{ o: LongOverlay }> = ({ o }) => {
   const dur = Math.round((o.end - o.start) * FPS);
   switch (o.kind) {
@@ -253,7 +232,7 @@ const OverlayLayer: React.FC<{ o: LongOverlay }> = ({ o }) => {
     case "quote": return <Quote text={o.text} source={o.source} highlight={o.highlight} dur={dur} />;
     case "route": return <Route points={o.points} label={o.label} dur={dur} drawSeconds={o.drawSeconds} />;
     case "stack": return <Stack items={o.items} dur={dur} every={o.every} />;
-    case "clock": return <Clock cx={o.cx} cy={o.cy} r={o.r} from={o.from} to={o.to} at={o.at} spin={o.spin} />;
+    case "clock": return <Clock cx={o.cx} cy={o.cy} r={o.r} from={o.from} to={o.to} at={o.at} spin={o.spin} W={1920} H={1080} />;
   }
 };
 

@@ -108,7 +108,7 @@ Asset types (see `plan/formats-16x9-9x16.md`):
 |---|---|---|---|---|---|
 | 1 | `[curious]` The most famous stomach in medical history belonged to a man who kept walking away. | WS Alexis walking out of frame L→R on a dirt road; the doctor's house behind | static (he leaves the frame) | footsteps | W |
 | 2 | Alexis St. Martin couldn't read or write. A gunshot had left an opening into his stomach, and his doctor, William Beaumont, wanted to study it. | MCU Alexis looking at a paper he can't read; reverse to Beaumont (180° kept) | push | paper rustle | W (shot/reverse from one master) |
-| 3 | In 1825, Alexis left. Back home to Canada. "Without my consent," Beaumont wrote. | map: dotted line L→R to Canada; insert of handwriting "without my consent" | slide | quill | G + I |
+| 3 | In 1825, Alexis left. Back home to Canada. "Without obtaining my consent," Beaumont wrote. | map: dotted line L→R to Canada; insert of handwriting "without obtaining my consent" | slide | quill | G + I |
 | 4 | Four years later, fur-company agents brought him back. With a wife and two kids. Two thousand miles. | EWS canoe with the family travelling R→L; counter "2,000 MILES" | slide R→L | paddles | T/W |
 | 5 | Between experiments he chopped wood and carried loads, as the doctor's servant. | MS Alexis splits a log (**our existing sh06 clip**) | — | axe hit, cut on sound | R (C) |
 | 6 | In 1833 came a contract: a "covenant servant", who must submit to experiments "on or in" his stomach. One hundred fifty dollars a year. | ECU contract, the quoted words highlight as Liam says them | push in | pen scratch; stamp "$150 / YEAR" | I + G |
