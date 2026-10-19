@@ -393,7 +393,8 @@ def check_spacing(text: str, words: list[dict], min_gap: float = MIN_SENTENCE_GA
     Fix a tight one by writing a line break or '…' after that sentence in v3_text and re-recording that section."""
     import difflib
     clean = re.sub(r"\[[^\]]*\]", " ", text)
-    tokens = re.findall(r"[\w'’$.,]+[.?!…]*|[.?!…]+", clean)
+    clean = re.sub(r"\s*\n", " ¶ ", clean)                # every line end is a sentence boundary
+    tokens = re.findall(r"[\w'’$.,]+[.?!…]*|[.?!¶]+", clean)
     script, ends = [], set()
     for tkn in tokens:
         w = re.sub(r"[^\w$]", "", tkn.lower())
@@ -402,7 +403,7 @@ def check_spacing(text: str, words: list[dict], min_gap: float = MIN_SENTENCE_GA
                 ends.add(len(script) - 1)
             continue
         script.append(w)
-        if re.search(r"[.?!…]$", tkn):
+        if re.search(r"[.?!]$", tkn):            # "…" inside a line is a deliberate breath, not a sentence end
             ends.add(len(script) - 1)
     heard = [re.sub(r"[^\w$]", "", w["word"].lower()) for w in words]
     match = {}
@@ -484,11 +485,13 @@ def step_music(pid, *only):
     t = tools()
     todo = [n for n in ep["music"]["prompts"] if not only or n in only]
     cost_ledger.estimate("music (MiniMax Music v2)", len(todo), PRICES["music"], fal=True)
-    for name, prompt in ep["music"]["prompts"].items():
+    for name, spec in ep["music"]["prompts"].items():
         if only and name not in only:
             continue
         out = p / "assets/music" / f"{name}.mp3"
-        r = t["fal_minimax_music"].execute({"prompt": prompt, "output_path": str(out)})
+        prompt, sections = (spec, 2) if isinstance(spec, str) else (spec["prompt"], spec.get("sections", 2))
+        lyrics = "[Intro]\n" + "[Instrumental]\n" * sections + "[Outro]"
+        r = t["fal_minimax_music"].execute({"prompt": prompt, "lyrics_prompt": lyrics, "output_path": str(out)})
         if not r.success:
             print(name, False, r.error)
             continue
@@ -496,7 +499,8 @@ def step_music(pid, *only):
         stt = t["azure_stt"].execute({"input_path": str(out)})
         d = stt.data or {}
         txt = (d.get("text") or " ".join(s.get("text", "") for s in d.get("segments", []))).strip()
-        print(f"{name}: {duration(out):.1f}s, vocals detected: {bool(txt)} {txt[:80]}")
+        vocals = bool(re.search(r"[A-Za-z]{2,}", txt))     # STT returns "." or a stray letter on pure instrumentals
+        print(f"{name}: {duration(out):.1f}s, vocals detected: {vocals} {txt[:80]}")
 
 
 def step_sfx(pid, *_):
@@ -675,13 +679,29 @@ def step_mix(pid, *_):
         total = max(total, json.load(open(props_path, encoding="utf-8"))["totalSeconds"])
     tmp = p / "assets/audio/_mix"
     tmp.mkdir(exist_ok=True)
-    src = p / "assets/music" / f"{ep['music']['selected']}.mp3"
+    cues = ep["music"].get("cues")
+    src = p / "assets/music" / f"{(cues[0]['track'] if cues else ep['music']['selected'])}.mp3"
     L = loop_len(ep)
-    if duration(src) < total + L + 1:
+    if cues:
+        # each cue: the track looped to fit, faded 2 s in/out, placed at its start; neighbours overlap by 2 s
+        ins, chains = [], []
+        for k, c in enumerate(cues):
+            f = p / "assets/music" / f"{c['track']}.mp3"
+            ins += ["-stream_loop", "-1", "-i", str(f)]
+            d = min(c["end"], total) - c["start"] + (2 if k < len(cues) - 1 else 0)
+            ms = int(c["start"] * 1000)
+            chains.append(f"[{k}:a]atrim=0:{d:.2f},asetpts=PTS-STARTPTS,aformat=sample_rates=48000:channel_layouts=stereo,"
+                          f"afade=t=in:d={0.4 if k == 0 else 2},afade=t=out:st={max(0, d - 2):.2f}:d=2,adelay={ms}|{ms}[c{k}]")
+        ff(*ins, "-filter_complex", ";".join(chains) + ";" + "".join(f"[c{k}]" for k in range(len(cues))) +
+           f"amix=inputs={len(cues)}:duration=longest:normalize=0,atrim=0:{total}[m]", "-map", "[m]", "-ar", "48000", "-ac", "2",
+           str(tmp / "m.wav"))
+    elif duration(src) < total + L + 1:
         ff("-i", str(src), "-i", str(src), "-filter_complex", "[0:a][1:a]acrossfade=d=2:c1=tri:c2=tri[a]", "-map", "[a]",
            "-ar", "48000", str(tmp / "loop.wav"))
         src = tmp / "loop.wav"
-    if L:
+    if cues:
+        pass
+    elif L:
         # Bed plays source[L : L+total]; its last L seconds crossfade into source[0:L], so when the platform
         # loops back to 0 (which plays source[L...]) the music continues without a seam.
         ff("-i", str(src), "-filter_complex",
@@ -725,11 +745,15 @@ def step_mix(pid, *_):
     print(f"mix.wav {li} LUFS, peak {lp} dBFS, {len(ep['sfx'])} sfx cues")
 
 
-def step_render(pid, *_):
+def step_render(pid, *flags):
+    """Render. `--preview`: long videos at 1080p into renders/preview.mp4 (about 4x faster) for the edit review."""
     p = proj(pid)
     ed = json.load(open(p / "artifacts/edit_decisions.json", encoding="utf-8"))
     pp_path = p / "artifacts/proposal_packet.json"
     out = p / "renders/final.mp4"
+    if "--preview" in flags:
+        ed["bespoke"].pop("scale", None)
+        out = p / "renders/preview.mp4"
     t0 = time.time()
     ep = load_ep(pid)
     n = ep.get("narration", {})

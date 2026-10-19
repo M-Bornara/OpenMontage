@@ -40,6 +40,14 @@ Every generation round teaches us something. A lesson only counts once it's **en
 |---|---|---|---|---|
 | N1 | 20 % of sentences run into the next (< 0.3 s of silence), even with a line break after each one (HC001: 29 of 147) | v3 treats line breaks as soft; fast, excited delivery | A `[pause]` tag after each sentence: HC001 ch6 went from 5 tight to 0 (min 0.32 s, median 0.80 s), and the tag is not spoken. It costs about 16 % more length, so the owner judges the pace | `narrate` spacing check · owner listen |
 
+## Edit and music lessons
+| # | Symptom | Cause | Fix | Enforced in |
+|---|---|---|---|---|
+| E1 | An edit anchor doesn't match ("two hours", "realised", "That one's") | The transcriber writes digits, US spellings and its own contractions | Anchor each shot on nearby plain words, never on numbers or spellings | `edit_*.py` (the builder stops if a phrase isn't found) |
+| E2 | "Eight, ten months" read as a hesitation, captions "8, 10" | A comma between numbers | Write it as the source does ("eight or ten months") | script review |
+| M1 | Short music tracks (~43 s) would loop 12 times under a 9-min video | MiniMax picks its own length | `"sections": 8–10` for longer tracks; 4 cues following the story's acts, crossfaded (`music.cues`) | `episode.py music` / `mix` |
+| M2 | The vocal check fires on "." | The transcriber returns punctuation on instrumentals | Vocals = at least one real word | `episode.py music` |
+
 ## Things that worked first time (keep doing them)
 - **Chaining from the episode's character sheets:** likeness held in every image (HC001).
 - **Thirds composition for wide masters:** the 9:16 windows read as designed shots.

@@ -37,7 +37,7 @@ He does.
 And that's where the trouble starts."""),
  ("ch2", 1.2, """For seventeen days, everything he swallows comes back out… through the wound.
 Then, slowly, he gets stronger.
-Beaumont spends eight, ten months trying to close the opening.
+Beaumont spends eight or ten months trying to close the opening.
 There's one option left: stitch it shut.
 Alexis says NO.
 We don't know his reasons.

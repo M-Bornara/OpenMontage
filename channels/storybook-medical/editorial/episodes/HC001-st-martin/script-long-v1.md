@@ -52,7 +52,7 @@ and are built from this film's scenes (checked the same day).
 |---|---|---|---|
 | 17 | For seventeen days, everything he swallows comes back out… through the wound. | MS Alexis bandaged in bed, candle; counter DAY 1 → 17 | C04 |
 | 18 | Then, slowly, he gets stronger. | window light warms across days | C07 |
-| 19 | Beaumont spends eight, ten months trying to close the opening. | Beaumont changing dressings; seasons cycle in the window | C05 |
+| 19 | Beaumont spends eight or ten months trying to close the opening. | Beaumont changing dressings; seasons cycle in the window | C05 |
 | 20 | There's one option left: stitch it shut. | ECU needle and thread on a tray | C05 |
 | 21 | Alexis says NO. | CU Alexis, low angle, turns his head away; punch caption "NO" | C05 |
 | 22 | We don't know his reasons. But surgery in the 1820s meant no anaesthetic. None. | slow push on the tray; the candle gutters | C35 |
