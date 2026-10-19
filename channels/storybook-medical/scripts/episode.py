@@ -63,6 +63,7 @@ from tools.tool_registry import registry  # noqa: E402
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import google_images as gimg  # noqa: E402
 import cost_ledger  # noqa: E402
+import prompt_kit  # noqa: E402
 
 PLAYBOOK = "storybook-medical"
 VOICE = {"voice": "Liam", "model_id": "eleven-v3", "stability": 0.4, "speed": 1.2}
@@ -177,7 +178,8 @@ def gen_images(pid: str, section: str, out_dir: str, only: list[str]):
     only, premium = split_premium(only)
     use_batch = "--batch" in only
     missing = "--missing" in only          # only items that have no image yet
-    only = [n for n in only if n not in ("--batch", "--missing")]
+    lint_ok = "--lint-ok" in only          # proceed despite prompt-lint findings (after reading them)
+    only = [n for n in only if n not in ("--batch", "--missing", "--lint-ok")]
     ep = load_ep(pid)
     items = ep.get(section, {})
     out = proj(pid) / "assets/images" / out_dir
@@ -255,6 +257,13 @@ def gen_images(pid: str, section: str, out_dir: str, only: list[str]):
                     print(res)
 
     # dependency waves: an item waits for any kf:/ref: it references that is still being generated
+    # pre-flight: known prompt mistakes (plan/prompt-lessons.md) stop the run before any money is spent
+    found = prompt_kit.lint_all({x: items[x] for x in names})
+    for x, problems in found.items():
+        for pr in problems:
+            print(f"LINT {x}: {pr}")
+    if found and not lint_ok:
+        raise SystemExit(f"prompt lint: {len(found)} item(s) need a fix (see plan/prompt-lessons.md), or re-run with --lint-ok")
     if names:
         specs = [main_spec(x) for x in names] * (2 if dual else 1)
         res = sorted({x["resolution"] for x in specs})

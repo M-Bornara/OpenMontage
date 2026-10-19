@@ -1,0 +1,81 @@
+"""Shared prompt building blocks + a pre-flight lint. Every lesson in plan/prompt-lessons.md that can be enforced in
+code lives here, so the next episode can't repeat it. Episode prompt files import these blocks; episode.py runs
+lint() on every image prompt before any paid call (stops the run on a known mistake unless --lint-ok)."""
+from __future__ import annotations
+
+import re
+
+# L1/L2 · the style anchor shows the pilot's red-tuque voyageur, so the model pastes him into scenes. Use it only when
+# Alexis-era characters are in the shot; otherwise a people-free plate of the episode is the style reference.
+STYLE_ANCHOR = "kit:style-anchor.jpg"
+ANCHOR_NOTE = ("Reference 1 is a STYLE reference only: copy its painting style; do NOT copy or include the man in it, "
+               "and no red tuque unless this prompt asks for that character.")
+NO_PEOPLE = ("NO PEOPLE anywhere in the frame: no figures, no faces, no hands unless stated. Reference 1 is a STYLE "
+             "reference only: copy its painting style, never its contents.")
+# L3 · square prompts drew a framed card with a white margin.
+FULL_BLEED = "Full-bleed image to every edge: no border, no frame, no white margin, no vignette card."
+# L4 · thumbnail/cover text side came back as a flat panel with a hard seam.
+TEXT_SIDE = ("The {side} is the same scene continuing, darker, calmer and out of focus, with nothing in it. NO panel, NO "
+             "border, NO flat colour block, NO split screen.")
+# L5 · clock hands are never exact: draw the watch without hands, animate them in Remotion.
+NO_HANDS = "the watch face has its numerals as simple marks but NO HANDS AT ALL (a centre pin only)"
+# L6 · with two people in frame the model gave the opening to the wrong person / side.
+def body_mark(person: str, what: str, side: str = "LEFT", where: str = "lower abdomen, just below the ribs") -> str:
+    return (f"CRITICAL: {what} is on {person}'s body only, on the {side} side of the {where}; nobody else has it. "
+            f"(Check after generation; mirror the image if it lands on the wrong side.)")
+# L7 · the model adds extra people (a duplicate of the hero, onlookers). Always state the cast.
+def cast(*people: str, extra: str = "") -> str:
+    n = len(people)
+    who = "; ".join(people)
+    return f"CAST: exactly {n} {'person' if n == 1 else 'people'}: {who}. Nobody else in the frame.{(' ' + extra) if extra else ''}"
+# L8 · props with writing: the model writes words (labels on maps, "Contract", signatures).
+NO_TEXT = "No text, letters, numbers, labels, signatures or watermark anywhere; any writing is illegible scribble."
+# L9 · red rule and string/vial colours drift.
+RED_RULE = ("Only the story's motif may be saturated red (e.g. Alexis's tuque); everything else avoids pure red. Strings "
+            "are cream-white; glass vials hold amber liquid.")
+# L10 · period accuracy slips (castle-like forts, modern maps).
+PERIOD = "Period-accurate only: nothing modern, no modern maps or borders, no anachronistic objects."
+# L11 · Matt's glasses: hide them as a small visual joke (brand-signature.md).
+def glasses_gag(gag: str) -> str:
+    return (f"Hidden detail, small and easy to miss: a pair of round wire spectacles with amber-tinted lenses (exactly as "
+            f"in the glasses reference) {gag}. It is a gentle visual joke, physically plausible, in the background or "
+            f"midground, never the focus.")
+# L12 · Matt's cameo: era clothes + teal scarf + amber notebook, a small comic beat, face partly shaded by the hat.
+def matt_beat(era_outfit: str, beat: str) -> str:
+    return (f"Small background cameo of MATT (from the Matt reference): {era_outfit}, teal scarf, amber notebook; {beat}. "
+            f"He is small in frame, never at the centre of the action, and must not draw attention on first viewing.")
+
+
+# ── pre-flight lint ─────────────────────────────────────────────────────────
+
+def lint(name: str, spec: dict) -> list[str]:
+    """Return problems in one image spec (episode.json keyframes/references/thumbnails/covers entry)."""
+    p = (spec.get("prompt", "") + " " + spec.get("roles", "")).lower()
+    refs = spec.get("refs", [])
+    issues = []
+    people_free = "no people" in p or "empty location plate" in p
+    hero_in_shot = any("sheet-alexis" in r or "sheet-young-family" in r for r in refs)
+    if STYLE_ANCHOR in refs and (people_free or not hero_in_shot):
+        issues.append("L1: the style anchor (it shows the red-tuque voyageur) on a shot without that character: "
+                      "use a people-free episode plate as reference 1")
+    if STYLE_ANCHOR in refs and "style reference only" not in p and "style only" not in p:
+        issues.append("L2: style anchor without the 'style only, never its man' note (ANCHOR_NOTE)")
+    if spec.get("aspect") == "1:1" and "border" not in p:
+        issues.append("L3: square image without FULL_BLEED (the model draws a framed card)")
+    if re.search(r"(plain|empty|blank)[^.]{0,40}(background|side)[^.]{0,30}(for|text)", p) and "no panel" not in p:
+        issues.append("L4: 'empty background for text' without TEXT_SIDE (flat panel + seam)")
+    if re.search(r"(o'clock|hands (at|pointing))", p) and "no hands" not in p:
+        issues.append("L5: exact clock hands requested: draw NO_HANDS and animate them in Remotion")
+    if re.search(r"porthole|opening in|wound|fistula", p) and "left" not in p:
+        issues.append("L6: body opening without a side (use body_mark(..., side='LEFT'))")
+    if re.search(r"\b(and|with)\b[^.]{0,60}\b(alexis|beaumont|osler)\b", p) and "cast:" not in p and not people_free:
+        issues.append("L7: several characters but no CAST line (the model adds duplicates/onlookers)")
+    if re.search(r"\b(map|contract|letters?|poster|signpost|label|document|title page)\b", p) and not re.search(r"no (text|lettering)|illegible", p):
+        issues.append("L8: a writing-bearing prop without NO_TEXT / 'illegible'")
+    if "spectacles" in p and "amber" not in p and "no spectacles" not in p:
+        issues.append("L11: spectacles that aren't Matt's (confuses the spot-the-glasses game)")
+    return issues
+
+
+def lint_all(specs: dict[str, dict]) -> dict[str, list[str]]:
+    return {n: v for n, v in ((n, lint(n, s)) for n, s in specs.items()) if v}

@@ -155,6 +155,8 @@ error, such as the wrong person or the wrong side.
 ---
 
 ## Prompt recipe (thumbnails and Shorts covers)
+The building blocks below exist as code in `scripts/prompt_kit.py` (e.g. `TEXT_SIDE`, `cast()`, `body_mark()`, `FULL_BLEED`). The lint runs before every `thumbs` / `covers` call. All lessons: `plan/prompt-lessons.md`.
+
 Every image prompt is written in this order. Each line exists because a calibration image failed without it.
 
 ```

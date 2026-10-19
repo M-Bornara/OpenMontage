@@ -39,7 +39,7 @@ Mark each line: ✅ pass · ⚠️ pass with note · ❌ fix before the next gat
 | Safety: no gore, wounds or exposed organs; the episode's clean depiction (e.g. the brass window) is used | | |
 | Asset type per shot (wide master / square insert / tall-only / clip) and the format windows planned | | |
 | Clips only for single actions; everything else is a camera move | | |
-| Matt: one cameo (background, never at the fact) + hidden glasses placed per `plan/brand-signature.md` | | |
+| Matt: 4–6 comic beats in a long video (1 per Short), each gag written in the shot plan; glasses hidden **as a visual joke** (`plan/brand-signature.md`) | | |
 | No reused asset contradicts the claim log (e.g. the pilot's contract with an "X") | | |
 | Cost estimate shown before generation | | |
 
@@ -53,6 +53,8 @@ Mark each line: ✅ pass · ⚠️ pass with note · ❌ fix before the next gat
 | No text artefacts or fake writing where a readable document matters | | |
 | Period accuracy (as G2) holds in the actual images | | |
 | No soft crops: `build` printed no "only N px wide" warnings, or they were accepted on purpose | | |
+| Prompt lint passed before generating (or each `--lint-ok` justified) | | |
+| **Lessons recorded:** every new failure added to `plan/prompt-lessons.md` + `prompt_kit.py`; `test_prompt_lint.py` passes | | |
 | 16:9 frame and 9:16 windows both read as designed, not cropped | | |
 
 ## G4 · Audio
