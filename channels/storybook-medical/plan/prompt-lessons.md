@@ -28,6 +28,18 @@ Every generation round teaches us something. A lesson only counts once it's **en
 | L11 | Reading spectacles in a London scene would confuse the spot-the-glasses game | A generic prop | Only Matt's amber spectacles, only where planned | lint L11 |
 | L12 | Matt's glasses placed in dull spots (a shelf, a rail); Matt only once in a long video | No gag written into the plan | `glasses_gag(...)` and `matt_beat(...)`, written in the shot plan as a joke; 4–6 Matt beats per long video | `brand-signature.md` · shot-plan column |
 
+## Clip lessons (Kling v2.1 standard, image-to-video)
+| # | Symptom (where seen) | Cause | Fix | Enforced in |
+|---|---|---|---|---|
+| K1 | After the action, the character does it again (a second axe chop: HC001 C5; Veo did the same in the sh06 test) | 5 s is longer than one action; the model fills the time | Write **ONE action, then everything holds still until the end** (`CLIP_HOLD`); trim with `"use": [start, end]` | `prompt_kit.CLIP_HOLD` · `use` trims |
+| K2 | The moving object doesn't reach its target (the beef never reaches the porthole: C1) | Image-to-video can't hit a precise spot | Animate the *motion*, then cut to a close-up of the result (C1 → I02) | shot plan |
+| K3 | Camera creeps in or the subject drifts against the brief (C4 drifts right, C8 pushes in) | The model adds motion | Choose clips whose story survives small drift; mirror the source if direction matters | review |
+
+## Narration lessons (ElevenLabs v3, Liam)
+| # | Symptom (where seen) | Cause | Fix | Enforced in |
+|---|---|---|---|---|
+| N1 | 20 % of sentences run into the next (< 0.3 s of silence), even with a line break after each one (HC001: 29 of 147) | v3 treats line breaks as soft; fast, excited delivery | A `[pause]` tag after each sentence: HC001 ch6 went from 5 tight to 0 (min 0.32 s, median 0.80 s), and the tag is not spoken. It costs about 16 % more length, so the owner judges the pace | `narrate` spacing check · owner listen |
+
 ## Things that worked first time (keep doing them)
 - **Chaining from the episode's character sheets:** likeness held in every image (HC001).
 - **Thirds composition for wide masters:** the 9:16 windows read as designed shots.

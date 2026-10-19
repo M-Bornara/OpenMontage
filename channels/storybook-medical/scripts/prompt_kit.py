@@ -46,6 +46,10 @@ def matt_beat(era_outfit: str, beat: str) -> str:
             f"He is small in frame, never at the centre of the action, and must not draw attention on first viewing.")
 
 
+# K1 · clips: one action, then stillness (Kling fills spare seconds by repeating the action).
+CLIP_HOLD = "ONE single action only; once it is done, everything holds completely still until the end of the clip."
+
+
 # ── pre-flight lint ─────────────────────────────────────────────────────────
 
 def lint(name: str, spec: dict) -> list[str]:

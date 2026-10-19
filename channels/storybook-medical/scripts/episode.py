@@ -445,21 +445,27 @@ def step_clips(pid, *only):
             "colours and the room exactly as in the image. No new objects, no new people, no morphing, no text.")
 
     def run(sid):
-        kf = p / "assets/images/keyframes" / f"{sid}.png"
+        spec = ep["clips"][sid]
+        kf = p / "assets/images/keyframes" / f"{spec.get('source', sid)}.png"   # "source": the keyframe to animate
         out = p / "assets/video" / f"{sid}.mp4"
-        model = PREMIUM[1] if premium else ep["clips"][sid].get("model", clip_model)
-        prompt = ep["clips"][sid]["motion"] + keep
+        aspect = spec.get("aspect", "16:9" if ep.get("format") == "long" else "9:16")
+        model = PREMIUM[1] if premium else spec.get("model", clip_model)
+        prompt = spec["motion"] + keep
         if model == "h3-max":
             r = t["h3_max_video"].execute({"model": "h3-max", "prompt": prompt, "image_path": str(kf), "duration": 5,
                                            "resolution": "768P", "prompt_expansion_mode": "balanced",
                                            "enable_safety_checker": False, "output_path": str(out)})
         else:
-            im = Image.open(kf).convert("RGB").resize((1080, 1920), Image.LANCZOS)
+            im = Image.open(kf).convert("RGB")
+            fit = (1920, 1080) if aspect == "16:9" else (1080, 1920)
+            if abs(im.width / im.height - fit[0] / fit[1]) > 0.02:
+                raise SystemExit(f"clip {sid}: keyframe aspect {im.size} does not match {aspect}")
+            im = im.resize(fit, Image.LANCZOS)
             buf = io.BytesIO()
             im.save(buf, "JPEG", quality=92)
             r = t["kling_video"].execute({"prompt": prompt, "operation": "image_to_video",
                                           "image_url": "data:image/jpeg;base64," + base64.b64encode(buf.getvalue()).decode(),
-                                          "model_variant": CLIP_VARIANT, "duration": "5", "aspect_ratio": "9:16",
+                                          "model_variant": CLIP_VARIANT, "duration": "5", "aspect_ratio": aspect,
                                           "output_path": str(out)})
         if r.success:
             log_cost(pid, f"clip:{sid}:{model}", r.cost_usd or CLIP_MODELS.get(model, PRICES["clip"]))
@@ -549,6 +555,22 @@ def step_sheet(pid, *_):
     print(out)
 
 
+def caption_spellings() -> dict[str, str]:
+    """editorial/pronunciation.csv: words Liam is given a phonetic spelling for, mapped back to the real spelling."""
+    import csv
+    out = {}
+    f = KIT / "editorial/pronunciation.csv"
+    if f.exists():
+        for row in csv.DictReader(open(f, encoding="utf-8")):
+            real = re.sub(r"\(.*?\)", "", row["term"]).split()
+            said = (row.get("narrator_spelling") or "").split()
+            if real and len(real) == len(said):
+                for r, n in zip(real, said):
+                    if r.lower() != n.lower():
+                        out[re.sub(r"\W", "", n.lower())] = re.sub(r"[^\w'.-]", "", r)
+    return out
+
+
 def fit_frame(src: Path, dst: Path, size: tuple[int, int], focus: float = 0.5, keep_full: bool = False):
     """Fit a still to the format without distortion. Normally: crop a window of the target aspect, centred on
     `focus` (0 = left/top edge, 1 = right/bottom), then resize. keep_full (for "pan" shots): keep the whole
@@ -613,10 +635,12 @@ def step_build(pid, *_):
     else:
         shots[-1]["end"] = total
     punch = {w.lower() for w in ep["narration"].get("punch_words", [])}
+    respell = caption_spellings()
     words = []
     for w in words_raw:
         t = w["word"]
         shown = "ST." if t.lower() == "st." else re.sub(r"[^\w'?$]", "", t)
+        shown = respell.get(shown.lower(), shown)   # narrator spelling (e.g. "Mackinaw") -> real spelling on screen
         words.append({"word": shown, "start": round(w["start"], 3), "end": round(w["end"], 3),
                       "punch": re.sub(r"\W", "", t.lower()) in punch,
                       "breakAfter": bool(re.search(r"[.,?!]$", t)) and t.lower() != "st."})
