@@ -24,6 +24,7 @@ FARM, DUSK, CHURCH, WASH, LAKE, STREET, DOCK = "plate-farm", "M31", "plate-churc
 # 0 · hook
 st("0.01", STUDY, P("handsTie", 50, 118, 120), blur=6, dark=0.15)
 st("0.02", STUDY, P("porthole", 50, 112, 180), P("beefString", 50, 30, 60), blur=4)
+st("0.04", STUDY, P("porthole", 50, 130, 150), P("stringPull", 50, 70, 60), blur=4)
 st("0.05", SICK, A("beaumont", "stand", 78, 175, 190, "l", exp="shock"), P("stringHalf", 42, 75, 70), blur=5)
 st("0.06", STUDY, A("beaumont", "sitWrite", 26, 96, 52, "r", hold="pen"), A("alexis", "getUpWalk", 55, 96, 54, "r", hold="none", move=[50, 92]),
    P("firewood", 70, 96, 18, move=[66, 108]))
@@ -75,6 +76,7 @@ st("4.11", VIALS)
 st("4.12", VIALS, P("vial", 50, 100, 120), blur=6)
 st("4.15", STUDY, A("alexis", "sit", 66, 145, 130, "l", exp="mortified"), A("beaumont", "hold", 8, 150, 150, "r", exp="curious"))
 st("4.17", STUDY, A("beaumont", "stand", 50, 165, 160, "r", exp="sour"))
+st("4.18", STUDY, A("alexis", "armsFold", 50, 150, 140, "r", exp="angry"))
 st("4.19", STUDY, A("alexis", "armsFold", 32, 98, 62, "r", exp="determined"))
 st("4.21", STUDY, A("beaumont", "lookUp", 45, 130, 115, "r"))
 st("4.22", STUDY, dark=0.1)
@@ -98,6 +100,7 @@ st("5.21b", WASH, A("alexis", "armsFold", 50, 160, 150, "r", exp="sad"))
 st("5.22", STUDY, P("letter", 50, 105, 150, text="1834"), blur=6)
 st("5.23", FARM, A("wife", "armsFold", 60, 150, 140, "l", exp="determined"))
 st("5.24", FARM, A("alexis", "walk", 40, 88, 26, "r", move=[30, 75]))
+st("5.25", STUDY, A("beaumont", "sitWrite", 45, 110, 85, "r", hold="pen", exp="sad"))
 # 6 · what they learned
 st("6.03", WASH, A("merchant", "point", 32, 100, 66, "r"), A("prof1", "armsFold", 72, 100, 66, "l"), P("purse", 52, 96, 30))
 st("6.05", FARM, A("son", "walk", 60, 88, 30, "l", move=[80, 45]))

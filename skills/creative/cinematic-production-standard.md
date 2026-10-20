@@ -131,6 +131,15 @@ when the mood is lowest; a few months → light dissolve; the same time in anoth
 the energy is high. Hard cuts stay inside a set, or are marked as deliberate ("cut!", e.g. cutting on an action that
 carries across a doorway).
 
+**Two shots of the same picture** (a callback, a frame that returns from a section) are joined by a dissolve or by
+nothing, never by a dip or a chapter-style transition: those read as a glitch.
+
+**Ambient light sits on its source.** A lamp glow goes on the lamp, dust motes and rays in the window light. A glow on
+a person is a focus effect and must be planned in that beat's fx.
+
+**The hook has its own sound.** Faster music than the story, cut off on the intro sting; the story's music starts
+after the sting. Every cluster of fast cuts gets sound design: a riser into it, a whoosh and a hit on each cut.
+
 **The hook never spoils the ending.** Flash-forwards tease the conflict (the shot, the refusal, the experiment, the
 contract), never the death or the final twist.
 

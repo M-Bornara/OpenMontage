@@ -24,7 +24,8 @@ export type Beat = { id: string; at: string; shot: string; see: string; cast: st
                      set?: string; setName?: string; setYear?: string };
 type Word = { word: string; start: number; end: number };
 export type AnimaticProps = { beats: string; words: string; narration: string; insertAfter?: string; insertSecs?: number;
-                              music: { src: string; from: number; to: number; offset?: number }[]; totalSeconds: number };
+                              music: { src: string; from: number; to: number; offset?: number }[]; totalSeconds: number;
+                              hookMusic?: { src: string; offset?: number } };
 
 const useJson = <T,>(path: string) => {
   const [d, setD] = useState<T | null>(null);
@@ -251,6 +252,38 @@ const InShot: React.FC<{ half: number; children: React.ReactNode }> = ({ half, c
   <Freeze frame={half} active={(f) => f < half}><Sequence from={half}>{children}</Sequence></Freeze>
 );
 
+// ── sound design preview: each beat's sfx words → the kit's sound library; the trailer gets a whoosh + hit per flash
+const SFX: [RegExp, string, number][] = [
+  [/stamp/, "stamp-thud", 0.5], [/ding/, "ding-correct", 0.45], [/buzzer/, "buzzer-wrong", 0.4], [/whoosh/, "whoosh", 0.45],
+  [/paper/, "paper-slide", 0.4], [/tick|watch/, "watch-snap", 0.4], [/musket|shot|gasp|heartbeat/, "hit-suspense", 0.55],
+  [/glass|plink|clink/, "glass-clink", 0.4], [/wind/, "night-wind", 0.3], [/cloth|rustle/, "cloth-rustle", 0.35],
+];
+const Sfx: React.FC<{ at: number; name: string; vol: number }> = ({ at, name, vol }) => (
+  <Sequence from={Math.max(0, Math.round(at * FPS))} durationInFrames={Math.round(4 * FPS)}>
+    <Audio src={staticFile(`sfx/${name}.mp3`)} volume={vol} />
+  </Sequence>
+);
+const SfxTrack: React.FC<{ beats: Beat[] }> = ({ beats }) => {
+  const out: React.ReactNode[] = [];
+  beats.forEach((b) => {
+    const at = b.start + 0.2; // on the key word
+    if (b.src === "trailer") {
+      const n = (b.note.match(/[\d]+\.[\d]+b?/g) ?? []).length || 1;
+      const slot = b.dur / n;
+      out.push(<Sfx key={`${b.id}r`} at={b.start - 2.5} name="riser-drone" vol={0.45} />);
+      for (let i = 0; i < n; i++) {
+        out.push(<Sfx key={`${b.id}w${i}`} at={b.start + i * slot - 0.12} name="whoosh" vol={0.4} />);
+        out.push(<Sfx key={`${b.id}h${i}`} at={b.start + i * slot} name="hit-suspense" vol={0.5 + 0.1 * i} />);
+      }
+      return;
+    }
+    const L = b.sfx.toLowerCase() + (b.fx.toLowerCase().includes("stamp") ? " stamp" : "");
+    const seen = new Set<string>();
+    SFX.forEach(([re, name, vol]) => { if (re.test(L) && !seen.has(name)) { seen.add(name); out.push(<Sfx key={`${b.id}${name}`} at={at} name={name} vol={vol} />); } });
+  });
+  return <>{out}</>;
+};
+
 // ── transitions between beats ────────────────────────────────────────────────────────────────────────────
 const transOf = (t: string): [TransKind | null, number, boolean] => {
   const s = t.toLowerCase();
@@ -279,7 +312,7 @@ const Captions: React.FC<{ words: Word[]; shift: (t: number) => number }> = ({ w
   );
 };
 
-export const Animatic: React.FC<AnimaticProps> = ({ beats: bp, words: wp, narration, insertAfter, insertSecs = 0, music, totalSeconds }) => {
+export const Animatic: React.FC<AnimaticProps> = ({ beats: bp, words: wp, narration, insertAfter, insertSecs = 0, music, totalSeconds, hookMusic }) => {
   const data = useJson<{ beats: Beat[] }>(bp);
   const words = useJson<Word[]>(wp);
   if (!data || !words) return null;
@@ -352,6 +385,14 @@ export const Animatic: React.FC<AnimaticProps> = ({ beats: bp, words: wp, narrat
           <Audio src={staticFile(m.src)} startFrom={fr(m.offset ?? 0)} volume={(f) => 0.22 * interpolate(f, [0, 45, fr(m.to - m.from) - 45, fr(m.to - m.from)], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })} />
         </Sequence>
       ))}
+      {/* the hook has its own, faster music; it stops dead on the sting, and the story's music starts after it */}
+      {hookMusic ? (
+        <Sequence from={0} durationInFrames={fr(stingAt) + 2}>
+          <Audio src={staticFile(hookMusic.src)} startFrom={fr(hookMusic.offset ?? 0)}
+                 volume={(f) => 0.3 * interpolate(f, [0, 8, fr(stingAt) - 4, fr(stingAt) + 2], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })} />
+        </Sequence>
+      ) : null}
+      <SfxTrack beats={beats} />
       <Captions words={words} shift={shift} />
       <div style={{ position: "absolute", right: 24, bottom: 24, fontFamily: sans, fontWeight: 900, fontSize: 18, color: "rgba(255,255,255,0.45)", letterSpacing: 4 }}>ANIMATIC v3 · HC001</div>
     </AbsoluteFill>

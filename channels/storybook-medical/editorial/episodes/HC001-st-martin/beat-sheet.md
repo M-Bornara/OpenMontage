@@ -1,10 +1,10 @@
 # HC001 · Beat sheet v1 (for review)
 
-**131 beats**, on average **3.91 s** each (longest 12.72 s). Estimated generation cost: **$12.99** (new stills $0.12, clips $0.40 incl. their image, first+last-frame clips $0.73, props $0.24; reused / callbacks / maps / graphics are free).
+**131 beats**, on average **3.91 s** each (longest 12.72 s). Estimated generation cost: **$13.23** (new stills $0.12, clips $0.40 incl. their image, first+last-frame clips $0.73, props $0.24; reused / callbacks / maps / graphics are free).
 
-Sources: clip 6, flf 3, reuse 19, callback 7, new 64, trailer 1, newline 1, map 5, graphic 13, card 2, props 2, file 7, brand 1
+Sources: clip 6, flf 3, reuse 17, callback 7, new 66, trailer 1, newline 1, map 5, graphic 13, card 2, props 2, file 7, brand 1
 
-Transitions: cut 69, film dissolve 18, ink bleed 13, light dissolve 6, whip 5, dip to black 4, page turn 4, match 2, cold open: sound first 1, flash cuts 1, sting → bars open 1, flash 1, cut! 1, morph 1, dip to parchment 1, case-file drop 1, case-file exit 1, zoom-through 1
+Transitions: cut 69, film dissolve 19, ink bleed 13, light dissolve 6, whip 5, page turn 4, dip to black 3, match 2, cold open: sound first 1, flash cuts 1, sting → bars open 1, flash 1, cut! 1, morph 1, dip to parchment 1, case-file drop 1, case-file exit 1, zoom-through 1
 
 ## Mood curve
 
@@ -126,7 +126,7 @@ ch9  ▂▂▄▂▆▄
 | 4.15 | 3:26.1 | 5.44 | and yes beaumont | MCU | NIAGARA | Alexis's mortified face, eyes wide; Beaumont leaning in at the frame edge (implied, never shown) | new | push>alexis | cut | Matt note 'he really did this.' | ▆ |
 | 4.16 | 3:31.5 | 3.04 | empty no acid | ECU |  | the journal line writes itself: 'no acid taste' | graphic:journal | push | cut | stamp HIS OWN WORDS | ▆ |
 | 4.17 | 3:34.6 | 3.68 | with food in it | CU | NIAGARA | Beaumont's sour face | new | snap | cut |  | ▆ |
-| 4.18 | 3:38.3 | 6.8 | he also noted | MCU | NIAGARA | Alexis glaring at the vials, arms folded | reuse:M18 | push>alexis | cut | quote 'anger and impatience' (ink underline) | ▄ |
+| 4.18 | 3:38.3 | 6.8 | he also noted | MCU | NIAGARA | Alexis glaring at the vials, arms folded | new | push>alexis | cut | quote 'anger and impatience' (ink underline) | ▄ |
 | 4.19 | 3:45.1 | 2.72 | to be fair | MS | PLATTS | Alexis staring at the open door | new | pan:alexis>door | ink bleed *(auto: set change)* |  | ▄ |
 | 4.20 | 3:47.8 | 5.68 | in the end there | WS |  | a shelf of notebooks | reuse:I12 | pull | cut | counter 1→238 | ▄ |
 | 4.21 | 3:53.5 | 1.52 | one problem | MCU | PLATTS | Beaumont looks up from his notes | new | push>beaumont | cut |  | ▆ |
@@ -158,7 +158,7 @@ ch9  ▂▂▄▂▆▄
 | 5.22 | 5:40.6 | 3.36 | a letter came | ECU | STLOUIS | a letter in a hand, 1834 | new | push | light dissolve *(auto: set change)* | real date heading | ▄ |
 | 5.23 | 5:43.9 | 3.04 | his wife was not | CU | CABIN | his wife at their cabin door, arms folded | new | push>wife | film dissolve *(auto: set change)* |  | ▆ |
 | 5.24 | 5:47.0 | 2.72 | he never worked | WS | CABIN | Alexis walks out of frame along a country road | new | static | cut |  | ▄ |
-| 5.25 | 5:49.7 | 3.19 | beaumont never stopped | MS | STLOUIS | Beaumont alone at his desk, a fresh sheet of paper | reuse:M27 | push>beaumont | film dissolve *(auto: set change)* | candle flicker | ▂ |
+| 5.25 | 5:49.7 | 3.19 | beaumont never stopped | MS | STLOUIS | Beaumont alone at his desk, a fresh sheet of paper | new | push>beaumont | film dissolve *(auto: set change)* | candle flicker | ▂ |
 | 6.01 | 5:52.9 | 9.84 | in 1833 beaumont had | GFX |  | the 1833 title page, typeset by us in period type | graphic:titlepage | push | page turn (chapter card) |  | ▂ |
 | 6.02 | 6:02.7 | 3.04 | doctors in europe | MAP |  | an Atlantic map: a dotted line America → London | map:atlantic | zoom | cut |  | ▂ |
 | 6.03 | 6:05.8 | 4.88 | a london society | MS | LONDON | a committee table, a purse of coins | new | push | cut | shine on the coins | ▂ |
@@ -177,7 +177,7 @@ ch9  ▂▂▄▂▆▄
 | 7.06 | 7:14.7 | 8.16 | the strangest bit | FILE |  | card: THE DOCTOR TASTED THE STOMACH → TRUE | file:callback:4.16 | static | cut | myth card (green) | █ |
 | 7.07 | 7:22.9 | 5.8 | even alexiss age | FILE |  | card: HIS AGE → THE RECORDS DISAGREE; three documents side by side | file:graphic | static | cut | myth card | ▄ |
 | 7.08 | 7:28.7 | 2.91 | which brings us | FILE |  | the camera pushes into the folder photo: back to the story | file:callback:8.01 | push | case-file exit |  | ▄ |
-| 8.01 | 7:31.6 | 4.32 | in june 1880 | WS | FARM | the farmhouse at dusk; its one lit window goes out | reuse:M31 | push | dip to black | chapter tag 8 · The Last Word · fog, window glow fading OUT | ▁ |
+| 8.01 | 7:31.6 | 4.32 | in june 1880 | WS | FARM | the farmhouse at dusk; its one lit window goes out | reuse:M31 | push | film dissolve | chapter tag 8 · The Last Word · fog, window glow fading OUT | ▁ |
 | 8.02 | 7:35.9 | 6.64 | a young doctor | MS | OSLER | Osler writing at his desk, gaslight | new | push>osler | film dissolve *(auto: set change)* | name tag DR. WILLIAM OSLER | ▂ |
 | 8.03 | 7:42.6 | 4.56 | he offered to pay | MS | MUSEUM | a museum shelf with an empty specimen jar | new | push>jar | ink bleed *(auto: set change)* | shine on the jar | ▄ |
 | 8.04 | 7:47.1 | 2.48 | the family said no | CU | FARM_IN | Osler's letter set down, unanswered, on a farmhouse table | new | static | ink bleed | stamp NO (quiet) | ▆ |

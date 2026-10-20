@@ -121,6 +121,12 @@ def build(beats_path: str, pid: str, words_path: str | None = None):
         names = [c.split("@")[0] for c in b["cast"].split()]
         if tgt and tgt not in names and tgt not in ("left", "right"):
             problems.append(f"{b['id']}: camera target '{tgt}' is not placed in the frame (cast: {b['cast'] or 'none'})")
+    # a dip / chapter-style transition between two shots of the same picture looks like a glitch: dissolve instead
+    for k in range(1, len(timed)):
+        a, b = timed[k - 1], timed[k]
+        same = a["src"].endswith(":" + b["id"]) or b["src"].endswith(":" + a["id"]) or (a["src"] == b["src"] and a["src"].startswith("reuse:"))
+        if same and b["trans"].startswith(("dip", "page", "ink")):
+            problems.append(f"{b['id']}: '{b['trans']}' between two shots of the same picture: use a dissolve (or no transition)")
     # repeats: the same reused image inside 60 s, unless the beat is a declared callback
     seen = {}
     for b in timed:

@@ -10,10 +10,12 @@ Updated 2026-10-20.
 - [ ] The user reviews the 3 HC001 Shorts (not watched yet).
 
 ## Before ANY paid HC001 generation (so nothing is paid for twice)
-- [ ] Animatic v3 notes by beat number (sets, transitions, hook), then approval.
+- [x] Animatic v3 reviewed (2026-10-20): 0:10 string pull, 0:20 stray glow, hook music + SFX, 8.01 dissolve fixed → v3.1.
 - [ ] **Set list approval** (beat-sheet.md, "Sets" table: 27 places with year and look). Every prompt carries its set (lint L19).
-- [ ] Decision: one empty **set plate** per recurring set (~12 sets, ~$1.45) as the location reference, so a scene's
-      shots share one room and different places never look alike. Recommended.
+- [ ] **Set plates (P2a): 5 prompts ready for approval** (plates_hc001.py → episode.json references): Niagara stone quarters,
+      Mackinac post hospital, Washington parlour, Plattsburgh house, the habitant house. ~$0.60 (Gemini 3 Pro Image, 4K, batch).
+      Six sets reuse existing plates for free; one-off sets get no plate.
+- [ ] Hook music: generate a real faster hook track (~$0.03) at the music gate (P7). The animatic uses a temp (mD from 0:25).
 - [ ] Cast sheets with **age versions**: Alexis 1822–25 / 1829–34 / old (1846–80); Beaumont 1822 / 1833 / 1850s.
 - [ ] 0.10 hook line, new wording without the death: "…and why, for the rest of his life, he kept running away." (needs OK + a Liam take)
 - [ ] 4.15 tasting shown as an implied, comic moment (needs OK).

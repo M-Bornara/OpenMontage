@@ -35,6 +35,15 @@ const PropArt: React.FC<{ p: string; t: number; T: number; text?: string }> = ({
       return (<g><line x1={0} y1={-200} x2={0} y2={y} stroke="#F4EEDF" strokeWidth={2.5} />
         <rect x={-14} y={y} width={28} height={24} rx={4} fill="#A8423A" stroke={INK} strokeWidth={2.5} /><path d={`M-14,${y + 8} L14,${y + 14}`} stroke="#F4EEDF" strokeWidth={2} /></g>);
     }
+    case "stringPull": { // 0.04: fingers draw the string UP out of the opening; the beef comes out half gone
+      const y = interpolate(k, [0, 0.85], [150, 40], clamp);
+      return (<g><line x1={0} y1={-220} x2={0} y2={y} stroke="#F4EEDF" strokeWidth={2.5} />
+        <rect x={-14} y={y} width={28} height={13} rx={4} fill="#A8423A" stroke={INK} strokeWidth={2.5} />
+        <g transform={`translate(0,${y - 62})`}>
+          <path d="M-8,-30 Q-22,-8 -8,6 Q0,10 8,6 Q22,-8 8,-30 Z" fill={SKIN} stroke={INK} strokeWidth={2.5} />
+          <rect x={-16} y={-80} width={32} height={52} fill="#24324F" stroke={INK} strokeWidth={2.5} />
+        </g></g>);
+    }
     case "handsTie": return (
       <g transform="translate(0,110)">
         <rect x={-26} y={-22} width={52} height={44} rx={6} fill="#A8423A" stroke={INK} strokeWidth={3} />
@@ -130,12 +139,23 @@ const PropEl: React.FC<{ s: PropSpec; t: number; T: number }> = ({ s, t, T }) =>
   );
 };
 
-const lifeLayers = (life: string) => {
+// where each plate's real light sources are (% of frame): a glow sits on the lamp, motes and rays in the window light,
+// never on a person (a glow on someone is a focus effect, planned in the beat's fx, not ambient life)
+const PLATE_LIGHT: Record<string, { lamp?: [number, number]; window?: [number, number] }> = {
+  "plate-study": { lamp: [15, 50], window: [57, 30] }, "plate-sickroom16": { lamp: [88, 56], window: [40, 32] },
+  M17: { lamp: [12, 57], window: [62, 26] }, "plate-store16": { window: [82, 42] }, "plate-washington": { window: [12, 30] },
+  M31: { lamp: [86, 58] }, M29: { lamp: [22, 32] },
+};
+
+const lifeLayers = (life: string, bg: string) => {
   const L = life.toLowerCase();
   const out: React.ReactNode[] = [];
-  if (L.includes("flicker") || L.includes("glow") || L.includes("lamp") || L.includes("candle") || L.includes("stove")) out.push(<Glow key="g" x={30} y={45} r={420} strength={0.16} />);
-  if (L.includes("motes") || L.includes("dust")) out.push(<Motes key="m" x={40} y={45} r={22} n={30} />);
-  if (L.includes("rays") || L.includes("light")) out.push(<Rays key="r" x={12} y={6} angle={38} spread={22} n={4} length={140} strength={0.12} />);
+  const src = PLATE_LIGHT[bg] ?? {};
+  if (src.lamp && (L.includes("flicker") || L.includes("glow") || L.includes("lamp") || L.includes("candle") || L.includes("stove")))
+    out.push(<Glow key="g" x={src.lamp[0]} y={src.lamp[1]} r={260} strength={0.16} />);
+  if (src.window && (L.includes("motes") || L.includes("dust"))) out.push(<Motes key="m" x={src.window[0]} y={src.window[1] + 10} r={14} n={24} />);
+  if (src.window && (L.includes("rays") || L.includes("light")))
+    out.push(<Rays key="r" x={src.window[0]} y={src.window[1] - 12} angle={src.window[0] < 50 ? 38 : -38} spread={18} n={4} length={120} strength={0.1} />);
   if (L.includes("fog") || L.includes("mist")) out.push(<Fog key="f" id={`fog${life.length}`} top={40} bottom={80} opacity={0.4} />);
   if (L.includes("rain")) out.push(<Rain key="rn" n={110} />);
   if (L.includes("snow")) out.push(<Rain key="sn" n={70} slant={4} speed={30} opacity={0.6} />);
@@ -158,7 +178,7 @@ export const StageScene: React.FC<{ s: StageSpec; cam: Cam; dur: number; spanOff
         <AbsoluteFill style={{ filter: s.silhouette ? "brightness(0)" : undefined }}>
           {(s.actors ?? []).map((a, i) => <ActorEl key={`a${i}`} a={a} t={t} T={T} />)}
         </AbsoluteFill>
-        {lifeLayers(life)}
+        {lifeLayers(life, s.bg)}
       </AbsoluteFill>
     </AbsoluteFill>
   );

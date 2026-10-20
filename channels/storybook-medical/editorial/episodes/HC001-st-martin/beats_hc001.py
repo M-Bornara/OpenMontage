@@ -23,7 +23,7 @@ def B(id, at, shot, see, cast="", src="new", cam="push", trans="cut", life="", f
 B("0.01", "a doctor ties", "ECU", "Beaumont's hands knot a silk string around a cube of beef; pocket watch beside it", "hands@C", "clip",
   "static", "cold open: sound first", fx="letterbox", sfx="string creak", mood=4)
 B("0.02", "then he lowers", "CU", "the beef on its string descends into the clean brass porthole on Alexis's LEFT side", "porthole@C",
-  "flf", "push>porthole", "match (string)", mood=4, note="end frame: beef inside, string taut")
+  "flf", "push>porthole", "match (string)", mood=4, note="Beaumont's fingers hold the string at the top of the frame THROUGHOUT (so 0.04, the reverse, reads as him pulling it out); end frame: beef inside, string taut")
 B("0.03", "he checks his watch", "ECU", "the pocket watch (no hands drawn); hands animate 12→1", "watch@C", "reuse:I03a", "static",
   fx="clock 12→1 · shine on glass", sfx="ticking", mood=3)
 B("0.04", "he pulls the string", "CU", "Beaumont's fingers draw the string up out of the porthole", "hands@CL porthole@C", "callback:0.02",
@@ -148,8 +148,8 @@ B("4.15", "and yes beaumont", "MCU", "Alexis's mortified face, eyes wide; Beaumo
 B("4.16", "empty no acid", "ECU", "the journal line writes itself: 'no acid taste'", "journal@C", "graphic:journal", "push",
   fx="stamp HIS OWN WORDS", mood=4)
 B("4.17", "with food in it", "CU", "Beaumont's sour face", "beaumont@C", "new", "snap", sfx="slurp", mood=4)
-B("4.18", "he also noted", "MCU", "Alexis glaring at the vials, arms folded", "alexis@C", "reuse:M18", "push>alexis",
-  fx="quote 'anger and impatience' (ink underline)", mood=3)
+B("4.18", "he also noted", "MCU", "Alexis glaring at the vials, arms folded", "alexis@C", "new", "push>alexis",
+  fx="quote 'anger and impatience' (ink underline)", mood=3, note="was reuse M18 (a log-cabin room): it must be the Niagara stone quarters (L19)")
 B("4.19", "to be fair", "MS", "Alexis staring at the open door", "alexis@L door@R", "new", "pan:alexis>door", mood=3)
 B("4.20", "in the end there", "WS", "a shelf of notebooks", "shelf@C", "reuse:I12", "pull", fx="counter 1→238", sfx="ticks", mood=3)
 B("4.21", "one problem", "MCU", "Beaumont looks up from his notes", "beaumont@C", "new", "push>beaumont", mood=4)
@@ -201,8 +201,8 @@ B("5.21b", "the man with a lid", "CU", "Alexis's face, not laughing, while the r
 B("5.22", "a letter came", "ECU", "a letter in a hand, 1834", "letter@C", "new", "push", fx="real date heading", mood=3)
 B("5.23", "his wife was not", "CU", "his wife at their cabin door, arms folded", "wife@C", "new", "push>wife", mood=4)
 B("5.24", "he never worked", "WS", "Alexis walks out of frame along a country road", "alexis@C", "new", "static", mood=3)
-B("5.25", "beaumont never stopped", "MS", "Beaumont alone at his desk, a fresh sheet of paper", "beaumont@C", "reuse:M27", "push>beaumont",
-  life="candle flicker", mood=2)
+B("5.25", "beaumont never stopped", "MS", "Beaumont alone at his desk, a fresh sheet of paper", "beaumont@C", "new", "push>beaumont",
+  life="candle flicker", mood=2, note="was reuse M27 (a log-cabin room): it must be the St. Louis brick study, Beaumont older (L19)")
 
 # ═══ 6 · WHAT THEY LEARNED ════════════════════════════════════════════════════════════════════════════════
 B("6.01", "in 1833 beaumont had", "GFX", "the 1833 title page, typeset by us in period type", "", "graphic:titlepage", "push",
@@ -241,7 +241,7 @@ B("7.08", "which brings us", "FILE", "the camera pushes into the folder photo: b
   sfx="whoosh; story music returns", mood=3)
 
 # ═══ 8 · THE LAST WORD ════════════════════════════════════════════════════════════════════════════════════
-B("8.01", "in june 1880", "WS", "the farmhouse at dusk; its one lit window goes out", "window@CR", "reuse:M31", "push", "dip to black",
+B("8.01", "in june 1880", "WS", "the farmhouse at dusk; its one lit window goes out", "window@CR", "reuse:M31", "push", "film dissolve",
   life="fog, window glow fading OUT", fx="chapter tag 8 · The Last Word", mood=1)
 B("8.02", "a young doctor", "MS", "Osler writing at his desk, gaslight", "osler@C", "new", "push>osler", fx="name tag DR. WILLIAM OSLER",
   mood=2)
