@@ -180,6 +180,17 @@ All made in Remotion (free) unless marked.
 **Devices**
 - **2.5D parallax:** each still split into foreground, mid and back layers (depth map, free) with a real camera move. This is
   the biggest upgrade over flat zooms, and makes stills feel filmed.
+- **Attention highlights** (point the eye at what the narrator names, timed to the key word):
+  - **Glint:** a small star shine on an object (Matt's glasses, a vial, the watch). Needs only a point; free.
+  - **Spotlight:** the rest of the frame dims or desaturates slightly while a soft oval stays bright. Needs only an
+    oval; free.
+  - **Character pulse:** a warm colour flash plus a thin glow along that person's outline, about 0.6 s. Needs a cut-out
+    mask, from local rembg (free) or a text-prompted segmentation on fal (fractions of a cent; estimated before use).
+  - In a clip, the highlight follows the subject (tracked oval), or it's used only on the clip's still opening frame.
+  - **Glasses-gag rule:** the glasses stay unhighlighted in the story so the game still works. In the Case File's
+    "did you spot them?" replay, every gag frame comes back with a glint and a counter (1/5, 2/5 ...). One gag per
+    episode may get a tiny glint in the story, as a teaser.
+  - Use them sparingly: at most one highlight every ~20 s, or they stop meaning anything.
 - **Freeze-frame character intro:** the picture freezes, a hand-drawn arrow and a label appear ("ALEXIS ST. MARTIN · 18 ·
   voyageur · about to have a very bad day"), then it unfreezes.
 - **Matt's notebook asides:** a doodle or a dry one-liner pops up in the corner, written in his amber ink.
