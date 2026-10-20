@@ -3,11 +3,11 @@
 Updated 2026-10-19.
 
 ## Decisions waiting for the user
-- [ ] Approve editing-v2.md sections 1–9 (the cast troupe, maps, structure, hook, toolbox, rhythm, Matt).
-- [ ] HC001 script restructure: move "The Last Word" (the grave) before the Case File; Myth vs Record and Why It Matters
-      move into the Case File; write the new hook lines. This needs a re-approval of the script.
-- [ ] Re-record Liam with per-chapter delivery (recommended: yes).
-- [ ] The HC001 Shorts: rebuild them from the new images, or keep the current three?
+- [x] editing-v2 approved (2026-10-19); the original structure is kept (see section 0).
+- [ ] Watch the test reels and give feedback by number: Focus ✅ rendered · Transitions · Map · Section changes (hook→story, story→myth→story, ending).
+- [ ] Hook: new lines (trailer flash-forwards + open loop). These need a script approval.
+- [ ] Liam: a hyped take for the hook / myth / ending, compared against the archived take.
+- [ ] The user reviews the 3 HC001 Shorts (not watched yet).
 
 ## Production (HC001, due Wed Nov 4; launch Sun Nov 8)
 - [ ] Transitions and devices reel (P8), plus edit-engine fixes (key-word sync, lints, no clip→still).

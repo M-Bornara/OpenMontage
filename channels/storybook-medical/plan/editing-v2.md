@@ -1,9 +1,20 @@
 # Editing v2: how a long video is made (from HC001 onward)
 
-Written 2026-10-19 after the HC001 preview review (34 notes). It replaces the "places first" shot planning. Status: DRAFT,
-waiting for approval of sections 1–9.
+Written 2026-10-19 after the HC001 preview review (34 notes). It replaces the "places first" shot planning. Status: APPROVED 2026-10-19. Final say on each device comes after seeing it in the test reels.
 
 ---
+
+## 0 · Decisions from 2026-10-19
+
+| Topic | Decision |
+|---|---|
+| **The camera frames the subject** | Every zoom and pan is centred on what the narration is about (the person, object or action), never the chair or the wall. A shot without a `target` is refused by the edit lint. Reviews are done as a senior director / film editor would |
+| **Effects** | Free, After-Effects-style tricks only (Remotion + local tools). No paid effects |
+| **Glasses glint** | A very small sparkle, timed to land while *another* highlight or action is happening, so it's easy to miss on the first watch and found on a rewatch. The big reveal happens only in the Case File replay |
+| **Maps** | Real geography, period styling, **with the country border shown**, so a border crossing reads clearly. No modern state/province lines, no modern political-map look |
+| **Structure** | Keep the original order (hook → story → myth check → story ending → why it matters). The fix is in the **transitions and the change of look**: hook → story, story → myth (a big change of rhythm and theme), myth → back to story, the ending. The Case File look (section 5) is used for the myth section. The script order isn't changed, and we can revert cheaply |
+| **Narration** | Keep the current Liam takes (archived, never overwritten). Story chapters stay as they are, with small, careful tweaks at most. Hook, myth and ending sections may be re-recorded with more energy, and are compared with the old take before choosing |
+| **Shorts** | Not reviewed yet by the user. No changes until they are |
 
 ## 1 · You approve every piece (gates)
 
@@ -108,7 +119,7 @@ Cost: $0 for the drawing; one or two cents' worth of props at most.
 
 ---
 
-## 5 · Structure: a clear story, then a clear break
+## 5 · Structure: a clear story, then a clear break (superseded by section 0: keep the original order, use this look for the myth section)
 
 The HC001 order (story → myth check → **back to story** → why it matters) confused the ear: chapter 8 felt like the end, then
 chapter 9 surprised. New fixed structure:
