@@ -1,0 +1,281 @@
+// Period map scene (plan/editing-v2.md section 4): real geography (Natural Earth via scripts/map_prep.py) drawn as ink on
+// parchment, with the national border, period labels, city pins, routes that draw themselves and a travelling canoe.
+// The camera moves in map space; strokes and labels stay crisp at any zoom.
+import React, { useEffect, useState } from "react";
+import { AbsoluteFill, continueRender, delayRender, Easing, interpolate, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
+import { loadFont as loadSerif } from "@remotion/google-fonts/LibreBaskerville";
+import { loadFont } from "@remotion/google-fonts/Montserrat";
+import { loadFont as loadHand } from "@remotion/google-fonts/Caveat";
+
+const { fontFamily: serif } = loadSerif("normal", { weights: ["400"] });
+const { fontFamily: serifI } = loadSerif("italic", { weights: ["400"] });
+const { fontFamily: sans } = loadFont("normal", { weights: ["700", "900"] });
+const { fontFamily: hand } = loadHand("normal", { weights: ["700"] });
+
+const INK = "#4A3820";
+const WATER = "#AFC3B8";
+const LAND = "#E7D7AE";
+const BORDER = "#7A2E2A";
+const AMBER = "#E8A33D";
+const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
+const ease = Easing.inOut(Easing.sin);
+
+type City = { id: string; name: string; sub?: string; xy: [number, number]; side?: "l" | "r" | "t" | "b" };
+type Label = { text: string; xy: [number, number]; kind: "country" | "water" | "region"; rotate?: number };
+type Route = { id: string; style: "river" | "arc"; pts: [number, number][]; cum: number[]; miles: number };
+export type MapData = { size: [number, number]; land: string; lakes: string; rivers: string; borders: string[]; routes: Route[];
+                        cities: City[]; labels: Label[]; pxPerMile: number };
+
+export type CamKey = { f: number; c: [number, number]; z: number }; // map-space centre, zoom (1 = whole map)
+export type RouteCue = { id: string; from: number; to: number; canoe?: boolean; year?: string; counter?: { to: number; label: string };
+                         legend?: string };
+
+export type MapSceneProps = {
+  data: string; // public path of the JSON from map_prep.py
+  cams: CamKey[];
+  routes: RouteCue[];
+  cities?: { id: string; at: number }[];
+  labelsAt?: number;
+  borderAt?: number;
+  borderPulse?: number; // frame when the canoe crosses the border: the line glows briefly
+  follow?: { id: string; from: number; to: number; z: number }; // camera rides with this route's canoe
+  title?: string;
+  subtitle?: string;
+};
+
+const useMapData = (path: string) => {
+  const [data, setData] = useState<MapData | null>(null);
+  const [handle] = useState(() => delayRender("map data"));
+  useEffect(() => {
+    fetch(staticFile(path)).then((r) => r.json()).then((j) => { setData(j); continueRender(handle); });
+  }, [path, handle]);
+  return data;
+};
+
+const camAt = (cams: CamKey[], f: number) => {
+  if (f <= cams[0].f) return cams[0];
+  for (let i = 0; i < cams.length - 1; i++) {
+    const a = cams[i];
+    const b = cams[i + 1];
+    if (f <= b.f) {
+      const t = ease((f - a.f) / Math.max(1, b.f - a.f));
+      // zoom interpolates in log space so a zoom-in feels even
+      const z = Math.exp(Math.log(a.z) + (Math.log(b.z) - Math.log(a.z)) * t);
+      return { f, c: [a.c[0] + (b.c[0] - a.c[0]) * t, a.c[1] + (b.c[1] - a.c[1]) * t] as [number, number], z };
+    }
+  }
+  return cams[cams.length - 1];
+};
+
+const pointAt = (r: Route, p: number): { x: number; y: number; ang: number; i: number } => {
+  const { pts, cum } = r;
+  let i = 1;
+  while (i < cum.length - 1 && cum[i] < p) i++;
+  const t = (p - cum[i - 1]) / Math.max(1e-6, cum[i] - cum[i - 1]);
+  const [x1, y1] = pts[i - 1];
+  const [x2, y2] = pts[i];
+  return { x: x1 + (x2 - x1) * t, y: y1 + (y2 - y1) * t, ang: (Math.atan2(y2 - y1, x2 - x1) * 180) / Math.PI, i };
+};
+
+const Canoe: React.FC<{ ang: number; f: number }> = ({ ang, f }) => {
+  // a canoe always sits level on the water: it faces left or right and tilts at most 25°, whatever the heading
+  const flip = Math.abs(ang) > 90;
+  const a = Math.max(-25, Math.min(25, flip ? (ang > 0 ? ang - 180 : ang + 180) : ang));
+  const bob = Math.sin(f / 5) * 1.5;
+  return (
+    <svg viewBox="-50 -22 100 34" width={92} height={31} style={{ position: "absolute", left: -46, top: -22, overflow: "visible",
+         transform: `rotate(${a}deg) scaleX(${flip ? -1 : 1}) translateY(${bob}px)`, filter: "drop-shadow(0 3px 2px rgba(0,0,0,0.35))" }}>
+      <path d="M-46,0 Q-40,10 -20,11 L20,11 Q40,10 46,0 Q30,4 0,4 Q-30,4 -46,0 Z" fill="#C9A26A" stroke={INK} strokeWidth={2.2} />
+      <path d="M-40,2 Q0,6 40,2" fill="none" stroke={INK} strokeWidth={1.2} opacity={0.6} />
+      {[-22, -4, 14].map((x, i) => (
+        <g key={i} transform={`translate(${x},0)`}>
+          <rect x={-4} y={-11} width={8} height={11} rx={3} fill={i === 2 ? "#B5423A" : "#5B6E78"} stroke={INK} strokeWidth={1.2} />
+          <circle cx={0} cy={-15} r={4.2} fill="#E9C9A0" stroke={INK} strokeWidth={1.2} />
+          <line x1={2} y1={-6} x2={10 + Math.sin(f / 4 + i) * 3} y2={10} stroke={INK} strokeWidth={1.6} />
+        </g>
+      ))}
+    </svg>
+  );
+};
+
+const Compass: React.FC = () => (
+  <svg viewBox="-60 -60 120 120" width={150} height={150} style={{ position: "absolute", left: 60, bottom: 60, opacity: 0.85 }}>
+    <circle r={44} fill="none" stroke={INK} strokeWidth={1.5} />
+    <circle r={38} fill="none" stroke={INK} strokeWidth={0.8} />
+    {[0, 90, 180, 270].map((r) => (<path key={r} d="M0,-52 L7,0 L0,6 L-7,0 Z" transform={`rotate(${r})`} fill={r === 0 ? BORDER : INK} />))}
+    {[45, 135, 225, 315].map((r) => (<path key={r} d="M0,-34 L4,0 L-4,0 Z" transform={`rotate(${r})`} fill={INK} opacity={0.7} />))}
+    <text y={-55} textAnchor="middle" fontFamily={serif} fontSize={14} fill={INK}>N</text>
+  </svg>
+);
+
+export const MapScene: React.FC<MapSceneProps> = ({ data: path, cams, routes, cities = [], labelsAt = 0, borderAt = 0, borderPulse, title, subtitle, follow }) => {
+  const f = useCurrentFrame();
+  const { width: FW, height: FH } = useVideoConfig();
+  const d = useMapData(path);
+  if (!d) return null;
+  const [W, H] = d.size;
+  let cam = camAt(cams, f);
+  if (follow) {
+    const r = d.routes.find((x) => x.id === follow.id);
+    const cue = routes.find((x) => x.id === follow.id);
+    if (r && cue) {
+      const p = interpolate(f, [cue.from, cue.to], [0, 1], { ...clamp, easing: ease });
+      const pt = pointAt(r, p);
+      const w = interpolate(f, [follow.from, follow.from + 25, follow.to - 25, follow.to], [0, 1, 1, 0], { ...clamp, easing: ease });
+      const z = Math.exp(Math.log(cam.z) + (Math.log(follow.z) - Math.log(cam.z)) * w);
+      cam = { f, c: [cam.c[0] + (pt.x - cam.c[0]) * w, cam.c[1] + (pt.y - cam.c[1]) * w], z };
+    }
+  }
+  const vw = W / cam.z;
+  const vh = H / cam.z;
+  const vx = cam.c[0] - vw / 2;
+  const vy = cam.c[1] - vh / 2;
+  const toScreen = (x: number, y: number) => [((x - vx) / vw) * FW, ((y - vy) / vh) * FH];
+  const nss = { vectorEffect: "non-scaling-stroke" } as React.CSSProperties;
+  const pulse = borderPulse !== undefined ? interpolate(f, [borderPulse, borderPulse + 6, borderPulse + 30], [0, 1, 0], clamp) : 0;
+  const routeById = Object.fromEntries(d.routes.map((r) => [r.id, r]));
+  const lab = interpolate(f, [labelsAt, labelsAt + 20], [0, 1], clamp);
+  // scale bar: the round distance whose bar is closest to ~160 px at this zoom
+  const perMile = (d.pxPerMile * FW) / vw;
+  const scaleMiles = [10, 25, 50, 100, 200, 300, 500].reduce((best, m) => (Math.abs(m * perMile - 160) < Math.abs(best * perMile - 160) ? m : best), 100);
+  const scalePx = scaleMiles * perMile;
+
+  return (
+    <AbsoluteFill style={{ background: "radial-gradient(ellipse at 50% 45%, #EEDFBD 0%, #DCC898 70%, #B99E6C 100%)", overflow: "hidden" }}>
+      <svg viewBox={`${vx} ${vy} ${vw} ${vh}`} preserveAspectRatio="none" style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}>
+        <defs>
+          <filter id="hand" x="-5%" y="-5%" width="110%" height="110%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="3" />
+            <feDisplacementMap in="SourceGraphic" scale={2.2 / cam.z} />
+          </filter>
+          <pattern id="hatch" width={8 / cam.z} height={8 / cam.z} patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+            <line x1={0} y1={0} x2={0} y2={8 / cam.z} stroke={INK} strokeWidth={0.6 / cam.z} opacity={0.18} />
+          </pattern>
+        </defs>
+        <rect x={-2000} y={-2000} width={W + 4000} height={H + 4000} fill={WATER} />
+        {/* coast ripples: concentric water-side bands, like engraved maps */}
+        {[22, 14, 7].map((w, i) => (
+          <path key={w} d={d.land} fill="none" stroke="#7F9C95" strokeWidth={w} opacity={0.12 + i * 0.08} style={nss} strokeLinejoin="round" />
+        ))}
+        <g filter="url(#hand)">
+          <path d={d.land} fill={LAND} stroke={INK} strokeWidth={1.6} style={nss} strokeLinejoin="round" />
+          <path d={d.land} fill="url(#hatch)" />
+          <path d={d.lakes} fill={WATER} stroke={INK} strokeWidth={1.2} style={nss} />
+          <path d={d.lakes} fill="none" stroke="#7F9C95" strokeWidth={6} opacity={0.25} style={nss} />
+          <path d={d.rivers} fill="none" stroke="#5F7F86" strokeWidth={1.4} style={nss} strokeLinecap="round" />
+          {d.borders.map((b, i) => (
+            <g key={i} opacity={interpolate(f, [borderAt, borderAt + 15], [0, 1], clamp)}>
+              {pulse > 0 ? <path d={b} fill="none" stroke={AMBER} strokeWidth={10} opacity={0.7 * pulse} style={nss} strokeLinecap="round" /> : null}
+              <path d={b} fill="none" stroke={BORDER} strokeWidth={2.4} strokeDasharray="12 5 2 5" style={nss} strokeLinecap="round" />
+            </g>
+          ))}
+        </g>
+        {/* routes draw themselves */}
+        {routes.map((cue) => {
+          const r = routeById[cue.id];
+          if (!r || f < cue.from) return null;
+          const p = interpolate(f, [cue.from, cue.to], [0, 1], { ...clamp, easing: ease });
+          const end = pointAt(r, p);
+          const pts = r.pts.slice(0, end.i).concat([[end.x, end.y]]);
+          const dd = "M" + pts.map(([x, y]) => `${x},${y}`).join(" L");
+          return (
+            <g key={cue.id}>
+              <path d={dd} fill="none" stroke="#F4E9CF" strokeWidth={7} style={nss} strokeLinecap="round" opacity={0.8} />
+              <path d={dd} fill="none" stroke={INK} strokeWidth={3.2} strokeDasharray={r.style === "arc" ? "1 9" : "14 8"}
+                    style={nss} strokeLinecap="round" />
+            </g>
+          );
+        })}
+      </svg>
+
+      {/* labels (screen space: constant size at any zoom) */}
+      <AbsoluteFill style={{ opacity: lab }}>
+        {d.labels.map((l) => {
+          const [x, y] = toScreen(...l.xy);
+          const st: React.CSSProperties = l.kind === "water"
+            ? { fontFamily: serifI, fontSize: 26, color: "#3E5A5C", letterSpacing: 2 }
+            : l.kind === "country"
+              ? { fontFamily: serif, fontSize: 36, color: INK, letterSpacing: 16, opacity: 0.75 }
+              : { fontFamily: serif, fontSize: 24, color: INK, letterSpacing: 9, opacity: 0.7 };
+          return <div key={l.text} style={{ position: "absolute", left: x, top: y, transform: `translate(-50%,-50%) rotate(${l.rotate ?? 0}deg)`, whiteSpace: "nowrap", ...st }}>{l.text}</div>;
+        })}
+      </AbsoluteFill>
+
+      {/* cities */}
+      {d.cities.map((c) => {
+        const cue = cities.find((x) => x.id === c.id);
+        if (!cue) return null;
+        const o = interpolate(f, [cue.at, cue.at + 10], [0, 1], clamp);
+        const drop = interpolate(f, [cue.at, cue.at + 10], [-18, 0], { ...clamp, easing: Easing.out(Easing.back(2)) });
+        const [x, y] = toScreen(...c.xy);
+        const side = c.side ?? "r";
+        const off: React.CSSProperties = side === "r" ? { left: 22, top: -18 } : side === "l" ? { right: 22, top: -18, textAlign: "right" } : side === "t" ? { left: -100, bottom: 20, width: 200, textAlign: "center" } : { left: -100, top: 18, width: 200, textAlign: "center" };
+        return (
+          <div key={c.id} style={{ position: "absolute", left: x, top: y + drop, opacity: o }}>
+            <div style={{ position: "absolute", left: -10, top: -10, width: 20, height: 20, borderRadius: 10, background: AMBER, border: `3px solid ${INK}` }} />
+            <div style={{ position: "absolute", whiteSpace: "nowrap", ...off }}>
+              <div style={{ fontFamily: serif, fontSize: 30, color: INK, textShadow: "0 0 6px #EEDFBD, 0 0 3px #EEDFBD" }}>{c.name}</div>
+              {c.sub ? <div style={{ fontFamily: sans, fontWeight: 700, fontSize: 17, letterSpacing: 4, color: "#7A5A2A", textTransform: "uppercase" }}>{c.sub}</div> : null}
+            </div>
+          </div>
+        );
+      })}
+
+      {/* canoes + year tags */}
+      {routes.map((cue) => {
+        const r = routeById[cue.id];
+        if (!r || !cue.canoe || f < cue.from - 5) return null;
+        const p = interpolate(f, [cue.from, cue.to], [0, 1], { ...clamp, easing: ease });
+        const pt = pointAt(r, p);
+        const [x, y] = toScreen(pt.x, pt.y);
+        const o = interpolate(f, [cue.from - 5, cue.from + 5, cue.to + 20, cue.to + 35], [0, 1, 1, 0], clamp);
+        return (
+          <div key={cue.id} style={{ position: "absolute", left: x, top: y, opacity: o }}>
+            <Canoe ang={pt.ang} f={f} />
+            {cue.year ? <div style={{ position: "absolute", left: 40, top: -62, fontFamily: hand, fontWeight: 700, fontSize: 40, color: BORDER, transform: "rotate(-6deg)" }}>{cue.year}</div> : null}
+          </div>
+        );
+      })}
+
+      {/* counter tied to the canoe */}
+      {routes.filter((c) => c.counter && f >= c.from).map((cue) => {
+        const p = interpolate(f, [cue.from, cue.to], [0, 1], { ...clamp, easing: ease });
+        const o = interpolate(f, [cue.from, cue.from + 10, cue.to + 25, cue.to + 40], [0, 1, 1, 0], clamp);
+        return (
+          <div key={cue.id} style={{ position: "absolute", right: 80, top: 70, opacity: o, textAlign: "right" }}>
+            <div style={{ fontFamily: sans, fontWeight: 900, fontSize: 84, color: INK }}>{Math.round(p * cue.counter!.to).toLocaleString("en-US")}</div>
+            <div style={{ fontFamily: sans, fontWeight: 700, fontSize: 24, letterSpacing: 8, color: "#7A5A2A", marginTop: -8 }}>{cue.counter!.label}</div>
+          </div>
+        );
+      })}
+
+      {/* cartouche, legend, scale bar, compass */}
+      {title ? (
+        <div style={{ position: "absolute", left: 60, top: 50, padding: "18px 34px", background: "rgba(238,223,189,0.92)", border: `2px solid ${INK}`,
+                      boxShadow: `0 0 0 6px rgba(238,223,189,0.92), 0 0 0 8px ${INK}` }}>
+          <div style={{ fontFamily: serif, fontSize: 34, color: INK }}>{title}</div>
+          {subtitle ? <div style={{ fontFamily: serifI, fontSize: 20, color: "#6A5432", marginTop: 4 }}>{subtitle}</div> : null}
+        </div>
+      ) : null}
+      <div style={{ position: "absolute", right: 70, bottom: 60, padding: "14px 22px", background: "rgba(238,223,189,0.9)", border: `2px solid ${INK}` }}>
+        {routes.filter((c) => c.legend && f >= c.from - 10).map((c) => (
+          <div key={c.id} style={{ display: "flex", alignItems: "center", gap: 14, margin: "4px 0" }}>
+            <svg width={60} height={10}><line x1={2} y1={5} x2={58} y2={5} stroke={INK} strokeWidth={3} strokeDasharray={routeById[c.id]?.style === "arc" ? "1 7" : "10 6"} strokeLinecap="round" /></svg>
+            <span style={{ fontFamily: serif, fontSize: 20, color: INK }}>{c.legend}</span>
+          </div>
+        ))}
+        <div style={{ display: "flex", alignItems: "center", gap: 14, margin: "4px 0" }}>
+          <svg width={60} height={10}><line x1={2} y1={5} x2={58} y2={5} stroke={BORDER} strokeWidth={2.5} strokeDasharray="10 4 2 4" /></svg>
+          <span style={{ fontFamily: serif, fontSize: 20, color: INK }}>National border</span>
+        </div>
+        <div style={{ marginTop: 10 }}>
+          <div style={{ width: scalePx, height: 8, border: `2px solid ${INK}`, background: `linear-gradient(to right, ${INK} 50%, transparent 50%)` }} />
+          <div style={{ fontFamily: serif, fontSize: 16, color: INK }}>{scaleMiles} miles</div>
+        </div>
+      </div>
+      <Compass />
+      {/* paper grain + burnt edges */}
+      <AbsoluteFill style={{ background: "radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0) 60%, rgba(70,45,15,0.45) 100%)", pointerEvents: "none" }} />
+    </AbsoluteFill>
+  );
+};

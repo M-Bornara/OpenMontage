@@ -4,14 +4,15 @@ Updated 2026-10-19.
 
 ## Decisions waiting for the user
 - [x] editing-v2 approved (2026-10-19); the original structure is kept (see section 0).
-- [ ] Watch the test reels and give feedback by number (projects/_fxlab/renders/): Focus ✅ reviewed (v2 adds the white pulse) · Transitions ✅ reviewed ("basic") · **AI transitions v2 ✅ rendered (TransV2Reel)** · Living stills ✅ reviewed · Map (next) · **Animatic engine (next, then the HC001 beat sheet + animatic)** · Section changes (next: hook→story, story→myth→story, ending).
+- [ ] Watch the test reels and give feedback by number (projects/_fxlab/renders/): Focus ✅ reviewed (v2 adds the white pulse) · Transitions ✅ reviewed ("basic") · **AI transitions v2 ✅ rendered (TransV2Reel)** · Living stills ✅ reviewed · **Map ✅ rendered (MapReel)** · **Animatic engine (next, then the HC001 beat sheet + animatic)** · Section changes (next: hook→story, story→myth→story, ending).
 - [ ] Hook: new lines (trailer flash-forwards + open loop). These need a script approval.
 - [ ] Liam: a hyped take for the hook / myth / ending, compared against the archived take.
 - [ ] The user reviews the 3 HC001 Shorts (not watched yet).
 
 ## Production (HC001, due Wed Nov 4; launch Sun Nov 8)
 - [ ] Transitions and devices reel (P8), plus edit-engine fixes (key-word sync, lints, no clip→still).
-- [ ] Period map component (Natural Earth base + parchment kit).
+- [x] Period map component (map_prep.py + MapScene.tsx): Natural Earth, national border through the lakes, period labels, cities, river / arc routes, travelling canoe, follow-cam, counter, legend, adaptive scale bar, compass, title scroll.
+- [ ] Map rule: pins and paths only where the sources give them (a dotted arc = route not recorded).
 - [ ] Beat sheet HC001 (P1), then cast (P2), then prompts / images / clips (P3–P5), narration (P6), music (P7), cut (P9).
 - [ ] Fix the caption merge "BELIEVEDSTRONG" (3:40 in the preview).
 - [ ] The book page (I11) still has lorem ipsum: re-draw it with WAVY_WRITING + blur.
