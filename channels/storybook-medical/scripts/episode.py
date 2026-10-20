@@ -84,7 +84,7 @@ TIERS = {
     "budget": ("nano-banana-2", "h3-max"),                      # tested on episode 2, ~$2.60
 }
 PREMIUM = TIERS["premium"]
-KIT_REMOTION = ("StorybookShort.tsx", "StorybookLong.tsx", "Clock.tsx", "Brand.tsx", "Fx.tsx", "Life.tsx", "Transitions.tsx", "MapScene.tsx", "Sections.tsx", "LabReels.tsx", "Root.tsx", "index.tsx")
+KIT_REMOTION = ("StorybookShort.tsx", "StorybookLong.tsx", "Clock.tsx", "Brand.tsx", "Fx.tsx", "Life.tsx", "Transitions.tsx", "MapScene.tsx", "Sections.tsx", "Animatic.tsx", "LabReels.tsx", "Root.tsx", "index.tsx")
 
 
 def model_choice(ep: dict) -> tuple[str, str]:

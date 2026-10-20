@@ -3,6 +3,7 @@ import { CalculateMetadataFunction, Composition, Still } from "remotion";
 import { FPS, StorybookCover, StorybookShort, StorybookShortProps } from "./StorybookShort";
 import { OddlyEndScreen, OddlySting, OddlyThumbnail } from "./Brand";
 import { StorybookLong, StorybookLongProps } from "./StorybookLong";
+import { Animatic, AnimaticProps } from "./Animatic";
 import { FOCUS, FocusReel, LIFE, LifeReel, MAPS, MapReel, reelFrames, SECTIONS, SectionsReel, TRANS, TRANS2, TransReel, TransV2Reel } from "./LabReels";
 
 const calculateMetadata: CalculateMetadataFunction<StorybookShortProps> = async ({ props }) => ({
@@ -61,6 +62,9 @@ export const Root: React.FC = () => (
     <Composition id="TransV2Reel" component={TransV2Reel} durationInFrames={reelFrames(TRANS2, FPS)} fps={FPS} width={1920} height={1080} />
     <Composition id="MapReel" component={MapReel} durationInFrames={reelFrames(MAPS, FPS)} fps={FPS} width={1920} height={1080} />
     <Composition id="SectionsReel" component={SectionsReel} durationInFrames={reelFrames(SECTIONS, FPS)} fps={FPS} width={1920} height={1080} />
+    <Composition id="Animatic" component={Animatic} durationInFrames={FPS * 60} fps={FPS} width={1920} height={1080}
+                 defaultProps={{ beats: "animatic/beats.json", words: "animatic/words.json", narration: "animatic/narration.wav", music: [], totalSeconds: 60 } as AnimaticProps}
+                 calculateMetadata={async ({ props }) => ({ durationInFrames: Math.ceil((props as AnimaticProps).totalSeconds * FPS) })} />
     <Composition id="LifeReel" component={LifeReel} durationInFrames={reelFrames(LIFE, FPS)} fps={FPS} width={1920} height={1080} />
   </>
 );
