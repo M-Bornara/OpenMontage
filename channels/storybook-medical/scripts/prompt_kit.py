@@ -42,6 +42,11 @@ NO_TEXT = "No text, letters, numbers, labels, signatures or watermark anywhere; 
 # L15 · "illegible copperplate" came back as readable "Lorem ipsum ... Contract ... signature" (HC001 I13, twice).
 WAVY_WRITING = ("Any handwriting is drawn ONLY as rows of soft wavy ink lines with no letters, words, numbers or signature, "
                 "slightly out of focus, like writing seen from too far away to read. No heading or title on the page.")
+# L16 · give the page REAL words: the model invents "Lorem ipsum" because it needs filler. A short real heading or quote
+# (period-true, from the script/sources, under ~8 words) is rendered exactly; the rest of the page stays wavy lines.
+def real_writing(text: str, where: str = "at the top of the page") -> str:
+    return (f'The only legible writing is "{text}", handwritten in period ink {where}, spelled exactly like that. '
+            f"Every other line is soft wavy ink lines with no letters. Never Latin or placeholder text.")
 # L9 · red rule and string/vial colours drift.
 RED_RULE = ("Only the story's motif may be saturated red (e.g. Alexis's tuque); everything else avoids pure red. Strings "
             "are cream-white; glass vials hold amber liquid.")
@@ -87,8 +92,8 @@ def lint(name: str, spec: dict) -> list[str]:
     if re.search(r"\b(and|with)\b[^.]{0,60}\b(alexis|beaumont|osler)\b", p) and "cast:" not in p and not people_free:
         issues.append("L7: several characters but no CAST line (the model adds duplicates/onlookers)")
     if re.search(r"\b(map|contract|letters?|poster|signpost|label|document|title page)\b", p) and "wavy ink lines" not in p \
-            and "no lettering" not in p:
-        issues.append("L8/L15: a writing-bearing prop without WAVY_WRITING ('illegible' still produces lorem ipsum)")
+            and "no lettering" not in p and "only legible writing" not in p:
+        issues.append("L8/L15: a writing-bearing prop without WAVY_WRITING or real_writing() ('illegible' still produces lorem ipsum)")
     if "spectacles" in p and "amber" not in p and "no spectacles" not in p:
         issues.append("L11: spectacles that aren't Matt's (confuses the spot-the-glasses game)")
     return issues
