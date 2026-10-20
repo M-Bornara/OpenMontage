@@ -9,7 +9,9 @@ import { loadFont as loadSerif } from "@remotion/google-fonts/LibreBaskerville";
 import { camTransform, Cam } from "./Fx";
 import { TransKind, Transition, TransitionV2 } from "./Transitions";
 import { MapScene } from "./MapScene";
-import { CaseFile, Letterbox, MythCard, Stamp } from "./Sections";
+import { CaseFile, HandLine, Letterbox, MythCard, Stamp } from "./Sections";
+import { StageScene, StageSpec } from "./Stage";
+import { GraphicCard } from "./Graphics";
 
 const { fontFamily: sans } = loadFont("normal", { weights: ["700", "900"] });
 const { fontFamily: hand } = loadHand("normal", { weights: ["700"] });
@@ -18,7 +20,7 @@ const FPS = 30;
 const AMBER = "#E8A33D";
 
 export type Beat = { id: string; at: string; shot: string; see: string; cast: string; src: string; cam: string; trans: string; life: string;
-                     fx: string; sfx: string; mood: number; note: string; start: number; end: number; dur: number };
+                     fx: string; sfx: string; mood: number; note: string; start: number; end: number; dur: number; stage?: StageSpec };
 type Word = { word: string; start: number; end: number };
 export type AnimaticProps = { beats: string; words: string; narration: string; insertAfter?: string; insertSecs?: number;
                               music: { src: string; from: number; to: number; offset?: number }[]; totalSeconds: number };
@@ -113,6 +115,50 @@ export const BeatCard: React.FC<{ b: Beat; all: Beat[] }> = ({ b, all }) => {
   const [label, colour] = BADGE[kind] ?? ["?", "#777"];
   const cam = camOf(b);
   const img = reuseImg(b.src) ?? (kind === "callback" ? reuseImg(all.find((x) => x.id === b.src.split(":")[1])?.src ?? "") : null);
+  // the picture source: this beat's own stage, or the stage / image of the beat it calls back to
+  const refId = b.src.match(/callback:([\w.]+)/)?.[1];
+  const ref = refId ? all.find((x) => x.id === refId) : undefined;
+  const stage = b.stage ?? ref?.stage;
+  const stageCam = (s: StageSpec): Cam => {
+    const m = b.cam.match(/push>(\w+)|pan:(\w+)>(\w+)/);
+    const pos = (name?: string): [number, number] => {
+      const a = s.actors?.find((x) => x.who === name || x.who.startsWith(name ?? "~")) ?? (name ? undefined : s.actors?.[0]);
+      if (a) return [a.x, Math.max(15, Math.min(85, a.y - a.h * 0.8))];
+      const pr = s.props?.[0];
+      return pr ? [pr.x, Math.max(15, Math.min(85, pr.y - pr.h * 0.5))] : [50, 50];
+    };
+    if (b.cam.startsWith("pan:") && m) return { target: pos(m[2]), panTo: pos(m[3]), from: 1.15, to: 1.15, centre: 0.8 };
+    if (b.cam.startsWith("push")) return { target: pos(m?.[1]), from: 1.03, to: 1.16 };
+    if (b.cam === "pull") return { target: pos(), from: 1.16, to: 1.03 };
+    if (b.cam === "snap") return { target: pos(), from: 1.03, to: 1.05, snapAt: 6, snapTo: 1.25 };
+    return { target: [50, 50], from: 1.02, to: 1.05 };
+  };
+  if (kind === "graphic" || b.src === "file:graphic") {
+    return <GraphicCard name={b.src === "file:graphic" ? "documents" : b.src.split(":")[1]} see={b.see} dur={dur} />;
+  }
+  if (kind === "trailer") {
+    // flash-forwards: the beats named in the note, each a short slice with a flash
+    const ids = (b.note.match(/[\d]+\.[\d]+b?/g) ?? []).map((id) => all.find((x) => x.id === id)).filter(Boolean) as Beat[];
+    const slot = Math.max(1, Math.floor(dur / Math.max(1, ids.length)));
+    return (
+      <AbsoluteFill style={{ backgroundColor: "#000" }}>
+        {ids.map((x, i) => (
+          <Sequence key={x.id} from={i * slot} durationInFrames={slot}>
+            <BeatCard b={{ ...x, dur: slot / FPS, cam: "snap", fx: x.fx.includes("stamp") ? x.fx : "", see: "", life: "" } as Beat} all={all} />
+            <AbsoluteFill style={{ backgroundColor: "#FFF6E4", opacity: interpolate(useCurrentFrame() - i * slot, [0, 1, 5], [0, 0.8, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) }} />
+          </Sequence>
+        ))}
+      </AbsoluteFill>
+    );
+  }
+  if (kind === "newline" && stage) {
+    return (
+      <AbsoluteFill>
+        <StageScene s={stage} cam={{ target: [80, 55], from: 1.04, to: 1.12 }} dur={dur} />
+        <HandLine text={b.see.match(/'([^']+)'/)?.[1] ?? ""} at={4} y={40} />
+      </AbsoluteFill>
+    );
+  }
   const mapRoute = b.src.match(/^map:(\w+)/)?.[1];
   if (mapRoute && mapRoute !== "atlantic") {
     const routes = mapRoute === "overview" ? [] : [{ id: mapRoute, from: 6, to: Math.max(20, dur - 20), canoe: true,
@@ -129,7 +175,11 @@ export const BeatCard: React.FC<{ b: Beat; all: Beat[] }> = ({ b, all }) => {
   if (b.shot === "FILE") {
     // Matt's Case File: the folder is already open; each beat is one myth card (parsed from the beat's description)
     const m = b.see.match(/(?:myth card|card:) (.+?) → (\w+)(?: → '(.+?)')?(?:;|$)/);
-    const photo = img ? <Img src={staticFile(img)} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
+    const fileRef = b.src.match(/callback:([\w.]+)/)?.[1];
+    const fileStage = b.stage ?? (fileRef ? all.find((x) => x.id === fileRef)?.stage : undefined);
+    const fileImg = fileRef ? reuseImg(all.find((x) => x.id === fileRef)?.src ?? "") : null;
+    const photo = fileStage ? <StageScene s={fileStage} cam={{ target: [50, 50], from: 1.04, to: 1.08 }} dur={dur} />
+      : (fileImg ?? img) ? <Img src={staticFile((fileImg ?? img)!)} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
       : <AbsoluteFill style={{ background: "#3B4249", alignItems: "center", justifyContent: "center", fontFamily: sans, fontWeight: 700, fontSize: 40, color: "#C9CED2" }}>{label}</AbsoluteFill>;
     return (
       <CaseFile at={b.id === "7.01" ? 4 : -200} mattAt={b.id === "7.01" ? 40 : -200} matt="img/matt-bust.png" photo={photo}
@@ -137,6 +187,18 @@ export const BeatCard: React.FC<{ b: Beat; all: Beat[] }> = ({ b, all }) => {
         {m ? <MythCard at={6} myth={m[1]} verdict={m[2]} verdictAt={Math.round(dur * 0.35)} record={m[3] ?? ""} source={m[3] ? "the record" : ""}
                        recordAt={m[3] ? Math.round(dur * 0.55) : 99999} /> : null}
       </CaseFile>
+    );
+  }
+  if (stage && !img) {
+    return (
+      <AbsoluteFill>
+        <StageScene s={stage} cam={stageCam(stage)} dur={dur} spanOffset={(b as any).spanOffset ?? 0} life={b.life} />
+        <div style={{ position: "absolute", left: 22, top: 22, display: "flex", gap: 10, opacity: 0.85 }}>
+          <div style={{ background: "#11151A", color: "#EFE6D2", fontFamily: sans, fontWeight: 900, fontSize: 22, padding: "5px 12px", borderRadius: 6 }}>{b.id} · {b.shot}</div>
+          <div style={{ background: colour, color: "#11151A", fontFamily: sans, fontWeight: 900, fontSize: 18, padding: "6px 12px", borderRadius: 6 }}>{label}</div>
+        </div>
+        <Overlays b={b} />
+      </AbsoluteFill>
     );
   }
   return (

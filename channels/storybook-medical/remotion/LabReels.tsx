@@ -1,10 +1,11 @@
 // Test reels for user review (plan/editing-v2.md P8). Each sample is numbered so notes can say "focus 07".
 import React from "react";
-import { AbsoluteFill, Audio, Freeze, interpolate, OffthreadVideo, Sequence, staticFile, useCurrentFrame } from "remotion";
+import { AbsoluteFill, Audio, Freeze, Img, interpolate, OffthreadVideo, Sequence, staticFile, useCurrentFrame } from "remotion";
 import { CaseFile, HandLine, Letterbox, MythCard, Stamp } from "./Sections";
 import { loadFont as loadSerif } from "@remotion/google-fonts/LibreBaskerville";
 import { ChapterCard, TransKind, Transition, TransitionV2 } from "./Transitions";
 import { MapScene } from "./MapScene";
+import { ActorEl } from "./Puppet";
 import { Birds, Bob, Breathe, Drift, FlameWaver, Fog, Glow, Leaves, LightShift, Parallax, Rain, Rays, Ripple, Smoke, Sway } from "./Life";
 import { loadFont } from "@remotion/google-fonts/Montserrat";
 import { AMBER, BONE, CHARCOAL, Callout, Flicker, Glint, InkCircle, Isolate, Loupe, Motes, Ping, Plate, Pulse, RackFocus, Shine, Spotlight } from "./Fx";
@@ -454,3 +455,35 @@ export const LIFE: Sample[] = [
 ];
 export const LifeReel: React.FC = () => <Reel samples={LIFE} />;
 
+
+
+// ── Puppet test ──
+const PT: React.FC<{ dur: number; children: (t: number, T: number) => React.ReactNode; bg?: string }> = ({ dur, children, bg }) => {
+  const f = useCurrentFrame();
+  return (
+    <AbsoluteFill style={{ background: "#E9DDC0" }}>
+      {bg ? <Img src={staticFile(bg)} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} /> : null}
+      {children(f / 30, dur / 30)}
+    </AbsoluteFill>
+  );
+};
+const NAMES = ["alexis", "beaumont", "matt", "wife", "child1", "child2", "friend1", "friend2", "voyageur", "clerk", "prof1", "prof2", "osler", "priest", "soldier", "son", "digger", "merchant", "alexisOld"];
+export const PUPPETS: Sample[] = [
+  { title: "CAST LINE-UP", use: "Every cast member's puppet, idle.", secs: 3, body: ({ dur }) => (
+    <PT dur={dur}>{(t, T) => <>{NAMES.map((n, i) => (
+      <React.Fragment key={n}>
+        <ActorEl a={{ who: n, act: "idle", x: 4 + (i % 10) * 10.2, y: i < 10 ? 47 : 95, h: 30, face: "r" }} t={t} T={T} />
+        <div style={{ position: "absolute", left: `${4 + (i % 10) * 10.2}%`, top: `${i < 10 ? 48 : 96}%`, transform: "translateX(-50%)", fontFamily, fontWeight: 700, fontSize: 18 }}>{n}</div>
+      </React.Fragment>))}</>}</PT>
+  ) },
+  { title: "ACTIONS", use: "walk · run · kneel+lantern · fall · cough · paddle · chop · dig · write · push away · laugh · shake head", secs: 4, body: ({ dur }) => (
+    <PT dur={dur}>{(t, T) => <>{[["alexis", "walk"], ["beaumont", "run"], ["matt", "kneelLantern"], ["alexis", "fall"], ["alexis", "cough"], ["alexis", "paddle"],
+      ["alexis", "chop"], ["digger", "dig"], ["beaumont", "sitWrite"], ["alexis", "pushAway"], ["friend1", "laugh"], ["alexisOld", "shakeHead"]].map(([w, a], i) => (
+      <React.Fragment key={i}>
+        <ActorEl a={{ who: w, act: a, x: 8 + (i % 6) * 16.5, y: i < 6 ? 46 : 95, h: 32, face: "r",
+                      hold: a === "paddle" ? "paddle" : a === "chop" ? "axe" : a === "dig" ? "shovel" : a === "kneelLantern" ? "lantern" : a === "sitWrite" ? "pen" : "none" }} t={t} T={T} />
+        <div style={{ position: "absolute", left: `${8 + (i % 6) * 16.5}%`, top: `${i < 6 ? 47 : 96}%`, transform: "translateX(-50%)", fontFamily, fontWeight: 700, fontSize: 20 }}>{w} · {a}</div>
+      </React.Fragment>))}</>}</PT>
+  ) },
+];
+export const PuppetReel: React.FC = () => <Reel samples={PUPPETS} />;

@@ -49,7 +49,16 @@ def build(beats_path: str, pid: str, words_path: str | None = None):
                 return i, i + len(want) - 1
         return None
 
+    stage_path = Path(beats_path).with_name(Path(beats_path).name.replace("beats_", "stage_"))
+    stages = {}
+    if stage_path.exists():
+        spec = importlib.util.spec_from_file_location("stage_mod", stage_path)
+        sm = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(sm)
+        stages = sm.STAGE
     for b in beats:
+        if b["id"] in stages:
+            b["stage"] = stages[b["id"]]
         hit = find(b["at"])
         if hit is None:
             problems.append(f"{b['id']}: key words not found after the previous beat: {b['at']!r}")
