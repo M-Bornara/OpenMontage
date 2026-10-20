@@ -2,6 +2,7 @@
 // is what makes a transition feel filmed instead of slideshow-like. Each kind has a rule for when it's used.
 import React from "react";
 import { AbsoluteFill, Easing, Img, interpolate, staticFile, useCurrentFrame } from "remotion";
+import { Cam, camTransform } from "./Fx";
 
 export type TransKind =
   | { kind: "dissolve" } // time passes in the same place
@@ -14,7 +15,13 @@ export type TransKind =
   | { kind: "leak" } // flash-forwards in the hook, memory
   | { kind: "passer"; mask: string; centre: [number, number]; scale?: number } // a figure crosses close to the lens
   | { kind: "fog" } // dusk to dawn, a long time passing outdoors
-  | { kind: "zoom" }; // a fast zoom-through: arrivals, the hook's pace
+  | { kind: "zoom" } // a fast zoom-through: arrivals, the hook's pace
+  // ── v2, AI-style (prep: scripts/trans_prep.py) ──
+  | { kind: "film" } // the smoothest dissolve: additive (no muddy mid-point), a breath of bloom
+  | { kind: "morph"; dir: string; n: number } // one image flows into the other (optical flow), for designed pairs
+  | { kind: "peel"; src: string; bands: string[]; cam: Cam; dur: number } // A leaves layer by layer, nearest first
+  | { kind: "build"; src: string; bands: string[]; cam: Cam; dur: number } // B arrives layer by layer, farthest first
+  | { kind: "luma"; src: string; bands: string[]; cam: Cam; dur: number }; // B arrives with the light, brightest first
 
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 const io = Easing.inOut(Easing.cubic);
@@ -189,6 +196,89 @@ export const Transition: React.FC<{ a: React.ReactNode; b: React.ReactNode; at: 
         </AbsoluteFill>
       );
     }
+  }
+};
+
+const smooth = (x: number) => { const c = Math.min(1, Math.max(0, x)); return c * c * (3 - 2 * c); };
+const maskOf = (m: string): React.CSSProperties => ({
+  WebkitMaskImage: `url(${staticFile(m)})`, maskImage: `url(${staticFile(m)})`, WebkitMaskSize: "100% 100%", maskSize: "100% 100%",
+});
+const layerFill: React.CSSProperties = { position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "fill" };
+
+// v2 transitions, rendered by <TransitionV2> (same props as <Transition>)
+export const TransitionV2: React.FC<{ a: React.ReactNode; b: React.ReactNode; at: number; len: number; t: TransKind; id: string }> = (props) => {
+  const { a, b, at, len, t } = props;
+  const f = useCurrentFrame();
+  const raw = interpolate(f, [at, at + len], [0, 1], clamp);
+  if (f < at) return <AbsoluteFill>{a}</AbsoluteFill>;
+  if (f >= at + len) return <AbsoluteFill>{b}</AbsoluteFill>;
+  switch (t.kind) {
+    case "film": {
+      const p = smooth(raw);
+      return (
+        <AbsoluteFill style={{ filter: `brightness(${1 + 0.06 * Math.sin(raw * Math.PI)}) blur(${1.2 * Math.sin(raw * Math.PI)}px)` }}>
+          <AbsoluteFill style={{ opacity: 1 - p }}>{a}</AbsoluteFill>
+          <AbsoluteFill style={{ opacity: p, mixBlendMode: "plus-lighter" }}>{b}</AbsoluteFill>
+        </AbsoluteFill>
+      );
+    }
+    case "morph": {
+      const i = Math.min(t.n - 1, Math.round(raw * (t.n - 1)));
+      return <AbsoluteFill><Img src={staticFile(`${t.dir}/${String(i).padStart(3, "0")}.jpg`)} style={layerFill} /></AbsoluteFill>;
+    }
+    case "peel": {
+      // the next scene waits underneath, soft and dim; this scene's layers leave one by one toward the camera
+      const n = t.bands.length;
+      const under = smooth((raw - 0.15) / 0.85);
+      return (
+        <AbsoluteFill style={{ overflow: "hidden" }}>
+          <AbsoluteFill style={{ filter: `blur(${10 * (1 - under)}px) brightness(${0.8 + 0.2 * under})` }}>{b}</AbsoluteFill>
+          {/* behind each leaving element: its own scene, heavily blurred (no ghost outline of the next scene) */}
+          <AbsoluteFill style={{ transform: camTransform(t.cam, f, t.dur), opacity: 1 - smooth((raw - 0.3) / 0.5) }}>
+            <Img src={staticFile(t.src)} style={{ ...layerFill, filter: "blur(28px) brightness(0.92)" }} />
+          </AbsoluteFill>
+          <AbsoluteFill style={{ transform: camTransform(t.cam, f, t.dur) }}>
+            {t.bands.map((m, k) => {
+              const s0 = (k / n) * 0.55;
+              const q = smooth((raw - s0) / 0.42);
+              return (
+                <AbsoluteFill key={m} style={{ opacity: 1 - q, transform: `scale(${1 + 0.12 * q * (1 - k / n)})`, filter: `blur(${8 * q}px)` }}>
+                  <Img src={staticFile(t.src)} style={{ ...layerFill, ...maskOf(m) }} />
+                </AbsoluteFill>
+              );
+            }).reverse()}
+          </AbsoluteFill>
+        </AbsoluteFill>
+      );
+    }
+    case "build":
+    case "luma": {
+      // the next scene arrives piece by piece: farthest layer first (build) or brightest light first (luma)
+      const n = t.bands.length;
+      const order = t.kind === "build" ? [...t.bands.keys()].reverse() : [...t.bands.keys()];
+      const fadeA = smooth(raw / 0.9);
+      const settle = smooth((raw - 0.85) / 0.15);
+      return (
+        <AbsoluteFill style={{ overflow: "hidden" }}>
+          <AbsoluteFill style={{ filter: `blur(${6 * fadeA}px) brightness(${1 - 0.25 * fadeA})` }}>{a}</AbsoluteFill>
+          <AbsoluteFill style={{ transform: camTransform(t.cam, f, t.dur) }}>
+            {order.map((k, j) => {
+              const s0 = (j / n) * 0.5;
+              const q = smooth((raw - s0) / 0.4);
+              const lift = t.kind === "build" ? 0.07 * (1 - q) * (1 - k / n) : 0;
+              return (
+                <AbsoluteFill key={k} style={{ opacity: q, transform: `scale(${1 + lift})`, filter: `blur(${5 * (1 - q)}px)` }}>
+                  <Img src={staticFile(t.src)} style={{ ...layerFill, ...maskOf(t.bands[k]) }} />
+                </AbsoluteFill>
+              );
+            })}
+          </AbsoluteFill>
+          <AbsoluteFill style={{ opacity: settle }}>{b}</AbsoluteFill>
+        </AbsoluteFill>
+      );
+    }
+    default:
+      return null;
   }
 };
 

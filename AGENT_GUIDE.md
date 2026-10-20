@@ -523,6 +523,10 @@ Before committing to execution, present:
 6. **Music plan** — mandatory for every pipeline that has audio. See below.
 7. Production plan by stage.
 8. Approval gate before asset generation.
+9. **For any narrated / story-driven video: a beat sheet and a free animatic (wireframe storyboard with the real
+   transitions, effects, overlays and narration) BEFORE any paid generation.** Follow
+   `skills/creative/cinematic-production-standard.md`: it is the cross-project standard for images, motion, camera,
+   sync, focus effects, transitions, structure, rhythm and review.
 
 If a user prefers a specific vendor and that tool is available, surface it directly. Do not hide provider choice.
 
@@ -703,6 +707,7 @@ The `.agents/skills/` directory is large. When you're not coming in through a to
 | How does a tool actually work? | the tool's `usage_location` from the registry |
 | How should this pipeline stage behave? | `skills/pipelines/<pipeline>/...` |
 | What is the checkpoint/review policy? | `skills/meta/` |
+| How should a story video be planned, shot, cut and reviewed? | `skills/creative/cinematic-production-standard.md` |
 
 ## What Not To Do
 

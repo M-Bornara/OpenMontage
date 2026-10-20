@@ -4,7 +4,7 @@ Updated 2026-10-19.
 
 ## Decisions waiting for the user
 - [x] editing-v2 approved (2026-10-19); the original structure is kept (see section 0).
-- [ ] Watch the test reels and give feedback by number (projects/_fxlab/renders/): Focus ✅ reviewed (v2 adds the white pulse) · Transitions ✅ rendered · Living stills ✅ rendered · Map (next) · Section changes (next: hook→story, story→myth→story, ending).
+- [ ] Watch the test reels and give feedback by number (projects/_fxlab/renders/): Focus ✅ reviewed (v2 adds the white pulse) · Transitions ✅ reviewed ("basic") · **AI transitions v2 ✅ rendered (TransV2Reel)** · Living stills ✅ reviewed · Map (next) · **Animatic engine (next, then the HC001 beat sheet + animatic)** · Section changes (next: hook→story, story→myth→story, ending).
 - [ ] Hook: new lines (trailer flash-forwards + open loop). These need a script approval.
 - [ ] Liam: a hyped take for the hook / myth / ending, compared against the archived take.
 - [ ] The user reviews the 3 HC001 Shorts (not watched yet).
@@ -25,6 +25,11 @@ Updated 2026-10-19.
 - [ ] Delete `projects/kit-route-test` (my rm was blocked).
 - [ ] YouTube upload: tick the "altered or synthetic content" box only if a scene looks realistic. Our painted style
       normally doesn't need it, but check per video.
+
+## Standard (general, all projects): skills/creative/cinematic-production-standard.md
+- [ ] Move Fx / Life / Transitions / masks / life_prep / trans_prep from the channel kit into a shared OpenMontage library when a second project needs them.
+- [ ] More AI-style transitions to develop: element exits from layered (separately generated) props, a liquid displacement dissolve, object-led wipes (an object carried across the frame).
+- [ ] First + last frame clips: the Kling tool now accepts tail_image_url (v2.1 pro/master: $0.49 / 5 s plus an end-frame image). Plan them in the beat sheet.
 
 ## Coming up
 - [ ] HCS01 Forssmann Short, for week 2 (upload-schedule.md).

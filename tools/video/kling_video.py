@@ -67,6 +67,11 @@ class KlingVideo(BaseTool):
                 "enum": ["text_to_video", "image_to_video"],
                 "default": "text_to_video",
             },
+            "tail_image_url": {
+                "type": "string",
+                "description": "Optional end frame (URL or data URI) for image_to_video: the clip moves from image_url to this "
+                               "frame. Controls where the motion lands. Supported by v2.1/pro and v2.1/master.",
+            },
             "model_variant": {
                 "type": "string",
                 "enum": ["v3/standard", "v2.5-turbo/pro", "v2.1/master", "v2.1/pro", "v2.1/standard"],
@@ -144,6 +149,9 @@ class KlingVideo(BaseTool):
             payload["aspect_ratio"] = inputs["aspect_ratio"]
         if operation == "image_to_video" and inputs.get("image_url"):
             payload["image_url"] = inputs["image_url"]
+        # first + last frame: the clip must END on this image (pro / master variants; standard ignores it).
+        if operation == "image_to_video" and inputs.get("tail_image_url"):
+            payload["tail_image_url"] = inputs["tail_image_url"]
 
         headers = {
             "Authorization": f"Key {api_key}",

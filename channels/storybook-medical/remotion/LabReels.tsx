@@ -2,7 +2,7 @@
 import React from "react";
 import { AbsoluteFill, Audio, interpolate, Sequence, staticFile, useCurrentFrame } from "remotion";
 import { loadFont as loadSerif } from "@remotion/google-fonts/LibreBaskerville";
-import { ChapterCard, TransKind, Transition } from "./Transitions";
+import { ChapterCard, TransKind, Transition, TransitionV2 } from "./Transitions";
 import { Birds, Bob, Breathe, Drift, FlameWaver, Fog, Glow, Leaves, LightShift, Parallax, Rain, Rays, Ripple, Smoke, Sway } from "./Life";
 import { loadFont } from "@remotion/google-fonts/Montserrat";
 import { AMBER, BONE, CHARCOAL, Callout, Flicker, Glint, InkCircle, Isolate, Loupe, Motes, Ping, Plate, Pulse, RackFocus, Shine, Spotlight } from "./Fx";
@@ -193,6 +193,36 @@ export const TRANS: Sample[] = [
     P("M21", [70, 62]), P("M22", [75, 45], 1.1, 1.03), { kind: "zoom" }, 14, ["whoosh", 0.3, 0]),
 ];
 export const TransReel: React.FC = () => <Reel samples={TRANS} />;
+
+// ── AI-style transitions (v2) ──
+const T2 = (title: string, use: string, a: React.ReactNode, b: React.ReactNode, t: TransKind, len: number, sound?: [string, number, number?], secs = 4.6): Sample => ({
+  title, use, secs,
+  body: () => (
+    <>
+      <TransitionV2 id={title.replace(/\W/g, "")} a={a} b={b} at={AT} len={len} t={t} />
+      {sound ? sfx(sound[0], AT + (sound[2] ?? 0), sound[1]) : null}
+    </>
+  ),
+});
+const still = (n: string, fit: "fill" | "cover" = "fill") => <Plate src={img(n)} fit={fit} dur={138} cam={{ target: [50, 50], from: 1.0, to: 1.0 }} />;
+const bands = (n: string, kind: string, count: number) => Array.from({ length: count }, (_, k) => m(`${n}-${kind}-${k}`));
+const C0 = { target: [50, 50] as [number, number], from: 1.0, to: 1.0 };
+
+export const TRANS2: Sample[] = [
+  T2("FILM DISSOLVE (SMOOTH)", "The smoothest dissolve: additive, with no muddy middle and a breath of bloom. Our default dissolve from now on.",
+    P("M33", [65, 75], 1.04, 1.08), P("M34", [55, 78], 1.08, 1.04), { kind: "film" }, 40),
+  T2("MORPH: WATCH → PORTHOLE", "One shape flows into the other (optical flow). For designed match pairs: same shape, same place.",
+    still("I03a", "cover"), still("I19", "cover"), { kind: "morph", dir: "img/morph-watch-porthole", n: 30 }, 30, ["watch-snap", 0.4, 12]),
+  T2("MORPH: TIME-LAPSE", "The same place, time passing: the diggers fade away as the grave fills and the flowers grow.",
+    still("M33"), still("M34"), { kind: "morph", dir: "img/morph-grave", n: 40 }, 40),
+  T2("ELEMENT PEEL (DEPTH)", "The scene leaves element by element, nearest first (the voyageurs, then the dock, then the fort), and the next scene comes into focus.",
+    still("M05"), P("M03", [50, 50], 1.02, 1.06), { kind: "peel", src: img("M05"), bands: bands("M05", "d", 4), cam: C0, dur: 138 }, 48, ["whoosh", 0.15, 6]),
+  T2("ELEMENT BUILD (DEPTH)", "The next scene assembles itself, farthest first: the room, then the doctors, then the desk lands in front.",
+    P("M01", [50, 50], 1.04, 1.06), still("M13"), { kind: "build", src: img("M13"), bands: bands("M13", "d", 4), cam: C0, dur: 138 }, 48),
+  T2("LIGHT DISSOLVE (LUMA)", "The next scene arrives with the light: the brightest parts first. For dawn, hope, revelation.",
+    P("M31", [60, 50], 1.04, 1.06), still("M33"), { kind: "luma", src: img("M33"), bands: bands("M33", "l", 6), cam: C0, dur: 138 }, 50),
+];
+export const TransV2Reel: React.FC = () => <Reel samples={TRANS2} />;
 
 // ── Living stills reel ──
 const L = (title: string, use: string, body: React.FC<{ dur: number }>, secs = 5): Sample => ({ title, use, secs, body });
