@@ -214,8 +214,8 @@ B("6.04", "kept writing to him", "MS", "Beaumont's desk; letters drop onto a pil
   "static", fx="stack 1836…1852", sfx="paper", mood=3)
 B("6.05", "he sent his own son", "WS", "a young rider (Beaumont's son) on a country road", "son@C", "new", "pan", life="dust", mood=2)
 B("6.06", "alexis had his own farm", "MS", "Alexis at his farm fence, shaking his head", "alexis@C", "new", "push>alexis", mood=3)
-B("6.07", "in 1852 beaumont", "ECU", "the offer letter", "letter@C", "graphic:journal", "push", fx="counter $150 → $500", mood=3)
-B("6.08", "his last letter", "ECU", "the line writes itself: 'Don't disappoint me more.' The quill lifts", "letter@C", "graphic:journal",
+B("6.07", "in 1852 beaumont", "ECU", "the offer letter: 'five hundred dollars a year'", "letter@C", "graphic:journal", "push", fx="counter $150 → $500", mood=3)
+B("6.08", "his last letter", "ECU", "the line writes itself: 'Don’t disappoint me more.' The quill lifts", "letter@C", "graphic:journal",
   "push", mood=4)
 B("6.09", "six months later", "WS", "a dark St. Louis street in the rain, one lit window", "window@CL", "reuse:M29", "push", "dip to black",
   life="rain, lamp glow", fx="GLASSES GAG: on the rainy windowsill", mood=2)
@@ -237,7 +237,7 @@ B("7.06", "the strangest bit", "FILE", "card: THE DOCTOR TASTED THE STOMACH → 
   sfx="ding", mood=5)
 B("7.07", "even alexiss age", "FILE", "card: HIS AGE → THE RECORDS DISAGREE; three documents side by side", "", "file:graphic",
   "static", fx="myth card", mood=3)
-B("7.08", "which brings us", "FILE", "the camera pushes into the folder photo: back to the story", "", "card", "push", "case-file exit",
+B("7.08", "which brings us", "FILE", "the camera pushes into the folder photo: back to the story", "", "file:callback:8.01", "push", "case-file exit",
   sfx="whoosh; story music returns", mood=3)
 
 # ═══ 8 · THE LAST WORD ════════════════════════════════════════════════════════════════════════════════════

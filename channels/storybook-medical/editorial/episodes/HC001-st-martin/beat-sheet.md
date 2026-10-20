@@ -2,7 +2,7 @@
 
 **131 beats**, on average **3.91 s** each (longest 12.72 s). Estimated generation cost: **$12.99** (new stills $0.12, clips $0.40 incl. their image, first+last-frame clips $0.73, props $0.24; reused / callbacks / maps / graphics are free).
 
-Sources: clip 6, flf 3, reuse 19, callback 7, new 64, trailer 1, newline 1, map 5, graphic 13, card 3, props 2, file 6, brand 1
+Sources: clip 6, flf 3, reuse 19, callback 7, new 64, trailer 1, newline 1, map 5, graphic 13, card 2, props 2, file 7, brand 1
 
 Transitions: cut 90, film dissolve 11, ink bleed 5, dip to black 4, whip 4, page turn 4, match 2, light dissolve 2, cold open: sound first 1, flash cuts 1, sting → bars open 1, flash 1, morph 1, dip to parchment 1, case-file drop 1, case-file exit 1, zoom-through 1
 
@@ -133,8 +133,8 @@ ch9  ▂▂▄▂▆▄
 | 6.04 | 6:10.7 | 2.8 | kept writing to him | MS | Beaumont's desk; letters drop onto a pile, each stamped with its year | graphic:letters | static | cut | stack 1836…1852 | ▄ |
 | 6.05 | 6:13.5 | 3.28 | he sent his own son | WS | a young rider (Beaumont's son) on a country road | new | pan | cut | dust | ▂ |
 | 6.06 | 6:16.7 | 3.92 | alexis had his own farm | MS | Alexis at his farm fence, shaking his head | new | push>alexis | cut |  | ▄ |
-| 6.07 | 6:20.7 | 6.64 | in 1852 beaumont | ECU | the offer letter | graphic:journal | push | cut | counter $150 → $500 | ▄ |
-| 6.08 | 6:27.3 | 4.64 | his last letter | ECU | the line writes itself: 'Don't disappoint me more.' The quill lifts | graphic:journal | push | cut |  | ▆ |
+| 6.07 | 6:20.7 | 6.64 | in 1852 beaumont | ECU | the offer letter: 'five hundred dollars a year' | graphic:journal | push | cut | counter $150 → $500 | ▄ |
+| 6.08 | 6:27.3 | 4.64 | his last letter | ECU | the line writes itself: 'Don’t disappoint me more.' The quill lifts | graphic:journal | push | cut |  | ▆ |
 | 6.09 | 6:31.9 | 3.76 | six months later | WS | a dark St. Louis street in the rain, one lit window | reuse:M29 | push | dip to black | GLASSES GAG: on the rainy windowsill · rain, lamp glow | ▂ |
 | 6.10 | 6:35.7 | 3.92 | alexis outlived | MS | old Alexis on his porch at sunset | reuse:M30 | push>alexis | film dissolve | counter 27 YEARS · light shift to dusk | ▂ |
 | 7.01 | 6:39.6 | 4.8 | now if youve heard | FILE | the picture freezes and drops into Matt's case folder; MYTH vs RECORD; Matt rises in | card | static | case-file drop |  | ▆ |
@@ -144,7 +144,7 @@ ch9  ▂▂▄▂▆▄
 | 7.05 | 7:07.0 | 7.76 | even the library | FILE | card: SOME SUSPECT IT WAS LEFT OPEN → UNPROVEN; photo: Beaumont half in shadow | file:new | static | cut | myth card (amber) | ▆ |
 | 7.06 | 7:14.7 | 8.16 | the strangest bit | FILE | card: THE DOCTOR TASTED THE STOMACH → TRUE | file:callback:4.16 | static | cut | myth card (green) | █ |
 | 7.07 | 7:22.9 | 5.8 | even alexiss age | FILE | card: HIS AGE → THE RECORDS DISAGREE; three documents side by side | file:graphic | static | cut | myth card | ▄ |
-| 7.08 | 7:28.7 | 2.91 | which brings us | FILE | the camera pushes into the folder photo: back to the story | card | push | case-file exit |  | ▄ |
+| 7.08 | 7:28.7 | 2.91 | which brings us | FILE | the camera pushes into the folder photo: back to the story | file:callback:8.01 | push | case-file exit |  | ▄ |
 | 8.01 | 7:31.6 | 4.32 | in june 1880 | WS | the farmhouse at dusk; its one lit window goes out | reuse:M31 | push | dip to black | chapter tag 8 · The Last Word · fog, window glow fading OUT | ▁ |
 | 8.02 | 7:35.9 | 6.64 | a young doctor | MS | Osler writing at his desk, gaslight | new | push>osler | cut | name tag DR. WILLIAM OSLER | ▂ |
 | 8.03 | 7:42.6 | 4.56 | he offered to pay | MS | a museum shelf with an empty specimen jar | new | push>jar | cut | shine on the jar | ▄ |

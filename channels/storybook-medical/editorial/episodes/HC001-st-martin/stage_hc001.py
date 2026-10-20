@@ -19,7 +19,7 @@ def st(id, bg, *items, **kw):
 
 
 HARBOR, STORE, SICK, STUDY, VIALS = "plate-harbor", "plate-store16", "plate-sickroom16", "plate-study", "M17"
-FARM, DUSK, CHURCH, WASH, LAKE, STREET, DOCK = "plate-farm", "M31", "plate-churchyard16", "plate-washington", "M21-bg", "M29", "M03"
+FARM, DUSK, CHURCH, WASH, LAKE, STREET, DOCK = "plate-farm", "M31", "plate-churchyard16", "plate-washington", "M21-lake", "M29", "M03"
 
 # 0 · hook
 st("0.01", STUDY, P("handsTie", 50, 118, 120), blur=6, dark=0.15)
@@ -44,10 +44,10 @@ st("1.10", HARBOR, A("beaumont", "run", 30, 92, 34, "r", hold="none", move=[20, 
 st("1.11", STORE, A("beaumont", "run", 70, 100, 70, "l", move=[78, 58]), A("friend2", "turnHead", 30, 100, 62, "r"))
 st("1.12", STORE, A("alexis", "lie", 56, 98, 60, "r", exp="pain"), A("beaumont", "kneel", 30, 100, 64, "r", exp="shock"),
    A("matt", "kneelLantern", 80, 100, 66, "l", hold="lantern", exp="worried"))
-st("1.13", STORE, P("wound", 50, 112, 180))
+st("1.13", STORE, P("wound", 50, 104, 120), blur=6, dark=0.15)
 st("1.14", STORE, A("friend1", "hatInHands", 30, 78, 40, "r"), A("clerk", "hatInHands", 50, 78, 40, "r"), A("voyageur", "hatInHands", 68, 78, 40, "l"),
    A("alexis", "lie", 52, 100, 50, "r", exp="pain"), dark=0.1)
-st("1.15", STORE, A("alexis", "eyesOpen", 102, 34, 360, "r"), dark=0.1)
+st("1.15", STORE, A("alexis", "faceWake", 50, 317, 300, "r"), dark=0.2, blur=4)
 st("1.16", STORE, A("beaumont", "turnHead", 50, 160, 150, "r"))
 # 2 · what happened next
 st("2.01", SICK, A("alexis", "lie", 80, 66, 42, "r", exp="pain"))
@@ -116,5 +116,5 @@ st("8.10", CHURCH, A("wife", "hatInHands", 40, 90, 38, "r", exp="sad"), A("frien
    P("grave", 50, 96, 30), dark=0.1)
 # 9 · why it matters
 st("9.02", LAKE, P("canoe", 50, 96, 50, move=[20, 70]), A("alexis", "paddle", 48, 84, 34, "r", hold="paddle", move=[18, 68]))
-st("9.03", FARM, P("tuqueNail", 50, 110, 140), blur=4)
+st("9.03", FARM, P("tuqueNail", 50, 92, 75), blur=4)
 st("9.04", DUSK, A("osler", "hold", 50, 100, 80, "r", hold="musket"), dark=0.5, silhouette=True)

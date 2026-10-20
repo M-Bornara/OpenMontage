@@ -14,7 +14,7 @@ const PAPER = "radial-gradient(ellipse at 50% 45%, #F3E9CF 0%, #E2D2A8 75%, #C9B
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 const FPS = 30;
 
-const quoteOf = (see: string) => see.match(/'([^']+)'/)?.[1] ?? "";
+const quoteOf = (see: string) => see.match(/(?:^|[\s:(])'([^']+)'/)?.[1] ?? "";
 
 const Journal: React.FC<{ text: string; dur: number }> = ({ text, dur }) => {
   const f = useCurrentFrame();

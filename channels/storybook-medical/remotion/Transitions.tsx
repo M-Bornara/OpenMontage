@@ -40,8 +40,11 @@ const inkMask = (p: number, grow = 1, pad = 0) => {
   return { WebkitMaskImage: url, maskImage: url, WebkitMaskSize: "100% 100%", maskSize: "100% 100%" } as React.CSSProperties;
 };
 
-export const Transition: React.FC<{ a: React.ReactNode; b: React.ReactNode; at: number; len: number; t: TransKind; id: string }> = ({ a, b, at, len, t, id }) => {
+export const Transition: React.FC<{ a: React.ReactNode; b: React.ReactNode; at: number; len: number; t: TransKind; id: string }> = ({ a: a0, b: b0, at, len, t, id }) => {
   const f = useCurrentFrame();
+  // keyed, so React never reuses the outgoing shot's component for the incoming one
+  const a = <React.Fragment key="shotA">{a0}</React.Fragment>;
+  const b = <React.Fragment key="shotB">{b0}</React.Fragment>;
   const raw = interpolate(f, [at, at + len], [0, 1], clamp);
   const p = io(raw);
   if (f < at) return <AbsoluteFill>{a}</AbsoluteFill>;
@@ -207,7 +210,9 @@ const layerFill: React.CSSProperties = { position: "absolute", inset: 0, width: 
 
 // v2 transitions, rendered by <TransitionV2> (same props as <Transition>)
 export const TransitionV2: React.FC<{ a: React.ReactNode; b: React.ReactNode; at: number; len: number; t: TransKind; id: string }> = (props) => {
-  const { a, b, at, len, t } = props;
+  const { at, len, t } = props;
+  const a = <React.Fragment key="shotA">{props.a}</React.Fragment>;
+  const b = <React.Fragment key="shotB">{props.b}</React.Fragment>;
   const f = useCurrentFrame();
   const raw = interpolate(f, [at, at + len], [0, 1], clamp);
   if (f < at) return <AbsoluteFill>{a}</AbsoluteFill>;

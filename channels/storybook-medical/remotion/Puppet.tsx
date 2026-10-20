@@ -105,6 +105,7 @@ export const ACTS: Record<string, Act> = {
   pushAway: (t, T) => mix(POSES.sit, POSES.pushAway, sm(t / Math.min(0.6, T * 0.3))),
   fall: (t, T) => mix({ ...STAND, exp: "shock", eyes: "wide" }, { ...POSES.lie, dx: -30 }, sm(t / Math.min(0.7, T * 0.4))),
   getUpWalk: (t, T) => (t < T * 0.35 ? mix(POSES.sit, STAND, sm(t / (T * 0.35))) : { ...ACTS.walk(t - T * 0.35, T), exp: "neutral" }),
+  faceWake: (t, T) => ({ ...STAND, head: -6 + 4 * Math.sin(t * 1.3), eyes: t < T * 0.45 ? "closed" : "wide", exp: t < T * 0.45 ? "pain" : "shock" }),
   eyesOpen: (t, T) => ({ ...POSES.lie, eyes: t < T * 0.45 ? "closed" : "wide", exp: t < T * 0.45 ? "neutral" : "shock" }),
   paddle: (t) => { const u = ((t % 1.1) / 1.1); const pull = u < 0.62; const k = pull ? u / 0.62 : (u - 0.62) / 0.38;
     const reach = pull ? 1 - k : k; // 1 = blade forward (catch), 0 = blade back (exit)

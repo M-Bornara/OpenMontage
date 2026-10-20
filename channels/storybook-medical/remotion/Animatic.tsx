@@ -107,6 +107,11 @@ const reuseImg = (src: string) => {
   return m ? `img/${m[1]}.jpg` : null;
 };
 
+const FlashIn: React.FC = () => {
+  const f = useCurrentFrame();
+  return <AbsoluteFill style={{ backgroundColor: "#FFF6E4", opacity: interpolate(f, [0, 1, 5], [0, 0.8, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) }} />;
+};
+
 export const BeatCard: React.FC<{ b: Beat; all: Beat[] }> = ({ b, all }) => {
   // beats that continue the same image share ONE camera move (span), so the shot never restarts
   const f = useCurrentFrame() + Math.round(((b as any).spanOffset ?? 0) * FPS);
@@ -145,7 +150,7 @@ export const BeatCard: React.FC<{ b: Beat; all: Beat[] }> = ({ b, all }) => {
         {ids.map((x, i) => (
           <Sequence key={x.id} from={i * slot} durationInFrames={slot}>
             <BeatCard b={{ ...x, dur: slot / FPS, cam: "snap", fx: x.fx.includes("stamp") ? x.fx : "", see: "", life: "" } as Beat} all={all} />
-            <AbsoluteFill style={{ backgroundColor: "#FFF6E4", opacity: interpolate(useCurrentFrame() - i * slot, [0, 1, 5], [0, 0.8, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) }} />
+            <FlashIn />
           </Sequence>
         ))}
       </AbsoluteFill>
@@ -155,7 +160,7 @@ export const BeatCard: React.FC<{ b: Beat; all: Beat[] }> = ({ b, all }) => {
     return (
       <AbsoluteFill>
         <StageScene s={stage} cam={{ target: [80, 55], from: 1.04, to: 1.12 }} dur={dur} />
-        <HandLine text={b.see.match(/'([^']+)'/)?.[1] ?? ""} at={4} y={40} />
+        <HandLine text={b.see.match(/(?:^|[\s:(])'([^']+)'/)?.[1] ?? ""} at={4} y={40} />
       </AbsoluteFill>
     );
   }
