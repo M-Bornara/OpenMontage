@@ -328,7 +328,7 @@ export const SECTIONS: Sample[] = [
           <Title at={6} text="The Man With a Window Into His Stomach" sub="AN ODDLY MATT STORY" />
           <Audio src={staticFile("music/mA.mp3")} volume={vol([[0, 0], [30, 0.5]])} />
         </Sequence>
-        <Letterbox openAt={238} />
+        <Letterbox openAt={166} dur={14} />
         {sfx("riser-drone", 0, 0.35)}
         {[8, 24, 40, 56, 72].map((t, i) => <React.Fragment key={t}>{sfx(i === 0 ? "hit-suspense" : "stamp-thud", t, 0.4)}</React.Fragment>)}
       </AbsoluteFill>

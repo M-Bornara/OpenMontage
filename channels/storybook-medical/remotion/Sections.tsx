@@ -98,14 +98,14 @@ export const CaseFile: React.FC<{ at: number; photo: React.ReactNode; title?: st
                                  overflow: "hidden", filter: `grayscale(${desat}) sepia(${desat * 0.6})` }}>
             {photo}
           </AbsoluteFill>
+          {/* paper clip gripping the print's top edge (moves with the photo) */}
+          {clip > 0 ? (
+            <svg viewBox="0 0 40 110" width={140} height={385} style={{ position: "absolute", left: "8%", top: "-17%", opacity: 1 - e,
+                 transform: `translateY(${(1 - clip) * -60}px) rotate(-6deg)`, filter: "drop-shadow(0 3px 2px rgba(0,0,0,0.35))" }}>
+              <path d="M12,100 L12,20 Q12,6 22,6 Q32,6 32,20 L32,88 Q32,96 24,96 Q16,96 16,88 L16,30" fill="none" stroke="#A7B0B5" strokeWidth={5} strokeLinecap="round" />
+            </svg>
+          ) : null}
         </AbsoluteFill>
-        {/* paper clip */}
-        {clip > 0 ? (
-          <svg viewBox="0 0 40 110" width={56} height={150} style={{ position: "absolute", left: "15%", top: "12%", opacity: fade,
-               transform: `translateY(${(1 - clip) * -60}px) rotate(-8deg)` }}>
-            <path d="M12,100 L12,20 Q12,6 22,6 Q32,6 32,20 L32,88 Q32,96 24,96 Q16,96 16,88 L16,30" fill="none" stroke="#9AA3A8" strokeWidth={5} strokeLinecap="round" />
-          </svg>
-        ) : null}
         <AbsoluteFill style={{ opacity: fade }}>{children}</AbsoluteFill>
         {/* Matt, the host, rises into the corner of the frame */}
         {matt && mattIn > 0 ? (
@@ -141,7 +141,9 @@ export const MythCard: React.FC<{ at: number; myth: string; verdict: string; ver
           </div>
         ) : null}
       </div>
-      <Stamp text={verdict} at={verdictAt} x={74} y={30} size={58} rot={-10} color={verdict === "TRUE" ? "#3E7A3A" : OXBLOOD} />
+      <div style={{ position: "absolute", left: 0, right: 0, top: 0, height: 200 }}>
+        <Stamp text={verdict} at={verdictAt} x={74} y={40} size={58} rot={-10} color={verdict === "TRUE" ? "#3E7A3A" : OXBLOOD} />
+      </div>
     </div>
   );
 };
