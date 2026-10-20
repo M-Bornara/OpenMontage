@@ -4,7 +4,7 @@ Updated 2026-10-19.
 
 ## Decisions waiting for the user
 - [x] editing-v2 approved (2026-10-19); the original structure is kept (see section 0).
-- [ ] Watch the test reels and give feedback by number (projects/_fxlab/renders/): Focus ✅ reviewed (v2 adds the white pulse) · Transitions ✅ reviewed ("basic") · **AI transitions v2 ✅ rendered (TransV2Reel)** · Living stills ✅ reviewed · **Map ✅ rendered (MapReel)** · **Animatic engine (next, then the HC001 beat sheet + animatic)** · Section changes (next: hook→story, story→myth→story, ending).
+- [ ] Watch the test reels and give feedback by number (projects/_fxlab/renders/): Focus ✅ reviewed (v2 adds the white pulse) · Transitions ✅ reviewed ("basic") · **AI transitions v2 ✅ rendered (TransV2Reel)** · Living stills ✅ reviewed · **Map ✅ approved (canoe crews fixed)** · **Section changes ✅ rendered (SectionsReel)** · **Animatic engine (next, then the HC001 beat sheet + animatic)** · Section changes (next: hook→story, story→myth→story, ending).
 - [ ] Hook: new lines (trailer flash-forwards + open loop). These need a script approval.
 - [ ] Liam: a hyped take for the hook / myth / ending, compared against the archived take.
 - [ ] The user reviews the 3 HC001 Shorts (not watched yet).
@@ -31,6 +31,8 @@ Updated 2026-10-19.
 - [ ] Move Fx / Life / Transitions / masks / life_prep / trans_prep from the channel kit into a shared OpenMontage library when a second project needs them.
 - [ ] More AI-style transitions to develop: element exits from layered (separately generated) props, a liquid displacement dissolve, object-led wipes (an object carried across the frame).
 - [ ] First + last frame clips: the Kling tool now accepts tail_image_url (v2.1 pro/master: $0.49 / 5 s plus an end-frame image). Plan them in the beat sheet.
+
+- [ ] Case File section: generate its own playful music track (~$0.03) and 3–4 Matt host poses as clean sprites (pointing, shrugging, writing, laughing; ~$0.07 each, 2K batch). The reel uses the cut-out from his sheet.
 
 ## Coming up
 - [ ] HCS01 Forssmann Short, for week 2 (upload-schedule.md).

@@ -1,6 +1,7 @@
 // Test reels for user review (plan/editing-v2.md P8). Each sample is numbered so notes can say "focus 07".
 import React from "react";
-import { AbsoluteFill, Audio, interpolate, Sequence, staticFile, useCurrentFrame } from "remotion";
+import { AbsoluteFill, Audio, Freeze, interpolate, OffthreadVideo, Sequence, staticFile, useCurrentFrame } from "remotion";
+import { CaseFile, HandLine, Letterbox, MythCard, Stamp } from "./Sections";
 import { loadFont as loadSerif } from "@remotion/google-fonts/LibreBaskerville";
 import { ChapterCard, TransKind, Transition, TransitionV2 } from "./Transitions";
 import { MapScene } from "./MapScene";
@@ -255,6 +256,132 @@ export const MAPS: Sample[] = [
     ) },
 ];
 export const MapReel: React.FC = () => <Reel samples={MAPS} />;
+
+// ── Section changes reel ──
+const vol = (pts: [number, number][]) => (f: number) => interpolate(f, pts.map((p) => p[0]), pts.map((p) => p[1]), { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+const Flash: React.FC<{ at: number }> = ({ at }) => {
+  const f = useCurrentFrame();
+  return <AbsoluteFill style={{ backgroundColor: "#FFF6E4", opacity: interpolate(f, [at, at + 1, at + 5], [0, 0.85, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) }} />;
+};
+const Title: React.FC<{ at: number; text: string; sub: string }> = ({ at, text, sub }) => {
+  const f = useCurrentFrame();
+  const o = interpolate(f, [at, at + 20, at + 70, at + 85], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  return (
+    <AbsoluteFill style={{ alignItems: "center", justifyContent: "center", opacity: o }}>
+      <div style={{ fontFamily: serif, fontSize: 62, color: "#F7EEDC", textShadow: "0 4px 18px rgba(0,0,0,0.8)", textAlign: "center", maxWidth: 1700, whiteSpace: "nowrap" }}>{text}</div>
+      <div style={{ fontFamily, fontWeight: 900, fontSize: 24, letterSpacing: 12, color: AMBER, marginTop: 16, textShadow: "0 2px 8px #000" }}>{sub}</div>
+    </AbsoluteFill>
+  );
+};
+const ChapterTag: React.FC<{ at: number; n: number; text: string }> = ({ at, n, text }) => {
+  const f = useCurrentFrame();
+  const o = interpolate(f, [at, at + 15, at + 80, at + 95], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  return (
+    <div style={{ position: "absolute", left: 80, top: 80, opacity: o }}>
+      <div style={{ fontFamily, fontWeight: 900, fontSize: 22, letterSpacing: 10, color: AMBER, textShadow: "0 2px 8px #000" }}>CHAPTER {n}</div>
+      <div style={{ width: 90, height: 4, background: AMBER, margin: "10px 0" }} />
+      <div style={{ fontFamily: serif, fontSize: 52, color: "#F7EEDC", textShadow: "0 3px 12px rgba(0,0,0,0.8)" }}>{text}</div>
+    </div>
+  );
+};
+const Hold: React.FC<{ at: number; children: React.ReactNode }> = ({ at, children }) => <Freeze frame={at}>{children}</Freeze>;
+const SwapPhoto: React.FC<{ swapAt: number; a: React.ReactNode; b: React.ReactNode }> = ({ swapAt, a, b }) => {
+  const f = useCurrentFrame();
+  return <>{f < swapAt ? a : b}</>;
+};
+const Epitaph: React.FC<{ at: number }> = ({ at }) => {
+  const f = useCurrentFrame();
+  const o = interpolate(f, [at, at + 25, at + 75, at + 90], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  return (
+    <AbsoluteFill style={{ alignItems: "center", justifyContent: "flex-start", paddingTop: 140, opacity: o }}>
+      <div style={{ fontFamily: serif, fontSize: 64, color: "#FBF3E2", textShadow: "0 3px 16px rgba(0,0,0,0.6)" }}>Alexis St. Martin</div>
+      <div style={{ fontFamily: serif, fontSize: 30, color: "#FBF3E2", marginTop: 8, letterSpacing: 6, textShadow: "0 2px 10px rgba(0,0,0,0.6)" }}>died 1880</div>
+    </AbsoluteFill>
+  );
+};
+const Dark: React.FC<{ from: number; to: number; color?: string }> = ({ from, to, color = "#000" }) => {
+  const f = useCurrentFrame();
+  return <AbsoluteFill style={{ backgroundColor: color, opacity: interpolate(f, [from, to], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) }} />;
+};
+const snap = (n: string, t: [number, number], fit: "fill" | "cover" = "fill") => (
+  <Plate src={img(n)} fit={fit} dur={16} cam={{ target: t, from: 1.18, to: 1.32 }} />
+);
+
+export const SECTIONS: Sample[] = [
+  { title: "HOOK → STORY", use: "The hook looks like a trailer: cinema bars, flash cuts on hits, a riser, the open loop in handwriting. Then silence, the sting, and the story opens full-frame with its own music.", secs: 10,
+    body: () => (
+      <AbsoluteFill style={{ backgroundColor: "#000" }}>
+        <Sequence from={8} durationInFrames={16}>{snap("I06", [50, 50], "cover")}</Sequence>
+        <Sequence from={24} durationInFrames={16}>{snap("M11", [80, 40])}<Stamp text="NO" at={3} x={62} y={42} size={170} /></Sequence>
+        <Sequence from={40} durationInFrames={16}>{snap("M01", [83, 60])}</Sequence>
+        <Sequence from={56} durationInFrames={16}>{snap("M24", [60, 45])}</Sequence>
+        <Sequence from={72} durationInFrames={20}>{snap("M33", [65, 70])}</Sequence>
+        {[8, 24, 40, 56, 72].map((t) => <Flash key={t} at={t} />)}
+        <Sequence from={96} durationInFrames={76}>
+          <Plate src={img("M31")} dur={76} cam={{ target: [87, 55], from: 1.05, to: 1.15 }} />
+          <AbsoluteFill style={{ backgroundColor: "rgba(0,0,0,0.5)" }} />
+          <HandLine text="…and when he died, his family made sure no doctor would ever get him." at={6} />
+        </Sequence>
+        <Sequence from={182} durationInFrames={54}><OffthreadVideo src={staticFile("brand/sting.mp4")} /></Sequence>
+        <Sequence from={236}>
+          <Plate src={img("M03")} dur={64} cam={{ target: [45, 45], from: 1.04, to: 1.08 }} />
+          <Title at={6} text="The Man With a Window Into His Stomach" sub="AN ODDLY MATT STORY" />
+          <Audio src={staticFile("music/mA.mp3")} volume={vol([[0, 0], [30, 0.5]])} />
+        </Sequence>
+        <Letterbox openAt={238} />
+        {sfx("riser-drone", 0, 0.35)}
+        {[8, 24, 40, 56, 72].map((t, i) => <React.Fragment key={t}>{sfx(i === 0 ? "hit-suspense" : "stamp-thud", t, 0.4)}</React.Fragment>)}
+      </AbsoluteFill>
+    ) },
+  { title: "STORY → MYTH (MATT'S CASE FILE)", use: "The picture freezes and drops into a case folder, the music flips from wistful to playful, and Matt rises in to host quick-fire myth cards: a new look, a new rhythm.", secs: 12,
+    body: () => (
+      <AbsoluteFill>
+        <CaseFile at={60} matt="img/matt-bust.png" mattAt={100}
+          photo={<SwapPhoto swapAt={172} a={<Hold at={60}><Plate src={img("M27")} dur={360} cam={{ target: [30, 45], from: 1.04, to: 1.3 }} /></Hold>}
+                            b={<Plate src={img("I06")} fit="cover" dur={360} cam={{ target: [50, 50], from: 1.05, to: 1.12 }} />} />}>
+          <MythCard at={125} myth="It was a shotgun." verdict="FALSE" verdictAt={160} record="A musket, loaded with duck shot." source="Beaumont, 1833" recordAt={180} out={252} />
+          <MythCard at={262} myth="He was a fur trader." verdict="FALSE" verdictAt={292} record="A voyageur: a canoe-man for the fur company." source="Beaumont, 1833" recordAt={308} />
+        </CaseFile>
+        <Audio src={staticFile("music/mC.mp3")} startFrom={600} volume={vol([[0, 0.45], [58, 0.45], [68, 0]])} />
+        <Sequence from={80}><Audio src={staticFile("music/mB.mp3")} volume={vol([[0, 0], [8, 0.45]])} /></Sequence>
+        {sfx("stamp-thud", 60, 0.5)}
+        {sfx("whoosh", 62, 0.25)}
+        {sfx("stamp-thud", 90, 0.45)}
+        {sfx("buzzer-wrong", 160, 0.3)}
+        {sfx("paper-slide", 180, 0.4)}
+        {sfx("buzzer-wrong", 292, 0.3)}
+        {sfx("paper-slide", 308, 0.4)}
+      </AbsoluteFill>
+    ) },
+  { title: "MYTH → BACK TO THE STORY", use: "Matt's file closes in on its photo: the camera pushes into the picture until it is the world again, and the story's music returns.", secs: 7,
+    body: () => (
+      <AbsoluteFill>
+        <CaseFile at={-200} matt="img/matt-bust.png" mattAt={-200} exitAt={30} exitDur={45}
+          photo={<Plate src={img("M30")} dur={210} cam={{ target: [76, 48], from: 1.03, to: 1.14 }} />} />
+        <ChapterTag at={95} n={8} text="The Last Word" />
+        <Audio src={staticFile("music/mB.mp3")} startFrom={900} volume={vol([[0, 0.45], [25, 0.45], [50, 0]])} />
+        <Sequence from={45}><Audio src={staticFile("music/mD.mp3")} volume={vol([[0, 0], [40, 0.45]])} /></Sequence>
+        {sfx("whoosh", 32, 0.2)}
+      </AbsoluteFill>
+    ) },
+  { title: "THE ENDING", use: "Time passes in the same place with the smooth film dissolve, leaves fall, the epitaph appears, the music resolves, then the outro sting and the end screen.", secs: 11.5,
+    body: () => (
+      <AbsoluteFill style={{ backgroundColor: "#000" }}>
+        <Sequence durationInFrames={262}>
+          <TransitionV2 id="end" at={90} len={45} t={{ kind: "film" }}
+            a={<Plate src={img("M33")} dur={262} cam={{ target: [65, 72], from: 1.04, to: 1.1 }} />}
+            b={<Plate src={img("M34")} dur={262} cam={{ target: [58, 75], from: 1.1, to: 1.2 }}><Leaves n={8} area={[60, 0, 100, 60]} /></Plate>} />
+          <Epitaph at={145} />
+          <Dark from={228} to={258} />
+          <Audio src={staticFile("music/mD.mp3")} startFrom={1800} volume={vol([[0, 0.45], [200, 0.45], [255, 0]])} />
+        </Sequence>
+        <Sequence from={262} durationInFrames={54}><OffthreadVideo src={staticFile("brand/sting-outro.mp4")} /></Sequence>
+        <Sequence from={316}><OffthreadVideo src={staticFile("brand/endscreen.mp4")} muted /></Sequence>
+      </AbsoluteFill>
+    ) },
+];
+export const SectionsReel: React.FC = () => <Reel samples={SECTIONS} />;
+
 
 // ── Living stills reel ──
 const L = (title: string, use: string, body: React.FC<{ dur: number }>, secs = 5): Sample => ({ title, use, secs, body });
