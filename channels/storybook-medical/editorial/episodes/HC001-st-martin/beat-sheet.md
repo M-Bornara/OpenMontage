@@ -1,10 +1,10 @@
 # HC001 · Beat sheet v1 (for review)
 
-**131 beats**, on average **3.91 s** each (longest 12.72 s). Estimated generation cost: **$12.87** (new stills $0.12, clips $0.40 incl. their image, first+last-frame clips $0.73, props $0.24; reused / callbacks / maps / graphics are free).
+**131 beats**, on average **3.91 s** each (longest 12.72 s). Estimated generation cost: **$12.99** (new stills $0.12, clips $0.40 incl. their image, first+last-frame clips $0.73, props $0.24; reused / callbacks / maps / graphics are free).
 
-Sources: clip 6, flf 3, reuse 19, callback 8, new 63, trailer 1, newline 1, map 5, graphic 13, card 3, props 2, file 6, brand 1
+Sources: clip 6, flf 3, reuse 19, callback 7, new 64, trailer 1, newline 1, map 5, graphic 13, card 3, props 2, file 6, brand 1
 
-Transitions: cut 91, film dissolve 10, ink bleed 5, dip to black 4, whip 4, page turn 4, match 2, light dissolve 2, cold open: sound first 1, flash cuts 1, sting → bars open 1, flash 1, morph 1, dip to parchment 1, case-file drop 1, case-file exit 1, zoom-through 1
+Transitions: cut 90, film dissolve 11, ink bleed 5, dip to black 4, whip 4, page turn 4, match 2, light dissolve 2, cold open: sound first 1, flash cuts 1, sting → bars open 1, flash 1, morph 1, dip to parchment 1, case-file drop 1, case-file exit 1, zoom-through 1
 
 ## Mood curve
 
@@ -53,7 +53,7 @@ ch9  ▂▂▄▂▆▄
 | 1.10 | 1:01.5 | 2.32 | the army surgeon | WS | Beaumont runs up the hill path from the fort, bag in hand | clip | static | whip | name tag DR. WILLIAM BEAUMONT | ▆ |
 | 1.11 | 1:03.8 | 2.64 | reaches him | MS | Beaumont bursts through the store door, light behind him; the crowd parts | new | push>beaumont | cut | pulse (white) on Beaumont | ▆ |
 | 1.12 | 1:06.4 | 4.08 | what he sees is | MS | Beaumont kneels over Alexis on the floor; MATT, close to camera, holds the lantern up for him | new | push>beaumont | cut | spotlight on Beaumont's face · lamp flicker, motes | ▆ |
-| 1.13 | 1:10.5 | 2.8 | look straight into | CU | over Beaumont's shoulder: the clean brass porthole opening on Alexis's LEFT side (illustrated, never a wound) | new | push>porthole | cut |  | █ |
+| 1.13 | 1:10.5 | 2.8 | look straight into | CU | over Beaumont's shoulder: the fresh gunshot wound on Alexis's LEFT side under the torn, scorched shirt; painted and restrained (dark torn opening, powder burns, a little blood, no gore) | new | push>wound | cut |  | █ |
 | 1.14 | 1:13.3 | 5.6 | by every rule | WS | the store gone quiet: men with hats in hands (distinct faces), Alexis covered on the floor | new | pull | cut | colour isolation on Alexis | ▄ |
 | 1.15 | 1:18.9 | 1.8 | he does | CU | Alexis's eyes open | flf | static | cut |  | ▆ |
 | 1.16 | 1:20.7 | 2.54 | thats where | MCU | Beaumont's face turns from worry to curiosity | new | push>beaumont | cut |  | ▆ |
@@ -153,7 +153,7 @@ ch9  ▂▂▄▂▆▄
 | 8.06 | 7:52.7 | 3.0 | much longer than usual | MS | a shuttered farmhouse room in summer heat, candles by a closed coffin | new | push | cut | heat haze, candle flicker | ▂ |
 | 8.07 | 7:55.7 | 2.32 | his grave dug | WS | two men dig in the afternoon heat, a tall shovel against the fence | reuse:M33 | push | cut | counter 8 FEET · leaves, dust | ▄ |
 | 8.08 | 7:58.0 | 3.36 | so that nobody | WS | the same churchyard: the grave closed with flowers, his red tuque on the fence | reuse:M34 | push | film dissolve (same place) | GLASSES GAG: on the fence post beside the tuque · leaves | ▁ |
-| 8.09 | 8:01.4 | 4.64 | after fifty-eight years | WS | slow push; the light warms | callback:8.08 | push | cut | epitaph | ▁ |
+| 8.09 | 8:01.4 | 4.64 | after fifty-eight years | CU | close on the fresh grave: wildflowers, and his red tuque hung on the fence post | new | push>tuque | film dissolve | epitaph | ▁ |
 | 8.10 | 8:06.0 | 2.61 | the people who loved | WS | his wife and grown children standing at the grave at sunset | new | pull | film dissolve | glow, leaves | ▁ |
 | 9.01 | 8:08.6 | 5.52 | every time someone | ECU | callback: the silk string, now in warm light | reuse:I01 | push | light dissolve (luma) | rays, motes | ▂ |
 | 9.01b | 8:14.1 | 1.52 | a frontier island | EWS | callback: Mackinac Island, now at sunset | callback:1.01 | pull | film dissolve | glow, gulls | ▂ |

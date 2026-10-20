@@ -216,7 +216,8 @@ export const TransitionV2: React.FC<{ a: React.ReactNode; b: React.ReactNode; at
     case "film": {
       const p = smooth(raw);
       return (
-        <AbsoluteFill style={{ filter: `brightness(${1 + 0.06 * Math.sin(raw * Math.PI)}) blur(${1.2 * Math.sin(raw * Math.PI)}px)` }}>
+        <AbsoluteFill style={{ backgroundColor: "#000", isolation: "isolate",
+                               filter: `brightness(${1 + 0.06 * Math.sin(raw * Math.PI)}) blur(${1.2 * Math.sin(raw * Math.PI)}px)` }}>
           <AbsoluteFill style={{ opacity: 1 - p }}>{a}</AbsoluteFill>
           <AbsoluteFill style={{ opacity: p, mixBlendMode: "plus-lighter" }}>{b}</AbsoluteFill>
         </AbsoluteFill>

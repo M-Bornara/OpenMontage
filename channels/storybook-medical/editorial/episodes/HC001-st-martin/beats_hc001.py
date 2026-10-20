@@ -69,8 +69,9 @@ B("1.11", "reaches him", "MS", "Beaumont bursts through the store door, light be
 B("1.12", "what he sees is", "MS", "Beaumont kneels over Alexis on the floor; MATT, close to camera, holds the lantern up for him",
   "beaumont@CL matt@R alexis@C", "new", "push>beaumont", life="lamp flicker, motes", fx="spotlight on Beaumont's face",
   mood=4, note="Matt's bold role: the lantern-holder (one onlooker, face clear)")
-B("1.13", "look straight into", "CU", "over Beaumont's shoulder: the clean brass porthole opening on Alexis's LEFT side (illustrated, never a wound)",
-  "porthole@C", "new", "push>porthole", sfx="heartbeat", mood=5)
+B("1.13", "look straight into", "CU", "over Beaumont's shoulder: the fresh gunshot wound on Alexis's LEFT side under the torn, scorched shirt; painted and restrained (dark torn opening, powder burns, a little blood, no gore)",
+  "wound@C beaumont@L", "new", "push>wound", sfx="heartbeat", mood=5,
+  note="the porthole look starts only after the opening HEALED (2.11 on); at the injury it is a real wound")
 B("1.14", "by every rule", "WS", "the store gone quiet: men with hats in hands (distinct faces), Alexis covered on the floor", "alexis@C",
   "new", "pull", fx="colour isolation on Alexis", mood=3)
 B("1.15", "he does", "CU", "Alexis's eyes open", "alexis@C", "flf", "static", "cut", sfx="gasp", mood=4, note="first frame eyes closed, last frame open")
@@ -254,7 +255,8 @@ B("8.07", "his grave dug", "WS", "two men dig in the afternoon heat, a tall shov
   life="leaves, dust", fx="counter 8 FEET", sfx="shovel", mood=3)
 B("8.08", "so that nobody", "WS", "the same churchyard: the grave closed with flowers, his red tuque on the fence", "grave@C", "reuse:M34",
   "push", "film dissolve (same place)", life="leaves", fx="GLASSES GAG: on the fence post beside the tuque", mood=1)
-B("8.09", "after fifty-eight years", "WS", "slow push; the light warms", "grave@C", "callback:8.08", "push", fx="epitaph", mood=1)
+B("8.09", "after fifty-eight years", "CU", "close on the fresh grave: wildflowers, and his red tuque hung on the fence post", "tuque@C", "new", "push>tuque",
+  "film dissolve", fx="epitaph", mood=1)
 
 # ═══ 9 · WHY IT MATTERS ═══════════════════════════════════════════════════════════════════════════════════
 B("8.10", "the people who loved", "WS", "his wife and grown children standing at the grave at sunset", "wife@C", "new", "pull",

@@ -106,8 +106,9 @@ const reuseImg = (src: string) => {
 };
 
 export const BeatCard: React.FC<{ b: Beat; all: Beat[] }> = ({ b, all }) => {
-  const f = useCurrentFrame();
-  const dur = Math.max(1, Math.round(b.dur * FPS));
+  // beats that continue the same image share ONE camera move (span), so the shot never restarts
+  const f = useCurrentFrame() + Math.round(((b as any).spanOffset ?? 0) * FPS);
+  const dur = Math.max(1, Math.round(((b as any).spanDur ?? b.dur) * FPS));
   const kind = b.src.split(":")[0];
   const [label, colour] = BADGE[kind] ?? ["?", "#777"];
   const cam = camOf(b);
@@ -206,19 +207,34 @@ export const Animatic: React.FC<AnimaticProps> = ({ beats: bp, words: wp, narrat
   const shift = (t: number) => (t >= cut ? t + insertSecs : t);
   const beats = data.beats.map((b) => ({ ...b, start: b.id === insertAfter ? b.start : shift(b.start), end: b.id === insertAfter ? b.start + insertSecs + (b.end - b.start) : shift(b.end) }));
   beats.forEach((b) => { b.dur = b.end - b.start; });
+  // group consecutive beats on the same image (a callback to the beat just before, or the same reused image)
+  const imgKey = (b: Beat) => (b.src.startsWith("callback:") ? beats.find((x) => x.id === b.src.split(":")[1])?.src ?? b.src : b.src);
+  for (let k = 0; k < beats.length; k++) {
+    const b = beats[k] as any;
+    const prev = beats[k - 1] as any;
+    const same = prev && (b.src === `callback:${prev.id}` || (imgKey(b) === imgKey(prev) && !b.src.startsWith("new") && !b.src.startsWith("map")));
+    b.group = same ? prev.group : k;
+    b.continues = !!same;
+  }
+  beats.forEach((b: any) => {
+    const g = beats.filter((x: any) => x.group === b.group);
+    b.spanOffset = b.start - g[0].start;
+    b.spanDur = g[g.length - 1].end - g[0].start;
+  });
   const fr = (t: number) => Math.round(t * FPS);
   const hookEnd = beats.find((b) => b.id.startsWith("1."))?.start ?? 30;
   const stingAt = hookEnd - 1.95;
   return (
     <AbsoluteFill style={{ backgroundColor: "#000" }}>
       {beats.map((b, k) => {
-        const [tk, len, v2] = k > 0 ? transOf(b.trans) : [null, 0, false];
+        const [tk, len, v2] = k > 0 && !(b as any).continues ? transOf(b.trans) : [null, 0, false];
         const prev = beats[k - 1];
         return (
           <React.Fragment key={b.id}>
             <Sequence from={fr(b.start)} durationInFrames={Math.max(1, fr(b.dur))}><BeatCard b={b} all={beats} /></Sequence>
             {tk && prev ? (
               <Sequence from={fr(b.start) - Math.round(len / 2)} durationInFrames={len}>
+                <AbsoluteFill style={{ backgroundColor: "#000", isolation: "isolate" }}>
                 {v2 ? (
                   <TransitionV2 id={`t${b.id}`} at={0} len={len} t={tk}
                     a={<Sequence from={-(fr(b.start) - Math.round(len / 2) - fr(prev.start))}><BeatCard b={prev} all={beats} /></Sequence>}
@@ -228,6 +244,7 @@ export const Animatic: React.FC<AnimaticProps> = ({ beats: bp, words: wp, narrat
                     a={<Sequence from={-(fr(b.start) - Math.round(len / 2) - fr(prev.start))}><BeatCard b={prev} all={beats} /></Sequence>}
                     b={<Sequence from={-Math.round(len / 2)}><BeatCard b={b} all={beats} /></Sequence>} />
                 )}
+                </AbsoluteFill>
               </Sequence>
             ) : null}
           </React.Fragment>
