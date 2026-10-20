@@ -27,7 +27,7 @@ export type MapData = { size: [number, number]; land: string; lakes: string; riv
                         cities: City[]; labels: Label[]; pxPerMile: number };
 
 export type CamKey = { f: number; c: [number, number]; z: number }; // map-space centre, zoom (1 = whole map)
-export type RouteCue = { id: string; from: number; to: number; canoe?: boolean; year?: string; counter?: { to: number; label: string };
+export type RouteCue = { id: string; from: number; to: number; canoe?: boolean; crew?: "solo" | "family"; year?: string; counter?: { to: number; label: string };
                          legend?: string };
 
 export type MapSceneProps = {
@@ -77,23 +77,82 @@ const pointAt = (r: Route, p: number): { x: number; y: number; ang: number; i: n
   return { x: x1 + (x2 - x1) * t, y: y1 + (y2 - y1) * t, ang: (Math.atan2(y2 - y1, x2 - x1) * 180) / Math.PI, i };
 };
 
-const Canoe: React.FC<{ ang: number; f: number }> = ({ ang, f }) => {
-  // a canoe always sits level on the water: it faces left or right and tilts at most 25°, whatever the heading
+const Canoe: React.FC<{ ang: number; f: number; crew?: "solo" | "family" }> = ({ ang, f, crew = "solo" }) => {
+  // a canoe always sits level on the water: it faces left or right and tilts at most 20°, whatever the heading
   const flip = Math.abs(ang) > 90;
-  const a = Math.max(-25, Math.min(25, flip ? (ang > 0 ? ang - 180 : ang + 180) : ang));
-  const bob = Math.sin(f / 5) * 1.5;
+  const a = Math.max(-20, Math.min(20, flip ? (ang > 0 ? ang - 180 : ang + 180) : ang));
+  const bob = Math.sin(f / 6) * 1.6;
+  const roll = Math.sin(f / 6 + 1) * 1.2;
+  // stroke cycle, 1.1 s: pull (blade in the water, front → back), then recovery (blade lifts and swings forward)
+  const u = (f % 33) / 33;
+  const pull = u < 0.62;
+  const k = pull ? u / 0.62 : (u - 0.62) / 0.38;
+  const px = crew === "solo" ? -8 : -38; // Alexis's seat (stern for the family trip)
+  const bladeX = pull ? px + 38 - 64 * k : px - 26 + 64 * (0.5 - 0.5 * Math.cos(Math.PI * k));
+  const bladeY = pull ? 17 : 17 - 26 * Math.sin(Math.PI * k);
+  const lean = pull ? 8 - 14 * k : -6 + 14 * k;
+  const gripX = px + 4 + lean * 0.5;
+  const gripY = -40;
+  const W = 285;
+  const skin = "#E8C39A";
+  const splash = pull && k < 0.18 ? 1 - k / 0.18 : 0;
   return (
-    <svg viewBox="-50 -22 100 34" width={92} height={31} style={{ position: "absolute", left: -46, top: -22, overflow: "visible",
-         transform: `rotate(${a}deg) scaleX(${flip ? -1 : 1}) translateY(${bob}px)`, filter: "drop-shadow(0 3px 2px rgba(0,0,0,0.35))" }}>
-      <path d="M-46,0 Q-40,10 -20,11 L20,11 Q40,10 46,0 Q30,4 0,4 Q-30,4 -46,0 Z" fill="#C9A26A" stroke={INK} strokeWidth={2.2} />
-      <path d="M-40,2 Q0,6 40,2" fill="none" stroke={INK} strokeWidth={1.2} opacity={0.6} />
-      {[-22, -4, 14].map((x, i) => (
-        <g key={i} transform={`translate(${x},0)`}>
-          <rect x={-4} y={-11} width={8} height={11} rx={3} fill={i === 2 ? "#B5423A" : "#5B6E78"} stroke={INK} strokeWidth={1.2} />
-          <circle cx={0} cy={-15} r={4.2} fill="#E9C9A0" stroke={INK} strokeWidth={1.2} />
-          <line x1={2} y1={-6} x2={10 + Math.sin(f / 4 + i) * 3} y2={10} stroke={INK} strokeWidth={1.6} />
+    <svg viewBox="-110 -66 220 96" width={W} height={W * 96 / 220}
+         style={{ position: "absolute", left: -W / 2, top: -W * 0.42, overflow: "visible",
+                  transform: `rotate(${a + roll}deg) scaleX(${flip ? -1 : 1}) translateY(${bob}px)`,
+                  filter: "drop-shadow(0 4px 3px rgba(0,0,0,0.35))" }}>
+      {/* wake behind the stern */}
+      <path d="M-96,14 L-150,4 M-96,18 L-150,28" stroke="#F4F1E6" strokeWidth={2.4} opacity={0.75} strokeLinecap="round" />
+      <path d="M-120,10 Q-128,16 -120,22" stroke="#F4F1E6" strokeWidth={1.8} fill="none" opacity={0.5} />
+      {/* crew: wife and children sit in the middle (family trips only) */}
+      {crew === "family" ? (
+        <g>
+          <g transform="translate(18,0)">
+            <path d="M-11,6 Q-12,-14 0,-18 Q12,-14 11,6 Z" fill="#6C7F8C" stroke={INK} strokeWidth={1.4} />
+            <circle cx={0} cy={-25} r={7} fill={skin} stroke={INK} strokeWidth={1.3} />
+            <path d="M-7,-27 Q0,-37 7,-27 Q8,-22 6,-20 Q4,-30 -4,-29 Q-7,-24 -7,-27 Z" fill="#3B2A1E" />
+            <circle cx={-6} cy={-26} r={3.2} fill="#3B2A1E" />
+          </g>
+          <g transform="translate(44,4)">
+            <path d="M-7,3 Q-7,-9 0,-11 Q7,-9 7,3 Z" fill="#8A6A3A" stroke={INK} strokeWidth={1.2} />
+            <circle cx={0} cy={-16} r={5.2} fill={skin} stroke={INK} strokeWidth={1.2} />
+            <path d="M-5,-18 Q0,-24 5,-18 Z" fill="#4A3320" />
+          </g>
+          <g transform="translate(62,6)">
+            <path d="M-6,2 Q-6,-7 0,-9 Q6,-7 6,2 Z" fill="#5E7A6A" stroke={INK} strokeWidth={1.2} />
+            <circle cx={0} cy={-13} r={4.4} fill={skin} stroke={INK} strokeWidth={1.1} />
+            <path d="M-4,-15 Q0,-20 4,-15 Z" fill="#4A3320" />
+          </g>
         </g>
-      ))}
+      ) : null}
+      {/* Alexis kneeling, paddling: white shirt, sash, red tuque */}
+      <g transform={`translate(${px},0)`}>
+        <g transform={`rotate(${lean}, 0, 6)`}>
+          <path d="M-12,8 Q-14,-22 0,-28 Q14,-22 12,8 Z" fill="#F2EEE4" stroke={INK} strokeWidth={1.6} />
+          <rect x={-12} y={-2} width={24} height={6} fill="#8C5A3C" stroke={INK} strokeWidth={1} />
+          <circle cx={1} cy={-36} r={8.5} fill={skin} stroke={INK} strokeWidth={1.5} />
+          <path d="M-8,-38 Q-6,-52 6,-50 Q14,-48 16,-42 L9,-40 Q2,-46 -8,-38 Z" fill="#B3352D" stroke={INK} strokeWidth={1.3} />
+        </g>
+      </g>
+      {/* paddle: shaft from the top grip to the blade; arms on the shaft */}
+      <line x1={gripX} y1={gripY} x2={bladeX} y2={bladeY} stroke="#6B4A26" strokeWidth={3} strokeLinecap="round" />
+      <ellipse cx={bladeX} cy={bladeY + 4} rx={4} ry={9} fill="#8E6A3C" stroke={INK} strokeWidth={1.2}
+               transform={`rotate(${Math.atan2(bladeX - gripX, bladeY - gripY) * -57.3}, ${bladeX}, ${bladeY + 4})`} />
+      <line x1={px + 2 + lean * 0.4} y1={-22} x2={gripX} y2={gripY + 2} stroke={INK} strokeWidth={3.2} strokeLinecap="round" />
+      <line x1={px + 6 + lean * 0.3} y1={-18} x2={(gripX + bladeX) / 2} y2={(gripY + bladeY) / 2} stroke={INK} strokeWidth={3.2} strokeLinecap="round" />
+      {/* hull: birchbark with raised ends, gunwale and bark seams (drawn over the legs, under the paddle blade) */}
+      <path d="M-100,-10 Q-96,2 -86,10 Q-50,22 0,22 Q50,22 86,10 Q96,2 100,-10 Q92,-2 80,2 Q40,8 0,8 Q-40,8 -80,2 Q-92,-2 -100,-10 Z"
+            fill="#D9BC86" stroke={INK} strokeWidth={2.4} strokeLinejoin="round" />
+      <path d="M-84,4 Q0,14 84,4" fill="none" stroke={INK} strokeWidth={1.4} opacity={0.65} />
+      {[-60, -30, 0, 30, 60].map((x) => (<line key={x} x1={x} y1={9} x2={x + 2} y2={20} stroke={INK} strokeWidth={1} opacity={0.4} />))}
+      <path d="M-100,-10 Q-104,-16 -98,-20 M100,-10 Q104,-16 98,-20" stroke={INK} strokeWidth={2.2} fill="none" />
+      {/* the blade in the water shows below the hull line; splash at the catch */}
+      {pull ? <ellipse cx={bladeX} cy={bladeY + 6} rx={4.2} ry={5} fill="#8E6A3C" opacity={0.45} /> : null}
+      {splash > 0 ? (
+        <g opacity={splash}>
+          {[-8, 0, 8].map((dx, i) => (<circle key={i} cx={bladeX + dx} cy={12 - 10 * (1 - splash) - i * 2} r={2.2} fill="#F4F1E6" />))}
+        </g>
+      ) : null}
     </svg>
   );
 };
@@ -231,8 +290,8 @@ export const MapScene: React.FC<MapSceneProps> = ({ data: path, cams, routes, ci
         const o = interpolate(f, [cue.from - 5, cue.from + 5, cue.to + 20, cue.to + 35], [0, 1, 1, 0], clamp);
         return (
           <div key={cue.id} style={{ position: "absolute", left: x, top: y, opacity: o }}>
-            <Canoe ang={pt.ang} f={f} />
-            {cue.year ? <div style={{ position: "absolute", left: 40, top: -62, fontFamily: hand, fontWeight: 700, fontSize: 40, color: BORDER, transform: "rotate(-6deg)" }}>{cue.year}</div> : null}
+            <Canoe ang={pt.ang} f={f} crew={cue.crew} />
+            {cue.year ? <div style={{ position: "absolute", left: 95, top: -140, fontFamily: hand, fontWeight: 700, fontSize: 40, color: BORDER, transform: "rotate(-6deg)" }}>{cue.year}</div> : null}
           </div>
         );
       })}

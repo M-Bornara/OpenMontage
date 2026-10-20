@@ -228,21 +228,21 @@ export const TransV2Reel: React.FC = () => <Reel samples={TRANS2} />;
 // ── Map reel ──
 const MAP = "map/hc001.json";
 export const MAPS: Sample[] = [
-  { title: "MAP · 1825: ACROSS THE BORDER", use: "Overview, then into the corner of the map: Alexis leaves Plattsburgh for Lower Canada. The border glows as the canoe crosses it.", secs: 8,
+  { title: "MAP · 1825: ACROSS THE BORDER", use: "Overview (Fort Mackinac: the 1822 accident), then into the corner: Alexis, alone, leaves Plattsburgh for Lower Canada. The border glows as he crosses it.", secs: 8,
     body: () => (
       <MapScene data={MAP} title="The Travels of Alexis St. Martin" subtitle="1825 – 1831"
         cams={[{ f: 0, c: [1200, 690], z: 1.04 }, { f: 45, c: [1200, 690], z: 1.08 }, { f: 110, c: [1690, 400], z: 3.6 }, { f: 240, c: [1700, 390], z: 3.8 }]}
         labelsAt={8} borderAt={18} borderPulse={148}
-        cities={[{ id: "plattsburgh", at: 100 }, { id: "berthier", at: 112 }]}
-        routes={[{ id: "1825", from: 120, to: 200, canoe: true, year: "1825", legend: "1825 · leaves for Canada" }]} />
+        cities={[{ id: "mackinac", at: 20 }, { id: "plattsburgh", at: 100 }, { id: "berthier", at: 112 }]}
+        routes={[{ id: "1825", from: 120, to: 200, canoe: true, crew: "solo", year: "1825", legend: "1825 · leaves for Canada, alone" }]} />
     ) },
   { title: "MAP · 1829: BROUGHT BACK (ROUTE NOT RECORDED)", use: "The sources don't give the route, so it's a dotted arc, not a river path. The counter uses the narration's 'nearly 2,000 miles'.", secs: 7,
     body: () => (
       <MapScene data={MAP}
         cams={[{ f: 0, c: [1700, 380], z: 3.2 }, { f: 60, c: [1040, 560], z: 1.25 }, { f: 210, c: [1040, 560], z: 1.3 }]}
         labelsAt={0} borderAt={0}
-        cities={[{ id: "berthier", at: 0 }, { id: "crawford", at: 45 }, { id: "mackinac", at: 55 }]}
-        routes={[{ id: "1829", from: 55, to: 175, canoe: true, year: "1829", counter: { to: 2000, label: "MILES · NEARLY" }, legend: "1829 · brought back (route not recorded)" }]} />
+        cities={[{ id: "berthier", at: 0 }, { id: "crawford", at: 45 }]}
+        routes={[{ id: "1829", from: 55, to: 175, canoe: true, crew: "family", year: "1829", counter: { to: 2000, label: "MILES · NEARLY" }, legend: "1829 · brought back with his family (route not recorded)" }]} />
     ) },
   { title: "MAP · 1831: HOME BY CANOE", use: "Documented rivers, so the canoe follows them: down the Mississippi, up the Ohio, across the Great Lakes, down the St. Lawrence. The camera rides along, then pulls back to show the whole journey.", secs: 13,
     body: () => (
@@ -251,7 +251,7 @@ export const MAPS: Sample[] = [
         follow={{ id: "1831", from: 20, to: 340, z: 2.1 }}
         labelsAt={0} borderAt={0}
         cities={[{ id: "crawford", at: 0 }, { id: "montreal", at: 300 }]}
-        routes={[{ id: "1831", from: 25, to: 320, canoe: true, year: "1831", legend: "1831 · home by open canoe" }]} />
+        routes={[{ id: "1831", from: 25, to: 320, canoe: true, crew: "family", year: "1831", legend: "1831 · the family paddles home" }]} />
     ) },
 ];
 export const MapReel: React.FC = () => <Reel samples={MAPS} />;
