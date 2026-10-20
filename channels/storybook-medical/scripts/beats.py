@@ -24,6 +24,20 @@ norm = lambda w: re.sub(r"[^a-z0-9]", "", w.lower())
 COST = {"new": 0.12, "props": 0.24, "clip": 0.28 + 0.12, "flf": 0.49 + 0.24}
 STILL_LIKE = ("new", "reuse", "callback", "props")
 MAX_STILL, MIN_BEAT = 7.0, 1.0
+PICTURE = ("new", "clip", "flf", "props")
+
+
+def auto_transition(prev, b):
+    """A change of set is never a plain cut: a jump in time dissolves, a move in place inks or whips (by energy)."""
+    if b["trans"] != "cut" or not prev.get("set") or not b.get("set") or prev["set"] == b["set"]:
+        return None
+    yr = lambda x: int(re.search(r"\d{4}", x["setYear"]).group())
+    jump = abs(yr(b) - yr(prev))
+    if jump >= 3:  # years pass
+        return "dip to black" if b["mood"] <= 1 else "film dissolve"
+    if jump >= 1:
+        return "light dissolve"
+    return "whip" if b["mood"] >= 4 else "ink bleed"  # same time, another place ("cut!" in the sheet keeps a hard cut)
 
 
 def load(path):
@@ -56,9 +70,27 @@ def build(beats_path: str, pid: str, words_path: str | None = None):
         sm = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(sm)
         stages = sm.STAGE
+    # sets (place + year + look) per beat: sets_<ep>.py next to the beats module
+    sets_path = Path(beats_path).with_name(Path(beats_path).name.replace("beats_", "sets_"))
+    SETS, SET_OF = {}, {}
+    if sets_path.exists():
+        spec = importlib.util.spec_from_file_location("sets_mod", sets_path)
+        xm = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(xm)
+        SETS, SET_OF = xm.SETS, xm.SET_OF
     for b in beats:
         if b["id"] in stages:
-            b["stage"] = stages[b["id"]]
+            b["stage"] = dict(stages[b["id"]])
+        sid = SET_OF.get(b["id"])
+        if sid:
+            st = SETS[sid]
+            b.update(set=sid, setName=st["name"], setYear=st["year"], setLook=st["look"])
+            if "stage" in b and st.get("plate"):  # the animatic draws the set's stand-in plate, graded per set
+                b["stage"]["bg"] = st["plate"]
+                if st.get("tint") and not b["stage"].get("tint"):
+                    b["stage"]["tint"] = st["tint"]
+        elif SETS and b["src"].split(":")[0] in PICTURE:
+            problems.append(f"{b['id']}: a picture beat with no set: name its place + year in sets_*.py")
         hit = find(b["at"])
         if hit is None:
             problems.append(f"{b['id']}: key words not found after the previous beat: {b['at']!r}")
@@ -72,6 +104,9 @@ def build(beats_path: str, pid: str, words_path: str | None = None):
     end_all = round(words[-1]["end"] + 0.9, 2)
     timed = [b for b in beats if b["start"] is not None]
     for k, b in enumerate(timed):
+        t = auto_transition(timed[k - 1], b) if k else None
+        if t:
+            b["trans"], b["transAuto"] = t, True
         b["end"] = timed[k + 1]["start"] if k + 1 < len(timed) else end_all
         b["dur"] = round(b["end"] - b["start"], 2)
         kind = b["src"].split(":")[0]
@@ -140,12 +175,20 @@ def review_md(beats, stats, problems):
     decisions = [b for b in beats if "NEEDS" in b.get("note", "")]
     if decisions:
         lines += ["## Decisions for you", ""] + [f"- **{b['id']}** ({_t(b['start'])}): {b['note']}. {b['see']}" for b in decisions] + [""]
-    lines += ["## Beats", "", "| # | time | s | key words | shot | what we see | source | camera | in | fx / life | mood |",
-              "|---|---|---|---|---|---|---|---|---|---|---|"]
+    used = {}
+    for b in beats:
+        if b.get("set"):
+            used.setdefault(b["set"], [b["setName"], b["setYear"], b["setLook"], []])[3].append(b["id"])
+    if used:
+        lines += ["## Sets (each image prompt carries its set's look)", "", "| set | place | year | look | beats |", "|---|---|---|---|---|"]
+        lines += [f"| {k} | {v[0]} | {v[1]} | {v[2]} | {', '.join(v[3])} |" for k, v in used.items()] + [""]
+    lines += ["## Beats", "", "| # | time | s | key words | shot | set | what we see | source | camera | in | fx / life | mood |",
+              "|---|---|---|---|---|---|---|---|---|---|---|---|"]
     for b in beats:
         fx = " · ".join(x for x in (b["fx"], b["life"]) if x)
-        lines.append(f"| {b['id']} | {_t(b['start'])} | {b['dur']} | {b['at']} | {b['shot']} | {b['see']} | {b['src']} | {b['cam']} | "
-                     f"{b['trans']} | {fx} | {bar(b['mood'])} |")
+        tr = b["trans"] + (" *(auto: set change)*" if b.get("transAuto") else "")
+        lines.append(f"| {b['id']} | {_t(b['start'])} | {b['dur']} | {b['at']} | {b['shot']} | {b.get('set', '')} | {b['see']} | {b['src']} | {b['cam']} | "
+                     f"{tr} | {fx} | {bar(b['mood'])} |")
     return "\n".join(lines) + "\n"
 
 

@@ -19,6 +19,7 @@ No paid image, clip, voice or music call runs before the user has **seen** the f
    - key word (the beat is anchored to it);
    - what we SEE (action verb first);
    - shot size and angle;
+   - **set** (place + year, from a set list where each set has its own look: materials, palette, light);
    - cast (each person by their reference);
    - subject box (where the subject sits in the frame);
    - camera move and its **target**;
@@ -47,6 +48,9 @@ No paid image, clip, voice or music call runs before the user has **seen** the f
   crop holds the action. No square crops. Close-ups are generated as close-ups, never made by zooming a crop.
 - **Safe framing.** Story subjects sit inside the central 70% of the frame, so the camera can zoom, pan and focus on
   them.
+- **Distinct sets.** Every story image names its set (place + year) and carries that set's own look in the prompt.
+  Different places and years never share one generic room (in HC001 v1 one log-cabin office stood in for five
+  places across 58 years). A set may return only when the story returns to that place.
 - **Distinct cast.** Every recurring person has a reference sheet. Extras come from a reusable troupe library. Nobody
   may resemble a main character.
 - **Writing.** Give pages their real words (a short, period-true heading or quote); every other line is wavy ink
@@ -121,6 +125,14 @@ At most one highlight about every 20 s.
 | Fog roll | a long time passing outdoors |
 | Zoom-through | arrivals, the pace of the hook |
 | **AI-style (v2):** morph, element-by-element / depth peel (the scene leaves layer by layer and the next one builds in), luma dissolve | showpiece moments, about 1–3 per video |
+
+**A change of set is never a plain cut** (the beat builder enforces it): years passing → film dissolve, or a dip
+when the mood is lowest; a few months → light dissolve; the same time in another place → ink bleed, or a whip when
+the energy is high. Hard cuts stay inside a set, or are marked as deliberate ("cut!", e.g. cutting on an action that
+carries across a doorway).
+
+**The hook never spoils the ending.** Flash-forwards tease the conflict (the shot, the refusal, the experiment, the
+contract), never the death or the final twist.
 
 Structure changes (hook → story, story → a myth / fact section, back to the story, the ending) get a **bigger** change:
 a different look (frame or border, texture, colour), a change of rhythm and music, and a signature transition.

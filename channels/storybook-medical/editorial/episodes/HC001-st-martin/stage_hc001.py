@@ -28,7 +28,7 @@ st("0.05", SICK, A("beaumont", "stand", 78, 175, 190, "l", exp="shock"), P("stri
 st("0.06", STUDY, A("beaumont", "sitWrite", 26, 96, 52, "r", hold="pen"), A("alexis", "getUpWalk", 55, 96, 54, "r", hold="none", move=[50, 92]),
    P("firewood", 70, 96, 18, move=[66, 108]))
 st("0.07", STUDY, A("beaumont", "turnHead", 36, 150, 140, "r", hold="notebook"), dark=0.05)
-st("0.10", DUSK, dark=0.45)
+st("0.10", LAKE, P("canoe", 62, 70, 12, move=[66, 58]), A("alexis", "paddle", 61, 67, 8, "r", hold="paddle", move=[65, 57]), dark=0.5)
 # 1 · the case
 st("1.01", HARBOR, P("gulls", 70, 40, 30))
 st("1.03", HARBOR, P("canoe", 50, 98, 40, move=[105, 55]), A("voyageur", "paddle", 44, 88, 28, "l", hold="paddle", move=[99, 49]),
@@ -85,8 +85,8 @@ st("5.05", LAKE, P("canoe", 50, 96, 60, move=[25, 70]), A("alexis", "paddle", 40
    A("voyageur", "paddle", 60, 84, 40, "r", hold="paddle", move=[35, 80]))
 st("5.08", FARM, A("alexis", "chop", 45, 96, 60, "r", hold="axe"), P("firewood", 62, 96, 16))
 st("5.09", FARM, A("alexis", "carry", 50, 96, 56, "r", hold="sack", hold2="sack", move=[30, 62]), A("beaumont", "hold", 82, 96, 58, "l", hold="notebook"))
-st("5.11", LAKE, P("canoe", 50, 74, 16, move=[30, 60]), A("alexis", "paddle", 46, 70, 11, "r", hold="paddle", move=[26, 56]),
-   A("wife", "sit", 53, 70, 9, "r", move=[33, 63]), A("child1", "sit", 57, 70, 7, "r", move=[37, 67]), A("child2", "sit", 60, 70, 6, "r", move=[40, 70]))
+st("5.11", LAKE, P("canoe", 50, 74, 16, move=[30, 60]), A("alexis", "paddle", 47, 70, 11, "r", hold="paddle", move=[27, 57]),
+   A("wife", "sit", 50.5, 70.5, 9, "r", move=[30.5, 60.5]), A("child1", "sit", 52.5, 71, 7, "r", move=[32.5, 62.5]), A("child2", "sit", 54, 71, 6, "r", move=[34, 64]))
 st("5.11b", LAKE, P("canoe", 50, 120, 120), A("alexis", "paddle", 50, 150, 150, "r", hold="paddle", exp="determined"))
 st("5.13", FARM, A("alexis", "stand", 70, 100, 70, "l", exp="smile"))
 st("5.14", WASH, A("merchant", "walk", 40, 90, 46, "r", move=[30, 60]), A("osler", "walk", 70, 90, 44, "l", move=[80, 55]))
@@ -101,7 +101,7 @@ st("5.24", FARM, A("alexis", "walk", 40, 88, 26, "r", move=[30, 75]))
 # 6 · what they learned
 st("6.03", WASH, A("merchant", "point", 32, 100, 66, "r"), A("prof1", "armsFold", 72, 100, 66, "l"), P("purse", 52, 96, 30))
 st("6.05", FARM, A("son", "walk", 60, 88, 30, "l", move=[80, 45]))
-st("6.06", FARM, A("alexis", "shakeHead", 50, 120, 100, "l"))
+st("6.06", FARM, A("alexisOld", "shakeHead", 50, 120, 100, "l"))
 # 7 · case file photos
 st("7.03", STORE, A("merchant", "hold", 50, 100, 70, "r", hold="hat"), P("furBale", 75, 98, 26))
 st("7.05", STUDY, A("beaumont", "stand", 50, 150, 140, "r", exp="neutral"), dark=0.35)
@@ -112,7 +112,7 @@ st("8.04", FARM, P("letter", 50, 105, 140, text="W. Osler"), blur=6)
 st("8.05", CHURCH, A("priest", "stand", 32, 70, 34, "r"))
 st("8.06", SICK, P("coffin", 60, 96, 60), dark=0.35)
 st("8.09", CHURCH, P("grave", 50, 104, 80), P("tuquePost", 78, 104, 90))
-st("8.10", CHURCH, A("wife", "hatInHands", 40, 90, 38, "r", exp="sad"), A("friend1", "hatInHands", 54, 90, 40, "r"), A("friend2", "hatInHands", 64, 90, 42, "r"),
+st("8.10", CHURCH, A("digger2", "hatInHands", 40, 90, 40, "r", exp="sad"), A("friend1", "hatInHands", 54, 90, 40, "r"), A("friend2", "hatInHands", 64, 90, 42, "r"),
    P("grave", 50, 96, 30), dark=0.1)
 # 9 · why it matters
 st("9.02", LAKE, P("canoe", 50, 96, 50, move=[20, 70]), A("alexis", "paddle", 48, 84, 34, "r", hold="paddle", move=[18, 68]))

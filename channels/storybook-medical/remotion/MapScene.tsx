@@ -77,14 +77,15 @@ const pointAt = (r: Route, p: number): { x: number; y: number; ang: number; i: n
   return { x: x1 + (x2 - x1) * t, y: y1 + (y2 - y1) * t, ang: (Math.atan2(y2 - y1, x2 - x1) * 180) / Math.PI, i };
 };
 
-const Canoe: React.FC<{ ang: number; f: number; crew?: "solo" | "family" }> = ({ ang, f, crew = "solo" }) => {
-  // a canoe always sits level on the water: it faces left or right and tilts at most 20°, whatever the heading
+const HULL = "M-100,-10 Q-96,2 -86,10 Q-50,22 0,22 Q50,22 86,10 Q96,2 100,-10 Q92,-2 80,2 Q40,8 0,8 Q-40,8 -80,2 Q-92,-2 -100,-10 Z";
+const Canoe: React.FC<{ ang: number; f: number; crew?: "solo" | "family"; still?: boolean }> = ({ ang, f, crew = "solo", still = false }) => {
+  // a canoe always sits level on the water: it faces left or right and tilts at most 12°, whatever the heading
   const flip = Math.abs(ang) > 90;
-  const a = Math.max(-20, Math.min(20, flip ? (ang > 0 ? ang - 180 : ang + 180) : ang));
+  const a = Math.max(-12, Math.min(12, flip ? (ang > 0 ? ang - 180 : ang + 180) : ang));
   const bob = Math.sin(f / 6) * 1.6;
   const roll = Math.sin(f / 6 + 1) * 1.2;
   // stroke cycle, 1.1 s: pull (blade in the water, front → back), then recovery (blade lifts and swings forward)
-  const u = (f % 33) / 33;
+  const u = still ? 0.7 : (f % 33) / 33;
   const pull = u < 0.62;
   const k = pull ? u / 0.62 : (u - 0.62) / 0.38;
   const px = crew === "solo" ? -8 : -38; // Alexis's seat (stern for the family trip)
@@ -93,17 +94,22 @@ const Canoe: React.FC<{ ang: number; f: number; crew?: "solo" | "family" }> = ({
   const lean = pull ? 8 - 14 * k : -6 + 14 * k;
   const gripX = px + 4 + lean * 0.5;
   const gripY = -40;
-  const W = 285;
+  const W = 250;
   const skin = "#E8C39A";
   const splash = pull && k < 0.18 ? 1 - k / 0.18 : 0;
   return (
     <svg viewBox="-110 -66 220 96" width={W} height={W * 96 / 220}
          style={{ position: "absolute", left: -W / 2, top: -W * 0.42, overflow: "visible",
                   transform: `rotate(${a + roll}deg) scaleX(${flip ? -1 : 1}) translateY(${bob}px)`,
-                  filter: "drop-shadow(0 4px 3px rgba(0,0,0,0.35))" }}>
-      {/* wake behind the stern */}
-      <path d="M-96,14 L-150,4 M-96,18 L-150,28" stroke="#F4F1E6" strokeWidth={2.4} opacity={0.75} strokeLinecap="round" />
-      <path d="M-120,10 Q-128,16 -120,22" stroke="#F4F1E6" strokeWidth={1.8} fill="none" opacity={0.5} />
+                  filter: "drop-shadow(0 6px 5px rgba(40,30,15,0.35)) drop-shadow(0 1px 0 rgba(255,246,224,0.6))" }}>
+      <defs>
+        <linearGradient id="bark" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#EAD3A0" /><stop offset="0.55" stopColor="#D2B07A" /><stop offset="1" stopColor="#9C7A4A" />
+        </linearGradient>
+        <clipPath id="hullClip"><path d={HULL} /></clipPath>
+      </defs>
+      {/* bow wave: water pushed aside at the front while the boat moves */}
+      {!still ? <path d="M96,16 Q112,10 124,18 M94,20 Q110,26 122,24" stroke="#F4F1E6" strokeWidth={2} fill="none" opacity={0.6 + 0.3 * Math.sin(f / 4)} strokeLinecap="round" /> : null}
       {/* crew: wife and children sit in the middle (family trips only) */}
       {crew === "family" ? (
         <g>
@@ -141,8 +147,12 @@ const Canoe: React.FC<{ ang: number; f: number; crew?: "solo" | "family" }> = ({
       <line x1={px + 2 + lean * 0.4} y1={-22} x2={gripX} y2={gripY + 2} stroke={INK} strokeWidth={3.2} strokeLinecap="round" />
       <line x1={px + 6 + lean * 0.3} y1={-18} x2={(gripX + bladeX) / 2} y2={(gripY + bladeY) / 2} stroke={INK} strokeWidth={3.2} strokeLinecap="round" />
       {/* hull: birchbark with raised ends, gunwale and bark seams (drawn over the legs, under the paddle blade) */}
-      <path d="M-100,-10 Q-96,2 -86,10 Q-50,22 0,22 Q50,22 86,10 Q96,2 100,-10 Q92,-2 80,2 Q40,8 0,8 Q-40,8 -80,2 Q-92,-2 -100,-10 Z"
-            fill="#D9BC86" stroke={INK} strokeWidth={2.4} strokeLinejoin="round" />
+      <path d={HULL} fill="url(#bark)" stroke={INK} strokeWidth={2.4} strokeLinejoin="round" />
+      {/* engraved shading: fine hatching on the lower hull, a highlight along the gunwale */}
+      <g clipPath="url(#hullClip)" opacity={0.35}>
+        {Array.from({ length: 40 }, (_, i) => -104 + i * 5.4).map((x) => (<line key={x} x1={x} y1={14} x2={x + 7} y2={24} stroke={INK} strokeWidth={0.8} />))}
+      </g>
+      <path d="M-80,4 Q0,11 80,4" fill="none" stroke="#FFF6E0" strokeWidth={1.6} opacity={0.7} />
       <path d="M-84,4 Q0,14 84,4" fill="none" stroke={INK} strokeWidth={1.4} opacity={0.65} />
       {[-60, -30, 0, 30, 60].map((x) => (<line key={x} x1={x} y1={9} x2={x + 2} y2={20} stroke={INK} strokeWidth={1} opacity={0.4} />))}
       <path d="M-100,-10 Q-104,-16 -98,-20 M100,-10 Q104,-16 98,-20" stroke={INK} strokeWidth={2.2} fill="none" />
@@ -179,7 +189,7 @@ export const MapScene: React.FC<MapSceneProps> = ({ data: path, cams, routes, ci
     const cue = routes.find((x) => x.id === follow.id);
     if (r && cue) {
       const p = interpolate(f, [cue.from, cue.to], [0, 1], { ...clamp, easing: ease });
-      const pt = pointAt(r, p);
+      const pt = pointAt(r, Math.min(1, p + 0.035));
       const w = interpolate(f, [follow.from, follow.from + 25, follow.to - 25, follow.to], [0, 1, 1, 0], { ...clamp, easing: ease });
       const z = Math.exp(Math.log(cam.z) + (Math.log(follow.z) - Math.log(cam.z)) * w);
       cam = { f, c: [cam.c[0] + (pt.x - cam.c[0]) * w, cam.c[1] + (pt.y - cam.c[1]) * w], z };
@@ -239,8 +249,14 @@ export const MapScene: React.FC<MapSceneProps> = ({ data: path, cams, routes, ci
           const dd = "M" + pts.map(([x, y]) => `${x},${y}`).join(" L");
           return (
             <g key={cue.id}>
-              <path d={dd} fill="none" stroke="#F4E9CF" strokeWidth={7} style={nss} strokeLinecap="round" opacity={0.8} />
-              <path d={dd} fill="none" stroke={INK} strokeWidth={3.2} strokeDasharray={r.style === "arc" ? "1 9" : "14 8"}
+              {r.style === "river" ? (
+                <>
+                  <path d={dd} fill="none" stroke={INK} strokeWidth={13} style={nss} strokeLinecap="round" strokeLinejoin="round" opacity={0.35} />
+                  <path d={dd} fill="none" stroke={WATER} strokeWidth={10} style={nss} strokeLinecap="round" strokeLinejoin="round" />
+                  <path d={dd} fill="none" stroke="#F4F1E6" strokeWidth={2} style={nss} strokeLinecap="round" opacity={0.5} />
+                </>
+              ) : <path d={dd} fill="none" stroke="#F4E9CF" strokeWidth={7} style={nss} strokeLinecap="round" opacity={0.8} />}
+              <path d={dd} fill="none" stroke={INK} strokeWidth={r.style === "arc" ? 3.2 : 2.2} strokeDasharray={r.style === "arc" ? "1 9" : "14 8"} opacity={r.style === "arc" ? 1 : 0.7}
                     style={nss} strokeLinecap="round" />
             </g>
           );
@@ -287,12 +303,40 @@ export const MapScene: React.FC<MapSceneProps> = ({ data: path, cams, routes, ci
         const p = interpolate(f, [cue.from, cue.to], [0, 1], { ...clamp, easing: ease });
         const pt = pointAt(r, p);
         const [x, y] = toScreen(pt.x, pt.y);
+        // heading from a short window around the boat (no snapping at the route's corners), in screen space
+        const pa = pointAt(r, Math.max(0, p - 0.012));
+        const pb = pointAt(r, Math.min(1, p + 0.012));
+        const [ax, ay] = toScreen(pa.x, pa.y);
+        const [bx, by] = toScreen(pb.x, pb.y);
+        const ang = (Math.atan2(by - ay, bx - ax) * 180) / Math.PI;
+        const moving = p > 0.001 && p < 0.999;
         const o = interpolate(f, [cue.from - 5, cue.from + 5, cue.to + 20, cue.to + 35], [0, 1, 1, 0], clamp);
+        // wake: a ring is laid every 7 frames at the boat's position then, and spreads and fades where it was laid
+        const rings: React.ReactNode[] = [];
+        for (let s0 = cue.from; s0 <= Math.min(f, cue.to); s0 += 4) {
+          const age = f - s0;
+          if (age > 36) continue;
+          const q = interpolate(s0, [cue.from, cue.to], [0, 1], { ...clamp, easing: ease });
+          const rp = pointAt(r, q);
+          const [rx, ry] = toScreen(rp.x, rp.y);
+          const k = age / 36;
+          rings.push(<ellipse key={s0} cx={rx} cy={ry + 4} rx={12 + 44 * k} ry={4 + 13 * k} fill="none" stroke="#F4F1E6"
+                              strokeWidth={1.8 * (1 - k)} opacity={0.6 * (1 - k) * (1 - k)} />);
+        }
         return (
-          <div key={cue.id} style={{ position: "absolute", left: x, top: y, opacity: o }}>
-            <Canoe ang={pt.ang} f={f} crew={cue.crew} />
-            {cue.year ? <div style={{ position: "absolute", left: 95, top: -140, fontFamily: hand, fontWeight: 700, fontSize: 40, color: BORDER, transform: "rotate(-6deg)" }}>{cue.year}</div> : null}
+          <React.Fragment key={cue.id}>
+            {moving ? <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: o }}>{rings}</svg> : null}
+          <div style={{ position: "absolute", left: x, top: y, opacity: o }}>
+            {/* a soft wash of water under the boat and its shadow on it: the token sits ON the map */}
+            <div style={{ position: "absolute", left: -150, top: -40, width: 300, height: 80, borderRadius: "50%",
+                          background: `radial-gradient(ellipse at 50% 50%, ${WATER} 0%, rgba(175,195,184,0.7) 45%, rgba(175,195,184,0) 72%)` }} />
+            <div style={{ position: "absolute", left: -105, top: -6, width: 210, height: 22, borderRadius: "50%",
+                          background: "radial-gradient(ellipse at 50% 50%, rgba(40,30,15,0.38) 0%, rgba(40,30,15,0) 70%)" }} />
+            <Canoe ang={ang} f={moving ? f : 0} crew={cue.crew} still={!moving} />
+            {cue.year ? <div style={{ position: "absolute", left: 95, top: -150, fontFamily: hand, fontWeight: 700, fontSize: 40, color: BORDER, transform: "rotate(-6deg)",
+                                      textShadow: "0 0 6px #EEDFBD, 0 0 3px #EEDFBD" }}>{cue.year}</div> : null}
           </div>
+          </React.Fragment>
         );
       })}
 

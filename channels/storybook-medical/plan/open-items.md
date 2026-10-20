@@ -1,6 +1,6 @@
 # Open items: read at the start of every session; mention anything due or unresolved
 
-Updated 2026-10-19.
+Updated 2026-10-20.
 
 ## Decisions waiting for the user
 - [x] editing-v2 approved (2026-10-19); the original structure is kept (see section 0).
@@ -8,6 +8,16 @@ Updated 2026-10-19.
 - [ ] Hook: new lines (trailer flash-forwards + open loop). These need a script approval.
 - [ ] Liam: a hyped take for the hook / myth / ending, compared against the archived take.
 - [ ] The user reviews the 3 HC001 Shorts (not watched yet).
+
+## Before ANY paid HC001 generation (so nothing is paid for twice)
+- [ ] Animatic v3 notes by beat number (sets, transitions, hook), then approval.
+- [ ] **Set list approval** (beat-sheet.md, "Sets" table: 27 places with year and look). Every prompt carries its set (lint L19).
+- [ ] Decision: one empty **set plate** per recurring set (~12 sets, ~$1.45) as the location reference, so a scene's
+      shots share one room and different places never look alike. Recommended.
+- [ ] Cast sheets with **age versions**: Alexis 1822–25 / 1829–34 / old (1846–80); Beaumont 1822 / 1833 / 1850s.
+- [ ] 0.10 hook line, new wording without the death: "…and why, for the rest of his life, he kept running away." (needs OK + a Liam take)
+- [ ] 4.15 tasting shown as an implied, comic moment (needs OK).
+- [ ] 8.10: the grave at sunset shows his grown children only (the sources don't say his wife was alive in 1880).
 
 ## Production (HC001, due Wed Nov 4; launch Sun Nov 8)
 - [ ] Transitions and devices reel (P8), plus edit-engine fixes (key-word sync, lints, no clip→still).

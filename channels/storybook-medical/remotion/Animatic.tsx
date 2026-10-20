@@ -2,7 +2,7 @@
 // and overlays, with each planned picture drawn as a wireframe card (subjects as boxes at their planned positions,
 // the planned camera move applied, the source type badged). Reused images show as themselves. Free to render.
 import React, { useEffect, useState } from "react";
-import { AbsoluteFill, Audio, continueRender, delayRender, Img, interpolate, OffthreadVideo, Sequence, staticFile, useCurrentFrame } from "remotion";
+import { AbsoluteFill, Audio, continueRender, delayRender, Freeze, Img, interpolate, OffthreadVideo, Sequence, staticFile, useCurrentFrame } from "remotion";
 import { loadFont } from "@remotion/google-fonts/Montserrat";
 import { loadFont as loadHand } from "@remotion/google-fonts/Caveat";
 import { loadFont as loadSerif } from "@remotion/google-fonts/LibreBaskerville";
@@ -20,7 +20,8 @@ const FPS = 30;
 const AMBER = "#E8A33D";
 
 export type Beat = { id: string; at: string; shot: string; see: string; cast: string; src: string; cam: string; trans: string; life: string;
-                     fx: string; sfx: string; mood: number; note: string; start: number; end: number; dur: number; stage?: StageSpec };
+                     fx: string; sfx: string; mood: number; note: string; start: number; end: number; dur: number; stage?: StageSpec;
+                     set?: string; setName?: string; setYear?: string };
 type Word = { word: string; start: number; end: number };
 export type AnimaticProps = { beats: string; words: string; narration: string; insertAfter?: string; insertSecs?: number;
                               music: { src: string; from: number; to: number; offset?: number }[]; totalSeconds: number };
@@ -106,6 +107,12 @@ const reuseImg = (src: string) => {
   const m = src.match(/^reuse:(\w+)/);
   return m ? `img/${m[1]}.jpg` : null;
 };
+
+// where and when the beat happens (sets_<ep>.py): the stand-in plate may repeat, the set never silently does
+const SetTag: React.FC<{ b: Beat }> = ({ b }) => (b.setName ? (
+  <div style={{ position: "absolute", left: 22, top: 66, background: "rgba(17,21,26,0.78)", borderLeft: `6px solid ${AMBER}`, padding: "5px 12px",
+                fontFamily: sans, fontWeight: 700, fontSize: 19, color: "#EFE6D2", opacity: 0.9 }}>
+    SET · {b.setName} · {b.setYear}</div>) : null);
 
 const FlashIn: React.FC = () => {
   const f = useCurrentFrame();
@@ -202,6 +209,7 @@ export const BeatCard: React.FC<{ b: Beat; all: Beat[] }> = ({ b, all }) => {
           <div style={{ background: "#11151A", color: "#EFE6D2", fontFamily: sans, fontWeight: 900, fontSize: 22, padding: "5px 12px", borderRadius: 6 }}>{b.id} · {b.shot}</div>
           <div style={{ background: colour, color: "#11151A", fontFamily: sans, fontWeight: 900, fontSize: 18, padding: "6px 12px", borderRadius: 6 }}>{label}</div>
         </div>
+        <SetTag b={b} />
         <Overlays b={b} />
       </AbsoluteFill>
     );
@@ -225,6 +233,7 @@ export const BeatCard: React.FC<{ b: Beat; all: Beat[] }> = ({ b, all }) => {
         <div style={{ background: "rgba(17,21,26,0.8)", color: AMBER, fontFamily: sans, fontWeight: 700, fontSize: 22, padding: "8px 14px", borderRadius: 6 }}>
           {"▁▂▄▆█"[Math.max(1, Math.min(5, b.mood)) - 1]} cam: {b.cam}</div>
       </div>
+      <SetTag b={b} />
       <Overlays b={b} />
       <div style={{ position: "absolute", left: 40, right: 40, bottom: 92, textAlign: "center" }}>
         <div style={{ display: "inline-block", background: "rgba(17,21,26,0.82)", padding: "12px 22px", borderRadius: 10, maxWidth: 1600 }}>
@@ -235,6 +244,12 @@ export const BeatCard: React.FC<{ b: Beat; all: Beat[] }> = ({ b, all }) => {
     </AbsoluteFill>
   );
 };
+
+// The incoming shot during a transition: it holds its first frame until its own start (the cut point), then plays on the
+// same clock as its main sequence, so nothing repeats when the transition hands over.
+const InShot: React.FC<{ half: number; children: React.ReactNode }> = ({ half, children }) => (
+  <Freeze frame={half} active={(f) => f < half}><Sequence from={half}>{children}</Sequence></Freeze>
+);
 
 // ── transitions between beats ────────────────────────────────────────────────────────────────────────────
 const transOf = (t: string): [TransKind | null, number, boolean] => {
@@ -272,7 +287,7 @@ export const Animatic: React.FC<AnimaticProps> = ({ beats: bp, words: wp, narrat
   const ins = insertAfter ? data.beats.find((b) => b.id === insertAfter) : undefined;
   const cut = ins ? ins.start : 1e9;
   const shift = (t: number) => (t >= cut ? t + insertSecs : t);
-  const beats = data.beats.map((b) => ({ ...b, start: b.id === insertAfter ? b.start : shift(b.start), end: b.id === insertAfter ? b.start + insertSecs + (b.end - b.start) : shift(b.end) }));
+  const beats = data.beats.map((b) => ({ ...b, start: b.id === insertAfter ? b.start : shift(b.start), end: b.id === insertAfter ? b.start + insertSecs + (b.end - b.start) : b.start < cut ? b.end : shift(b.end) }));
   beats.forEach((b) => { b.dur = b.end - b.start; });
   // group consecutive beats on the same image (a callback to the beat just before, or the same reused image)
   const imgKey = (b: Beat) => (b.src.startsWith("callback:") ? beats.find((x) => x.id === b.src.split(":")[1])?.src ?? b.src : b.src);
@@ -305,11 +320,11 @@ export const Animatic: React.FC<AnimaticProps> = ({ beats: bp, words: wp, narrat
                 {v2 ? (
                   <TransitionV2 id={`t${b.id}`} at={0} len={len} t={tk}
                     a={<Sequence from={-(fr(b.start) - Math.round(len / 2) - fr(prev.start))}><BeatCard b={prev} all={beats} /></Sequence>}
-                    b={<Sequence from={-Math.round(len / 2)}><BeatCard b={b} all={beats} /></Sequence>} />
+                    b={<InShot half={Math.round(len / 2)}><BeatCard b={b} all={beats} /></InShot>} />
                 ) : (
                   <Transition id={`t${b.id}`} at={0} len={len} t={tk}
                     a={<Sequence from={-(fr(b.start) - Math.round(len / 2) - fr(prev.start))}><BeatCard b={prev} all={beats} /></Sequence>}
-                    b={<Sequence from={-Math.round(len / 2)}><BeatCard b={b} all={beats} /></Sequence>} />
+                    b={<InShot half={Math.round(len / 2)}><BeatCard b={b} all={beats} /></InShot>} />
                 )}
                 </AbsoluteFill>
               </Sequence>
@@ -338,7 +353,7 @@ export const Animatic: React.FC<AnimaticProps> = ({ beats: bp, words: wp, narrat
         </Sequence>
       ))}
       <Captions words={words} shift={shift} />
-      <div style={{ position: "absolute", right: 24, bottom: 24, fontFamily: sans, fontWeight: 900, fontSize: 18, color: "rgba(255,255,255,0.45)", letterSpacing: 4 }}>ANIMATIC v1 · HC001</div>
+      <div style={{ position: "absolute", right: 24, bottom: 24, fontFamily: sans, fontWeight: 900, fontSize: 18, color: "rgba(255,255,255,0.45)", letterSpacing: 4 }}>ANIMATIC v3 · HC001</div>
     </AbsoluteFill>
   );
 };

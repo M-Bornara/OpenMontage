@@ -51,6 +51,11 @@ def real_writing(text: str, where: str = "at the top of the page") -> str:
 SAFE_FRAMING = ("FRAMING: every story-relevant person, object and action sits inside the central 70% of the frame (not touching "
                 "or cut by any edge), with room around it so the camera can zoom and pan toward it; the edges hold only "
                 "background.")
+# L19 · every story image names its SET (place + year) with that set's own look (editorial/.../sets_<ep>.py). In HC001 v1
+# the model fell back on one generic log-cabin room, so Beaumont's office was everywhere from 1822 to Osler in 1880.
+def set_block(name: str, year: str, look: str) -> str:
+    return (f"SET: {name}, {year}. {look}. This place has its own materials, palette and light, and must not look like "
+            f"any other room or place in the film.")
 # L9 · red rule and string/vial colours drift.
 RED_RULE = ("Only the story's motif may be saturated red (e.g. Alexis's tuque); everything else avoids pure red. Strings "
             "are cream-white; glass vials hold amber liquid.")
@@ -100,6 +105,8 @@ def lint(name: str, spec: dict) -> list[str]:
         issues.append("L8/L15: a writing-bearing prop without WAVY_WRITING or real_writing() ('illegible' still produces lorem ipsum)")
     if spec.get("aspect", "16:9") in ("16:9", "9:16") and not people_free_plate(p) and "central 70%" not in p:
         issues.append("L17: no SAFE_FRAMING (story subjects drift to the edges, where the camera can't zoom or focus on them)")
+    if spec.get("aspect", "16:9") == "16:9" and "set:" not in p and not re.match(r"(thumb|cover|sheet|ref)", name.lower()):
+        issues.append("L19: no SET line (set_block): without its place, year and look the model reuses one generic room")
     if "spectacles" in p and "amber" not in p and "no spectacles" not in p:
         issues.append("L11: spectacles that aren't Matt's (confuses the spot-the-glasses game)")
     return issues

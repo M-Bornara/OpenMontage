@@ -36,10 +36,10 @@ B("0.07", "nobody cut him open", "MCU", "Beaumont alone, watching the door Alexi
   "push>beaumont", life="lamp flicker, motes", mood=2)
 B("0.08", "three years", "CU", "the clean porthole close-up; a hand-drawn calendar flips 1822 → 1825 beside it", "porthole@C",
   "reuse:I19", "pull", "film dissolve", fx="counter 1822→1825", mood=3)
-B("0.09", "so how does a man", "—", "TRAILER: 5 flash-forwards on hits (musket flash · NO stamp · porthole · contract · shovel)", "",
-  "trailer", "snap", "flash cuts", fx="letterbox · riser", sfx="hits", mood=5, note="uses callbacks 1.07, 2.08, 1.14, 5.16, 8.07")
-B("0.10", "own stomach", "—", "NEW LINE: '…and when he died, his family made sure no doctor would ever get him.' Handwritten over the dark farmhouse",
-  "", "newline", "push", "dip to black", fx="hand-written line", mood=4, note="NEEDS APPROVAL + a new narration take")
+B("0.09", "so how does a man", "—", "TRAILER: 4 flash-forwards, one per hit (musket flash · NO stamp · the dissolving vial · the contract); nothing from his death (kept as the surprise)", "",
+  "trailer", "snap", "flash cuts", fx="letterbox · riser", sfx="hits", mood=5, note="uses callbacks 1.07, 2.08, 4.12, 5.16")
+B("0.10", "own stomach", "—", "NEW LINE: '…and why, for the rest of his life, he kept running away.' Handwritten over a lone canoe on the dark lake",
+  "", "newline", "push", "dip to black", fx="hand-written line", mood=4, note="NEEDS APPROVAL + a new narration take; no spoiler of his death (the grave stays a surprise)")
 
 # ═══ 1 · THE CASE ═════════════════════════════════════════════════════════════════════════════════════════
 B("1.01", "mackinac island", "EWS", "Mackinac Island at dawn: timber fort on the bluff, canoes on the beach, mist on the water", "fort@CR",
@@ -65,7 +65,7 @@ B("1.09", "less than a meter", "GFX", "hand-drawn diagram: muzzle → Alexis's s
 B("1.10", "the army surgeon", "WS", "Beaumont runs up the hill path from the fort, bag in hand", "beaumont@C", "clip", "static", "whip",
   fx="name tag DR. WILLIAM BEAUMONT", sfx="running steps", mood=4)
 B("1.11", "reaches him", "MS", "Beaumont bursts through the store door, light behind him; the crowd parts", "beaumont@C", "new",
-  "push>beaumont", fx="pulse (white) on Beaumont", mood=4)
+  "push>beaumont", "cut!", fx="pulse (white) on Beaumont", mood=4, note="hard cut on the action: running → bursting in")
 B("1.12", "what he sees is", "MS", "Beaumont kneels over Alexis on the floor; MATT, close to camera, holds the lantern up for him",
   "beaumont@CL matt@R alexis@C", "new", "push>beaumont", life="lamp flicker, motes", fx="spotlight on Beaumont's face",
   mood=4, note="Matt's bold role: the lantern-holder (one onlooker, face clear)")
@@ -246,7 +246,7 @@ B("8.01", "in june 1880", "WS", "the farmhouse at dusk; its one lit window goes 
 B("8.02", "a young doctor", "MS", "Osler writing at his desk, gaslight", "osler@C", "new", "push>osler", fx="name tag DR. WILLIAM OSLER",
   mood=2)
 B("8.03", "he offered to pay", "MS", "a museum shelf with an empty specimen jar", "jar@C", "new", "push>jar", fx="shine on the jar", mood=3)
-B("8.04", "the family said no", "CU", "Osler's letter set down, unanswered, on a farmhouse table", "letter@C", "new", "static",
+B("8.04", "the family said no", "CU", "Osler's letter set down, unanswered, on a farmhouse table", "letter@C", "new", "static", "ink bleed",
   fx="stamp NO (quiet)", mood=4)
 B("8.05", "according to the parish", "MS", "the parish priest at the church door", "priest@C", "new", "push>priest", mood=2)
 B("8.06", "much longer than usual", "MS", "a shuttered farmhouse room in summer heat, candles by a closed coffin", "coffin@C", "new", "push",
@@ -259,7 +259,7 @@ B("8.09", "after fifty-eight years", "CU", "close on the fresh grave: wildflower
   "film dissolve", fx="epitaph", mood=1)
 
 # ═══ 9 · WHY IT MATTERS ═══════════════════════════════════════════════════════════════════════════════════
-B("8.10", "the people who loved", "WS", "his wife and grown children standing at the grave at sunset", "wife@C", "new", "pull",
+B("8.10", "the people who loved", "WS", "his grown children standing at the grave at sunset (no wife: the sources don't say she was alive in 1880)", "family@C", "new", "pull",
   "film dissolve", life="glow, leaves", mood=1)
 B("9.01", "every time someone", "ECU", "callback: the silk string, now in warm light", "string@C", "reuse:I01", "push", "light dissolve (luma)",
   life="rays, motes", mood=2)
