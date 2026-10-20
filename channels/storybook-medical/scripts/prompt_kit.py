@@ -47,6 +47,10 @@ WAVY_WRITING = ("Any handwriting is drawn ONLY as rows of soft wavy ink lines wi
 def real_writing(text: str, where: str = "at the top of the page") -> str:
     return (f'The only legible writing is "{text}", handwritten in period ink {where}, spelled exactly like that. '
             f"Every other line is soft wavy ink lines with no letters. Never Latin or placeholder text.")
+# L17 · story subjects at the frame edge (HC001 M17 vials) can't be zoomed, panned or focused on. Keep them in the inner area.
+SAFE_FRAMING = ("FRAMING: every story-relevant person, object and action sits inside the central 70% of the frame (not touching "
+                "or cut by any edge), with room around it so the camera can zoom and pan toward it; the edges hold only "
+                "background.")
 # L9 · red rule and string/vial colours drift.
 RED_RULE = ("Only the story's motif may be saturated red (e.g. Alexis's tuque); everything else avoids pure red. Strings "
             "are cream-white; glass vials hold amber liquid.")
@@ -94,9 +98,15 @@ def lint(name: str, spec: dict) -> list[str]:
     if re.search(r"\b(map|contract|letters?|poster|signpost|label|document|title page)\b", p) and "wavy ink lines" not in p \
             and "no lettering" not in p and "only legible writing" not in p:
         issues.append("L8/L15: a writing-bearing prop without WAVY_WRITING or real_writing() ('illegible' still produces lorem ipsum)")
+    if spec.get("aspect", "16:9") in ("16:9", "9:16") and not people_free_plate(p) and "central 70%" not in p:
+        issues.append("L17: no SAFE_FRAMING (story subjects drift to the edges, where the camera can't zoom or focus on them)")
     if "spectacles" in p and "amber" not in p and "no spectacles" not in p:
         issues.append("L11: spectacles that aren't Matt's (confuses the spot-the-glasses game)")
     return issues
+
+
+def people_free_plate(p: str) -> bool:
+    return "empty location plate" in p
 
 
 def lint_all(specs: dict[str, dict]) -> dict[str, list[str]]:

@@ -15,6 +15,10 @@ Written 2026-10-19 after the HC001 preview review (34 notes). It replaces the "p
 | **Structure** | Keep the original order (hook → story → myth check → story ending → why it matters). The fix is in the **transitions and the change of look**: hook → story, story → myth (a big change of rhythm and theme), myth → back to story, the ending. The Case File look (section 5) is used for the myth section. The script order isn't changed, and we can revert cheaply |
 | **Narration** | Keep the current Liam takes (archived, never overwritten). Story chapters stay as they are, with small, careful tweaks at most. Hook, myth and ending sections may be re-recorded with more energy, and are compared with the old take before choosing |
 | **Shorts** | Not reviewed yet by the user. No changes until they are |
+| **Focus reel verdicts** | 08 glasses glint = THE glasses treatment · 10 loupe only when the source resolution allows (no pixelation) · shake only on a big hit, snap zoom only on a sudden action (rare) · ping for spotting objects · **handwriting / ink circles / drawn lines: yes, more of these** · lamp flicker: yes · pulse: prefer a soft white tint/shine + slight glow (amber glow for other uses) · rack focus: great · **shine sweep: a must** · each trick used only when the context calls for it |
+| **Living stills** | Bring images to life with free animation (clouds, birds, smoke, water, light moving, etc.). It reduces the need for paid clips |
+| **Motion quality** | Every zoom and pan is **smooth**: no flicker, jitter or glitch, at a reasonable (slow) speed. The source is always at a higher resolution than the output |
+| **Composition** | Story subjects are kept away from the frame edges (prompt rule L17) |
 
 ## 1 · You approve every piece (gates)
 

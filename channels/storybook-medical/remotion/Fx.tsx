@@ -12,7 +12,8 @@ const { fontFamily: hand } = loadHand("normal", { weights: ["700"] });
 export const AMBER = "#E8A33D";
 export const BONE = "#EFE6D2";
 export const CHARCOAL = "#22262A";
-const ease = Easing.bezier(0.33, 0, 0.2, 1);
+// camera ease: gentle sine in-out (peak speed ~1.6x the average), so pushes and pans never lurch
+const ease = Easing.inOut(Easing.sin);
 const W = 1920;
 const H = 1080;
 
@@ -65,12 +66,12 @@ export const camTransform = (cam: Cam, f: number, dur: number) => {
   return `translate(${dx}%, ${dy}%) scale(${s})`;
 };
 
-export const Plate: React.FC<{ src: string; cam: Cam; dur: number; children?: React.ReactNode }> = ({ src, cam, dur, children }) => {
+export const Plate: React.FC<{ src: string; cam: Cam; dur: number; fit?: "fill" | "cover"; children?: React.ReactNode }> = ({ src, cam, dur, fit = "fill", children }) => {
   const f = useCurrentFrame();
   return (
     <AbsoluteFill style={{ overflow: "hidden", backgroundColor: CHARCOAL }}>
-      <AbsoluteFill style={{ transform: camTransform(cam, f, dur), transformOrigin: "50% 50%" }}>
-        <Img src={staticFile(src)} style={fill} />
+      <AbsoluteFill style={{ transform: camTransform(cam, f, dur), transformOrigin: "50% 50%", willChange: "transform" }}>
+        <Img src={staticFile(src)} style={{ ...fill, objectFit: fit }} />
         {children}
       </AbsoluteFill>
     </AbsoluteFill>
@@ -136,9 +137,10 @@ export const Isolate: React.FC<{ src: string; mask: string; at: number; dur: num
   );
 };
 
-// ── Character pulse: a warm halo around the person + a short warm lift on them (~0.6 s) ────────────────────
-export const Pulse: React.FC<{ src: string; mask: string; at: number; dur?: number; color?: string; times?: number }> = ({
-  src, mask, at, dur = 20, color = AMBER, times = 1,
+// ── Character pulse: the person lights up as their name is said. Default "tint": a soft white lift + a thin bright rim
+// + a light sweep across them (user's preference). "glow": the stronger amber halo, for other uses.
+export const Pulse: React.FC<{ src: string; mask: string; at: number; dur?: number; variant?: "tint" | "glow"; color?: string; times?: number }> = ({
+  src, mask, at, dur = 22, variant = "tint", color, times = 1,
 }) => {
   const f = useCurrentFrame();
   let k = 0;
@@ -147,12 +149,21 @@ export const Pulse: React.FC<{ src: string; mask: string; at: number; dur?: numb
     k = Math.max(k, interpolate(f, [a, a + dur * 0.3, a + dur], [0, 1, 0], { ...clamp, easing: Easing.inOut(Easing.sin) }));
   }
   if (k <= 0) return null;
+  const glow = variant === "glow";
+  const c = color ?? (glow ? AMBER : "rgba(255,248,230,0.9)");
+  const halo = glow
+    ? `drop-shadow(0 0 ${6 + 6 * k}px ${c}) drop-shadow(0 0 ${16 + 10 * k}px ${c}) drop-shadow(0 0 ${30 * k}px ${c})`
+    : `drop-shadow(0 0 ${2 + 2 * k}px ${c}) drop-shadow(0 0 ${7 * k}px ${c})`;
+  const p = interpolate(f, [at, at + dur], [-20, 120], clamp);
   return (
     <>
       {/* halo: the silhouette itself casts the glow (a blur on a masked layer is clipped to the mask, so no halo) */}
-      <Img src={staticFile(mask)} style={{ ...fill, opacity: k,
-                                         filter: `drop-shadow(0 0 ${6 + 6 * k}px ${color}) drop-shadow(0 0 ${16 + 10 * k}px ${color}) drop-shadow(0 0 ${30 * k}px ${color})` }} />
-      <Img src={staticFile(src)} style={{ ...fill, ...masked(mask), filter: `brightness(${1 + 0.22 * k}) sepia(${0.25 * k})` }} />
+      <Img src={staticFile(mask)} style={{ ...fill, opacity: (glow ? 1 : 0.8) * k, filter: halo }} />
+      <Img src={staticFile(src)} style={{ ...fill, ...masked(mask), filter: glow ? `brightness(${1 + 0.22 * k}) sepia(${0.25 * k})` : `brightness(${1 + 0.16 * k}) saturate(${1 + 0.1 * k})` }} />
+      {glow ? null : (
+        <AbsoluteFill style={{ ...masked(mask), mixBlendMode: "screen", opacity: k,
+                               background: `linear-gradient(110deg, rgba(255,250,235,0) ${p - 10}%, rgba(255,250,235,0.45) ${p}%, rgba(255,250,235,0) ${p + 10}%)` }} />
+      )}
     </>
   );
 };
@@ -288,8 +299,10 @@ export const Motes: React.FC<{ x: number; y: number; r?: number; n?: number; at?
         const ang = random(`a${i}`) * Math.PI * 2;
         const dist = Math.sqrt(random(`d${i}`)) * r;
         const px = x + Math.cos(ang) * dist * 0.6;
-        const py = y + Math.sin(ang) * dist - ((f * (0.03 + random(`v${i}`) * 0.05)) % (r * 2)) + r * 0.5;
-        const tw = 0.35 + 0.65 * Math.abs(Math.sin(f / (6 + random(`t${i}`) * 10) + i));
+        // each mote rises through its loop and fades out before it wraps, so nothing ever pops
+        const u = ((f * (0.03 + random(`v${i}`) * 0.05) + random(`o${i}`) * r * 2) % (r * 2)) / (r * 2);
+        const py = y + Math.sin(ang) * dist * 0.4 + r * 0.5 - u * r * 2;
+        const tw = (0.35 + 0.65 * Math.abs(Math.sin(f / (6 + random(`t${i}`) * 10) + i))) * Math.sin(Math.PI * u);
         const s = 3 + random(`s${i}`) * 5;
         return <div key={i} style={{ position: "absolute", left: `${px}%`, top: `${py}%`, width: s, height: s, borderRadius: "50%",
                                      background: "#FFE2A8", boxShadow: "0 0 8px #FFC86B", opacity: tw }} />;
@@ -300,8 +313,9 @@ export const Motes: React.FC<{ x: number; y: number; r?: number; n?: number; at?
 
 // ── Lamp flicker: a warm light that breathes around a point ───────────────────────────────────────────────
 export const Flicker: React.FC<{ x: number; y: number; r?: number }> = ({ x, y, r = 30 }) => {
+  // layered slow sines only: a living flame, never a jumpy strobe
   const f = useCurrentFrame();
-  const k = 0.18 + 0.08 * Math.sin(f / 3.1) + 0.05 * Math.sin(f / 1.7 + 1) + 0.04 * (random(`fl${Math.floor(f / 2)}`) - 0.5);
+  const k = 0.18 + 0.07 * Math.sin(f / 4.3) + 0.045 * Math.sin(f / 2.6 + 1) + 0.03 * Math.sin(f / 1.9 + 2.2);
   return <AbsoluteFill style={{ mixBlendMode: "screen", background: `radial-gradient(circle ${r * 10}px at ${x}% ${y}%, rgba(255,190,100,${k}) 0%, rgba(255,190,100,0) 100%)` }} />;
 };
 

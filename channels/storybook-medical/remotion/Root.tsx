@@ -3,7 +3,7 @@ import { CalculateMetadataFunction, Composition, Still } from "remotion";
 import { FPS, StorybookCover, StorybookShort, StorybookShortProps } from "./StorybookShort";
 import { OddlyEndScreen, OddlySting, OddlyThumbnail } from "./Brand";
 import { StorybookLong, StorybookLongProps } from "./StorybookLong";
-import { FOCUS, FocusReel, reelFrames } from "./LabReels";
+import { FOCUS, FocusReel, LIFE, LifeReel, reelFrames, TRANS, TransReel } from "./LabReels";
 
 const calculateMetadata: CalculateMetadataFunction<StorybookShortProps> = async ({ props }) => ({
   durationInFrames: Math.ceil(props.totalSeconds * FPS),
@@ -57,5 +57,7 @@ export const Root: React.FC = () => (
            defaultProps={{ image: "brand/thumb-example.jpg", kicker: "VERMONT · 1848", lines: ["STILL", "TALKING."], side: "left" }} />
     {/* Test reels for review (scripts/lab.py) */}
     <Composition id="FocusReel" component={FocusReel} durationInFrames={reelFrames(FOCUS, FPS)} fps={FPS} width={1920} height={1080} />
+    <Composition id="TransReel" component={TransReel} durationInFrames={reelFrames(TRANS, FPS)} fps={FPS} width={1920} height={1080} />
+    <Composition id="LifeReel" component={LifeReel} durationInFrames={reelFrames(LIFE, FPS)} fps={FPS} width={1920} height={1080} />
   </>
 );

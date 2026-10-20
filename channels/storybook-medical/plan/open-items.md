@@ -4,7 +4,7 @@ Updated 2026-10-19.
 
 ## Decisions waiting for the user
 - [x] editing-v2 approved (2026-10-19); the original structure is kept (see section 0).
-- [ ] Watch the test reels and give feedback by number: Focus ✅ rendered · Transitions · Map · Section changes (hook→story, story→myth→story, ending).
+- [ ] Watch the test reels and give feedback by number (projects/_fxlab/renders/): Focus ✅ reviewed (v2 adds the white pulse) · Transitions ✅ rendered · Living stills ✅ rendered · Map (next) · Section changes (next: hook→story, story→myth→story, ending).
 - [ ] Hook: new lines (trailer flash-forwards + open loop). These need a script approval.
 - [ ] Liam: a hyped take for the hook / myth / ending, compared against the archived take.
 - [ ] The user reviews the 3 HC001 Shorts (not watched yet).
