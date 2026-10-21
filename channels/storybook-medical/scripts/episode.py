@@ -78,7 +78,7 @@ PRICES = {"image": 0.15, "clip": 0.28, "music": 0.03, "tts_per_1k_chars": 0.10}
 # Channel defaults are the V2 setup. An episode may override them for experiments with
 # "models": {"image": "nano-banana-2", "clip": "h3-max"} in episode.json.
 IMAGE_MODELS = {"gemini-3-pro-image": 0.15, "nano-banana-2": 0.08}
-CLIP_MODELS = {"kling-v2.1-standard": 0.28, "h3-max": 0.0325 * 5}
+CLIP_MODELS = {"kling-v2.1-standard": 0.28, "kling-v2.1-pro": 0.49, "h3-max": 0.0325 * 5}
 TIERS = {
     "premium": ("gemini-3-pro-image", "kling-v2.1-standard"),  # V2 pilot setup (default)
     "budget": ("nano-banana-2", "h3-max"),                      # tested on episode 2, ~$2.60
@@ -457,17 +457,23 @@ def step_clips(pid, *only):
                                            "resolution": "768P", "prompt_expansion_mode": "balanced",
                                            "enable_safety_checker": False, "output_path": str(out)})
         else:
-            im = Image.open(kf).convert("RGB")
             fit = (1920, 1080) if aspect == "16:9" else (1080, 1920)
-            if abs(im.width / im.height - fit[0] / fit[1]) > 0.02:
-                raise SystemExit(f"clip {sid}: keyframe aspect {im.size} does not match {aspect}")
-            im = im.resize(fit, Image.LANCZOS)
-            buf = io.BytesIO()
-            im.save(buf, "JPEG", quality=92)
-            r = t["kling_video"].execute({"prompt": prompt, "operation": "image_to_video",
-                                          "image_url": "data:image/jpeg;base64," + base64.b64encode(buf.getvalue()).decode(),
-                                          "model_variant": CLIP_VARIANT, "duration": "5", "aspect_ratio": aspect,
-                                          "output_path": str(out)})
+
+            def data_url(path):
+                im = Image.open(path).convert("RGB")
+                if abs(im.width / im.height - fit[0] / fit[1]) > 0.02:
+                    raise SystemExit(f"clip {sid}: keyframe aspect {im.size} does not match {aspect}")
+                buf = io.BytesIO()
+                im.resize(fit, Image.LANCZOS).save(buf, "JPEG", quality=92)
+                return "data:image/jpeg;base64," + base64.b64encode(buf.getvalue()).decode()
+
+            req = {"prompt": prompt, "operation": "image_to_video", "image_url": data_url(kf), "model_variant": CLIP_VARIANT,
+                   "duration": "5", "aspect_ratio": aspect, "output_path": str(out)}
+            if spec.get("tail"):  # first + last frame: the clip must END on this keyframe (v2.1 pro)
+                req["tail_image_url"] = data_url(p / "assets/images/keyframes" / f"{spec['tail']}.png")
+                req["model_variant"] = "v2.1/pro"
+                model = "kling-v2.1-pro"
+            r = t["kling_video"].execute(req)
         if r.success:
             log_cost(pid, f"clip:{sid}:{model}", r.cost_usd or CLIP_MODELS.get(model, PRICES["clip"]))
         return sid, model, r.success, (r.error or "")[:200]
