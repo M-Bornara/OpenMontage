@@ -59,7 +59,6 @@ const OnObject: React.FC<{ fx: Fx; img: string }> = ({ fx, img }) => {
     case "spot": return <Spotlight src={img} x={fx.x} y={fx.y} rx={fx.rx} ry={fx.ry} at={fx.at} dur={fx.dur ?? 90} />;
     case "ink": return <InkCircle x={fx.x} y={fx.y} rx={fx.rx} ry={fx.ry} at={fx.at} note={fx.note} noteAt={fx.noteAt} dur={fx.dur ?? 120} />;
     case "glint": return <Glint x={fx.x} y={fx.y} at={fx.at} size={fx.size ?? 30} />;
-    case "callout": return <Callout at={fx.at} dur={fx.dur ?? 110} name={fx.name} sub={fx.sub} aside={fx.aside} x={fx.x > 50 ? 100 - fx.x + 6 : fx.x + 6} y={fx.y - 14} side={fx.x > 50 ? "right" : "left"} />;
     case "foods": return <Foods items={fx.items} at={fx.at} />;
     default: return null;
   }
@@ -142,12 +141,13 @@ const Overlay: React.FC<{ fx: Fx; dur: number }> = ({ fx, dur }) => {
           <div style={{ fontFamily: serif, fontSize: 30, color: AMBER, letterSpacing: 8, marginTop: 6 }}>DIED 24 JUNE 1880</div>
         </div>
       );
+    case "callout": return <Callout at={at} dur={fx.dur ?? 110} name={fx.name} sub={fx.sub} aside={fx.aside} x={6} y={12} side="left" />;
     case "flash": return <AbsoluteFill style={{ backgroundColor: "#FFF4DC", opacity: interpolate(f, [at, at + 1, at + 6], [0, 0.85, 0], clamp) }} />;
     default: return null;
   }
 };
 
-const SCREEN = new Set(["stamp", "counter", "date", "location", "tag", "quote", "note", "hand", "chapter", "epitaph", "flash"]);
+const SCREEN = new Set(["callout", "stamp", "counter", "date", "location", "tag", "quote", "note", "hand", "chapter", "epitaph", "flash"]);
 
 // a canoe sprite on the water: it drifts, bobs and rolls a little, with its reflection under the waterline
 const Sprite: React.FC<{ s: NonNullable<CutSpec["sprite"]>; dur: number }> = ({ s, dur }) => {

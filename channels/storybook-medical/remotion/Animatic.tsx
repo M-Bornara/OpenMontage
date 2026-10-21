@@ -7,7 +7,7 @@ import { loadFont } from "@remotion/google-fonts/Montserrat";
 import { loadFont as loadHand } from "@remotion/google-fonts/Caveat";
 import { loadFont as loadSerif } from "@remotion/google-fonts/LibreBaskerville";
 import { camTransform, Cam } from "./Fx";
-import { TransKind, Transition, TransitionV2 } from "./Transitions";
+import { ChapterCard, TransKind, Transition, TransitionV2 } from "./Transitions";
 import { MapScene } from "./MapScene";
 import { CaseFile, HandLine, Letterbox, MythCard, Stamp } from "./Sections";
 import { StageScene, StageSpec } from "./Stage";
@@ -183,6 +183,26 @@ export const BeatCard: React.FC<{ b: Beat; all: Beat[] }> = ({ b, all }) => {
     );
   }
   const mapRoute = b.src.match(/^map:(\w+)/)?.[1];
+  if (b.shot === "CARD" && b.id !== "7.01") {
+    const m = b.see.match(/chapter card (\d+) · (.+)$/);
+    if (m) return <ChapterCard n={+m[1]} title={m[2]} font={sans} serif={serif} />;
+  }
+  if (mapRoute === "atlantic") {
+    // the Atlantic: the camera slides from the lakes to the open ocean; a dotted line runs off the map toward London
+    const p = interpolate(f, [10, dur - 10], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.inOut(Easing.sin) });
+    return (
+      <AbsoluteFill>
+        <MapScene data="map/hc001.json" cams={[{ f: 0, c: [1700, 760], z: 1.5 }, { f: dur, c: [2050, 820], z: 1.7 }]} routes={[]} labelsAt={0} borderAt={0}
+                  cities={[{ id: "plattsburgh", at: 0 }]} />
+        <svg viewBox="0 0 1920 1080" style={{ position: "absolute", inset: 0 }}>
+          <defs><clipPath id="atl"><rect x={0} y={0} width={480 + 1440 * p} height={1080} /></clipPath></defs>
+          <path d="M 480 395 Q 1200 300 1920 420" fill="none" stroke="#4A3820" strokeWidth={7} strokeDasharray="1 18" strokeLinecap="round" clipPath="url(#atl)" />
+        </svg>
+        <div style={{ position: "absolute", right: 70, top: 300, fontFamily: hand, fontWeight: 700, fontSize: 64, color: "#7A2E2A", opacity: p,
+                      transform: "rotate(-4deg)" }}>to London →</div>
+      </AbsoluteFill>
+    );
+  }
   if (mapRoute && mapRoute !== "atlantic") {
     const routes = mapRoute === "overview" ? [] : [{ id: mapRoute, from: 6, to: Math.max(20, dur - 20), canoe: true,
       crew: (mapRoute === "1825" ? "solo" : "family") as "solo" | "family", year: mapRoute, legend: mapRoute,
@@ -370,7 +390,7 @@ export const Animatic: React.FC<AnimaticProps> = ({ beats: bp, words: wp0, narra
   if (insertAudio && ins) for (let k = fr(cut) + 6; k < fr(cut) + 6 + fr(insertSecs - 0.4); k++) speech[k] = 1;
   const env = new Float32Array(N);
   for (let k = 1; k < N; k++) env[k] = speech[k] > env[k - 1] ? env[k - 1] + (1 - env[k - 1]) / 4 : env[k - 1] * (1 - 1 / 14);
-  const duck = (g: number) => 1 - 0.5 * env[Math.max(0, Math.min(N - 1, g))];
+  const duck = (g: number) => 1 - 0.5 * (env[Math.max(0, Math.min(N - 1, Math.round(g)))] || 0);
   const hookEnd = beats.find((b) => b.id.startsWith("1."))?.start ?? 30;
   const stingAt = hookEnd - 1.95;
   return (

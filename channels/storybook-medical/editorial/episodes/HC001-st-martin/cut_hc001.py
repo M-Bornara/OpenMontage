@@ -145,6 +145,7 @@ s("6.06", K + "s6.06.jpg", C([73, 48], 1.04, 1.16, centre=0.6))
 s("6.09", "img/M29.jpg", C([22, 35]), [], life=[dict(t="rain"), dict(t="glow", x=23.3, y=42, r=150)])
 s("6.10", "img/M30.jpg", C([62, 45]), [dict(t="counter", text=["27 YEARS"], at=12, every=99)], life=[dict(t="shift")])
 # 7 · case file photos
+s("7.01", "img/M30.jpg", None)
 s("7.02", K + "wI06.jpg", None)
 s("7.03", K + "s7.03.jpg", None)
 s("7.04", K + "wI07.jpg", None)
