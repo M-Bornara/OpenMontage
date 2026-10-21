@@ -2,7 +2,7 @@
 
 **131 beats**, on average **3.91 s** each (longest 12.72 s). Estimated generation cost: **$13.23** (new stills $0.12, clips $0.40 incl. their image, first+last-frame clips $0.73, props $0.24; reused / callbacks / maps / graphics are free).
 
-Sources: clip 6, flf 3, reuse 17, callback 7, new 66, trailer 1, newline 1, map 5, graphic 13, card 2, props 2, file 7, brand 1
+Sources: clip 6, flf 3, reuse 15, callback 9, new 66, trailer 1, newline 1, map 5, graphic 13, card 2, props 2, file 7, brand 1
 
 Transitions: cut 69, film dissolve 18, ink bleed 13, light dissolve 6, whip 5, page turn 4, dip to black 3, match 2, cut! 2, cold open: sound first 1, flash cuts 1, sting → bars open 1, flash 1, morph 1, dip to parchment 1, case-file drop 1, case-file exit 1, zoom-through 1
 
@@ -69,7 +69,7 @@ ch9  ▂▂▄▂▆▄
 | 0.05 | 0:11.4 | 2.08 | half the food | ECU | NIAGARA | the string held up to window light: half the pieces dissolved away, Beaumont's widened eyes soft behind | new | push>string | cut | ink circle 'half. gone.' · shine on string | █ |
 | 0.06 | 0:13.5 | 3.52 | and the man | WS | NIAGARA | Alexis gets up, tucks his shirt in, gathers an armful of firewood and walks out; Beaumont watches, notebook up | clip | static | cut |  | ▄ |
 | 0.07 | 0:17.0 | 4.8 | nobody cut him open | MCU | NIAGARA | Beaumont alone, watching the door Alexis just left by, notebook in hand | new | push>beaumont | cut | lamp flicker, motes | ▂ |
-| 0.08 | 0:21.8 | 1.76 | three years | CU | NIAGARA | the clean porthole close-up; a hand-drawn calendar flips 1822 → 1825 beside it | reuse:I19 | pull | film dissolve | counter 1822→1825 | ▄ |
+| 0.08 | 0:21.8 | 1.76 | three years | CU | NIAGARA | the clean porthole close-up; a hand-drawn calendar flips 1822 → 1825 beside it | callback:4.07 | pull | film dissolve | counter 1822→1825 | ▄ |
 | 0.09 | 0:23.6 | 3.26 | so how does a man | — |  | TRAILER: 4 flash-forwards, one per hit (musket flash · NO stamp · the dissolving vial · the contract); nothing from his death (kept as the surprise) | trailer | snap | flash cuts | letterbox · riser | █ |
 | 0.10 | 0:26.9 | 2.93 | own stomach | — | LAKE | NEW LINE: '…and why, for the rest of his life, he kept running away.' Handwritten over a lone canoe on the dark lake | newline | push | dip to black | hand-written line | ▆ |
 | 1.01 | 0:29.8 | 5.08 | mackinac island | EWS | MAC_SHORE | Mackinac Island at dawn: timber fort on the bluff, canoes on the beach, mist on the water | new | push>fort | sting → bars open | title card · location '1822' · fog low, light rays, gulls (sprites) | ▂ |
@@ -187,7 +187,7 @@ ch9  ▂▂▄▂▆▄
 | 8.08 | 7:58.0 | 3.36 | so that nobody | WS | STTHOMAS | the same churchyard: the grave closed with flowers, his red tuque on the fence | reuse:M34 | push | film dissolve (same place) | GLASSES GAG: on the fence post beside the tuque · leaves | ▁ |
 | 8.09 | 8:01.4 | 4.64 | after fifty-eight years | CU | STTHOMAS | close on the fresh grave: wildflowers, and his red tuque hung on the fence post | new | push>tuque | film dissolve | epitaph | ▁ |
 | 8.10 | 8:06.0 | 2.61 | the people who loved | WS | STTHOMAS | his grown children standing at the grave at sunset (no wife: the sources don't say she was alive in 1880) | new | pull | film dissolve | glow, leaves | ▁ |
-| 9.01 | 8:08.6 | 5.52 | every time someone | ECU |  | callback: the silk string, now in warm light | reuse:I01 | push | light dissolve (luma) | rays, motes | ▂ |
+| 9.01 | 8:08.6 | 5.52 | every time someone | ECU |  | callback: the silk string, now in warm light | callback:0.01 | push | light dissolve (luma) | rays, motes | ▂ |
 | 9.01b | 8:14.1 | 1.52 | a frontier island | EWS | MAC_SHORE | callback: Mackinac Island, now at sunset | callback:1.01 | pull | film dissolve | glow, gulls | ▂ |
 | 9.02 | 8:15.7 | 5.44 | it came from a man | WS | LAKE | Alexis paddling home at sunrise | props:canoe-solo | pan | film dissolve *(auto: set change)* | sprite paddles, glow | ▄ |
 | 9.03 | 8:21.1 | 4.32 | medicine owes | CU | FARM | his red tuque hanging on a nail by his door | new | push>tuque | film dissolve *(auto: set change)* | shine | ▂ |

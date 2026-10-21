@@ -130,12 +130,15 @@ shot("1.11", "Beaumont bursts in through the bright store doorway, light flaring
 shot("1.12", "Beaumont kneels on the floor over Alexis, who lies on his back, shirt torn (no injury visible from this angle); "
      "close to the camera on the right, MATT holds a lantern high so the doctor can see, its warm light on Beaumont's intense face.",
      ["B", "A", "matt"], matt_bold="MATT is clearly visible in this shot (his bold moment): close to camera on the right, holding the lantern high, face lit, worried")
-shot("1.13", "Over Beaumont's shoulder: Alexis's torn, scorched shirt pulled aside, and on his LEFT side below the ribs a fresh "
-     "gunshot wound, painted with restraint: a dark ragged opening, powder burns around it, a little blood, no gore, no organs.",
-     ["B", "A"], wound=True)
+shot("1.13", "High angle, looking DOWN over Beaumont's shoulder (his navy shoulder and the back of his head soft in the left "
+     "foreground): Alexis lies flat on his back on the floorboards, unconscious, face grey, eyes closed, his scorched shirt torn "
+     "open; on his LEFT side below the ribs a fresh gunshot wound, painted with restraint: a dark ragged opening, powder burns "
+     "around it, a little blood, no gore, no organs. Beaumont's hands press a cloth near it.", ["B", "A"], wound=True,
+     extras="Alexis is LYING DOWN, badly hurt; he is NOT standing or holding his shirt")
 shot("1.14", "The store gone silent: the men stand with their hats in their hands, heads bowed; Alexis lies on the floor covered "
      "with a grey wool blanket up to his chest, eyes closed.", ["A", "f1", "f2", "voy", "clerk"], crowd="exactly 5 people")
-shot("1.15a", "Close on Alexis's face as he lies on the floorboards, pale, EYES CLOSED, lips parted, red tuque fallen beside his head.", ["A"])
+shot("1.15a", "SAME FRAME as reference 1, only one change: Alexis's EYES ARE CLOSED, his face slack and pale, lips parted, as if "
+     "unconscious.", ["A"], first="s1.15b")
 shot("1.15b", "SAME FRAME as reference 1 (the first frame), only one change: Alexis's EYES ARE NOW WIDE OPEN in shock.", ["A"], first="s1.15a")
 shot("1.16", "Beaumont's face in lantern light, changing from worry to sharp curiosity, eyes narrowing as he thinks.", ["B"])
 # 2 · what happened next (Mackinac post hospital)
@@ -165,8 +168,9 @@ shot("3.06", "The white fort on its bluff above the straits, seen from the water
 shot("4.03", "Six small pieces of food tied along a cream-white silk string laid across the table, spaced apart and clearly "
      "different: a dark spiced beef cube, a pale fat salt-pork piece, a red raw-beef cube, a grey boiled-beef cube, a crust of "
      "stale bread, a green curl of raw cabbage. Each has a small blank paper tag.", [], people_free=True)
-shot("4.05", "The same six pieces on the cream-white string, pulled up after two hours: four are gone (just the empty loops of "
-     "string), the others half-dissolved and ragged.", [], people_free=True)
+shot("4.05", "SAME FRAME as reference 1 (the six foods on the string), only one change, two hours later: four of the pieces are "
+     "GONE (only their empty loops of string and blank tags remain) and the other two are half-dissolved, small and ragged.",
+     [], people_free=True, first="s4.03")
 shot("4.06", "Alexis sits up on the army cot looking unwell, one hand pressed on his belly, grimacing.", ["A"])
 shot("4.07a", "Beaumont's fingers hold a small white pill just above the opening in Alexis's side.", ["hands", "A"], porthole=True)
 shot("4.07b", "SAME FRAME as reference 1 (the first frame), only one change: the pill is gone, dropped inside; Beaumont's "
@@ -197,7 +201,8 @@ shot("5.08", "Alexis splits firewood in the fort yard with an axe, a pile of log
 shot("5.09", "Alexis carries a heavy sack across the stockade yard, bent under it; on the left Beaumont reads his notes, not looking up.",
      ["A", "B"], writing=True)
 shot("5.11b", "Alexis paddles hard at dusk, jaw set, one hand pressed against his side between strokes, the lake behind him.", ["A"])
-shot("5.13", "Alexis stands at the door of his house, a small defiant smile.", ["A"])
+shot("5.13", "Medium shot, waist up and LARGE in frame: Alexis leans in the doorway of his whitewashed log house, arms "
+     "folded, a small defiant smile, the door frame around him; only a sliver of the garden behind.", ["A"])
 shot("5.14", "A Washington government corridor: white columns, plaster walls, two clerks in the distance carrying papers.",
      [], extras="exactly two small distant clerks in dark coats, faces not detailed")
 shot("5.15", "Alexis stands in an ill-fitting army uniform, the sleeves too long over his hands, looking down at himself, unsure.",
@@ -241,12 +246,28 @@ shot("9.04", "Silhouette of a 1920s doctor in a white coat holding a long thin r
 # props (sprites on plain backgrounds, composited over the lake plate)
 shot("prop-canoe-family", "A birchbark canoe seen from the side: Alexis paddling in the stern, his wife and two small children "
      "sitting in the middle. Isolated on a plain flat light-grey background, no water, no shadow.", ["A", "wife", "kids"], sprite=True, crowd="exactly 4 people")
-shot("prop-canoe-solo", "A birchbark canoe seen from the side with Alexis alone paddling in the stern. Isolated on a plain flat "
-     "light-grey background, no water, no shadow.", ["A"], sprite=True)
+shot("prop-canoe-solo", "SAME IMAGE as reference 1, only one change: Alexis is ALONE in the canoe; the wife and the children "
+     "are gone and their places in the canoe are empty. Same canoe, same Alexis, same plain light-grey background.", ["A"],
+     sprite=True, first="prop-canoe-family")
+
+# the v1 close-ups the beat sheet reuses were SQUARE (1:1): recompose each one natively as 16:9 (never crop a square)
+WIDEN = {"I03a": "0.03", "I19": "0.08", "I06": "1.07", "I07": "2.06", "I20": "3.03", "I21": "3.04", "I12": "4.20", "I01": "9.01"}
+
+
+def widen_spec(name):
+    return {"aspect": "16:9", "resolution": "4K", "refs": [f"kf:{name}"],
+            "roles": "Reference 1 is an approved SQUARE close-up from this film.",
+            "prompt": ("Recompose EXACTLY this image as a native 16:9 widescreen frame: same subject, same size on screen, same "
+                       "light, colours and art style; extend the scene naturally to the left and right (more of the same table, "
+                       "wall or room), nothing new and nothing cropped from the subject. " + K.SAFE_FRAMING + " " +
+                       K.set_block("the same place as the reference", "same year", "exactly as in the reference") + " " +
+                       K.PERIOD + " " + K.RED_RULE + " No lettering, signs or labels anywhere."),
+            "beat": WIDEN[name]}
+
 
 BEAT = {"0.02a": "0.02", "0.02b": "0.02", "1.15a": "1.15", "1.15b": "1.15", "4.07a": "4.07", "4.07b": "4.07", "4.12b": "4.12",
         "prop-canoe-family": "5.11", "prop-canoe-solo": "9.02"}
-BATCHES = [("0.", "1."), ("2.", "3.", "4."), ("5.",), ("6.", "7.", "8.", "9.", "prop")]
+BATCHES = [("0.", "1."), ("2.", "3.", "4."), ("5.",), ("6.", "7.", "8.", "9.", "prop", "wI")]
 
 
 def build(sid, beats):
@@ -337,9 +358,26 @@ def build(sid, beats):
             "beat": bid}
 
 
+# ── clips (Kling v2.1, 5 s): source keyframe, motion, and for first+last clips the END keyframe (tail) ──
+CLIPS = {
+    "v0.01": ("s0.01", "The two hands pull the silk string tight around the beef cube and finish the knot with one firm tug."),
+    "v0.02": ("s0.02a", "The fingers slowly lower the string; the beef cube descends smoothly into the round opening and disappears "
+              "inside; the string stays taut. Alexis stays calm and still.", "s0.02b"),
+    "v0.06": ("s0.06", "The young man walks steadily toward the open door carrying the firewood; the doctor at the table turns his "
+              "head to follow him with his eyes."),
+    "v1.03": ("s1.03", "The canoes glide forward toward the beach, the voyageurs paddling in rhythm, spray flashing off the blades."),
+    "v1.10": ("s1.10", "The doctor runs down the dirt path toward the camera, bag swinging, coat flapping."),
+    "v1.15": ("s1.15a", "The young man's eyes slowly open wide in shock; nothing else moves.", "s1.15b"),
+    "v2.02": ("s2.02", "The young man coughs and leans forward over the basin; the doctor steadies the basin and his shoulder."),
+    "v4.07": ("s4.07a", "The fingers drop the small white pill into the round opening; it disappears inside; the fingers open.", "s4.07b"),
+    "v5.08": ("s5.08", "The man swings the axe down and splits the log in two; the halves fall apart."),
+}
+
+
 if __name__ == "__main__":
     beats = {b["id"]: b for b in json.load(open("projects/hc001-window-into-his-stomach/artifacts/beats.json", encoding="utf-8"))["beats"]}
     specs = {(sid if sid.startswith("prop") else "s" + sid): build(sid, beats) for sid in S}
+    specs.update({f"w{n}": widen_spec(n) for n in WIDEN})
     issues = K.lint_all(specs)
     print(len(specs), "shots ·", "lint:", issues or "clean")
     if "--show" in sys.argv:
@@ -348,6 +386,8 @@ if __name__ == "__main__":
     if "--write" in sys.argv:
         ep = json.load(open(P, encoding="utf-8"))
         ep["keyframes"].update(specs)
+        for cid, c in CLIPS.items():
+            ep["clips"][cid] = {"source": c[0], "motion": c[1] + " " + K.CLIP_HOLD, "aspect": "16:9", **({"tail": c[2]} if len(c) > 2 else {})}
         json.dump(ep, open(P, "w", encoding="utf-8"), indent=1, ensure_ascii=False)
         print("written ->", P)
     for i, pre in enumerate(BATCHES):

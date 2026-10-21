@@ -35,7 +35,7 @@ B("0.06", "and the man", "WS", "Alexis gets up, tucks his shirt in, gathers an a
 B("0.07", "nobody cut him open", "MCU", "Beaumont alone, watching the door Alexis just left by, notebook in hand", "beaumont@CL", "new",
   "push>beaumont", life="lamp flicker, motes", mood=2)
 B("0.08", "three years", "CU", "the clean porthole close-up; a hand-drawn calendar flips 1822 → 1825 beside it", "porthole@C",
-  "reuse:I19", "pull", "film dissolve", fx="counter 1822→1825", mood=3)
+  "callback:4.07", "pull", "film dissolve", fx="counter 1822→1825", mood=3)
 B("0.09", "so how does a man", "—", "TRAILER: 4 flash-forwards, one per hit (musket flash · NO stamp · the dissolving vial · the contract); nothing from his death (kept as the surprise)", "",
   "trailer", "snap", "flash cuts", fx="letterbox · riser", sfx="hits", mood=5, note="uses callbacks 1.07, 2.08, 4.12, 5.16")
 B("0.10", "own stomach", "—", "NEW LINE: '…and why, for the rest of his life, he kept running away.' Handwritten over a lone canoe on the dark lake",
@@ -261,7 +261,7 @@ B("8.09", "after fifty-eight years", "CU", "close on the fresh grave: wildflower
 # ═══ 9 · WHY IT MATTERS ═══════════════════════════════════════════════════════════════════════════════════
 B("8.10", "the people who loved", "WS", "his grown children standing at the grave at sunset (no wife: the sources don't say she was alive in 1880)", "family@C", "new", "pull",
   "film dissolve", life="glow, leaves", mood=1)
-B("9.01", "every time someone", "ECU", "callback: the silk string, now in warm light", "string@C", "reuse:I01", "push", "light dissolve (luma)",
+B("9.01", "every time someone", "ECU", "callback: the silk string, now in warm light", "string@C", "callback:0.01", "push", "light dissolve (luma)",
   life="rays, motes", mood=2)
 B("9.01b", "a frontier island", "EWS", "callback: Mackinac Island, now at sunset", "fort@CR", "callback:1.01", "pull", "film dissolve",
   life="glow, gulls", mood=2)
