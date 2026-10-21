@@ -241,7 +241,7 @@ B("7.08", "which brings us", "FILE", "the camera pushes into the folder photo: b
   sfx="whoosh; story music returns", mood=3)
 
 # ═══ 8 · THE LAST WORD ════════════════════════════════════════════════════════════════════════════════════
-B("8.01", "in june 1880", "WS", "the farmhouse at dusk; its one lit window goes out", "window@CR", "reuse:M31", "push", "film dissolve",
+B("8.01", "in june 1880", "WS", "the farmhouse at dusk; its one lit window goes out", "window@CR", "reuse:M31", "push", "cut! (continues the folder photo: same picture, same framing, no transition)",
   life="fog, window glow fading OUT", fx="chapter tag 8 · The Last Word", mood=1)
 B("8.02", "a young doctor", "MS", "Osler writing at his desk, gaslight", "osler@C", "new", "push>osler", fx="name tag DR. WILLIAM OSLER",
   mood=2)

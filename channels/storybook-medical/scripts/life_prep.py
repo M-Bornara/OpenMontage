@@ -80,3 +80,4 @@ def clean_plate(src: str, masks: list[str], out: str, width: int = 2880, grow: i
     res = np.array(im) * (1 - soft) + filled * soft
     Image.fromarray(res.astype(np.uint8)).filter(ImageFilter.SMOOTH).save(out, quality=92)
     return out
+

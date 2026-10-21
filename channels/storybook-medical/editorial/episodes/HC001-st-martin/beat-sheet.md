@@ -4,7 +4,7 @@
 
 Sources: clip 6, flf 3, reuse 17, callback 7, new 66, trailer 1, newline 1, map 5, graphic 13, card 2, props 2, file 7, brand 1
 
-Transitions: cut 69, film dissolve 19, ink bleed 13, light dissolve 6, whip 5, page turn 4, dip to black 3, match 2, cold open: sound first 1, flash cuts 1, sting → bars open 1, flash 1, cut! 1, morph 1, dip to parchment 1, case-file drop 1, case-file exit 1, zoom-through 1
+Transitions: cut 69, film dissolve 18, ink bleed 13, light dissolve 6, whip 5, page turn 4, dip to black 3, match 2, cut! 2, cold open: sound first 1, flash cuts 1, sting → bars open 1, flash 1, morph 1, dip to parchment 1, case-file drop 1, case-file exit 1, zoom-through 1
 
 ## Mood curve
 
@@ -177,7 +177,7 @@ ch9  ▂▂▄▂▆▄
 | 7.06 | 7:14.7 | 8.16 | the strangest bit | FILE |  | card: THE DOCTOR TASTED THE STOMACH → TRUE | file:callback:4.16 | static | cut | myth card (green) | █ |
 | 7.07 | 7:22.9 | 5.8 | even alexiss age | FILE |  | card: HIS AGE → THE RECORDS DISAGREE; three documents side by side | file:graphic | static | cut | myth card | ▄ |
 | 7.08 | 7:28.7 | 2.91 | which brings us | FILE |  | the camera pushes into the folder photo: back to the story | file:callback:8.01 | push | case-file exit |  | ▄ |
-| 8.01 | 7:31.6 | 4.32 | in june 1880 | WS | FARM | the farmhouse at dusk; its one lit window goes out | reuse:M31 | push | film dissolve | chapter tag 8 · The Last Word · fog, window glow fading OUT | ▁ |
+| 8.01 | 7:31.6 | 4.32 | in june 1880 | WS | FARM | the farmhouse at dusk; its one lit window goes out | reuse:M31 | push | cut! (continues the folder photo: same picture, same framing, no transition) | chapter tag 8 · The Last Word · fog, window glow fading OUT | ▁ |
 | 8.02 | 7:35.9 | 6.64 | a young doctor | MS | OSLER | Osler writing at his desk, gaslight | new | push>osler | film dissolve *(auto: set change)* | name tag DR. WILLIAM OSLER | ▂ |
 | 8.03 | 7:42.6 | 4.56 | he offered to pay | MS | MUSEUM | a museum shelf with an empty specimen jar | new | push>jar | ink bleed *(auto: set change)* | shine on the jar | ▄ |
 | 8.04 | 7:47.1 | 2.48 | the family said no | CU | FARM_IN | Osler's letter set down, unanswered, on a farmhouse table | new | static | ink bleed | stamp NO (quiet) | ▆ |

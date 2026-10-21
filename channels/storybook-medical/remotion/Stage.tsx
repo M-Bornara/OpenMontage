@@ -141,18 +141,23 @@ const PropEl: React.FC<{ s: PropSpec; t: number; T: number }> = ({ s, t, T }) =>
 
 // where each plate's real light sources are (% of frame): a glow sits on the lamp, motes and rays in the window light,
 // never on a person (a glow on someone is a focus effect, planned in the beat's fx, not ambient life)
-const PLATE_LIGHT: Record<string, { lamp?: [number, number]; window?: [number, number] }> = {
-  "plate-study": { lamp: [15, 50], window: [57, 30] }, "plate-sickroom16": { lamp: [88, 56], window: [40, 32] },
-  M17: { lamp: [12, 57], window: [62, 26] }, "plate-store16": { window: [82, 42] }, "plate-washington": { window: [12, 30] },
-  M31: { lamp: [86, 58] }, M29: { lamp: [22, 32] },
+// measured on a coordinate grid over each plate (automatic detection confuses lit pages and brass with flames)
+const PLATE_LIGHT: Record<string, { lights?: [number, number, number][]; window?: [number, number] }> = { // lights: x, y, size
+  "plate-study": { lights: [[13.5, 43.5, 1], [88, 73, 0.6]], window: [51, 30] },
+  "plate-sickroom16": { lights: [[40.8, 49, 1], [96, 60, 0.8]], window: [24, 30] },
+  M17: { lights: [[13.5, 43.7, 1], [88, 70, 0.6]] },
+  M31: { lights: [[88, 60, 0.7]] }, M29: { lights: [[22, 32, 0.8]] },
+  "plate-store16": { window: [82, 42] }, "plate-washington": { window: [12, 30] },
 };
 
 const lifeLayers = (life: string, bg: string) => {
   const L = life.toLowerCase();
   const out: React.ReactNode[] = [];
   const src = PLATE_LIGHT[bg] ?? {};
-  if (src.lamp && (L.includes("flicker") || L.includes("glow") || L.includes("lamp") || L.includes("candle") || L.includes("stove")))
-    out.push(<Glow key="g" x={src.lamp[0]} y={src.lamp[1]} r={260} strength={0.16} />);
+  if (L.includes("flicker") || L.includes("glow") || L.includes("lamp") || L.includes("candle") || L.includes("stove"))
+    (src.lights ?? []).forEach(([x, y, k], i) => {
+      out.push(<Glow key={`g${i}`} x={x} y={y} r={150 * k} strength={0.3 * k} speed={1 + i * 0.3} />);
+    });
   if (src.window && (L.includes("motes") || L.includes("dust"))) out.push(<Motes key="m" x={src.window[0]} y={src.window[1] + 10} r={14} n={24} />);
   if (src.window && (L.includes("rays") || L.includes("light")))
     out.push(<Rays key="r" x={src.window[0]} y={src.window[1] - 12} angle={src.window[0] < 50 ? 38 : -38} spread={18} n={4} length={120} strength={0.1} />);

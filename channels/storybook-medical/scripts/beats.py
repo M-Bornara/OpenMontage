@@ -125,8 +125,8 @@ def build(beats_path: str, pid: str, words_path: str | None = None):
     for k in range(1, len(timed)):
         a, b = timed[k - 1], timed[k]
         same = a["src"].endswith(":" + b["id"]) or b["src"].endswith(":" + a["id"]) or (a["src"] == b["src"] and a["src"].startswith("reuse:"))
-        if same and b["trans"].startswith(("dip", "page", "ink")):
-            problems.append(f"{b['id']}: '{b['trans']}' between two shots of the same picture: use a dissolve (or no transition)")
+        if same and b["trans"].startswith(("dip", "page", "ink", "film", "light")):
+            problems.append(f"{b['id']}: '{b['trans']}' between two shots of the same picture: continue the same frame instead (a dissolve onto the same picture ghosts)")
     # repeats: the same reused image inside 60 s, unless the beat is a declared callback
     seen = {}
     for b in timed:

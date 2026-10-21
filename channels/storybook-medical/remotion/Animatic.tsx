@@ -2,7 +2,7 @@
 // and overlays, with each planned picture drawn as a wireframe card (subjects as boxes at their planned positions,
 // the planned camera move applied, the source type badged). Reused images show as themselves. Free to render.
 import React, { useEffect, useState } from "react";
-import { AbsoluteFill, Audio, continueRender, delayRender, Freeze, Img, interpolate, OffthreadVideo, Sequence, staticFile, useCurrentFrame } from "remotion";
+import { AbsoluteFill, Audio, continueRender, delayRender, Easing, Freeze, Img, interpolate, OffthreadVideo, Sequence, staticFile, useCurrentFrame } from "remotion";
 import { loadFont } from "@remotion/google-fonts/Montserrat";
 import { loadFont as loadHand } from "@remotion/google-fonts/Caveat";
 import { loadFont as loadSerif } from "@remotion/google-fonts/LibreBaskerville";
@@ -55,7 +55,8 @@ const camOf = (b: Beat): Cam => {
   const yC = (SIZE[b.shot] ?? SIZE.MS)[2] - 8;
   const at = (name?: string) => { const c = cast.find((x) => x.n === name); return c ? c.x : name === "left" ? 25 : name === "right" ? 75 : 50; };
   if (b.cam.startsWith("pan:") && m) return { target: [at(m[2]), yC], panTo: [at(m[3]), yC], from: 1.25, to: 1.25, centre: 0.8 };
-  if (b.cam.startsWith("push")) return { target: [at(m?.[1] ?? cast[0]?.n), yC], from: 1.03, to: 1.2 };
+  // a shot that continues the previous frame (e.g. out of the Case File photo) starts exactly where it left off: scale 1
+  if (b.cam.startsWith("push")) return { target: [at(m?.[1] ?? cast[0]?.n), yC], from: b.trans.includes("continues") ? 1.0 : 1.03, to: 1.2 };
   if (b.cam === "pull") return { target: [cast[0]?.x ?? 50, yC], from: 1.2, to: 1.03 };
   if (b.cam === "snap") return { target: [cast[0]?.x ?? 50, yC], from: 1.03, to: 1.05, snapAt: 6, snapTo: 1.3 };
   return { target: [50, 50], from: 1.0, to: 1.0 };
@@ -380,16 +381,21 @@ export const Animatic: React.FC<AnimaticProps> = ({ beats: bp, words: wp, narrat
       {/* narration: split at the inserted line so everything after it stays in sync */}
       <Audio src={staticFile(narration)} endAt={ins ? fr(cut) : undefined} />
       {ins ? <Sequence from={fr(cut + insertSecs)}><Audio src={staticFile(narration)} startFrom={fr(cut)} /></Sequence> : null}
-      {music.map((m, i) => (
-        <Sequence key={i} from={fr(shift(m.from))} durationInFrames={fr(m.to - m.from)}>
-          <Audio src={staticFile(m.src)} startFrom={fr(m.offset ?? 0)} volume={(f) => 0.22 * interpolate(f, [0, 45, fr(m.to - m.from) - 45, fr(m.to - m.from)], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })} />
-        </Sequence>
-      ))}
+      {/* story cues CROSSFADE: each one runs 2 s past its end while the next fades in (no dip, no hard cut) */}
+      {music.map((m, i) => {
+        const len = fr(m.to - m.from) + (i < music.length - 1 ? 60 : 0);
+        return (
+          <Sequence key={i} from={fr(shift(m.from))} durationInFrames={len}>
+            <Audio src={staticFile(m.src)} startFrom={fr(m.offset ?? 0)}
+                   volume={(f) => 0.22 * interpolate(f, [0, 60, len - 60, len], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.inOut(Easing.sin) })} />
+          </Sequence>
+        );
+      })}
       {/* the hook has its own, faster music; it stops dead on the sting, and the story's music starts after it */}
       {hookMusic ? (
         <Sequence from={0} durationInFrames={fr(stingAt) + 2}>
           <Audio src={staticFile(hookMusic.src)} startFrom={fr(hookMusic.offset ?? 0)}
-                 volume={(f) => 0.3 * interpolate(f, [0, 8, fr(stingAt) - 4, fr(stingAt) + 2], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })} />
+                 volume={(f) => 0.3 * interpolate(f, [0, 8, fr(stingAt) - 40, fr(stingAt) + 2], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.inOut(Easing.sin) })} />
         </Sequence>
       ) : null}
       <SfxTrack beats={beats} />
