@@ -14,9 +14,9 @@ Updated 2026-10-20.
 - [ ] **Set list approval** (beat-sheet.md, "Sets" table: 27 places with year and look). Every prompt carries its set (lint L19).
 - [x] Set plates generated 2026-10-20 ($0.60): niagara, machosp (graded warmer, free), washrooms, platts (modern light
       switch removed, free), cabin. Originals kept as *.orig.png. Waiting for the user's look.
-- [ ] **Cast sheets (P2b): 7 prompts ready** (cast_hc001.py → episode.json): Alexis 1833, Beaumont 1833, Beaumont 1850s,
-      4 troupe line-ups (Mackinac 1822 · scholars + priest · soldiers, Israel, merchant · the 1880 diggers + grown children).
-      ~$0.47 (Gemini 3 Pro Image, 2K, batch).
+- [x] Cast sheets generated 2026-10-20 ($0.47): Alexis 1833, Beaumont 1833 / 1850s, 4 troupe line-ups. Free fixes: text
+      labels removed (Alexis sheet), a red patch removed (the daughter's dress). Originals kept as *.orig.png.
+- [ ] **Shot prompts, batch 1 of 4** (hook + chapter 1, ≤20 stills): write, lint, user approval, then generate.
 - [ ] Hook music: generate a real faster hook track (~$0.03) at the music gate (P7). The animatic uses a temp (mD from 0:25).
 - [ ] Cast sheets with **age versions**: Alexis 1822–25 / 1829–34 / old (1846–80); Beaumont 1822 / 1833 / 1850s.
 - [ ] 0.10 hook line, new wording without the death: "…and why, for the rest of his life, he kept running away." (needs OK + a Liam take)
