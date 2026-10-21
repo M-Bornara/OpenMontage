@@ -84,6 +84,7 @@ def lint(name: str, spec: dict) -> list[str]:
     refs = spec.get("refs", [])
     issues = []
     people_free = "no people" in p or "empty location plate" in p
+    model_sheet = "model sheet" in p  # sheets have no story framing and no set
     hero_in_shot = any("sheet-alexis" in r or "sheet-young-family" in r for r in refs)
     if STYLE_ANCHOR in refs and (people_free or not hero_in_shot):
         issues.append("L1: the style anchor (it shows the red-tuque voyageur) on a shot without that character: "
@@ -103,9 +104,9 @@ def lint(name: str, spec: dict) -> list[str]:
     if re.search(r"\b(map|contract|letters?|poster|signpost|label|document|title page)\b", p) and "wavy ink lines" not in p \
             and "no lettering" not in p and "only legible writing" not in p:
         issues.append("L8/L15: a writing-bearing prop without WAVY_WRITING or real_writing() ('illegible' still produces lorem ipsum)")
-    if spec.get("aspect", "16:9") in ("16:9", "9:16") and not people_free_plate(p) and "central 70%" not in p:
+    if spec.get("aspect", "16:9") in ("16:9", "9:16") and not people_free_plate(p) and not model_sheet and "central 70%" not in p:
         issues.append("L17: no SAFE_FRAMING (story subjects drift to the edges, where the camera can't zoom or focus on them)")
-    if spec.get("aspect", "16:9") == "16:9" and "set:" not in p and not re.match(r"(thumb|cover|sheet|ref)", name.lower()):
+    if spec.get("aspect", "16:9") == "16:9" and "set:" not in p and not model_sheet and not re.match(r"(thumb|cover|sheet|troupe|ref)", name.lower()):
         issues.append("L19: no SET line (set_block): without its place, year and look the model reuses one generic room")
     if "spectacles" in p and "amber" not in p and "no spectacles" not in p:
         issues.append("L11: spectacles that aren't Matt's (confuses the spot-the-glasses game)")
