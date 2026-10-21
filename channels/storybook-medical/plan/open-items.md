@@ -1,6 +1,6 @@
 # Open items: read at the start of every session; mention anything due or unresolved
 
-Updated 2026-10-20.
+Updated 2026-10-21.
 
 ## Decisions waiting for the user
 - [x] editing-v2 approved (2026-10-19); the original structure is kept (see section 0).
@@ -8,6 +8,10 @@ Updated 2026-10-20.
 - [ ] Hook: new lines (trailer flash-forwards + open loop). These need a script approval.
 - [ ] Liam: a hyped take for the hook / myth / ending, compared against the archived take.
 - [ ] The user reviews the 3 HC001 Shorts (not watched yet).
+
+## HC001 now
+- [ ] **User review of the real cut** (projects/_fxlab/renders/HC001-cut-v2.mp4, 8:47, -14 LUFS): notes by time. All generation done ($29.06).
+- [ ] Then: thumbnails (G-gates), publish package, the 3 Shorts re-check.
 
 ## Before ANY paid HC001 generation (so nothing is paid for twice)
 - [x] Animatic v3 reviewed (2026-10-20): 0:10 string pull, 0:20 stray glow, hook music + SFX, 8.01 dissolve fixed → v3.1.
