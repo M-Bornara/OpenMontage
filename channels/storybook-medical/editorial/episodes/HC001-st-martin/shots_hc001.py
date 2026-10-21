@@ -374,6 +374,10 @@ CLIPS = {
 }
 
 
+# usable part of each generated clip (reviewed): Kling dissolved the people out of the room near the end of these
+CLIP_USE = {"v2.02": [0, 3.7], "v5.08": [0, 3.0]}
+
+
 if __name__ == "__main__":
     beats = {b["id"]: b for b in json.load(open("projects/hc001-window-into-his-stomach/artifacts/beats.json", encoding="utf-8"))["beats"]}
     specs = {(sid if sid.startswith("prop") else "s" + sid): build(sid, beats) for sid in S}
@@ -388,6 +392,8 @@ if __name__ == "__main__":
         ep["keyframes"].update(specs)
         for cid, c in CLIPS.items():
             ep["clips"][cid] = {"source": c[0], "motion": c[1] + " " + K.CLIP_HOLD, "aspect": "16:9", **({"tail": c[2]} if len(c) > 2 else {})}
+            if cid in CLIP_USE:
+                ep["clips"][cid]["use"] = CLIP_USE[cid]
         json.dump(ep, open(P, "w", encoding="utf-8"), indent=1, ensure_ascii=False)
         print("written ->", P)
     for i, pre in enumerate(BATCHES):

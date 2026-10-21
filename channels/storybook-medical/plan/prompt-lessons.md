@@ -54,6 +54,7 @@ Every generation round teaches us something. A lesson only counts once it's **en
 | # | Symptom (where seen) | Cause | Fix | Enforced in |
 |---|---|---|---|---|
 | N1 | 20 % of sentences run into the next (< 0.3 s of silence), even with a line break after each one (HC001: 29 of 147) | v3 treats line breaks as soft; fast, excited delivery | A `[pause]` tag after each sentence: HC001 ch6 went from 5 tight to 0 (min 0.32 s, median 0.80 s), and the tag is not spoken. It costs about 16 % more length, so the owner judges the pace | `narrate` spacing check · owner listen |
+| K5 | Kling v2.1 standard faded the people OUT of the room in the last second (HC001 v2.02 at 3.8 s, v5.08 at 3.1 s), despite CLIP_HOLD | The model "finishes" a short action by emptying the scene | Review every clip to its last frame; record the usable window (`use`) and cut before it. The first+last-frame clips (pro) never did this | review · clip `use` |
 
 ## Edit and music lessons
 | # | Symptom | Cause | Fix | Enforced in |
