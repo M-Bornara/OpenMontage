@@ -1,7 +1,7 @@
 // Animatic (wireframe storyboard film) from artifacts/beats.json: the real narration, music, maps, sting, transitions
 // and overlays, with each planned picture drawn as a wireframe card (subjects as boxes at their planned positions,
 // the planned camera move applied, the source type badged). Reused images show as themselves. Free to render.
-import React, { useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { AbsoluteFill, Audio, continueRender, delayRender, Easing, Freeze, Img, interpolate, OffthreadVideo, Sequence, staticFile, useCurrentFrame } from "remotion";
 import { loadFont } from "@remotion/google-fonts/Montserrat";
 import { loadFont as loadHand } from "@remotion/google-fonts/Caveat";
@@ -12,6 +12,10 @@ import { MapScene } from "./MapScene";
 import { CaseFile, HandLine, Letterbox, MythCard, Stamp } from "./Sections";
 import { StageScene, StageSpec } from "./Stage";
 import { GraphicCard } from "./Graphics";
+import { CutShot, CutSpec } from "./Cut";
+
+// the real cut: per-beat shot specs (cut.json); final = no planning badges
+const ShotsCtx = createContext<{ shots: Record<string, CutSpec> | null; final: boolean }>({ shots: null, final: false });
 
 const { fontFamily: sans } = loadFont("normal", { weights: ["700", "900"] });
 const { fontFamily: hand } = loadHand("normal", { weights: ["700"] });
@@ -24,8 +28,9 @@ export type Beat = { id: string; at: string; shot: string; see: string; cast: st
                      set?: string; setName?: string; setYear?: string };
 type Word = { word: string; start: number; end: number };
 export type AnimaticProps = { beats: string; words: string; narration: string; insertAfter?: string; insertSecs?: number;
-                              music: { src: string; from: number; to: number; offset?: number }[]; totalSeconds: number;
-                              hookMusic?: { src: string; offset?: number } };
+                              music: { src: string; from: number; to: number; offset?: number; loop?: boolean }[]; totalSeconds: number;
+                              hookMusic?: { src: string; offset?: number }; shots?: string; final?: boolean; insertAudio?: string;
+                              wordFix?: Record<string, string> };
 
 const useJson = <T,>(path: string) => {
   const [d, setD] = useState<T | null>(null);
@@ -111,7 +116,7 @@ const reuseImg = (src: string) => {
 };
 
 // where and when the beat happens (sets_<ep>.py): the stand-in plate may repeat, the set never silently does
-const SetTag: React.FC<{ b: Beat }> = ({ b }) => (b.setName ? (
+const SetTag: React.FC<{ b: Beat }> = ({ b }) => (b.setName && !useContext(ShotsCtx).final ? (
   <div style={{ position: "absolute", left: 22, top: 66, background: "rgba(17,21,26,0.78)", borderLeft: `6px solid ${AMBER}`, padding: "5px 12px",
                 fontFamily: sans, fontWeight: 700, fontSize: 19, color: "#EFE6D2", opacity: 0.9 }}>
     SET · {b.setName} · {b.setYear}</div>) : null);
@@ -147,6 +152,10 @@ export const BeatCard: React.FC<{ b: Beat; all: Beat[] }> = ({ b, all }) => {
     if (b.cam === "snap") return { target: pos(), from: 1.03, to: 1.05, snapAt: 6, snapTo: 1.25 };
     return { target: [50, 50], from: 1.02, to: 1.05 };
   };
+  const { shots, final } = useContext(ShotsCtx);
+  const sp = shots?.[b.id];
+  if (sp && (b as any).trailerSlot) return <CutShot sp={sp} dur={dur} trailer />;
+  if (sp && b.shot !== "FILE" && (sp.img || sp.clip || sp.morph)) return <CutShot sp={sp} dur={Math.max(1, Math.round(b.dur * FPS))} />;
   if (kind === "graphic" || b.src === "file:graphic") {
     return <GraphicCard name={b.src === "file:graphic" ? "documents" : b.src.split(":")[1]} see={b.see} dur={dur} />;
   }
@@ -158,7 +167,7 @@ export const BeatCard: React.FC<{ b: Beat; all: Beat[] }> = ({ b, all }) => {
       <AbsoluteFill style={{ backgroundColor: "#000" }}>
         {ids.map((x, i) => (
           <Sequence key={x.id} from={i * slot} durationInFrames={slot}>
-            <BeatCard b={{ ...x, dur: slot / FPS, cam: "snap", fx: x.fx.includes("stamp") ? x.fx : "", see: "", life: "" } as Beat} all={all} />
+            <BeatCard b={{ ...x, dur: slot / FPS, cam: "snap", fx: x.fx.includes("stamp") ? x.fx : "", see: "", life: "", trailerSlot: true } as Beat} all={all} />
             <FlashIn />
           </Sequence>
         ))}
@@ -192,7 +201,8 @@ export const BeatCard: React.FC<{ b: Beat; all: Beat[] }> = ({ b, all }) => {
     const fileRef = b.src.match(/callback:([\w.]+)/)?.[1];
     const fileStage = b.stage ?? (fileRef ? all.find((x) => x.id === fileRef)?.stage : undefined);
     const fileImg = fileRef ? reuseImg(all.find((x) => x.id === fileRef)?.src ?? "") : null;
-    const photo = fileStage ? <StageScene s={fileStage} cam={{ target: [50, 50], from: 1.04, to: 1.08 }} dur={dur} />
+    const photo = sp?.img ? <Img src={staticFile(sp.img)} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
+      : fileStage ? <StageScene s={fileStage} cam={{ target: [50, 50], from: 1.04, to: 1.08 }} dur={dur} />
       : (fileImg ?? img) ? <Img src={staticFile((fileImg ?? img)!)} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
       : <AbsoluteFill style={{ background: "#3B4249", alignItems: "center", justifyContent: "center", fontFamily: sans, fontWeight: 700, fontSize: 40, color: "#C9CED2" }}>{label}</AbsoluteFill>;
     return (
@@ -300,10 +310,21 @@ const transOf = (t: string): [TransKind | null, number, boolean] => {
   return [null, 0, false];
 };
 
-const Captions: React.FC<{ words: Word[]; shift: (t: number) => number }> = ({ words, shift }) => {
+const Captions: React.FC<{ words: Word[]; shift: (t: number) => number; final?: boolean }> = ({ words, shift, final }) => {
   const f = useCurrentFrame();
   const t = f / FPS;
-  const w = words.filter((x) => shift(x.start) <= t + 1.2 && shift(x.end) >= t - 1.2);
+  let w = words.filter((x) => shift(x.start) <= t + 1.2 && shift(x.end) >= t - 1.2);
+  if (final) {
+    // final: one short phrase at a time (groups of up to 6 words, split at sentence ends), shown while it is spoken
+    const i = words.findIndex((x) => shift(x.end) + 0.35 >= t);
+    if (i < 0 || shift(words[i].start) > t + 0.15) return null;
+    let a = i;
+    while (a > 0 && i - a < 5 && !/[.?!]$/.test(words[a - 1].word) && (i - a) % 6 !== 5) a--;
+    a = i - ((i - a) % 6);
+    let e = a;
+    while (e < words.length - 1 && e - a < 5 && !/[.?!]$/.test(words[e].word)) e++;
+    w = words.slice(a, e + 1);
+  }
   if (!w.length) return null;
   return (
     <div style={{ position: "absolute", left: 0, right: 0, bottom: 26, textAlign: "center", fontFamily: sans, fontWeight: 700, fontSize: 30 }}>
@@ -313,10 +334,14 @@ const Captions: React.FC<{ words: Word[]; shift: (t: number) => number }> = ({ w
   );
 };
 
-export const Animatic: React.FC<AnimaticProps> = ({ beats: bp, words: wp, narration, insertAfter, insertSecs = 0, music, totalSeconds, hookMusic }) => {
+export const Animatic: React.FC<AnimaticProps> = ({ beats: bp, words: wp0, narration, insertAfter, insertSecs = 0, music, totalSeconds, hookMusic,
+                                                     shots: shotsPath, final = false, insertAudio, wordFix }) => {
   const data = useJson<{ beats: Beat[] }>(bp);
-  const words = useJson<Word[]>(wp);
-  if (!data || !words) return null;
+  const words0 = useJson<Word[]>(wp0);
+  const shotsJ = useJson<{ shots: Record<string, CutSpec> }>(shotsPath ?? "animatic/beats.json");
+  if (!data || !words0 || !shotsJ) return null;
+  // caption spelling fixes ("index:word"; "" drops the word)
+  const words = words0.map((w, i) => (wordFix && `${i}` in wordFix ? { ...w, word: wordFix[`${i}`] } : w)).filter((w) => w.word !== "");
   // insert time for a NEW narration line (beat `insertAfter`): everything after it shifts
   const ins = insertAfter ? data.beats.find((b) => b.id === insertAfter) : undefined;
   const cut = ins ? ins.start : 1e9;
@@ -338,9 +363,18 @@ export const Animatic: React.FC<AnimaticProps> = ({ beats: bp, words: wp, narrat
     b.spanDur = g[g.length - 1].end - g[0].start;
   });
   const fr = (t: number) => Math.round(t * FPS);
+  // music ducking: under the voice the music sits ~6 dB lower; it rises in the pauses (attack 4 frames, release 14)
+  const N = Math.ceil(totalSeconds * FPS) + 10;
+  const speech = new Float32Array(N);
+  words.forEach((w) => { for (let k = fr(shift(w.start)) - 2; k <= fr(shift(w.end)) + 6; k++) if (k >= 0 && k < N) speech[k] = 1; });
+  if (insertAudio && ins) for (let k = fr(cut) + 6; k < fr(cut) + 6 + fr(insertSecs - 0.4); k++) speech[k] = 1;
+  const env = new Float32Array(N);
+  for (let k = 1; k < N; k++) env[k] = speech[k] > env[k - 1] ? env[k - 1] + (1 - env[k - 1]) / 4 : env[k - 1] * (1 - 1 / 14);
+  const duck = (g: number) => 1 - 0.5 * env[Math.max(0, Math.min(N - 1, g))];
   const hookEnd = beats.find((b) => b.id.startsWith("1."))?.start ?? 30;
   const stingAt = hookEnd - 1.95;
   return (
+    <ShotsCtx.Provider value={{ shots: shotsPath ? shotsJ.shots : null, final }}>
     <AbsoluteFill style={{ backgroundColor: "#000" }}>
       {beats.map((b, k) => {
         const [tk, len, v2] = k > 0 && !(b as any).continues ? transOf(b.trans) : [null, 0, false];
@@ -381,13 +415,14 @@ export const Animatic: React.FC<AnimaticProps> = ({ beats: bp, words: wp, narrat
       {/* narration: split at the inserted line so everything after it stays in sync */}
       <Audio src={staticFile(narration)} endAt={ins ? fr(cut) : undefined} />
       {ins ? <Sequence from={fr(cut + insertSecs)}><Audio src={staticFile(narration)} startFrom={fr(cut)} /></Sequence> : null}
+      {ins && insertAudio ? <Sequence from={fr(cut) + 6}><Audio src={staticFile(insertAudio)} /></Sequence> : null}
       {/* story cues CROSSFADE: each one runs 2 s past its end while the next fades in (no dip, no hard cut) */}
       {music.map((m, i) => {
         const len = fr(m.to - m.from) + (i < music.length - 1 ? 60 : 0);
         return (
           <Sequence key={i} from={fr(shift(m.from))} durationInFrames={len}>
-            <Audio src={staticFile(m.src)} startFrom={fr(m.offset ?? 0)}
-                   volume={(f) => 0.22 * interpolate(f, [0, 60, len - 60, len], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.inOut(Easing.sin) })} />
+            <Audio src={staticFile(m.src)} startFrom={fr(m.offset ?? 0)} loop={m.loop}
+                   volume={(f) => (final ? 0.3 * duck(f + fr(shift(m.from))) : 0.22) * interpolate(f, [0, 60, len - 60, len], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.inOut(Easing.sin) })} />
           </Sequence>
         );
       })}
@@ -395,13 +430,14 @@ export const Animatic: React.FC<AnimaticProps> = ({ beats: bp, words: wp, narrat
       {hookMusic ? (
         <Sequence from={0} durationInFrames={fr(stingAt) + 2}>
           <Audio src={staticFile(hookMusic.src)} startFrom={fr(hookMusic.offset ?? 0)}
-                 volume={(f) => 0.3 * interpolate(f, [0, 8, fr(stingAt) - 40, fr(stingAt) + 2], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.inOut(Easing.sin) })} />
+                 volume={(f) => (final ? 0.36 * duck(f) : 0.3) * interpolate(f, [0, 8, fr(stingAt) - 40, fr(stingAt) + 2], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.inOut(Easing.sin) })} />
         </Sequence>
       ) : null}
       <SfxTrack beats={beats} />
-      <Captions words={words} shift={shift} />
-      <div style={{ position: "absolute", right: 24, bottom: 24, fontFamily: sans, fontWeight: 900, fontSize: 18, color: "rgba(255,255,255,0.45)", letterSpacing: 4 }}>ANIMATIC v3 · HC001</div>
+      <Captions words={words} shift={shift} final={final} />
+      {final ? null : <div style={{ position: "absolute", right: 24, bottom: 24, fontFamily: sans, fontWeight: 900, fontSize: 18, color: "rgba(255,255,255,0.45)", letterSpacing: 4 }}>ANIMATIC v3 · HC001</div>}
     </AbsoluteFill>
+    </ShotsCtx.Provider>
   );
 };
 
