@@ -10,7 +10,8 @@ Updated 2026-10-21.
 - [ ] The user reviews the 3 HC001 Shorts (not watched yet).
 
 ## HC001 now
-- [ ] **User review of the real cut** (projects/_fxlab/renders/HC001-cut-v2.mp4, 8:47, -14 LUFS): notes by time. All generation done ($29.06).
+- [x] User review of cut v2 (20 notes + music gaps) — fixed in v3 (2026-10-25).
+- [ ] **User review of cut v3** (projects/_fxlab/renders/HC001-cut-v3.mp4, 8:47, -14 LUFS; changed sections only: HC001-v3-changed-sections.mp4). HC001 $29.42. Open: 3 more same-set cuts flagged by the new jump-cut check (1.04, 2.02, 5.09) — user's call; optional upgrades of the lid (2.11) and chemistry (4.14) diagrams.
 - [ ] Then: thumbnails (G-gates), publish package, the 3 Shorts re-check.
 
 ## Before ANY paid HC001 generation (so nothing is paid for twice)
