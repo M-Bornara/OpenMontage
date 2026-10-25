@@ -11,8 +11,12 @@ Updated 2026-10-21.
 
 ## HC001 now
 - [x] User review of cut v2 (20 notes + music gaps) — fixed in v3 (2026-10-25).
-- [ ] **User review of cut v3** (projects/_fxlab/renders/HC001-cut-v3.mp4, 8:47, -14 LUFS; changed sections only: HC001-v3-changed-sections.mp4). HC001 $29.42. Open: 3 more same-set cuts flagged by the new jump-cut check (1.04, 2.02, 5.09) — user's call; optional upgrades of the lid (2.11) and chemistry (4.14) diagrams.
-- [ ] Then: thumbnails (G-gates), publish package, the 3 Shorts re-check.
+- [x] Cut approved: HC001-cut-v3.1.mp4 (v3 + Case File tab 'CASE FILE · ALEXIS ST. MARTIN', section-only render spliced in), 2026-10-25.
+- [x] Thumbnails: A main, B + C Test & compare (B kicker fixed to FORT NIAGARA · 1825).
+- [ ] **Upload package review** (projects/hc001-window-into-his-stomach/renders/deliverables-long/publish.md): title, description, chapters, sources, credits, tags, pinned comment, captions.srt.
+- [ ] rights.csv: 2 PENDING rows — user saves PDF copies of the fal.ai / Google / Kling terms.
+- [ ] Then: the 3 Shorts re-check.
+- [ ] Next episode: clean narration (no warble) — A/B the speed-up before recording (memory: narration-audio-processing).
 
 ## Before ANY paid HC001 generation (so nothing is paid for twice)
 - [x] Animatic v3 reviewed (2026-10-20): 0:10 string pull, 0:20 stray glow, hook music + SFX, 8.01 dissolve fixed → v3.1.

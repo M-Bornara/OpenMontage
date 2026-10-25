@@ -813,14 +813,19 @@ def _write_srt(words: list[dict], path: Path):
     cues, cur = [], []
     for w in words:
         cur.append(w)
-        if re.search(r"[.?!,]$", w["word"]) and len(cur) >= 3 or len(cur) >= 7 or cur[-1]["end"] - cur[0]["start"] > 3.0:
+        # a sentence end always closes the cue (one sentence never runs into the next); a comma closes it from 3 words
+        if re.search(r"[.?!]$", w["word"]) or re.search(r",$", w["word"]) and len(cur) >= 3 or len(cur) >= 7 or cur[-1]["end"] - cur[0]["start"] > 3.0:
             cues.append(cur)
             cur = []
     if cur:
         cues.append(cur)
     lines = []
     for i, c in enumerate(cues, 1):
-        lines += [str(i), f"{_srt_time(c[0]['start'])} --> {_srt_time(c[-1]['end'] + 0.15)}", " ".join(w["word"] for w in c), ""]
+        # hold each cue 0.15 s past its last word, but never into the next cue (players would stack two lines)
+        end = c[-1]["end"] + 0.15
+        if i < len(cues):
+            end = min(end, cues[i][0]["start"] - 0.02)
+        lines += [str(i), f"{_srt_time(c[0]['start'])} --> {_srt_time(max(end, c[-1]['end']))}", " ".join(w["word"] for w in c), ""]
     path.write_text("\n".join(lines), encoding="utf-8")
 
 
