@@ -35,7 +35,7 @@ B("0.06", "and the man", "WS", "Alexis gets up, tucks his shirt in, gathers an a
 B("0.07", "nobody cut him open", "MCU", "Beaumont alone, watching the door Alexis just left by, notebook in hand", "beaumont@CL", "new",
   "push>beaumont", life="lamp flicker, motes", mood=2)
 B("0.08", "three years", "CU", "the clean porthole close-up; a hand-drawn calendar flips 1822 → 1825 beside it", "porthole@C",
-  "callback:4.07", "pull", "film dissolve", fx="counter 1822→1825", mood=3)
+  "callback:4.07", "pull", "cut! (one camera move with 0.07: same picture)", fx="counter 1822→1825", mood=3)
 B("0.09", "so how does a man", "—", "TRAILER: 4 flash-forwards, one per hit (musket flash · NO stamp · the dissolving vial · the contract); nothing from his death (kept as the surprise)", "",
   "trailer", "snap", "flash cuts", fx="letterbox · riser", sfx="hits", mood=5, note="uses callbacks 1.07, 2.08, 4.12, 5.16")
 B("0.10", "own stomach", "—", "NEW LINE: '…and why, for the rest of his life, he kept running away.' Handwritten over a lone canoe on the dark lake",
@@ -79,7 +79,7 @@ B("1.16", "thats where", "MCU", "Beaumont's face turns from worry to curiosity",
 
 # ═══ 2 · WHAT HAPPENED NEXT ═══════════════════════════════════════════════════════════════════════════════
 B("2.01", "for 17 days", "MS", "Alexis bandaged in bed in the sickroom; days pass in the window", "alexis@C", "new", "push>alexis",
-  "page turn (chapter card)", life="candle flicker, light shift day/night", fx="counter DAY 1→17", mood=2)
+  "light dissolve (chapter card)", life="candle flicker, light shift day/night", fx="counter DAY 1→17", mood=2)
 B("2.02", "comes back out", "MS", "Alexis tries a spoon of broth, chokes and brings it back up; Beaumont catches the basin", "alexis@CR beaumont@L",
   "clip", "static", mood=3, note="the struggle (note 8); tasteful, no gore")
 B("2.03", "through the wound", "CU", "Beaumont's worried face as he changes the dressing", "beaumont@C", "new", "push>beaumont", mood=3)
@@ -102,7 +102,7 @@ B("2.13", "and beaumont realized", "MCU", "Beaumont at his desk looks up slowly;
   life="lamp flicker", mood=4)
 
 # ═══ 3 · THE SCIENCE, 1825 ═════════════════════════════════════════════════════════════════════════════════
-B("3.01", "heres the thing", "CARD", "chapter card 3 · The Science, 1825", "", "card", "static", "page turn", mood=2)
+B("3.01", "heres the thing", "CARD", "chapter card 3 · The Science, 1825", "", "card", "static", "light dissolve (chapter card)", mood=2)
 B("3.02", "doctors were still", "MS", "two rival professors (clearly different men: one fat and bald, one thin and white-haired) glaring across a table",
   "prof1@L prof2@R", "new", "pan:prof1>prof2", fx="rack focus prof1→prof2", mood=3, note="fixes the twin doctors (note 11)")
 B("3.03", "some said it grinds", "MS", "the bald professor demonstrates a millstone grinding grain", "prof1@CL", "reuse:I20", "push", "whip",
@@ -116,7 +116,7 @@ B("3.07", "what he had", "MS", "Alexis splits wood in the yard while Beaumont wa
 
 # ═══ 4 · THE EXPERIMENTS ══════════════════════════════════════════════════════════════════════════════════
 B("4.01", "remember the string", "ECU", "callback: the hands and the silk string", "hands@C", "callback:0.01", "static",
-  "page turn (chapter card)", mood=3)
+  "light dissolve (chapter card)", mood=3)
 B("4.02", "that was the first", "ECU", "Beaumont's journal: 'Aug. 1, 1825 — Exp. 1' writes itself on", "journal@C", "graphic:journal",
   "push", fx="handwriting write-on (real words)", sfx="quill", mood=2)
 B("4.03", "six foods", "ECU", "the six foods tied along the string, each with a little tag: spiced beef, salt pork, raw beef, boiled beef, stale bread, raw cabbage",
@@ -206,14 +206,15 @@ B("5.25", "beaumont never stopped", "MS", "Beaumont alone at his desk, a fresh s
 
 # ═══ 6 · WHAT THEY LEARNED ════════════════════════════════════════════════════════════════════════════════
 B("6.01", "in 1833 beaumont had", "GFX", "the 1833 title page, typeset by us in period type", "", "graphic:titlepage", "push",
-  "page turn (chapter card)", mood=2)
+  "light dissolve (chapter card)", mood=2)
 B("6.02", "doctors in europe", "MAP", "an Atlantic map: a dotted line America → London", "", "map:atlantic", "zoom", mood=2,
   note="second map spec (Atlantic)")
 B("6.03", "a london society", "MS", "a committee table, a purse of coins", "purse@C", "new", "push", fx="shine on the coins", mood=2)
 B("6.04", "kept writing to him", "MS", "Beaumont's desk; letters drop onto a pile, each stamped with its year", "", "graphic:letters",
   "static", fx="stack 1836…1852", sfx="paper", mood=3)
 B("6.05", "he sent his own son", "WS", "a young rider (Beaumont's son) on a country road", "son@C", "new", "pan", life="dust", mood=2)
-B("6.06", "alexis had his own farm", "MS", "Alexis at his farm fence, shaking his head", "alexis@C", "new", "push>alexis", mood=3)
+B("6.06", "alexis had his own farm", "MS", "Alexis at his farm fence, shaking his head", "alexis@C", "new", "push>alexis",
+  "light dissolve (same farm, new subject: a cut jumps)", mood=3)
 B("6.07", "in 1852 beaumont", "ECU", "the offer letter: 'five hundred dollars a year'", "letter@C", "graphic:journal", "push", fx="counter $150 → $500", mood=3)
 B("6.08", "his last letter", "ECU", "the line writes itself: 'Don’t disappoint me more.' The quill lifts", "letter@C", "graphic:journal",
   "push", mood=4)

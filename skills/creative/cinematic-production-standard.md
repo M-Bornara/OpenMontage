@@ -116,7 +116,6 @@ At most one highlight about every 20 s.
 | Smooth (filmic) dissolve | time passes in the same place |
 | Dip to black / to parchment | a death, a chapter end, entering a document |
 | Ink bleed | a scene change in an illustrated / painted style |
-| Page turn | to a chapter card, a book, a document |
 | Push-through (porthole / window / keyhole) | into a detail, inside a body, into a flashback |
 | Match cut (planned pair) | linking two shapes, eras or people |
 | Whip pan | energy, travel, "meanwhile" |
@@ -130,6 +129,11 @@ At most one highlight about every 20 s.
 when the mood is lowest; a few months → light dissolve; the same time in another place → ink bleed, or a whip when
 the energy is high. Hard cuts stay inside a set, or are marked as deliberate ("cut!", e.g. cutting on an action that
 carries across a doorway).
+
+**No page turns.** They read as a jump and look cheap: a chapter card fades in softly (light dissolve) or hard-cuts.
+
+**Same set, new subject, both wide or medium = a jump cut.** The background barely changes, so the subject seems to
+pop in. Dissolve, change the shot size, or cover the beat with a different picture (the beat builder warns about it).
 
 **Two shots of the same picture** (a callback, a frame that returns from a section) are joined by a dissolve or by
 nothing, never by a dip or a chapter-style transition: those read as a glitch.
@@ -170,7 +174,14 @@ Before showing any cut, check:
 - every section change is unmistakable;
 - the rhythm has peaks and valleys;
 - motion is smooth (frame-difference scan);
-- audio: music under the narration, SFX subtle, -14 LUFS.
+- audio: music under the narration, SFX subtle, -14 LUFS;
+- music covers every section (no cue shorter than its section; the render script refuses);
+- every sound effect has its picture on the same frame (a stamp thud when the stamp lands, never from the notes alone);
+- every mask follows its subject's outline (overlay sheet checked; a measured polygon when cut-out models fail);
+- a name card that introduces one person in a group highlights that person;
+- props on water sit in it (hull below the waterline, contact shadow, ripples, reflection, facing the way they move);
+- a map zooms slowly onto the named place and highlights it; a route shows where it starts and where it ends;
+- text over a bright picture has its own dark plate.
 
 ## 10 · Lessons loop
 

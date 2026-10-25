@@ -4,7 +4,7 @@
 
 Sources: clip 6, flf 3, reuse 15, callback 9, new 66, trailer 1, newline 1, map 5, graphic 13, card 2, props 2, file 7, brand 1
 
-Transitions: cut 69, film dissolve 18, ink bleed 13, light dissolve 6, whip 5, page turn 4, dip to black 3, match 2, cut! 2, cold open: sound first 1, flash cuts 1, sting → bars open 1, flash 1, morph 1, dip to parchment 1, case-file drop 1, case-file exit 1, zoom-through 1
+Transitions: cut 68, film dissolve 17, ink bleed 13, light dissolve 11, whip 5, cut! 3, dip to black 3, match 2, cold open: sound first 1, flash cuts 1, sting → bars open 1, flash 1, morph 1, dip to parchment 1, case-file drop 1, case-file exit 1, zoom-through 1
 
 ## Mood curve
 
@@ -20,6 +20,12 @@ ch7  ▆▆▆▆▆█▄▄
 ch8  ▁▂▄▆▂▂▄▁▁▁
 ch9  ▂▂▄▂▆▄
 ```
+
+## Checks that failed (to fix before the animatic is final)
+
+- 1.04: plain cut WS→MS inside set MAC_SHORE: same background, new subject = a jump; 'light dissolve' or a different shot size
+- 2.02: plain cut MS→MS inside set MAC_HOSP: same background, new subject = a jump; 'light dissolve' or a different shot size
+- 5.09: plain cut MS→MS inside set CRAWFORD: same background, new subject = a jump; 'light dissolve' or a different shot size
 
 ## Decisions for you
 
@@ -69,7 +75,7 @@ ch9  ▂▂▄▂▆▄
 | 0.05 | 0:11.4 | 2.08 | half the food | ECU | NIAGARA | the string held up to window light: half the pieces dissolved away, Beaumont's widened eyes soft behind | new | push>string | cut | ink circle 'half. gone.' · shine on string | █ |
 | 0.06 | 0:13.5 | 3.52 | and the man | WS | NIAGARA | Alexis gets up, tucks his shirt in, gathers an armful of firewood and walks out; Beaumont watches, notebook up | clip | static | cut |  | ▄ |
 | 0.07 | 0:17.0 | 4.8 | nobody cut him open | MCU | NIAGARA | Beaumont alone, watching the door Alexis just left by, notebook in hand | new | push>beaumont | cut | lamp flicker, motes | ▂ |
-| 0.08 | 0:21.8 | 1.76 | three years | CU | NIAGARA | the clean porthole close-up; a hand-drawn calendar flips 1822 → 1825 beside it | callback:4.07 | pull | film dissolve | counter 1822→1825 | ▄ |
+| 0.08 | 0:21.8 | 1.76 | three years | CU | NIAGARA | the clean porthole close-up; a hand-drawn calendar flips 1822 → 1825 beside it | callback:4.07 | pull | cut! (one camera move with 0.07: same picture) | counter 1822→1825 | ▄ |
 | 0.09 | 0:23.6 | 3.26 | so how does a man | — |  | TRAILER: 4 flash-forwards, one per hit (musket flash · NO stamp · the dissolving vial · the contract); nothing from his death (kept as the surprise) | trailer | snap | flash cuts | letterbox · riser | █ |
 | 0.10 | 0:26.9 | 2.93 | own stomach | — | LAKE | NEW LINE: '…and why, for the rest of his life, he kept running away.' Handwritten over a lone canoe on the dark lake | newline | push | dip to black | hand-written line | ▆ |
 | 1.01 | 0:29.8 | 5.08 | mackinac island | EWS | MAC_SHORE | Mackinac Island at dawn: timber fort on the bluff, canoes on the beach, mist on the water | new | push>fort | sting → bars open | title card · location '1822' · fog low, light rays, gulls (sprites) | ▂ |
@@ -89,7 +95,7 @@ ch9  ▂▂▄▂▆▄
 | 1.14 | 1:13.3 | 5.6 | by every rule | WS | MAC_STORE | the store gone quiet: men with hats in hands (distinct faces), Alexis covered on the floor | new | pull | cut | colour isolation on Alexis | ▄ |
 | 1.15 | 1:18.9 | 1.8 | he does | CU | MAC_STORE | Alexis's eyes open | flf | static | cut |  | ▆ |
 | 1.16 | 1:20.7 | 2.54 | thats where | MCU | MAC_STORE | Beaumont's face turns from worry to curiosity | new | push>beaumont | cut |  | ▆ |
-| 2.01 | 1:23.2 | 2.24 | for 17 days | MS | MAC_HOSP | Alexis bandaged in bed in the sickroom; days pass in the window | new | push>alexis | page turn (chapter card) | counter DAY 1→17 · candle flicker, light shift day/night | ▂ |
+| 2.01 | 1:23.2 | 2.24 | for 17 days | MS | MAC_HOSP | Alexis bandaged in bed in the sickroom; days pass in the window | new | push>alexis | light dissolve (chapter card) | counter DAY 1→17 · candle flicker, light shift day/night | ▂ |
 | 2.02 | 1:25.5 | 1.28 | comes back out | MS | MAC_HOSP | Alexis tries a spoon of broth, chokes and brings it back up; Beaumont catches the basin | clip | static | cut |  | ▄ |
 | 2.03 | 1:26.8 | 2.96 | through the wound | CU | MAC_HOSP | Beaumont's worried face as he changes the dressing | new | push>beaumont | cut |  | ▄ |
 | 2.04 | 1:29.7 | 2.88 | then slowly | WS | MAC_HOSP | morning light floods the sickroom; Alexis sits up eating porridge | new | push>alexis | light dissolve (luma) | light rays, motes | ▂ |
@@ -102,14 +108,14 @@ ch9  ▂▂▄▂▆▄
 | 2.11 | 1:47.5 | 7.44 | so his body found | GFX |  | pastel animated diagram: a fold of stomach lining slides over the hole like a lid | graphic:lid | static | film dissolve |  | ▄ |
 | 2.12 | 1:54.9 | 2.88 | press it with | GFX |  | the diagram: a fingertip presses, the lid opens | graphic:lid | static | cut |  | ▄ |
 | 2.13 | 1:57.8 | 3.41 | and beaumont realized | MCU | MAC_HOME | Beaumont at his desk looks up slowly; the idea lands | new | push>beaumont | cut | lamp flicker | ▆ |
-| 3.01 | 2:01.2 | 3.24 | heres the thing | CARD |  | chapter card 3 · The Science, 1825 | card | static | page turn |  | ▂ |
+| 3.01 | 2:01.2 | 3.24 | heres the thing | CARD |  | chapter card 3 · The Science, 1825 | card | static | light dissolve (chapter card) |  | ▂ |
 | 3.02 | 2:04.5 | 4.96 | doctors were still | MS | LECTURE | two rival professors (clearly different men: one fat and bald, one thin and white-haired) glaring across a table | new | pan:prof1>prof2 | cut | rack focus prof1→prof2 | ▄ |
 | 3.03 | 2:09.4 | 2.72 | some said it grinds | MS | LECTURE | the bald professor demonstrates a millstone grinding grain | reuse:I20 | push | whip |  | ▄ |
 | 3.04 | 2:12.1 | 3.6 | others said food | MS | LECTURE | the white-haired professor points at a pear wilting in a jar | reuse:I21 | push | whip |  | ▄ |
 | 3.05 | 2:15.7 | 4.96 | to settle it | MS | MAC_HOME | a closed door with lamplight under it | new | push>door | film dissolve *(auto: set change)* | light flicker under the door | ▄ |
 | 3.06 | 2:20.7 | 5.28 | beaumont had no | EWS | MAC_FORT | the timber fort on its bluff; a tiny Beaumont on the wall walk | new | pull | light dissolve *(auto: set change)* |  | ▂ |
 | 3.07 | 2:26.0 | 3.33 | what he had | MS | MAC_YARD | Alexis splits wood in the yard while Beaumont watches from a doorway, notebook up | reuse:M15 | pan:beaumont>alexis | light dissolve *(auto: set change)* | pulse (white) on Alexis | ▆ |
-| 4.01 | 2:29.3 | 1.92 | remember the string | ECU | NIAGARA | callback: the hands and the silk string | callback:0.01 | static | page turn (chapter card) |  | ▄ |
+| 4.01 | 2:29.3 | 1.92 | remember the string | ECU | NIAGARA | callback: the hands and the silk string | callback:0.01 | static | light dissolve (chapter card) |  | ▄ |
 | 4.02 | 2:31.2 | 4.08 | that was the first | ECU |  | Beaumont's journal: 'Aug. 1, 1825 — Exp. 1' writes itself on | graphic:journal | push | cut | handwriting write-on (real words) | ▂ |
 | 4.03 | 2:35.3 | 3.52 | six foods | ECU | NIAGARA | the six foods tied along the string, each with a little tag: spiced beef, salt pork, raw beef, boiled beef, stale bread, raw cabbage | new | pan:left>right | cut | stamp thud per food word | ▄ |
 | 4.05 | 2:38.8 | 4.08 | after 2 hours | ECU | NIAGARA | the string pulled up: some pieces gone, others half-dissolved | new | push | cut | watch flash 12→2 (on 'after 2 hours') · ink circles on the gone pieces | ▆ |
@@ -159,12 +165,12 @@ ch9  ▂▂▄▂▆▄
 | 5.23 | 5:43.9 | 3.04 | his wife was not | CU | CABIN | his wife at their cabin door, arms folded | new | push>wife | film dissolve *(auto: set change)* |  | ▆ |
 | 5.24 | 5:47.0 | 2.72 | he never worked | WS | CABIN | Alexis walks out of frame along a country road | new | static | cut |  | ▄ |
 | 5.25 | 5:49.7 | 3.19 | beaumont never stopped | MS | STLOUIS | Beaumont alone at his desk, a fresh sheet of paper | new | push>beaumont | film dissolve *(auto: set change)* | candle flicker | ▂ |
-| 6.01 | 5:52.9 | 9.84 | in 1833 beaumont had | GFX |  | the 1833 title page, typeset by us in period type | graphic:titlepage | push | page turn (chapter card) |  | ▂ |
+| 6.01 | 5:52.9 | 9.84 | in 1833 beaumont had | GFX |  | the 1833 title page, typeset by us in period type | graphic:titlepage | push | light dissolve (chapter card) |  | ▂ |
 | 6.02 | 6:02.7 | 3.04 | doctors in europe | MAP |  | an Atlantic map: a dotted line America → London | map:atlantic | zoom | cut |  | ▂ |
 | 6.03 | 6:05.8 | 4.88 | a london society | MS | LONDON | a committee table, a purse of coins | new | push | cut | shine on the coins | ▂ |
 | 6.04 | 6:10.7 | 2.8 | kept writing to him | MS |  | Beaumont's desk; letters drop onto a pile, each stamped with its year | graphic:letters | static | cut | stack 1836…1852 | ▄ |
 | 6.05 | 6:13.5 | 3.28 | he sent his own son | WS | FARM | a young rider (Beaumont's son) on a country road | new | pan | cut | dust | ▂ |
-| 6.06 | 6:16.7 | 3.92 | alexis had his own farm | MS | FARM | Alexis at his farm fence, shaking his head | new | push>alexis | cut |  | ▄ |
+| 6.06 | 6:16.7 | 3.92 | alexis had his own farm | MS | FARM | Alexis at his farm fence, shaking his head | new | push>alexis | light dissolve (same farm, new subject: a cut jumps) |  | ▄ |
 | 6.07 | 6:20.7 | 6.64 | in 1852 beaumont | ECU |  | the offer letter: 'five hundred dollars a year' | graphic:journal | push | cut | counter $150 → $500 | ▄ |
 | 6.08 | 6:27.3 | 4.64 | his last letter | ECU |  | the line writes itself: 'Don’t disappoint me more.' The quill lifts | graphic:journal | push | cut |  | ▆ |
 | 6.09 | 6:31.9 | 3.76 | six months later | WS | STLOUIS_ST | a dark St. Louis street in the rain, one lit window | reuse:M29 | push | dip to black | GLASSES GAG: on the rainy windowsill · rain, lamp glow | ▂ |

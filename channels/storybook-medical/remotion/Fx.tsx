@@ -125,13 +125,14 @@ export const Spotlight: React.FC<{ src: string; x: number; y: number; rx?: numbe
 };
 
 // ── Colour isolation: everything goes grey except the subject (mask) ───────────────────────────────────────
-export const Isolate: React.FC<{ src: string; mask: string; at: number; dur: number }> = ({ src, mask, at, dur }) => {
+// `soft`: the others only dim a little and keep some colour (to point out one person in a group, not a dramatic isolation).
+export const Isolate: React.FC<{ src: string; mask: string; at: number; dur: number; soft?: boolean }> = ({ src, mask, at, dur, soft }) => {
   const f = useCurrentFrame();
-  const k = env(f, at, dur, 10);
+  const k = env(f, at, dur, soft ? 14 : 10);
   if (k <= 0) return null;
   return (
     <>
-      <Img src={staticFile(src)} style={{ ...fill, filter: "grayscale(1) brightness(0.72) contrast(1.05)", opacity: k }} />
+      <Img src={staticFile(src)} style={{ ...fill, filter: soft ? "grayscale(0.55) brightness(0.58)" : "grayscale(1) brightness(0.72) contrast(1.05)", opacity: k }} />
       <Img src={staticFile(src)} style={{ ...fill, ...masked(mask), filter: `saturate(${1 + 0.25 * k})`, opacity: k }} />
     </>
   );

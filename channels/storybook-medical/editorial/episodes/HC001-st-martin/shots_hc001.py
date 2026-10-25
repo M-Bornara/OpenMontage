@@ -124,6 +124,10 @@ shot("1.06", "Inside the crowded fur-company store: by the counter the clerk fum
      "Dust in the light from the door.", ["A", "clerk", "f1", "voy"], crowd="about eight men in the store; the named ones are clearly placed, the rest generic")
 shot("1.08", "A spilled powder horn and a scatter of grey duck-shot pellets on the store's floorboards, a wisp of gun smoke curling "
      "above them.", [], people_free=True)
+shot("1.09c", "Low side view at waist height, the instant BEFORE the accident: the clerk on the right, half turned away, fumbles "
+     "the long musket held loosely at hip height, its muzzle pointing at Alexis's LEFT side less than an arm's length away; Alexis in "
+     "the left half turns toward it, startled, too close to step away. The short gap between muzzle and shirt is clearly visible "
+     "against the bright doorway behind. No smoke, no fire, no injury.", ["A", "clerk"], size="Medium shot, side view, both men from the knees up.")
 shot("1.10", "Beaumont runs up the steep dirt path from the white fort, his medical bag in hand, coat flapping, urgent.", ["B"], clip=True)
 shot("1.11", "Beaumont bursts in through the bright store doorway, light flaring behind him; the men inside turn and step back "
      "to make way.", ["B", "f1", "f2", "clerk"], crowd="Beaumont plus about six men inside")
@@ -171,6 +175,12 @@ shot("4.03", "Six small pieces of food tied along a cream-white silk string laid
 shot("4.05", "SAME FRAME as reference 1 (the six foods on the string), only one change, two hours later: four of the pieces are "
      "GONE (only their empty loops of string and blank tags remain) and the other two are half-dissolved, small and ragged.",
      [], people_free=True, first="s4.03")
+# v3 (user review 2026-10-24): the narration says the cabbage, bread, pork and boiled beef were gone after 2 hours, raw beef not
+shot("4.05c", "SAME FRAME as reference 1 (the six foods on the string, left to right: dark spiced beef, pale salt pork, red raw "
+     "beef, grey boiled beef, stale bread crust, green raw cabbage), only one change, two hours later: the 2nd (salt pork), 4th "
+     "(boiled beef), 5th (bread) and 6th (cabbage) pieces are completely GONE, only their empty loops of string and their blank "
+     "tags remain in the same places; the 1st (spiced beef) is half-dissolved, small and ragged; the 3rd (raw beef) is almost "
+     "unchanged, still a whole red cube. Every tag stays exactly where it was.", [], people_free=True, first="s4.03")
 shot("4.06", "Alexis sits up on the army cot looking unwell, one hand pressed on his belly, grimacing.", ["A"])
 shot("4.07a", "Beaumont's fingers hold a small white pill just above the opening in Alexis's side.", ["hands", "A"], porthole=True)
 shot("4.07b", "SAME FRAME as reference 1 (the first frame), only one change: the pill is gone, dropped inside; Beaumont's "
@@ -266,7 +276,7 @@ def widen_spec(name):
 
 
 BEAT = {"0.02a": "0.02", "0.02b": "0.02", "1.15a": "1.15", "1.15b": "1.15", "4.07a": "4.07", "4.07b": "4.07", "4.12b": "4.12",
-        "prop-canoe-family": "5.11", "prop-canoe-solo": "9.02"}
+        "prop-canoe-family": "5.11", "4.05c": "4.05", "1.09c": "1.06", "prop-canoe-solo": "9.02"}
 BATCHES = [("0.", "1."), ("2.", "3.", "4."), ("5.",), ("6.", "7.", "8.", "9.", "prop", "wI")]
 
 
@@ -327,7 +337,7 @@ def build(sid, beats):
         refs.append(GLASSES)
         roles.append("is Matt's amber spectacles (the hidden-glasses joke)")
     role_txt = " ".join(f"Reference {i + 1} {r}." for i, r in enumerate(roles))
-    parts = [SIZE.get(b["shot"], "") if not s.get("sprite") else "Side view, full object.", s["action"]]
+    parts = [s.get("size") or SIZE.get(b["shot"], "") if not s.get("sprite") else "Side view, full object.", s["action"]]
     if s.get("people_free"):
         parts.append(K.NO_PEOPLE.split(" Reference 1")[0])
     elif s.get("crowd"):

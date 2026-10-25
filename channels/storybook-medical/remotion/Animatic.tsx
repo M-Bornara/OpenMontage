@@ -11,7 +11,7 @@ import { ChapterCard, TransKind, Transition, TransitionV2 } from "./Transitions"
 import { MapScene } from "./MapScene";
 import { CaseFile, HandLine, Letterbox, MythCard, Stamp } from "./Sections";
 import { StageScene, StageSpec } from "./Stage";
-import { GraphicCard } from "./Graphics";
+import { CHEM_STAMP, GraphicCard } from "./Graphics";
 import { CutShot, CutSpec } from "./Cut";
 
 // the real cut: per-beat shot specs (cut.json); final = no planning badges
@@ -110,6 +110,10 @@ const Overlays: React.FC<{ b: Beat }> = ({ b }) => {
   return <>{els}</>;
 };
 
+// "stamp HIS OWN WORDS" on a graphic beat → the text; drawn at GRAPHIC_STAMP_AT frames into the beat
+const GRAPHIC_STAMP = (b: Beat) => b.fx.match(/stamps? ([A-Z$0-9][A-Z0-9 $/,.'-]+?)(?: ·|$| \()/)?.[1] ?? null;
+const GRAPHIC_STAMP_AT = 40;
+
 const reuseImg = (src: string) => {
   const m = src.match(/^reuse:(\w+)/);
   return m ? `img/${m[1]}.jpg` : null;
@@ -155,9 +159,28 @@ export const BeatCard: React.FC<{ b: Beat; all: Beat[] }> = ({ b, all }) => {
   const { shots, final } = useContext(ShotsCtx);
   const sp = shots?.[b.id];
   if (sp && (b as any).trailerSlot) return <CutShot sp={sp} dur={dur} trailer />;
+  // `cont`: this beat continues the previous beat's picture with ONE camera move over both (a hard cut would show nothing)
+  const contFrom = sp?.cont ? all.find((x) => x.id === sp.cont) : undefined;
+  const contTo = shots ? all.find((x) => shots[x.id]?.cont === b.id) : undefined;
+  if (sp && contFrom && shots?.[contFrom.id]) {
+    const off = Math.round((b.start - contFrom.start) * FPS);
+    const head = shots[contFrom.id];
+    const merged = { ...head, fx: [...head.fx, ...sp.fx.map((x) => ({ ...x, at: (x.at ?? 0) + off }))] };
+    return <Sequence from={-off}><CutShot sp={merged} dur={Math.max(1, Math.round((b.end - contFrom.start) * FPS))} /></Sequence>;
+  }
+  if (sp && contTo) return <CutShot sp={sp} dur={Math.max(1, Math.round((contTo.end - b.start) * FPS))} />;
   if (sp && b.shot !== "FILE" && (sp.img || sp.clip || sp.morph)) return <CutShot sp={sp} dur={Math.max(1, Math.round(b.dur * FPS))} />;
   if (kind === "graphic" || b.src === "file:graphic") {
-    return <GraphicCard name={b.src === "file:graphic" ? "documents" : b.src.split(":")[1]} see={b.see} dur={dur} />;
+    // a stamp named in the beat (e.g. HIS OWN WORDS on the journal) is drawn on top of the graphic, so its thud has a picture
+    const st = GRAPHIC_STAMP(b);
+    const g = b.src.split(":")[1];
+    return (
+      <AbsoluteFill>
+        <GraphicCard name={b.src === "file:graphic" ? "documents" : g} see={b.see} dur={dur}
+                     bg={g === "letters" ? "cut/s5.25.jpg" : undefined} cue={g === "letters" ? (b as any).cue : undefined} />
+        {st ? <Stamp text={st} at={GRAPHIC_STAMP_AT} x={50} y={72} size={96} /> : null}
+      </AbsoluteFill>
+    );
   }
   if (kind === "trailer") {
     // flash-forwards: the beats named in the note, each a short slice with a flash
@@ -188,19 +211,12 @@ export const BeatCard: React.FC<{ b: Beat; all: Beat[] }> = ({ b, all }) => {
     if (m) return <ChapterCard n={+m[1]} title={m[2]} font={sans} serif={serif} />;
   }
   if (mapRoute === "atlantic") {
-    // the Atlantic: the camera slides from the lakes to the open ocean; a dotted line runs off the map toward London
-    const p = interpolate(f, [10, dur - 10], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.inOut(Easing.sin) });
+    // the Atlantic: it starts ON Alexis's home (pin + rings), the camera pulls OUT so both ends of the crossing stay on screen,
+    // and a dotted sea route with a small ship draws itself from his home out across the ocean to "Europe"
     return (
-      <AbsoluteFill>
-        <MapScene data="map/hc001.json" cams={[{ f: 0, c: [1700, 760], z: 1.5 }, { f: dur, c: [2050, 820], z: 1.7 }]} routes={[]} labelsAt={0} borderAt={0}
-                  cities={[{ id: "plattsburgh", at: 0 }]} />
-        <svg viewBox="0 0 1920 1080" style={{ position: "absolute", inset: 0 }}>
-          <defs><clipPath id="atl"><rect x={0} y={0} width={480 + 1440 * p} height={1080} /></clipPath></defs>
-          <path d="M 480 395 Q 1200 300 1920 420" fill="none" stroke="#4A3820" strokeWidth={7} strokeDasharray="1 18" strokeLinecap="round" clipPath="url(#atl)" />
-        </svg>
-        <div style={{ position: "absolute", right: 70, top: 300, fontFamily: hand, fontWeight: 700, fontSize: 64, color: "#7A2E2A", opacity: p,
-                      transform: "rotate(-4deg)" }}>to London →</div>
-      </AbsoluteFill>
+      <MapScene data="map/hc001.json" cams={[{ f: 0, c: [1712, 330], z: 2.4 }, { f: dur, c: [2000, 470], z: 1.25 }]} routes={[]} labelsAt={0} borderAt={0}
+                cities={[{ id: "berthier", at: 0 }]} highlight={[{ id: "berthier", at: 2 }]}
+                arcs={[{ from: [1712, 311], to: [2930, 420], bend: 170, at: 8, dur: Math.max(30, dur - 22), label: "to Europe →" }]} />
     );
   }
   if (mapRoute && mapRoute !== "atlantic") {
@@ -208,12 +224,16 @@ export const BeatCard: React.FC<{ b: Beat; all: Beat[] }> = ({ b, all }) => {
       crew: (mapRoute === "1825" ? "solo" : "family") as "solo" | "family", year: mapRoute, legend: mapRoute,
       ...(mapRoute === "1829" ? { counter: { to: 2000, label: "MILES · NEARLY" } } : {}) }];
     const cams = mapRoute === "1825" ? [{ f: 0, c: [1690, 400] as [number, number], z: 3.4 }, { f: dur, c: [1700, 390] as [number, number], z: 3.7 }]
-      : mapRoute === "overview" ? [{ f: 0, c: [1200, 690] as [number, number], z: 1.05 }, { f: dur, c: [1150, 520] as [number, number], z: 2.6 }]
+      // overview: a slow, even zoom straight onto Fort Mackinac (the straits between Lake Michigan and Lake Huron); it
+      // lands at 75% of the beat and holds, while rings pulse on the island
+      : mapRoute === "overview" ? [{ f: 0, c: [1060, 520] as [number, number], z: 1.15 }, { f: Math.round(dur * 0.75), c: [853, 345] as [number, number], z: 3.0 },
+                                   { f: dur, c: [853, 345] as [number, number], z: 3.08 }]
         : [{ f: 0, c: [1040, 600] as [number, number], z: 1.25 }, { f: dur, c: [1040, 600] as [number, number], z: 1.3 }];
     return <MapScene data="map/hc001.json" cams={cams} routes={routes} labelsAt={0} borderAt={0} borderPulse={mapRoute === "1825" ? Math.round(dur * 0.4) : undefined}
                      cities={mapRoute === "overview" ? [{ id: "mackinac", at: 10 }] : mapRoute === "1825" ? [{ id: "plattsburgh", at: 0 }, { id: "berthier", at: 4 }]
                        : mapRoute === "1829" ? [{ id: "berthier", at: 0 }, { id: "crawford", at: 10 }] : [{ id: "crawford", at: 0 }, { id: "montreal", at: dur - 40 }]}
-                     follow={mapRoute === "1831" ? { id: "1831", from: 0, to: dur, z: 2.0 } : undefined} />;
+                     follow={mapRoute === "1831" ? { id: "1831", from: 0, to: dur, z: 2.0 } : undefined}
+                     highlight={mapRoute === "overview" ? [{ id: "mackinac", at: 12 }] : []} />;
   }
   if (b.shot === "FILE") {
     // Matt's Case File: the folder is already open; each beat is one myth card (parsed from the beat's description)
@@ -294,10 +314,27 @@ const Sfx: React.FC<{ at: number; name: string; vol: number }> = ({ at, name, vo
     <Audio src={staticFile(`sfx/${name}.mp3`)} volume={vol} />
   </Sequence>
 );
-const SfxTrack: React.FC<{ beats: Beat[] }> = ({ beats }) => {
+// Final cut: a sound plays on the frame its picture happens (user, 2026-10-24: "a stamp sound with no visual"). Every stamp
+// thuds when it LANDS (spring settles ~4 frames after it appears), the CHEMISTRY stamp of the diagram too, and every snap
+// zoom gets a whoosh; nothing is guessed from the beat's notes.
+const STAMP_LAND = 4;
+const SfxTrack: React.FC<{ beats: Beat[]; shots?: Record<string, CutSpec> | null }> = ({ beats, shots }) => {
   const out: React.ReactNode[] = [];
   beats.forEach((b) => {
     const at = b.start + 0.2; // on the key word
+    const sp = shots?.[b.id];
+    if (shots && b.src !== "trailer") {
+      const t = (fr: number) => b.start + fr / FPS;
+      (sp?.fx ?? []).filter((x) => x.t === "stamp").forEach((x, i) => out.push(<Sfx key={`${b.id}st${i}`} at={t(x.at + STAMP_LAND)} name="stamp-thud" vol={x.quiet ? 0.32 : 0.5} />));
+      if (sp?.cam?.snapAt != null) out.push(<Sfx key={`${b.id}snap`} at={t(sp.cam.snapAt) - 0.1} name="whoosh" vol={0.42} />);
+      if (b.src === "graphic:chemistry") out.push(<Sfx key={`${b.id}chem`} at={b.start + b.dur * CHEM_STAMP + 3 / FPS} name="stamp-thud" vol={0.5} />);
+      if (b.src.startsWith("graphic:") && GRAPHIC_STAMP(b)) out.push(<Sfx key={`${b.id}gst`} at={t(GRAPHIC_STAMP_AT + STAMP_LAND)} name="stamp-thud" vol={0.5} />);
+      // the other sound words (watch, glass, wind…) still come from the notes; stamps never do
+      const L = b.sfx.toLowerCase();
+      const seen = new Set<string>();
+      SFX.forEach(([re, name, vol]) => { if (name !== "stamp-thud" && re.test(L) && !seen.has(name)) { seen.add(name); out.push(<Sfx key={`${b.id}${name}`} at={at} name={name} vol={vol} />); } });
+      return;
+    }
     if (b.src === "trailer") {
       const n = (b.note.match(/[\d]+\.[\d]+b?/g) ?? []).length || 1;
       const slot = b.dur / n;
@@ -368,6 +405,12 @@ export const Animatic: React.FC<AnimaticProps> = ({ beats: bp, words: wp0, narra
   const shift = (t: number) => (t >= cut ? t + insertSecs : t);
   const beats = data.beats.map((b) => ({ ...b, start: b.id === insertAfter ? b.start : shift(b.start), end: b.id === insertAfter ? b.start + insertSecs + (b.end - b.start) : b.start < cut ? b.end : shift(b.end) }));
   beats.forEach((b) => { b.dur = b.end - b.start; });
+  // the letters graphic lands its last letter (1846) on the spoken "1846"
+  beats.forEach((b: any) => {
+    if (b.src !== "graphic:letters") return;
+    const w = words.find((x) => /1846/.test(x.word) && shift(x.start) >= b.start - 0.5 && shift(x.start) <= b.end + 1);
+    if (w) b.cue = Math.round((shift(w.start) - b.start) * FPS);
+  });
   // group consecutive beats on the same image (a callback to the beat just before, or the same reused image)
   const imgKey = (b: Beat) => (b.src.startsWith("callback:") ? beats.find((x) => x.id === b.src.split(":")[1])?.src ?? b.src : b.src);
   for (let k = 0; k < beats.length; k++) {
@@ -392,12 +435,14 @@ export const Animatic: React.FC<AnimaticProps> = ({ beats: bp, words: wp0, narra
   for (let k = 1; k < N; k++) env[k] = speech[k] > env[k - 1] ? env[k - 1] + (1 - env[k - 1]) / 4 : env[k - 1] * (1 - 1 / 14);
   const duck = (g: number) => 1 - 0.5 * (env[Math.max(0, Math.min(N - 1, Math.round(g)))] || 0);
   const hookEnd = beats.find((b) => b.id.startsWith("1."))?.start ?? 30;
-  const stingAt = hookEnd - 1.95;
+  // the sting (54 frames) ends exactly where chapter 1 starts, and chapter 1 starts with a hard cut out of it: nothing of
+  // the hook's last shot may show between the sting and the first story shot (user review 2026-10-24, the 0:31 leak)
+  const stingAt = hookEnd - 54 / FPS;
   return (
     <ShotsCtx.Provider value={{ shots: shotsPath ? shotsJ.shots : null, final }}>
     <AbsoluteFill style={{ backgroundColor: "#000" }}>
       {beats.map((b, k) => {
-        const [tk, len, v2] = k > 0 && !(b as any).continues ? transOf(b.trans) : [null, 0, false];
+        const [tk, len, v2] = k > 0 && !(b as any).continues && b.start !== hookEnd ? transOf(b.trans) : [null, 0, false];
         const prev = beats[k - 1];
         return (
           <React.Fragment key={b.id}>
@@ -453,7 +498,7 @@ export const Animatic: React.FC<AnimaticProps> = ({ beats: bp, words: wp0, narra
                  volume={(f) => (final ? 0.36 * duck(f) : 0.3) * interpolate(f, [0, 8, fr(stingAt) - 40, fr(stingAt) + 2], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.inOut(Easing.sin) })} />
         </Sequence>
       ) : null}
-      <SfxTrack beats={beats} />
+      <SfxTrack beats={beats} shots={final && shotsPath ? shotsJ.shots : null} />
       <Captions words={words} shift={shift} final={final} />
       {final ? null : <div style={{ position: "absolute", right: 24, bottom: 24, fontFamily: sans, fontWeight: 900, fontSize: 18, color: "rgba(255,255,255,0.45)", letterSpacing: 4 }}>ANIMATIC v3 · HC001</div>}
     </AbsoluteFill>

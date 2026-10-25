@@ -127,6 +127,14 @@ def build(beats_path: str, pid: str, words_path: str | None = None):
         same = a["src"].endswith(":" + b["id"]) or b["src"].endswith(":" + a["id"]) or (a["src"] == b["src"] and a["src"].startswith("reuse:"))
         if same and b["trans"].startswith(("dip", "page", "ink", "film", "light")):
             problems.append(f"{b['id']}: '{b['trans']}' between two shots of the same picture: continue the same frame instead (a dissolve onto the same picture ghosts)")
+    # jump cut: a plain cut between two DIFFERENT pictures of the same set where both are wide/medium (the background fills
+    # the frame and barely changes, so the subject seems to pop) — dissolve, or change the shot size (user review 2026-10-24)
+    for k in range(1, len(timed)):
+        a, b = timed[k - 1], timed[k]
+        if (b["trans"] == "cut" and a.get("set") and a.get("set") == b.get("set") and a["shot"] in ("WS", "MS", "MWS")
+                and b["shot"] in ("WS", "MS", "MWS") and not b["src"].startswith("callback:") and a["src"] != b["src"]):
+            problems.append(f"{b['id']}: plain cut {a['shot']}→{b['shot']} inside set {b['set']}: same background, new subject = a jump; "
+                            f"'light dissolve' or a different shot size")
     # repeats: the same reused image inside 60 s, unless the beat is a declared callback
     seen = {}
     for b in timed:

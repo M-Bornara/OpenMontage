@@ -1,7 +1,7 @@
 // Motion graphics for beats with src "graphic:NAME" (free, drawn in code): journal write-on, the healed-opening lid
 // diagram, the chemistry diagram, the point-blank distance diagram, the triptych, the 1833 title page, letters, documents.
 import React from "react";
-import { AbsoluteFill, Easing, interpolate, useCurrentFrame } from "remotion";
+import { AbsoluteFill, Easing, Img, interpolate, staticFile, useCurrentFrame } from "remotion";
 import { loadFont as loadHand } from "@remotion/google-fonts/Caveat";
 import { loadFont as loadSerif } from "@remotion/google-fonts/LibreBaskerville";
 import { loadFont } from "@remotion/google-fonts/Montserrat";
@@ -63,6 +63,7 @@ const Lid: React.FC<{ dur: number; press?: boolean }> = ({ dur, press }) => {
   );
 };
 
+export const CHEM_STAMP = 0.75; // the CHEMISTRY stamp lands at this fraction of the beat
 const Chemistry: React.FC<{ dur: number }> = ({ dur }) => {
   const f = useCurrentFrame();
   const s = (a: number, b: number) => interpolate(f, [a, b], [0, 1], clamp);
@@ -86,9 +87,12 @@ const Chemistry: React.FC<{ dur: number }> = ({ dur }) => {
           <text x={1570} y={630} textAnchor="middle" fontFamily={hand} fontWeight={700} fontSize={56} fill={INK}>rotting?</text>
           <line x1={1440} y1={320} x2={1700} y2={580} stroke="#7A2E2A" strokeWidth={14} opacity={s(dur * 0.57, dur * 0.57 + 6)} />
         </g>
-        <g opacity={s(dur * 0.75, dur * 0.75 + 8)} transform={`rotate(-6, 960, 860)`}>
-          <rect x={700} y={790} width={520} height={130} fill="none" stroke="#7A2E2A" strokeWidth={10} rx={14} />
-          <text x={960} y={880} textAnchor="middle" fontFamily={sans} fontWeight={900} fontSize={84} fill="#7A2E2A" letterSpacing={6}>CHEMISTRY</text>
+        {/* the stamp lands (and thuds: CHEM_STAMP is the sound cue) with the word fitted inside its frame */}
+        <g opacity={s(dur * CHEM_STAMP, dur * CHEM_STAMP + 3)}
+           transform={`rotate(-6, 960, 860) translate(960 855) scale(${interpolate(f, [dur * CHEM_STAMP, dur * CHEM_STAMP + 5], [1.5, 1], clamp)}) translate(-960 -855)`}>
+          <rect x={660} y={790} width={600} height={130} fill="none" stroke="#7A2E2A" strokeWidth={10} rx={14} />
+          <text x={960} y={884} textAnchor="middle" fontFamily={sans} fontWeight={900} fontSize={84} fill="#7A2E2A"
+                textLength={520} lengthAdjust="spacingAndGlyphs">CHEMISTRY</text>
         </g>
         <text x={960} y={140} textAnchor="middle" fontFamily={sans} fontWeight={900} fontSize={40} letterSpacing={10} fill="#7A5A2A">GASTRIC JUICE</text>
       </svg>
@@ -147,15 +151,40 @@ const TitlePage: React.FC<{ dur: number }> = ({ dur }) => {
   );
 };
 
-const Letters: React.FC<{ dur: number }> = ({ dur }) => {
+// Letters land one by one on Beaumont's own desk (his candlelit St. Louis desk, soft and dark behind them); each is a folded
+// letter with ink lines, a wax seal and a postmark with its year; they pile up on the desk to his right, clear of his face. The last one (1846) lands on the word "1846" (`cue`).
+const Letters: React.FC<{ dur: number; bg?: string; cue?: number }> = ({ dur, bg, cue }) => {
   const f = useCurrentFrame();
-  const years = ["1836", "1837", "1838", "1839", "1840", "1842", "1846", "1851", "1852"];
+  const years = ["1836", "1838", "1840", "1842", "1844", "1846"];
+  const last = Math.min(dur - 6, cue ?? dur - 12);
+  const step = (last - 4) / (years.length - 1);
   return (
-    <AbsoluteFill style={{ background: "#3A3027" }}>
-      {years.map((y, i) => { const at = 6 + i * ((dur - 20) / years.length); const p = interpolate(f, [at, at + 8], [0, 1], { ...clamp, easing: Easing.out(Easing.back(1.4)) });
-        return (<div key={y} style={{ position: "absolute", left: `${36 + (i % 3) * 2}%`, top: `${30 - i * 1.2 + (1 - p) * -40}%`, width: "28%", height: "34%", background: "#F2EAD6",
-                                      border: `3px solid ${INK}`, transform: `rotate(${((i * 37) % 14) - 7}deg)`, opacity: p, boxShadow: "0 8px 18px rgba(0,0,0,0.4)" }}>
-          <div style={{ position: "absolute", right: 14, top: 10, fontFamily: sans, fontWeight: 900, fontSize: 30, color: "#7A2E2A" }}>{y}</div></div>); })}
+    <AbsoluteFill style={{ background: "#1E1914", overflow: "hidden" }}>
+      {bg ? <Img src={staticFile(bg)} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover",
+                                               filter: "blur(5px) brightness(0.5) saturate(0.85)", transform: `scale(${interpolate(f, [0, dur], [1.08, 1.14])})` }} /> : null}
+      <AbsoluteFill style={{ background: "radial-gradient(ellipse at 50% 55%, rgba(0,0,0,0) 30%, rgba(0,0,0,0.55) 100%)" }} />
+      {years.map((y, i) => {
+        const at = 4 + i * step - 8;
+        const p = interpolate(f, [at, at + 8], [0, 1], { ...clamp, easing: Easing.out(Easing.back(1.2)) });
+        if (p <= 0) return null;
+        return (
+          <div key={y} style={{ position: "absolute", left: `${54 + ((i * 3) % 5) - 2}%`, top: `${42 - i * 0.9 + (1 - p) * -45}%`, width: "30%", height: "38%",
+                                background: "linear-gradient(160deg, #F6EEDB 0%, #E9DCBC 100%)", borderRadius: 4, border: "1px solid rgba(60,40,20,0.5)",
+                                transform: `rotate(${((i * 37) % 14) - 7}deg)`, boxShadow: "0 12px 26px rgba(0,0,0,0.5)" }}>
+            {/* the fold, ink lines, seal and postmark */}
+            <div style={{ position: "absolute", left: 0, right: 0, top: "50%", height: 2, background: "rgba(90,70,40,0.25)" }} />
+            {Array.from({ length: 6 }, (_, k) => (
+              <div key={k} style={{ position: "absolute", left: "10%", width: `${60 + ((k * 23 + i * 11) % 25)}%`, top: `${20 + k * 10 + (k > 2 ? 6 : 0)}%`, height: 3,
+                                    borderRadius: 2, background: "rgba(46,36,22,0.45)" }} />
+            ))}
+            <div style={{ position: "absolute", left: "44%", bottom: "8%", width: 46, height: 46, borderRadius: "50%", background: "radial-gradient(circle at 35% 35%, #B9483C, #7A2420)",
+                          boxShadow: "0 2px 4px rgba(0,0,0,0.4)" }} />
+            <div style={{ position: "absolute", right: "6%", top: "6%", width: 118, height: 118, borderRadius: "50%", border: "4px solid rgba(122,46,42,0.85)",
+                          display: "flex", alignItems: "center", justifyContent: "center", transform: "rotate(-12deg)",
+                          fontFamily: sans, fontWeight: 900, fontSize: 32, color: "rgba(122,46,42,0.95)" }}>{y}</div>
+          </div>
+        );
+      })}
     </AbsoluteFill>
   );
 };
@@ -171,7 +200,7 @@ const Documents: React.FC<{ dur: number }> = () => {
   );
 };
 
-export const GraphicCard: React.FC<{ name: string; see: string; dur: number }> = ({ name, see, dur }) => {
+export const GraphicCard: React.FC<{ name: string; see: string; dur: number; bg?: string; cue?: number }> = ({ name, see, dur, bg, cue }) => {
   switch (name) {
     case "journal": return <Journal text={quoteOf(see) || see} dur={dur} />;
     case "lid": return <Lid dur={dur} press={/finger|press/.test(see)} />;
@@ -179,7 +208,7 @@ export const GraphicCard: React.FC<{ name: string; see: string; dur: number }> =
     case "distance": return <Distance dur={dur} />;
     case "triptych": return <Triptych dur={dur} />;
     case "titlepage": return <TitlePage dur={dur} />;
-    case "letters": return <Letters dur={dur} />;
+    case "letters": return <Letters dur={dur} bg={bg} cue={cue} />;
     case "documents": return <Documents dur={dur} />;
     default: return null;
   }

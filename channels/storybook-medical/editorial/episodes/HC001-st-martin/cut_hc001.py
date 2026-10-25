@@ -39,17 +39,21 @@ s("0.04", None, None, clip="cut/clips/v0.02-rev.mp4")
 s("0.05", K + "s0.05.jpg", C([84, 50], 1.04, 1.22, centre=0.6),
   [dict(t="ink", x=85, y=52, rx=8, ry=30, at=8, note="half. gone.", noteAt=[62, 22]), dict(t="shine", mask="s0.05-beef", at=30)])
 s("0.06", None, None, clip="cut/clips/v0.06.mp4")
-s("0.07", K + "s0.07.jpg", C([47, 30]), life=[dict(t="glow", x=30, y=44, r=170), dict(t="motes", x=82, y=40)])
-s("0.08", K + "s4.07b.jpg", C([49, 73], 2.3, 1.8, centre=1.0), [dict(t="counter", text=["1822", "1823", "1824", "1825"], at=6, every=12)])
+# 0.07 + 0.08: ONE slow pull-back from the opening over both beats (user review 2026-10-24: Beaumont after Beaumont in the
+# same room was a jump cut; the opening covers "Nobody cut him open… three years" instead)
+s("0.07", K + "s4.07b.jpg", C([49, 73], 2.6, 1.7, centre=1.0))
+s("0.08", K + "s4.07b.jpg", None, [dict(t="counter", text=["1822", "1823", "1824", "1825"], at=6, every=12)], cont="0.07")
 s("0.10", "img/M21-lake.jpg", C([62, 58], 1.06, 1.14), [dict(t="hand", y=34)],
-  sprite=dict(src=K + "prop-canoe-solo-cut.png", x=[66, 60], y=60, w=13), dark=0.45)
+  sprite=dict(src=K + "prop-canoe-solo-cut.png", x=[66, 60], y=62, w=13, aspect=0.5, flip=True), dark=0.45)
 # 1 · the case
 s("1.01", K + "s1.01.jpg", C([37, 18], 1.03, 1.14), [dict(t="location", text="MACKINAC ISLAND · 1822", at=50)],
   life=[dict(t="fog", top=50, bottom=75), dict(t="birds", **{"from": [70, 18], "to": [100, 8]}), dict(t="smoke", x=3.5, y=23.4)])
 s("1.03", None, None, clip="cut/clips/v1.03.mp4")
 s("1.04", K + "s1.04.jpg", C([55, 40], 1.04, 1.14), life=[dict(t="spray", x=88, y=72)])
 s("1.05", K + "s1.05.jpg", C([74, 42], 1.03, 1.15),
-  [dict(t="callout", name="ALEXIS ST. MARTIN", sub="ABOUT 18 · VOYAGEUR", aside="about to have a very bad summer", x=74, y=36, side="left", at=10)])
+  [dict(t="callout", name="ALEXIS ST. MARTIN", sub="ABOUT 18 · VOYAGEUR", aside="about to have a very bad summer", x=74, y=36, side="left", at=10),
+   # which one is Alexis: his friends dim while the name card is up, and he lights up as it lands
+   dict(t="isolate", mask="s1.05-alexis", at=6, dur=120, soft=True), dict(t="pulse", mask="s1.05-alexis", at=12, dur=26)])
 s("1.05b", K + "s1.05b.jpg", C([58, 42], 1.12, 1.12, panTo=[66, 55], centre=0.6))
 s("1.06", K + "s1.06.jpg", C([45, 40], 1.04, 1.18), [dict(t="spot", x=48, y=48, rx=16, ry=26, at=14, dur=80),
                                                        dict(t="date", text="6 JUNE 1822", at=4)],
@@ -57,12 +61,15 @@ s("1.06", K + "s1.06.jpg", C([45, 40], 1.04, 1.18), [dict(t="spot", x=48, y=48, 
 s("1.07", K + "wI06.jpg", C([52, 45], 1.03, 1.05, snapAt=4, snapTo=1.3), [dict(t="flash", at=3), dict(t="shake", at=3)])
 s("1.08", K + "s1.08.jpg", C([55, 78], 1.04, 1.2, centre=0.55), [dict(t="ink", x=58, y=85, rx=11, ry=8, at=10, note="duck shot", noteAt=[70, 62])],
   life=[dict(t="smoke", x=61, y=70)])
+# the distance (user review 2026-10-24: the diagram was too plain): the clerk's musket an arm's length from Alexis; the ruler
+# runs under the barrel from Alexis's side to the clerk, its label on "meter"
+s("1.09", K + "s1.09c.jpg", C([55, 52], 1.04, 1.14), [dict(t="measure", x0=38, x1=74, y=57, at=4, labelAt=18, text="< 1 m")])
 s("1.10", None, None, clip="cut/clips/v1.10.mp4", fx=[dict(t="tag", text="DR. WILLIAM BEAUMONT", sub="ARMY SURGEON", at=12)])
 s("1.11", K + "s1.11.jpg", C([86, 32], 1.03, 1.14, centre=0.5), [dict(t="pulse", mask="s1.11-beaumont", at=8)])
 s("1.12", K + "s1.12.jpg", C([38, 22], 1.03, 1.14, centre=0.5), [dict(t="spot", x=38, y=24, rx=16, ry=26, at=10, dur=90)],
   life=[dict(t="glow", x=64.5, y=26.4, r=160)])
 s("1.13", K + "s1.13.jpg", C([21, 76], 1.04, 1.28, centre=0.65))
-s("1.14", K + "s1.14.jpg", C([66, 70], 1.18, 1.04), [dict(t="isolate", mask="s1.14-alexis", at=10, dur=999)])
+s("1.14", K + "s1.14.jpg", C([66, 70], 1.18, 1.04), [dict(t="isolate", mask="s1.14-alexis3", at=10, dur=999)])
 s("1.15", None, None, clip="cut/clips/v1.15.mp4")
 s("1.16", K + "s1.16.jpg", C([48, 27], 1.04, 1.2))
 # 2 · what happened next (Mackinac post hospital)
@@ -72,27 +79,31 @@ s("2.02", None, None, clip="cut/clips/v2.02.mp4", use=[0, 3.7])
 s("2.03", K + "s2.03.jpg", C([46, 22]))
 s("2.04", K + "s2.04.jpg", C([77, 40], 1.03, 1.14, centre=0.5), life=[dict(t="rays", x=14, y=24), dict(t="motes", x=24, y=40)])
 s("2.05", K + "s2.05.jpg", C([52, 32], 1.06, 1.1), [dict(t="counter", text=["8–10 MONTHS"], at=8, every=99)])
-s("2.06", K + "wI07.jpg", C([48, 50], 1.04, 1.2), [dict(t="shine", mask="wI07-tray", at=12)])
+s("2.06", K + "wI07.jpg", C([48, 50], 1.04, 1.2), [dict(t="shine", mask="wI07-tray2", at=12)])
 s("2.07", K + "s2.07.jpg", C([48, 34], 1.04, 1.18))
 s("2.08", K + "s2.08.jpg", C([70, 40], 1.06, 1.06), [dict(t="stamp", text="NO", x=32, y=36, size=150, at=6)])
 s("2.09", K + "s2.09.jpg", C([24, 40], 1.04, 1.16, centre=0.6))
 s("2.10", K + "s2.10.jpg", C([58, 55], 1.04, 1.18), [dict(t="stamp", text="NONE", x=50, y=24, size=110, at=30, strike="ANAESTHETIC")])
 s("2.13", K + "s2.13.jpg", C([66, 22], 1.04, 1.18, centre=0.6), life=[dict(t="glow", x=5, y=45, r=220)])
 # 3 · the science
-s("3.02", K + "s3.02.jpg", C([30, 30], 1.12, 1.12, panTo=[66, 30], centre=0.6), [dict(t="rack", a="s3.02-prof1", b="s3.02-prof2", at=50)])
+s("3.02", K + "s3.02.jpg", C([30, 30], 1.12, 1.12, panTo=[66, 30], centre=0.6), [dict(t="rack", a="s3.02-prof1", b="s3.02-prof2b", at=50)])
 s("3.03", K + "wI20.jpg", C([50, 40]))
 s("3.04", K + "wI21.jpg", C([50, 45]))
 s("3.05", K + "s3.05.jpg", C([45, 60]), life=[dict(t="glow", x=45, y=77, r=150), dict(t="glow", x=86, y=72, r=160)])
 s("3.06", K + "s3.06.jpg", C([48, 22], 1.25, 1.04, centre=0.4))
 s("3.07", "img/M15.jpg", C([25, 45], 1.12, 1.12, panTo=[70, 45], centre=0.6), [dict(t="pulse", mask="img/M15-alexis.png", at=40)])
 # 4 · the experiments
+# the six paper tags (measured centres, same in s4.03 and s4.05c): each food's name is written on its own tag
+FOOD_TAGS = [["spiced beef", 26, 80], ["salt pork", 41, 70.5], ["raw beef", 53, 63], ["boiled beef", 64, 55], ["stale bread", 76, 47], ["raw cabbage", 86, 41]]
 s("4.01", K + "s0.01.jpg", C([49, 70], 1.06, 1.14))
 s("4.03", K + "s4.03.jpg", C([28, 56], 1.22, 1.22, panTo=[72, 33], centre=0.7),
-  [dict(t="foods", at=6, items=[["spiced beef", 19, 60], ["salt pork", 32, 55], ["raw beef", 45, 49], ["boiled beef", 57, 42],
-                                 ["stale bread", 68, 33], ["raw cabbage", 79, 27]])])
-s("4.05", K + "s4.05.jpg", C([50, 45], 1.04, 1.12), [dict(t="clock", x=86, y=18, r=7, from_=12, to=2, at=2, dur=30, chip=True),
-                                                     dict(t="ink", x=16, y=60, rx=6, ry=7, at=24), dict(t="ink", x=30, y=55, rx=6, ry=7, at=34),
-                                                     dict(t="ink", x=56, y=43, rx=6, ry=6, at=44)])
+  [dict(t="foods", at=6, items=FOOD_TAGS)])
+# v3 image (user review 2026-10-24): cabbage, bread, pork and boiled beef gone, raw beef left, spiced beef half-dissolved; the
+# tags keep their names; an ink circle lands on each empty string as its word is spoken (cabbage 35, bread 54, pork 72, beef 91)
+s("4.05", K + "s4.05c.jpg", C([55, 50], 1.04, 1.12), [dict(t="clock", x=86, y=18, r=7, from_=12, to=2, at=2, dur=30, chip=True),
+                                                      dict(t="foods", at=0, every=2, items=FOOD_TAGS),
+                                                      dict(t="ink", x=80, y=31, rx=5.5, ry=6, at=33), dict(t="ink", x=69, y=37, rx=5.5, ry=6, at=52),
+                                                      dict(t="ink", x=32, y=57, rx=5.5, ry=6, at=70), dict(t="ink", x=57, y=42, rx=5.5, ry=6, at=90)])
 s("4.06", K + "s4.06.jpg", C([62, 28]))
 s("4.07", None, None, clip="cut/clips/v4.07.mp4", fx=[dict(t="note", text="no forms. none.", x=72, y=30, at=40)])
 s("4.08", K + "s4.08.jpg", C([48, 40], 1.3, 1.36), [dict(t="stamp", text="NO FORMS", x=28, y=30, size=90, at=10),
@@ -119,8 +130,10 @@ s("5.05", K + "s5.05.jpg", C([28, 38], 1.14, 1.14, panTo=[60, 50], centre=0.6))
 s("5.07", None, None)  # graphic
 s("5.08", None, None, clip="cut/clips/v5.08.mp4", use=[0, 3.0])
 s("5.09", K + "s5.09.jpg", C([72, 34], 1.14, 1.14, panTo=[25, 40], centre=0.6))
-s("5.11", "img/M21-lake.jpg", C([50, 55], 1.16, 1.03), [dict(t="glint", x=0, y=0, at=60, size=26, onSprite=[0.62, 0.62])],
-  sprite=dict(src=K + "prop-canoe-family-cut.png", x=[40, 46], y=62, w=24), life=[dict(t="glow", x=50, y=40, r=420)])
+# canoes (user review 2026-10-24: "flying"): y = the hull bottom, the lower 14% of the hull sits under the waterline;
+# the family canoe 10 points lower than before; the lake's water starts at y≈56%. (The old glint here had no glasses to sit on.)
+s("5.11", "img/M21-lake.jpg", C([50, 60], 1.16, 1.03),
+  sprite=dict(src=K + "prop-canoe-family-cut.png", x=[40, 46], y=72, w=24, aspect=0.5), life=[dict(t="glow", x=50, y=40, r=420)])
 s("5.11b", K + "s5.11b.jpg", C([49, 30], 1.04, 1.16))
 s("5.12", "img/M22.jpg", C([50, 50]), life=[dict(t="fog", top=40, bottom=85)])
 s("5.13", K + "s5.13.jpg", C([55, 30]))
@@ -168,7 +181,10 @@ s("8.10", K + "s8.10.jpg", C([52, 38], 1.16, 1.03), life=[dict(t="glow", x=20, y
 # 9 · why it matters
 s("9.01", K + "s0.01.jpg", C([49, 70], 1.04, 1.16), warm=True, life=[dict(t="rays", x=82, y=10), dict(t="motes", x=80, y=30)])
 s("9.01b", K + "s1.01.jpg", C([37, 20], 1.14, 1.03), warm=True, life=[dict(t="birds", **{"from": [20, 20], "to": [80, 6]})])
-s("9.02", "img/M21-lake.jpg", C([50, 55], 1.12, 1.12, panTo=[60, 55]), sprite=dict(src=K + "prop-canoe-solo-cut.png", x=[22, 70], y=63, w=20),
+# going home: starts slightly right of centre, drifts slowly down toward the lower left (closer, so it grows), facing the
+# way it moves; the camera holds still (a following camera cancelled the drift toward the viewer)
+s("9.02", "img/M21-lake.jpg", C([50, 62], 1.06, 1.08),
+  sprite=dict(src=K + "prop-canoe-solo-cut.png", x=[60, 40], y=[67, 80], w=[15, 21], aspect=0.5, flip=True),
   life=[dict(t="glow", x=50, y=40, r=420)])
 s("9.03", K + "s9.03.jpg", C([59, 33], 1.04, 1.2), [dict(t="shine", mask="s9.03-tuque", at=10)])
 s("9.04", K + "s9.04.jpg", C([50, 35], 1.03, 1.2))
@@ -176,19 +192,37 @@ s("9.04", K + "s9.04.jpg", C([50, 35], 1.03, 1.2))
 # ── effect masks: measured box (% x0 y0 x1 y1) per object ───────────────────────────────────────────────────
 MASKS = {
     "wI03a-watch": ("wI03a", (40, 34, 61, 71)), "s0.05-beef": ("s0.05", (77, 14, 94, 98)),
-    "s1.11-beaumont": ("s1.11", (78, 2, 95, 78)), "s1.14-alexis": ("s1.14", (55, 62, 92, 95)),
-    "wI07-tray": ("wI07", (32, 36, 73, 66)), "s3.02-prof1": ("s3.02", (18, 18, 42, 100)), "s3.02-prof2": ("s3.02", (52, 18, 82, 100)),
+    "s1.11-beaumont": ("s1.11", (78, 2, 95, 78)),
+    # v2 (user review 2026-10-24): boxes re-measured to hold the WHOLE subject (Alexis + blanket, the tray to its lower rim,
+    # the pointing hand); third value = padding around the box (small where a neighbour stands close)
+    "wI07-tray2": ("wI07", (31, 40, 74, 78), 0.1),
+    "s3.02-prof1": ("s3.02", (18, 18, 42, 100)), "s3.02-prof2b": ("s3.02", (46, 22, 82, 100), 0.08),
     "s4.11-vials": ("s4.11", (41, 44, 79, 89)), "s6.03-coins": ("s6.03", (18, 50, 60, 95)), "s8.03-jar": ("s8.03", (45, 36, 58, 62)),
     "s9.03-tuque": ("s9.03", (51, 20, 67, 46)),
 }
+# subjects a box can't isolate, outlined on a coordinate grid (% of the frame, checked on an overlay):
+# 1.05 — whole-picture cut-out, limited to Alexis's side along his back and the top of his arm (the three friends touch)
+# 1.14 — Alexis lying under the blanket, the barrel rim in front of him: a measured polygon (no model separates him)
+WHOLE = {"s1.05-alexis": ("s1.05", (70, 32, 86, 90), [(68, 0), (100, 0), (100, 100), (71.5, 100), (71.4, 86), (68.8, 83), (63.5, 83),
+                                                      (60.4, 79.4), (60.7, 71.9), (62, 70.5), (65.6, 70), (71.9, 62.6), (71.9, 55), (68, 37)])}
+POLY = {"s1.14-alexis3": ("s1.14", [(72.5, 71.6), (74.5, 71.6), (76.3, 73.5), (76.2, 76.5), (75.4, 79.5), (75.6, 84), (74.5, 87.5), (73.5, 89.8),
+                                    (68, 89.6), (62, 89.7), (56, 90.6), (51.5, 92.8), (50, 95.2), (46, 94.6), (42, 93.2), (38, 92.2), (35.3, 91.8),
+                                    (36.5, 90.2), (40, 88.6), (44, 87.2), (48, 85.8), (52, 84.6), (55.5, 83.2), (57, 81.5), (57.8, 80), (60, 79),
+                                    (62.5, 78.4), (64.5, 77.2), (66.5, 76), (68.5, 74.6), (70.5, 73), (71.5, 72.2)])}
 
 
 def build_masks():
-    from masks import subject_mask
-    for name, (img, box) in MASKS.items():
+    from masks import polygon_mask, subject_mask, whole_mask
+    for name, (img, box, limit) in WHOLE.items():
+        if not (PUB / f"cut/{name}.png").exists():
+            whole_mask(str(PUB / f"cut/{img}.jpg"), str(PUB / f"cut/{name}.png"), box, limit=limit)
+    for name, (img, pts) in POLY.items():
+        if not (PUB / f"cut/{name}.png").exists():
+            polygon_mask(str(PUB / f"cut/{img}.jpg"), str(PUB / f"cut/{name}.png"), pts)
+    for name, (img, box, *pad) in MASKS.items():
         out = PUB / f"cut/{name}.png"
         if not out.exists():
-            subject_mask(str(PUB / f"cut/{img}.jpg"), str(out), box, width=1920)
+            subject_mask(str(PUB / f"cut/{img}.jpg"), str(out), box, width=1920, **({"pad": pad[0]} if pad else {}))
 
 
 def verify_sheet(path):

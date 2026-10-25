@@ -41,6 +41,10 @@ export type MapSceneProps = {
   follow?: { id: string; from: number; to: number; z: number }; // camera rides with this route's canoe
   title?: string;
   subtitle?: string;
+  highlight?: { id: string; at: number }[]; // a city the narration names: amber rings pulse out from its pin
+  // a sea crossing drawn in MAP space (so it stays on the map while the camera moves): a dotted arc from → to that draws
+  // itself from `at` over `dur`, a small ship riding its tip, and a label at its end
+  arcs?: { from: [number, number]; to: [number, number]; bend?: number; at: number; dur: number; label?: string }[];
 };
 
 const useMapData = (path: string) => {
@@ -177,7 +181,13 @@ const Compass: React.FC = () => (
   </svg>
 );
 
-export const MapScene: React.FC<MapSceneProps> = ({ data: path, cams, routes, cities = [], labelsAt = 0, borderAt = 0, borderPulse, title, subtitle, follow }) => {
+const arcPt = (a: [number, number], b: [number, number], bend: number, t: number): [number, number] => {
+  const mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2 - bend;
+  return [(1 - t) ** 2 * a[0] + 2 * (1 - t) * t * mx + t * t * b[0], (1 - t) ** 2 * a[1] + 2 * (1 - t) * t * my + t * t * b[1]];
+};
+
+export const MapScene: React.FC<MapSceneProps> = ({ data: path, cams, routes, cities = [], labelsAt = 0, borderAt = 0, borderPulse, title, subtitle, follow,
+                                                    highlight = [], arcs = [] }) => {
   const f = useCurrentFrame();
   const { width: FW, height: FH } = useVideoConfig();
   const d = useMapData(path);
@@ -293,6 +303,58 @@ export const MapScene: React.FC<MapSceneProps> = ({ data: path, cams, routes, ci
               {c.sub ? <div style={{ fontFamily: sans, fontWeight: 700, fontSize: 17, letterSpacing: 4, color: "#7A5A2A", textTransform: "uppercase" }}>{c.sub}</div> : null}
             </div>
           </div>
+        );
+      })}
+
+      {/* highlight rings on a named place */}
+      {highlight.map((h) => {
+        const c = d.cities.find((x) => x.id === h.id);
+        if (!c || f < h.at) return null;
+        const [x, y] = toScreen(...c.xy);
+        return (
+          <div key={`hl${h.id}`} style={{ position: "absolute", left: x, top: y }}>
+            {[0, 1, 2].map((i) => {
+              const p = ((f - h.at + i * 14) % 42) / 42;
+              return <div key={i} style={{ position: "absolute", left: -70, top: -70, width: 140, height: 140, borderRadius: "50%", border: `5px solid ${AMBER}`,
+                                           transform: `scale(${0.25 + p})`, opacity: (1 - p) * 0.9 }} />;
+            })}
+            <div style={{ position: "absolute", left: -34, top: -34, width: 68, height: 68, borderRadius: "50%", border: `4px solid ${INK}`, opacity: 0.85,
+                          transform: `scale(${interpolate(f, [h.at, h.at + 10], [2.2, 1], { ...clamp, easing: Easing.out(Easing.back(1.6)) })})` }} />
+          </div>
+        );
+      })}
+
+      {/* sea crossings */}
+      {arcs.map((a, k) => {
+        if (f < a.at) return null;
+        const p = interpolate(f, [a.at, a.at + a.dur], [0, 1], { ...clamp, easing: ease });
+        const m = 60;
+        const pts = Array.from({ length: m + 1 }, (_, i) => toScreen(...arcPt(a.from, a.to, a.bend ?? 120, (p * i) / m)));
+        const tip = toScreen(...arcPt(a.from, a.to, a.bend ?? 120, p));
+        const prev = toScreen(...arcPt(a.from, a.to, a.bend ?? 120, Math.max(0, p - 0.02)));
+        const ang = (Math.atan2(tip[1] - prev[1], tip[0] - prev[0]) * 180) / Math.PI;
+        const end = toScreen(...a.to);
+        const lo = interpolate(f, [a.at + a.dur * 0.85, a.at + a.dur * 0.85 + 12], [0, 1], clamp);
+        return (
+          <React.Fragment key={`arc${k}`}>
+            <svg width={FW} height={FH} style={{ position: "absolute", inset: 0 }}>
+              <polyline points={pts.map(([x, y]) => `${x},${y}`).join(" ")} fill="none" stroke="#F4E9CF" strokeWidth={9} strokeLinecap="round" opacity={0.6} />
+              <polyline points={pts.map(([x, y]) => `${x},${y}`).join(" ")} fill="none" stroke={INK} strokeWidth={5} strokeDasharray="1 14" strokeLinecap="round" />
+            </svg>
+            {/* a small sailing ship at the tip */}
+            {p < 1 ? (
+              <svg width={70} height={70} viewBox="-35 -35 70 70" style={{ position: "absolute", left: tip[0] - 35, top: tip[1] - 46, transform: `rotate(${Math.max(-20, Math.min(20, ang))}deg)` }}>
+                <path d="M-24,8 L24,8 L16,18 L-16,18 Z" fill="#6B4A2A" stroke={INK} strokeWidth={2.5} />
+                <line x1={0} y1={8} x2={0} y2={-26} stroke={INK} strokeWidth={2.5} />
+                <path d="M2,-24 Q20,-10 2,4 Z" fill="#F4ECD8" stroke={INK} strokeWidth={2} />
+                <path d="M-2,-20 Q-16,-8 -2,4 Z" fill="#EFE4CC" stroke={INK} strokeWidth={2} />
+              </svg>
+            ) : null}
+            {a.label ? (
+              <div style={{ position: "absolute", left: Math.min(end[0], FW - 40), top: end[1], transform: "translate(-100%, -120%) rotate(-3deg)", opacity: lo,
+                            fontFamily: hand, fontWeight: 700, fontSize: 60, color: "#7A2E2A", whiteSpace: "nowrap", textShadow: "0 0 8px #EEDFBD" }}>{a.label}</div>
+            ) : null}
+          </React.Fragment>
         );
       })}
 

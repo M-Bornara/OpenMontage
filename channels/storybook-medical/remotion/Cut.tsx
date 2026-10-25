@@ -21,8 +21,9 @@ const fill: React.CSSProperties = { position: "absolute", inset: 0, width: "100%
 
 type Fx = { t: string; [k: string]: any };
 export type CutSpec = { img: string | null; cam: (Cam & { from?: number; to?: number }) | null; fx: Fx[]; life: Fx[]; clip?: string;
-                        use?: [number, number]; morph?: { dir: string; n: number }; sprite?: { src: string; x: [number, number]; y: number; w: number };
-                        dark?: number; warm?: boolean };
+                        use?: [number, number]; morph?: { dir: string; n: number };
+                        sprite?: { src: string; x: [number, number]; y: number | [number, number]; w: number | [number, number]; aspect?: number; sink?: number; flip?: boolean };
+                        dark?: number; warm?: boolean; cont?: string };
 
 const maskPath = (m: string) => (m.startsWith("img/") ? m : `cut/${m}.png`);
 const env = (f: number, at: number, dur: number, fade = 8) => interpolate(f, [at, at + fade, at + dur - fade, at + dur], [0, 1, 1, 0], clamp);
@@ -51,33 +52,52 @@ const Life: React.FC<{ l: Fx; i: number; dur: number }> = ({ l, i, dur }) => {
 // ── effects that sit ON an object (image space) ──
 const OnObject: React.FC<{ fx: Fx; img: string }> = ({ fx, img }) => {
   switch (fx.t) {
-    case "clock": return <Clock cx={fx.x} cy={fx.y} r={(fx.r / 100) * 1920} from={fx.from_} to={fx.to} at={fx.at / 30} spin={(fx.dur ?? 36) / 30} W={1920} H={1080} />;
+    case "clock": return <Clock cx={fx.x} cy={fx.y} r={(fx.r / 100) * 1920} from={fx.from_} to={fx.to} at={fx.at / 30} spin={(fx.dur ?? 36) / 30} W={1920} H={1080} face={!!fx.chip} />;
     case "shine": return <Shine mask={maskPath(fx.mask)} at={fx.at} dur={fx.dur ?? 26} />;
     case "pulse": return <Pulse src={img} mask={maskPath(fx.mask)} at={fx.at} />;
-    case "isolate": return <Isolate src={img} mask={maskPath(fx.mask)} at={fx.at} dur={fx.dur ?? 999} />;
+    case "isolate": return <Isolate src={img} mask={maskPath(fx.mask)} at={fx.at} dur={fx.dur ?? 999} soft={fx.soft} />;
     case "rack": return <RackFocus src={img} maskA={maskPath(fx.a)} maskB={maskPath(fx.b)} at={fx.at} />;
     case "spot": return <Spotlight src={img} x={fx.x} y={fx.y} rx={fx.rx} ry={fx.ry} at={fx.at} dur={fx.dur ?? 90} />;
     case "ink": return <InkCircle x={fx.x} y={fx.y} rx={fx.rx} ry={fx.ry} at={fx.at} note={fx.note} noteAt={fx.noteAt} dur={fx.dur ?? 120} />;
     case "glint": return <Glint x={fx.x} y={fx.y} at={fx.at} size={fx.size ?? 30} />;
-    case "foods": return <Foods items={fx.items} at={fx.at} />;
+    case "foods": return <Foods items={fx.items} at={fx.at} rot={fx.rot} every={fx.every} />;
+    case "measure": return <Measure x0={fx.x0} x1={fx.x1} y={fx.y} at={fx.at} labelAt={fx.labelAt ?? fx.at + 12} text={fx.text} />;
     default: return null;
   }
 };
 
-const Foods: React.FC<{ items: [string, number, number][]; at: number }> = ({ items, at }) => {
+// the food names written ON their paper tags (x/y = the measured tag centre, rot = the tag's angle), inked on one by one
+const Foods: React.FC<{ items: [string, number, number][]; at: number; rot?: number; every?: number }> = ({ items, at, rot = 22, every = 9 }) => {
   const f = useCurrentFrame();
   return (
     <>
       {items.map(([name, x, y], i) => {
-        const a = at + i * 9;
+        const a = at + i * every;
         const o = interpolate(f, [a, a + 5], [0, 1], clamp);
         return (
-          <div key={name} style={{ position: "absolute", left: `${x}%`, top: `${y + 11}%`, transform: `translate(-50%,0) rotate(-4deg) scale(${interpolate(f, [a, a + 6], [1.4, 1], clamp)})`,
-                                   opacity: o, fontFamily: hand, fontWeight: 700, fontSize: 40, color: "#3A2614", whiteSpace: "nowrap",
-                                   textShadow: "0 0 6px rgba(255,240,210,0.9), 0 0 2px rgba(255,240,210,1)" }}>{name}</div>
+          <div key={name} style={{ position: "absolute", left: `${x}%`, top: `${y}%`, transform: `translate(-50%,-50%) rotate(${rot}deg)`,
+                                   opacity: o, fontFamily: hand, fontWeight: 700, fontSize: 30, color: "#3A2614", whiteSpace: "nowrap",
+                                   clipPath: `inset(0 ${100 - interpolate(f, [a, a + 10], [0, 100], clamp)}% 0 0)` }}>{name}</div>
         );
       })}
     </>
+  );
+};
+
+// a measuring line between two measured points of the picture (the gap between the clerk and Alexis), with end ticks
+const Measure: React.FC<{ x0: number; x1: number; y: number; at: number; labelAt: number; text: string }> = ({ x0, x1, y, at, labelAt, text }) => {
+  const f = useCurrentFrame();
+  const d = interpolate(f, [at, at + 14], [0, 1], { ...clamp, easing: Easing.out(Easing.cubic) });
+  if (f < at) return null;
+  const X0 = (x0 / 100) * 1920, X1 = (x1 / 100) * 1920, Y = (y / 100) * 1080;
+  return (
+    <svg viewBox="0 0 1920 1080" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.6))" }}>
+      <line x1={X0} y1={Y} x2={X0 + (X1 - X0) * d} y2={Y} stroke={AMBER} strokeWidth={7} strokeLinecap="round" />
+      <line x1={X0} y1={Y - 22} x2={X0} y2={Y + 22} stroke={AMBER} strokeWidth={7} strokeLinecap="round" />
+      <line x1={X1} y1={Y - 22} x2={X1} y2={Y + 22} stroke={AMBER} strokeWidth={7} strokeLinecap="round" opacity={d >= 0.99 ? 1 : 0} />
+      <text x={(X0 + X1) / 2} y={Y + 92} textAnchor="middle" fontFamily={sans} fontWeight={900} fontSize={80} fill={AMBER} stroke="#22262A" strokeWidth={5}
+            paintOrder="stroke" opacity={interpolate(f, [labelAt, labelAt + 6], [0, 1], clamp)}>{text}</text>
+    </svg>
   );
 };
 
@@ -136,9 +156,15 @@ const Overlay: React.FC<{ fx: Fx; dur: number }> = ({ fx, dur }) => {
       );
     case "epitaph":
       return f < at ? null : (
-        <div style={{ position: "absolute", left: 0, right: 0, bottom: 160, textAlign: "center", opacity: k }}>
-          <div style={{ fontFamily: serif, fontSize: 50, color: BONE, letterSpacing: 6, textShadow: "0 3px 14px rgba(0,0,0,0.85)" }}>ALEXIS ST. MARTIN</div>
-          <div style={{ fontFamily: serif, fontSize: 30, color: AMBER, letterSpacing: 8, marginTop: 6 }}>DIED 24 JUNE 1880</div>
+        // its own dark plate (like the other titles): the bright graveyard must never show through the letters
+        <div style={{ position: "absolute", left: 0, right: 0, bottom: 150, display: "flex", justifyContent: "center", opacity: k,
+                      transform: `translateY(${(1 - pop) * 14}px)` }}>
+          <div style={{ background: "rgba(24,26,30,0.84)", borderTop: `4px solid ${AMBER}`, borderBottom: `4px solid ${AMBER}`, borderRadius: 8,
+                        padding: "18px 56px 20px", textAlign: "center", boxShadow: "0 12px 34px rgba(0,0,0,0.5)" }}>
+            <div style={{ fontFamily: serif, fontSize: 54, color: BONE, letterSpacing: 8 }}>ALEXIS ST. MARTIN</div>
+            <div style={{ width: 120, height: 2, background: AMBER, opacity: 0.8, margin: "10px auto 10px" }} />
+            <div style={{ fontFamily: serif, fontSize: 30, color: AMBER, letterSpacing: 10 }}>DIED 24 JUNE 1880</div>
+          </div>
         </div>
       );
     case "callout": return <Callout at={at} dur={fx.dur ?? 110} name={fx.name} sub={fx.sub} aside={fx.aside} x={6} y={12} side="left" />;
@@ -149,21 +175,45 @@ const Overlay: React.FC<{ fx: Fx; dur: number }> = ({ fx, dur }) => {
 
 const SCREEN = new Set(["callout", "stamp", "counter", "date", "location", "tag", "quote", "note", "hand", "chapter", "epitaph", "flash"]);
 
-// a canoe sprite on the water: it drifts, bobs and rolls a little, with its reflection under the waterline
-const Sprite: React.FC<{ s: NonNullable<CutSpec["sprite"]>; dur: number }> = ({ s, dur }) => {
+// a canoe sprite IN the water (the PNG is trimmed to the hull, so y = the bottom of the hull): it travels x/y/w from→to,
+// faces the way it moves, sits `sink` of its height below the waterline (the water hides the keel), bobs and rolls a little,
+// with a dark contact band, ripples spreading from the hull and its reflection.
+type SpriteSpec = { src: string; x: [number, number]; y: number | [number, number]; w: number | [number, number]; aspect?: number; sink?: number; flip?: boolean };
+const pair = (v: number | [number, number]): [number, number] => (Array.isArray(v) ? v : [v, v]);
+const Sprite: React.FC<{ s: SpriteSpec; dur: number }> = ({ s, dur }) => {
   const f = useCurrentFrame();
-  const x = interpolate(f, [0, dur], s.x, clamp);
-  const bob = Math.sin(f / 17) * 0.25;
-  const roll = Math.sin(f / 23 + 1) * 0.8;
-  const st: React.CSSProperties = { position: "absolute", left: `${x}%`, width: `${s.w}%`, transform: "translateX(-50%)" };
+  const ease = { ...clamp, easing: Easing.inOut(Easing.sin) };
+  const x = interpolate(f, [0, dur], s.x, ease);
+  const y = interpolate(f, [0, dur], pair(s.y), ease);
+  const w = interpolate(f, [0, dur], pair(s.w), ease);
+  const hPct = (w * (s.aspect ?? 0.4) * 1920) / 1080;   // hull height in % of the frame height
+  const sink = (s.sink ?? 0.14) * hPct;
+  const bob = Math.sin(f / 19) * 0.12 * hPct;
+  const roll = Math.sin(f / 27 + 1) * 0.6;
+  const flip = s.flip ? -1 : 1;
+  const water = y - sink;                                 // the waterline on screen
+  const box: React.CSSProperties = { position: "absolute", left: `${x}%`, width: `${w}%` };
+  const cut = 100 * (1 - (s.sink ?? 0.14));             // % of the sprite above the water
   return (
     <>
-      <Img src={staticFile(s.src)} style={{ ...st, top: `${s.y + bob}%`, transform: `translate(-50%, 0) scaleY(-1)`, opacity: 0.28,
-                                            filter: "blur(2px) brightness(0.8)", WebkitMaskImage: "linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0) 70%)" }} />
-      <Img src={staticFile(s.src)} style={{ ...st, top: `${s.y + bob}%`, transform: `translate(-50%, -100%) rotate(${roll}deg)`, transformOrigin: "50% 100%",
-                                            filter: "drop-shadow(0 2px 2px rgba(0,0,0,0.25))" }} />
-      {/* the waterline: a thin light ripple where the hull meets the water */}
-      <div style={{ ...st, top: `${s.y + bob - 0.4}%`, height: 6, borderRadius: 6, background: "rgba(255,248,230,0.35)", filter: "blur(2px)" }} />
+      {/* reflection: mirrored, soft, fading downward */}
+      <Img src={staticFile(s.src)} style={{ ...box, top: `${water + bob * 0.5}%`, transform: `translate(-50%, 0) scaleX(${flip}) scaleY(-0.8)`, transformOrigin: "50% 0%",
+                                            opacity: 0.3, filter: "blur(3px) brightness(0.75)", WebkitMaskImage: "linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.85) 40%, rgba(0,0,0,0) 100%)" }} />
+      {/* contact band where the hull enters the water */}
+      <div style={{ ...box, top: `${water + bob - 0.25}%`, height: `${hPct * 0.12}%`, transform: "translateX(-50%) scaleX(1.06)", borderRadius: "50%",
+                    background: "radial-gradient(ellipse at center, rgba(10,18,26,0.45), rgba(10,18,26,0) 70%)" }} />
+      {/* ripples spreading from the hull */}
+      {[0, 1, 2].map((i) => {
+        const p = ((f + i * 30) % 90) / 90;
+        return <div key={i} style={{ ...box, top: `${water + bob}%`, height: `${hPct * 0.16}%`, borderRadius: "50%", border: "2px solid rgba(255,248,232,0.5)",
+                                     transform: `translate(-50%, -50%) scale(${0.95 + p * 0.45}, ${1 + p * 0.9})`, opacity: (1 - p) * 0.55 }} />;
+      })}
+      {/* the canoe: the part under the waterline is hidden by the water */}
+      <Img src={staticFile(s.src)} style={{ ...box, top: `${y + bob}%`, transform: `translate(-50%, -100%) scaleX(${flip}) rotate(${roll}deg)`, transformOrigin: "50% 100%",
+                                            WebkitMaskImage: `linear-gradient(to bottom, #000 0%, #000 ${cut - 2}%, rgba(0,0,0,0.25) ${cut + 1}%, rgba(0,0,0,0) ${cut + 4}%)`,
+                                            filter: "drop-shadow(0 1px 1px rgba(0,0,0,0.2))" }} />
+      {/* a thin light line on the water along the hull */}
+      <div style={{ ...box, top: `${water + bob - 0.15}%`, height: 4, borderRadius: 4, transform: "translateX(-50%) scaleX(0.9)", background: "rgba(255,248,230,0.4)", filter: "blur(1.5px)" }} />
     </>
   );
 };
