@@ -61,7 +61,7 @@ export const Stamp: React.FC<{ text: string; at: number; color?: string; x?: num
 
 // ── The Case File: manila folder, the photo clipped in, a tab, Matt hosting ───────────────────────────────
 export const CaseFile: React.FC<{ at: number; photo: React.ReactNode; title?: string; tab?: string; matt?: string; mattAt?: number; children?: React.ReactNode;
-                                  exitAt?: number; exitDur?: number }> = ({ at, photo, title = "MYTH vs RECORD", tab = "CASE FILE · HC001", matt, mattAt, children, exitAt = 1e9, exitDur = 45 }) => {
+                                  exitAt?: number; exitDur?: number }> = ({ at, photo, title = "MYTH vs RECORD", tab = "CASE FILE", matt, mattAt, children, exitAt = 1e9, exitDur = 45 }) => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   // drop-in: the frozen picture shrinks onto the folder as the folder rises
@@ -87,8 +87,8 @@ export const CaseFile: React.FC<{ at: number; photo: React.ReactNode; title?: st
         <AbsoluteFill style={{ transform: `translateY(${folderY}%) scale(${1 + 0.9 * e})`, transformOrigin: "35% 53%", opacity: fade,
                                background: "radial-gradient(ellipse at 40% 40%, #E2C48A 0%, #D3B072 55%, #B8914F 100%)" }}>
           <AbsoluteFill style={{ backgroundImage: "repeating-linear-gradient(0deg, rgba(90,60,20,0.05) 0 2px, transparent 2px 6px)" }} />
-          <div style={{ position: "absolute", left: "6%", top: "-2%", width: "26%", height: "12%", background: "#D9BA7E", borderRadius: "0 0 18px 18px",
-                        boxShadow: "0 6px 14px rgba(0,0,0,0.25)", display: "flex", alignItems: "flex-end", justifyContent: "center", paddingBottom: 12,
+          <div style={{ position: "absolute", left: "6%", top: "-2%", minWidth: "26%", padding: "0 34px 12px", boxSizing: "border-box", whiteSpace: "nowrap", height: "12%", background: "#D9BA7E", borderRadius: "0 0 18px 18px",
+                        boxShadow: "0 6px 14px rgba(0,0,0,0.25)", display: "flex", alignItems: "flex-end", justifyContent: "center",
                         fontFamily: sans, fontWeight: 900, fontSize: 28, letterSpacing: 6, color: INK }}>{tab}</div>
           {hdr ? <Stamp text={title} at={at + 30} x={80} y={11} size={58} rot={-4} color={OXBLOOD} /> : null}
         </AbsoluteFill>

@@ -15,7 +15,7 @@ import { CHEM_STAMP, GraphicCard } from "./Graphics";
 import { CutShot, CutSpec } from "./Cut";
 
 // the real cut: per-beat shot specs (cut.json); final = no planning badges
-const ShotsCtx = createContext<{ shots: Record<string, CutSpec> | null; final: boolean }>({ shots: null, final: false });
+const ShotsCtx = createContext<{ shots: Record<string, CutSpec> | null; final: boolean; caseTab?: string }>({ shots: null, final: false });
 
 const { fontFamily: sans } = loadFont("normal", { weights: ["700", "900"] });
 const { fontFamily: hand } = loadHand("normal", { weights: ["700"] });
@@ -30,7 +30,8 @@ type Word = { word: string; start: number; end: number };
 export type AnimaticProps = { beats: string; words: string; narration: string; insertAfter?: string; insertSecs?: number;
                               music: { src: string; from: number; to: number; offset?: number; loop?: boolean }[]; totalSeconds: number;
                               hookMusic?: { src: string; offset?: number }; shots?: string; final?: boolean; insertAudio?: string;
-                              wordFix?: Record<string, string> };
+                              wordFix?: Record<string, string>;
+                              caseTab?: string }; // the Case File's tab, as viewers see it (never an internal episode code)
 
 const useJson = <T,>(path: string) => {
   const [d, setD] = useState<T | null>(null);
@@ -156,7 +157,7 @@ export const BeatCard: React.FC<{ b: Beat; all: Beat[] }> = ({ b, all }) => {
     if (b.cam === "snap") return { target: pos(), from: 1.03, to: 1.05, snapAt: 6, snapTo: 1.25 };
     return { target: [50, 50], from: 1.02, to: 1.05 };
   };
-  const { shots, final } = useContext(ShotsCtx);
+  const { shots, final, caseTab } = useContext(ShotsCtx);
   const sp = shots?.[b.id];
   if (sp && (b as any).trailerSlot) return <CutShot sp={sp} dur={dur} trailer />;
   // `cont`: this beat continues the previous beat's picture with ONE camera move over both (a hard cut would show nothing)
@@ -246,7 +247,7 @@ export const BeatCard: React.FC<{ b: Beat; all: Beat[] }> = ({ b, all }) => {
       : (fileImg ?? img) ? <Img src={staticFile((fileImg ?? img)!)} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
       : <AbsoluteFill style={{ background: "#3B4249", alignItems: "center", justifyContent: "center", fontFamily: sans, fontWeight: 700, fontSize: 40, color: "#C9CED2" }}>{label}</AbsoluteFill>;
     return (
-      <CaseFile at={b.id === "7.01" ? 4 : -200} mattAt={b.id === "7.01" ? 40 : -200} matt="img/matt-bust.png" photo={photo}
+      <CaseFile tab={caseTab} at={b.id === "7.01" ? 4 : -200} mattAt={b.id === "7.01" ? 40 : -200} matt="img/matt-bust.png" photo={photo}
                 exitAt={b.id === "7.08" ? 10 : undefined} exitDur={40}>
         {m ? <MythCard at={6} myth={m[1]} verdict={m[2]} verdictAt={Math.round(dur * 0.35)} record={m[3] ?? ""} source={m[3] ? "the record" : ""}
                        recordAt={m[3] ? Math.round(dur * 0.55) : 99999} /> : null}
@@ -392,7 +393,7 @@ const Captions: React.FC<{ words: Word[]; shift: (t: number) => number; final?: 
 };
 
 export const Animatic: React.FC<AnimaticProps> = ({ beats: bp, words: wp0, narration, insertAfter, insertSecs = 0, music, totalSeconds, hookMusic,
-                                                     shots: shotsPath, final = false, insertAudio, wordFix }) => {
+                                                     shots: shotsPath, final = false, insertAudio, wordFix, caseTab }) => {
   const data = useJson<{ beats: Beat[] }>(bp);
   const words0 = useJson<Word[]>(wp0);
   const shotsJ = useJson<{ shots: Record<string, CutSpec> }>(shotsPath ?? "animatic/beats.json");
@@ -439,7 +440,7 @@ export const Animatic: React.FC<AnimaticProps> = ({ beats: bp, words: wp0, narra
   // the hook's last shot may show between the sting and the first story shot (user review 2026-10-24, the 0:31 leak)
   const stingAt = hookEnd - 54 / FPS;
   return (
-    <ShotsCtx.Provider value={{ shots: shotsPath ? shotsJ.shots : null, final }}>
+    <ShotsCtx.Provider value={{ shots: shotsPath ? shotsJ.shots : null, final, caseTab }}>
     <AbsoluteFill style={{ backgroundColor: "#000" }}>
       {beats.map((b, k) => {
         const [tk, len, v2] = k > 0 && !(b as any).continues && b.start !== hookEnd ? transOf(b.trans) : [null, 0, false];
