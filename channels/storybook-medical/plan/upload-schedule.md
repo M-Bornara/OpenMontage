@@ -66,13 +66,19 @@ Everything you need is in the episode's `renders/deliverables/`:
      (e.g. "Alexis St. Martin").
    - **Audience:** "No, it's not made for kids".
    - **Show more**:
-     - **Altered content:** **No**. Our films are clearly illustrated, not realistic footage, and the
-       description has the AI line. Answer **Yes** only if a video ever contains photo-real people or events.
-     - **Paid promotion:** none.
+     - **AI use** (was "Altered content"): **No**. It asks about a real person made to say/do something, altered
+       real footage, a realistic-looking scene that never happened, or AI music as the main focus. Our films are
+       clearly illustrated, the music sits under the narration, Liam is not a real person, and the description
+       has the AI line. Answer **Yes** only if a video ever contains photo-real people or events.
+     - **Paid promotion:** No. Brand partnerships / Collaboration: leave empty.
+     - **Automatic chapters:** off (the description has our chapters). **Featured places:** off.
+       **Automatic concepts:** off.
      - **Tags:** from `publish.md`.
-     - **Language:** English.
-     - **Category:** Education.
-     - **Comments:** on, sort by Top.
+     - **Language:** English (the same language as the caption file). Caption certification: "never aired on
+       television in the U.S.". Recording date and location: leave empty.
+     - **License:** Standard, embedding on, notify subscribers on. **Shorts remixing:** allow video and audio.
+     - **Category:** Education (not the default People & Blogs).
+     - **Comments:** on, Basic moderation, anyone, sort by Top, show likes.
 3. **Video elements**
    - **Add subtitles** → Upload file → With timing → `captions.srt`.
    - **Add an end screen** → **Import from video** (after the first upload, reuse it) or build it:
