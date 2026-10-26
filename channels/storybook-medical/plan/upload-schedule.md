@@ -82,11 +82,14 @@ Everything you need is in the episode's `renders/deliverables/`:
      - **Comments:** on, Basic moderation, anyone, sort by Top, show likes.
 3. **Video elements**
    - **Add subtitles** → Upload file → With timing → `captions.srt`.
+   - **First video only (HC001-L):** Subscribe element alone on launch day; add the two video boxes the day the
+     first Short is live, and point the top box at the next long video when it's out (end screens can be edited
+     any time without re-uploading).
    - **Add an end screen** → **Import from video** (after the first upload, reuse it) or build it:
      - Element 1: **Video → Best for viewer**, placed on the right top box.
      - Element 2: **Video → Most recent upload** (or a specific one), right bottom box.
      - Element 3: **Subscribe**, top-left under "STILL CURIOUS?".
-     - All three run for the last 20 s.
+     - All three run for the whole end screen (HC001: 8:35 to the end, 12 s).
    - **Add cards:** one card at the moment the story mentions another case. Link to that video (from
      cluster 2 on).
 4. **Checks:** wait for "No issues found" (copyright). If a claim appears, stop and tell me.

@@ -16,6 +16,10 @@ Updated 2026-10-21.
 - [ ] **Upload package review** (projects/hc001-window-into-his-stomach/renders/deliverables-long/publish.md): title, description, chapters, sources, credits, tags, pinned comment, captions.srt.
 - [ ] rights.csv: 2 PENDING rows — user saves PDF copies of the fal.ai / Google / Kling terms.
 - [ ] Then: the 3 Shorts re-check.
+- [ ] **End screen HC001-L** (editable any time, no re-upload): Nov 8 = Subscribe only (8:35-end, left under STILL CURIOUS?).
+      **Remind Mon Nov 9** after the first Short is live: add Video "Most recent upload" (top right) + "Best for viewer"
+      (bottom right); if a Short can't be picked, use the "Alexis St. Martin" playlist. **Remind Sun Nov 22**: top box =
+      HC002-L (specific video).
 - [ ] Next episode: clean narration (no warble) — A/B the speed-up before recording (memory: narration-audio-processing).
 
 ## Before ANY paid HC001 generation (so nothing is paid for twice)
