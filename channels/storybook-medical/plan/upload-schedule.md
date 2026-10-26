@@ -77,7 +77,8 @@ Everything you need is in the episode's `renders/deliverables/`:
      - **Language:** English (the same language as the caption file). Caption certification: "never aired on
        television in the U.S.". Recording date and location: leave empty.
      - **License:** Standard, embedding on, notify subscribers on. **Shorts remixing:** allow video and audio.
-     - **Category:** Education (not the default People & Blogs).
+     - **Category:** Education (not the default People & Blogs). Its extra fields are for course material: Type
+       "Concept overview" if offered (else None); Problems empty; Academic system, Level, Exam/course: None.
      - **Comments:** on, Basic moderation, anyone, sort by Top, show likes.
 3. **Video elements**
    - **Add subtitles** → Upload file → With timing → `captions.srt`.
