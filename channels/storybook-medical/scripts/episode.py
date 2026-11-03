@@ -635,7 +635,8 @@ def step_build(pid, *_):
             kind, rel = "image", f"img/{s['id']}.jpg"
         shots.append({"id": s["id"], "src": rel, "kind": kind, "start": s["start"], "end": s["end"],
                       "inPoint": s.get("in", 0), "motion": s.get("motion", {"type": "push"}),
-                      "transitionIn": s.get("transition", "cut"), "darken": s.get("darken", 0)})
+                      "transitionIn": s.get("transition", "cut"), "darken": s.get("darken", 0),
+                      **({"captionY": s["captionY"]} if "captionY" in s else {})})
     # a dissolve needs the previous shot underneath it: overlap by 0.5 s
     for a, b in zip(shots, shots[1:]):
         if b["transitionIn"] == "dissolve":
@@ -788,15 +789,15 @@ def step_credits(pid, *_):
     credits = json.load(open(KIT / "library/sfx-credits.json"))
     used = sorted({c["name"] for c in ep["sfx"]})
     lines = ["CREDITS", ""]
-    lines.append(f"Music: original, generated with MiniMax Music v2 ({ep['music']['selected']})")
-    lines.append("Narration: ElevenLabs v3. Illustrations/animation: AI-assisted, art-directed.")
-    lines += ["", "Sound effects from Freesound.org (Creative Commons Attribution 4.0):"]
-    for n in used:
-        m = credits.get(n)
-        if m and "zero" not in m["license"]:
-            lines.append(f'- "{m["title"]}" by {m["author"]} - {m["url"]}')
+    lines.append("Music: original, generated with MiniMax Music v2.")     # no internal track codes in public text
+    lines.append("Narration: ElevenLabs v3 (voice: Liam). Illustrations/animation: AI-assisted, art-directed.")
+    ccby = [credits[n] for n in used if credits.get(n) and "zero" not in credits[n]["license"]]
     cc0 = [n for n in used if credits.get(n) and "zero" in credits[n]["license"]]
-    lines.append(f"- plus {len(cc0)} CC0 (public domain) sounds")
+    if ccby or cc0:
+        lines += ["", "Sound effects from Freesound.org" + (" (Creative Commons Attribution 4.0):" if ccby else ":")]
+        lines += [f'- "{m["title"]}" by {m["author"]} - {m["url"]}' for m in ccby]
+        if cc0:
+            lines.append(f"- {'plus ' if ccby else ''}{len(cc0)} CC0 (public domain) sound{'s' if len(cc0) != 1 else ''}")
     if ep.get("sources"):
         lines += ["", "Sources:"] + [f"- {s.split(' (')[0]}" for s in ep["sources"]]
     (p / "renders/CREDITS.txt").write_text("\n".join(lines), encoding="utf-8")

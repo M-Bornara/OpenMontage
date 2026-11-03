@@ -31,7 +31,10 @@ export type AnimaticProps = { beats: string; words: string; narration: string; i
                               music: { src: string; from: number; to: number; offset?: number; loop?: boolean }[]; totalSeconds: number;
                               hookMusic?: { src: string; offset?: number }; shots?: string; final?: boolean; insertAudio?: string;
                               wordFix?: Record<string, string>;
-                              caseTab?: string }; // the Case File's tab, as viewers see it (never an internal episode code)
+                              caseTab?: string;   // the Case File's tab, as viewers see it (never an internal episode code)
+                              // false = no burned-in captions (user 2026-10-26: YouTube shows the uploaded captions.srt; burned-in
+                              // ones would double up when viewers turn CC on, and YouTube can lay them out better)
+                              captions?: boolean };
 
 const useJson = <T,>(path: string) => {
   const [d, setD] = useState<T | null>(null);
@@ -170,7 +173,7 @@ export const BeatCard: React.FC<{ b: Beat; all: Beat[] }> = ({ b, all }) => {
     return <Sequence from={-off}><CutShot sp={merged} dur={Math.max(1, Math.round((b.end - contFrom.start) * FPS))} /></Sequence>;
   }
   if (sp && contTo) return <CutShot sp={sp} dur={Math.max(1, Math.round((contTo.end - b.start) * FPS))} />;
-  if (sp && b.shot !== "FILE" && (sp.img || sp.clip || sp.morph)) return <CutShot sp={sp} dur={Math.max(1, Math.round(b.dur * FPS))} />;
+  if (sp && b.shot !== "FILE" && (sp.img || sp.clip || sp.morph)) return <CutShot sp={sp} dur={Math.max(1, Math.round(b.end * FPS) - Math.round(b.start * FPS))} />;
   if (kind === "graphic" || b.src === "file:graphic") {
     // a stamp named in the beat (e.g. HIS OWN WORDS on the journal) is drawn on top of the graphic, so its thud has a picture
     const st = GRAPHIC_STAMP(b);
@@ -233,7 +236,7 @@ export const BeatCard: React.FC<{ b: Beat; all: Beat[] }> = ({ b, all }) => {
     return <MapScene data="map/hc001.json" cams={cams} routes={routes} labelsAt={0} borderAt={0} borderPulse={mapRoute === "1825" ? Math.round(dur * 0.4) : undefined}
                      cities={mapRoute === "overview" ? [{ id: "mackinac", at: 10 }] : mapRoute === "1825" ? [{ id: "plattsburgh", at: 0 }, { id: "berthier", at: 4 }]
                        : mapRoute === "1829" ? [{ id: "berthier", at: 0 }, { id: "crawford", at: 10 }] : [{ id: "crawford", at: 0 }, { id: "montreal", at: dur - 40 }]}
-                     follow={mapRoute === "1831" ? { id: "1831", from: 0, to: dur, z: 2.0 } : undefined}
+                     follow={mapRoute === "1831" ? { id: "1831", from: 0, to: dur, z: 1.4 } : undefined}  /* 2.0 slid too fast (review 2026-10-26) */
                      highlight={mapRoute === "overview" ? [{ id: "mackinac", at: 12 }] : []} />;
   }
   if (b.shot === "FILE") {
@@ -393,7 +396,7 @@ const Captions: React.FC<{ words: Word[]; shift: (t: number) => number; final?: 
 };
 
 export const Animatic: React.FC<AnimaticProps> = ({ beats: bp, words: wp0, narration, insertAfter, insertSecs = 0, music, totalSeconds, hookMusic,
-                                                     shots: shotsPath, final = false, insertAudio, wordFix, caseTab }) => {
+                                                     shots: shotsPath, final = false, insertAudio, wordFix, caseTab, captions = true }) => {
   const data = useJson<{ beats: Beat[] }>(bp);
   const words0 = useJson<Word[]>(wp0);
   const shotsJ = useJson<{ shots: Record<string, CutSpec> }>(shotsPath ?? "animatic/beats.json");
@@ -447,7 +450,9 @@ export const Animatic: React.FC<AnimaticProps> = ({ beats: bp, words: wp0, narra
         const prev = beats[k - 1];
         return (
           <React.Fragment key={b.id}>
-            <Sequence from={fr(b.start)} durationInFrames={Math.max(1, fr(b.dur))}><BeatCard b={b} all={beats} /></Sequence>
+            {/* end = the next beat's first frame: round(start) + round(dur) fell one frame short at 11 cuts (a black flash,
+                user review 2026-10-26) */}
+            <Sequence from={fr(b.start)} durationInFrames={Math.max(1, (beats[k + 1] ? fr(beats[k + 1].start) : fr(b.end)) - fr(b.start))}><BeatCard b={b} all={beats} /></Sequence>
             {tk && prev ? (
               <Sequence from={fr(b.start) - Math.round(len / 2)} durationInFrames={len}>
                 <AbsoluteFill style={{ backgroundColor: "#000", isolation: "isolate" }}>
@@ -500,7 +505,7 @@ export const Animatic: React.FC<AnimaticProps> = ({ beats: bp, words: wp0, narra
         </Sequence>
       ) : null}
       <SfxTrack beats={beats} shots={final && shotsPath ? shotsJ.shots : null} />
-      <Captions words={words} shift={shift} final={final} />
+      {captions ? <Captions words={words} shift={shift} final={final} /> : null}
       {final ? null : <div style={{ position: "absolute", right: 24, bottom: 24, fontFamily: sans, fontWeight: 900, fontSize: 18, color: "rgba(255,255,255,0.45)", letterSpacing: 4 }}>ANIMATIC v3 · HC001</div>}
     </AbsoluteFill>
     </ShotsCtx.Provider>

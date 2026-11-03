@@ -6,7 +6,7 @@ import { AbsoluteFill, Easing, Freeze, Img, interpolate, OffthreadVideo, spring,
 import { loadFont } from "@remotion/google-fonts/Montserrat";
 import { loadFont as loadHand } from "@remotion/google-fonts/Caveat";
 import { loadFont as loadSerif } from "@remotion/google-fonts/LibreBaskerville";
-import { camTransform, Cam, Callout, Glint, InkCircle, Isolate, Motes, Pulse, RackFocus, Shine, Spotlight } from "./Fx";
+import { camTransform, Cam, Callout, Dof, Glint, InkCircle, Isolate, Lift, Motes, Pulse, RackFocus, Shine, Spotlight } from "./Fx";
 import { Birds, Fog, Glow, Leaves, LightShift, Rain, Rays, Smoke } from "./Life";
 import { HandLine, Stamp } from "./Sections";
 import { Clock } from "./Clock";
@@ -17,7 +17,9 @@ const { fontFamily: serif } = loadSerif("normal", { weights: ["400"] });
 const AMBER = "#E8A33D";
 const BONE = "#EFE6D2";
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
-const fill: React.CSSProperties = { position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" };
+// "fill", like every effect layer and mask in Fx/Life: the stills are 0.8 % wider than 16:9, and "cover" trimmed ~7 px a side,
+// so each highlight sat a few px off its subject and slid as it faded in (user review 2026-10-26: the doctor at the door)
+const fill: React.CSSProperties = { position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "fill" };
 
 type Fx = { t: string; [k: string]: any };
 export type CutSpec = { img: string | null; cam: (Cam & { from?: number; to?: number }) | null; fx: Fx[]; life: Fx[]; clip?: string;
@@ -52,9 +54,12 @@ const Life: React.FC<{ l: Fx; i: number; dur: number }> = ({ l, i, dur }) => {
 // ── effects that sit ON an object (image space) ──
 const OnObject: React.FC<{ fx: Fx; img: string }> = ({ fx, img }) => {
   switch (fx.t) {
-    case "clock": return <Clock cx={fx.x} cy={fx.y} r={(fx.r / 100) * 1920} from={fx.from_} to={fx.to} at={fx.at / 30} spin={(fx.dur ?? 36) / 30} W={1920} H={1080} face={!!fx.chip} />;
+    case "clock": return <Clock cx={fx.x} cy={fx.y} r={(fx.r / 100) * 1920} pin={fx.pin} marks={fx.marks} from={fx.from_} to={fx.to} at={fx.at / 30}
+                                spin={(fx.dur ?? 48) / 30} W={1920} H={1080} face={!!fx.chip} />;
     case "shine": return <Shine mask={maskPath(fx.mask)} at={fx.at} dur={fx.dur ?? 26} />;
     case "pulse": return <Pulse src={img} mask={maskPath(fx.mask)} at={fx.at} />;
+    case "lift": return <Lift src={img} mask={maskPath(fx.mask)} at={fx.at} />;
+    case "dof": return <Dof src={img} mask={maskPath(fx.mask)} blur={fx.blur} />;
     case "isolate": return <Isolate src={img} mask={maskPath(fx.mask)} at={fx.at} dur={fx.dur ?? 999} soft={fx.soft} />;
     case "rack": return <RackFocus src={img} maskA={maskPath(fx.a)} maskB={maskPath(fx.b)} at={fx.at} />;
     case "spot": return <Spotlight src={img} x={fx.x} y={fx.y} rx={fx.rx} ry={fx.ry} at={fx.at} dur={fx.dur ?? 90} />;
@@ -176,9 +181,14 @@ const Overlay: React.FC<{ fx: Fx; dur: number }> = ({ fx, dur }) => {
 const SCREEN = new Set(["callout", "stamp", "counter", "date", "location", "tag", "quote", "note", "hand", "chapter", "epitaph", "flash"]);
 
 // a canoe sprite IN the water (the PNG is trimmed to the hull, so y = the bottom of the hull): it travels x/y/w from→to,
-// faces the way it moves, sits `sink` of its height below the waterline (the water hides the keel), bobs and rolls a little,
+// faces the way it moves, sits `sink` of its height below the waterline (the water hides the keel), rides a calm lake
+// (user review 2026-10-26: the old bob was ±12 % of the hull height every 4 s, "like a hurricane": now ±2.5 % over ~9 s),
 // with a dark contact band, ripples spreading from the hull and its reflection.
-type SpriteSpec = { src: string; x: [number, number]; y: number | [number, number]; w: number | [number, number]; aspect?: number; sink?: number; flip?: boolean };
+// water/refl/wmid/E/tilt (masks.canoe_water, user review 2026-10-26): the hull is drawn in 3/4 view with a keel tilted ~9.5°, so
+// the waterline follows the keel (a flat cut sank one end and lifted the other) and the reflection is mirrored straight down
+// about that line, UNDER the hull (the old one was flipped about the wrong edge and landed on the canoe)
+type SpriteSpec = { src: string; x: [number, number]; y: number | [number, number]; w: number | [number, number]; aspect?: number; sink?: number; flip?: boolean;
+                    water?: string; refl?: string; wmid?: number; E?: number; tilt?: number };
 const pair = (v: number | [number, number]): [number, number] => (Array.isArray(v) ? v : [v, v]);
 const Sprite: React.FC<{ s: SpriteSpec; dur: number }> = ({ s, dur }) => {
   const f = useCurrentFrame();
@@ -188,12 +198,33 @@ const Sprite: React.FC<{ s: SpriteSpec; dur: number }> = ({ s, dur }) => {
   const w = interpolate(f, [0, dur], pair(s.w), ease);
   const hPct = (w * (s.aspect ?? 0.4) * 1920) / 1080;   // hull height in % of the frame height
   const sink = (s.sink ?? 0.14) * hPct;
-  const bob = Math.sin(f / 19) * 0.12 * hPct;
-  const roll = Math.sin(f / 27 + 1) * 0.6;
+  const bob = Math.sin(f / 45) * 0.025 * hPct;
+  const roll = Math.sin(f / 62 + 1) * 0.2;
   const flip = s.flip ? -1 : 1;
-  const water = y - sink;                                 // the waterline on screen
+  const water = s.water ? y - hPct * (1 - (s.wmid ?? 0.86)) : y - sink;   // the waterline on screen (mid-hull)
+  const tilt = (s.tilt ?? 0) * flip;
   const box: React.CSSProperties = { position: "absolute", left: `${x}%`, width: `${w}%` };
   const cut = 100 * (1 - (s.sink ?? 0.14));             // % of the sprite above the water
+  if (s.water && s.refl) {
+    return (
+      <>
+        {/* reflection: precomputed, mirrored about the tilted waterline, so its top sits on the waterline under the hull */}
+        <Img src={staticFile(s.refl)} style={{ ...box, top: `${y + bob - hPct}%`, transform: `translateX(-50%) scaleX(${flip})`, transformOrigin: "50% 0%",
+                                               opacity: 0.34, filter: "blur(2px) brightness(0.8)" }} />
+        {/* contact band and ripples along the hull, tilted like the keel */}
+        <div style={{ ...box, top: `${water + bob - 0.25}%`, height: `${hPct * 0.1}%`, transform: `translateX(-50%) rotate(${tilt}deg) scaleX(0.92)`, borderRadius: "50%",
+                      background: "radial-gradient(ellipse at center, rgba(10,18,26,0.4), rgba(10,18,26,0) 70%)" }} />
+        {[0, 1, 2].map((i) => {
+          const p = ((f + i * 30) % 90) / 90;
+          return <div key={i} style={{ ...box, top: `${water + bob}%`, height: `${hPct * 0.14}%`, borderRadius: "50%", border: "2px solid rgba(255,248,232,0.5)",
+                                       transform: `translate(-50%, -50%) rotate(${tilt}deg) scale(${0.97 + p * 0.3}, ${1 + p * 0.5})`, opacity: (1 - p) * 0.4 }} />;
+        })}
+        <Img src={staticFile(s.src)} style={{ ...box, top: `${y + bob}%`, transform: `translate(-50%, -100%) scaleX(${flip}) rotate(${roll}deg)`, transformOrigin: "50% 100%",
+                                              WebkitMaskImage: `url(${staticFile(s.water)})`, maskImage: `url(${staticFile(s.water)})`,
+                                              WebkitMaskSize: "100% 100%", maskSize: "100% 100%", filter: "drop-shadow(0 1px 1px rgba(0,0,0,0.2))" }} />
+      </>
+    );
+  }
   return (
     <>
       {/* reflection: mirrored, soft, fading downward */}
@@ -206,7 +237,7 @@ const Sprite: React.FC<{ s: SpriteSpec; dur: number }> = ({ s, dur }) => {
       {[0, 1, 2].map((i) => {
         const p = ((f + i * 30) % 90) / 90;
         return <div key={i} style={{ ...box, top: `${water + bob}%`, height: `${hPct * 0.16}%`, borderRadius: "50%", border: "2px solid rgba(255,248,232,0.5)",
-                                     transform: `translate(-50%, -50%) scale(${0.95 + p * 0.45}, ${1 + p * 0.9})`, opacity: (1 - p) * 0.55 }} />;
+                                     transform: `translate(-50%, -50%) scale(${0.97 + p * 0.3}, ${1 + p * 0.5})`, opacity: (1 - p) * 0.4 }} />;
       })}
       {/* the canoe: the part under the waterline is hidden by the water */}
       <Img src={staticFile(s.src)} style={{ ...box, top: `${y + bob}%`, transform: `translate(-50%, -100%) scaleX(${flip}) rotate(${roll}deg)`, transformOrigin: "50% 100%",

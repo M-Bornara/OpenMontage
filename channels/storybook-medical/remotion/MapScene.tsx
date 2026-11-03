@@ -86,8 +86,8 @@ const Canoe: React.FC<{ ang: number; f: number; crew?: "solo" | "family"; still?
   // a canoe always sits level on the water: it faces left or right and tilts at most 12°, whatever the heading
   const flip = Math.abs(ang) > 90;
   const a = Math.max(-12, Math.min(12, flip ? (ang > 0 ? ang - 180 : ang + 180) : ang));
-  const bob = Math.sin(f / 6) * 1.6;
-  const roll = Math.sin(f / 6 + 1) * 1.2;
+  const bob = Math.sin(f / 14) * 0.8;          // calm water: a gentle lift with each stroke, no rocking
+  const roll = Math.sin(f / 14 + 1) * 0.4;
   // stroke cycle, 1.1 s: pull (blade in the water, front → back), then recovery (blade lifts and swings forward)
   const u = still ? 0.7 : (f % 33) / 33;
   const pull = u < 0.62;
@@ -198,8 +198,15 @@ export const MapScene: React.FC<MapSceneProps> = ({ data: path, cams, routes, ci
     const r = d.routes.find((x) => x.id === follow.id);
     const cue = routes.find((x) => x.id === follow.id);
     if (r && cue) {
-      const p = interpolate(f, [cue.from, cue.to], [0, 1], { ...clamp, easing: ease });
-      const pt = pointAt(r, Math.min(1, p + 0.035));
+      // the camera aims at the canoe's position AVERAGED over ±1.5 s (weighted to the middle), so it glides through the
+      // river's bends instead of jerking with every turn (user review 2026-10-26: "very shaky")
+      const at = (g: number) => pointAt(r, Math.min(1, interpolate(g, [cue.from, cue.to], [0, 1], { ...clamp, easing: ease }) + 0.035));
+      let sx = 0, sy = 0, sw = 0;
+      for (let k = -45; k <= 45; k += 3) {
+        const q = at(f + k), wk = Math.cos((k / 46) * (Math.PI / 2));
+        sx += q.x * wk; sy += q.y * wk; sw += wk;
+      }
+      const pt = { x: sx / sw, y: sy / sw };
       const w = interpolate(f, [follow.from, follow.from + 25, follow.to - 25, follow.to], [0, 1, 1, 0], { ...clamp, easing: ease });
       const z = Math.exp(Math.log(cam.z) + (Math.log(follow.z) - Math.log(cam.z)) * w);
       cam = { f, c: [cam.c[0] + (pt.x - cam.c[0]) * w, cam.c[1] + (pt.y - cam.c[1]) * w], z };

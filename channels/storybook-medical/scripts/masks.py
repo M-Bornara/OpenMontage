@@ -116,3 +116,43 @@ if __name__ == "__main__":
     a.add_argument("--grow", type=int, default=2)
     o = a.parse_args()
     subject_mask(o.image, o.out, tuple(o.box), o.width, o.grow)
+
+
+def canoe_water(src: str, sink: float = 0.14, refl_len: float = 0.4) -> dict:
+    """A canoe sprite drawn in 3/4 view has a TILTED keel (HC001: ~9.5°), so a flat waterline sank one end and lifted the
+    other out of the water (user review 2026-10-26). From the measured keel (the hull's lowest opaque pixel per column,
+    fitted on its middle 40 %), writes next to the sprite:
+      <name>-water.png  the canoe's mask: opaque above the waterline (parallel to the keel, `sink` of the sprite height
+                        above it), fading out just below it; the bow and stern curve up out of the water by themselves
+      <name>-refl.png   its reflection: every column mirrored straight down about its own waterline point (the way a
+                        reflection on still water works), fading with depth; same width, (1 + refl_len) × the height
+    Returns {"wmid": the waterline at mid-hull as a fraction of the sprite height, "E": the reflection's height factor}."""
+    import cv2
+    import numpy as np
+    im = np.array(Image.open(src).convert("RGBA"))
+    H, W = im.shape[:2]
+    a = im[..., 3] > 128
+    cols = np.where(a.any(0))[0]
+    x0, x1 = cols[0], cols[-1]
+    bot = np.array([np.max(np.nonzero(a[:, x])[0]) if a[:, x].any() else 0 for x in range(W)])
+    mid = [x for x in cols if x0 + 0.3 * (x1 - x0) <= x <= x0 + 0.7 * (x1 - x0)]
+    k, b = np.polyfit(mid, bot[mid], 1)
+    yw = k * np.arange(W) + b - sink * H                              # the waterline per column (px)
+    yy = np.arange(H)[:, None]
+    d = (yy - yw[None, :]) / H                                        # below the line > 0
+    m = np.interp(d, [-0.02, 0.01, 0.04], [1.0, 0.25, 0.0])
+    out = np.dstack([np.full((H, W), 0, np.uint8)] * 3 + [(m * 255).astype(np.uint8)])
+    from pathlib import Path
+    base = Path(src).with_suffix("")
+    Image.fromarray(out, "RGBA").save(f"{base}-water.png")
+    E = 1 + refl_len
+    RH = round(H * E)
+    ry = np.arange(RH, dtype=np.float32)[:, None].repeat(W, 1)
+    src_y = (2 * yw[None, :] - ry).astype(np.float32)                 # mirror about the column's waterline
+    src_x = np.arange(W, dtype=np.float32)[None, :].repeat(RH, 0)
+    refl = cv2.remap(im, src_x, src_y, cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT, borderValue=(0, 0, 0, 0))
+    depth = (ry - yw[None, :]) / H
+    fade = np.interp(depth, [0, 0.02, 0.28], [0, 1, 0]) * (ry >= yw[None, :])   # close under the hull only
+    refl[..., 3] = (refl[..., 3] * fade).astype(np.uint8)
+    Image.fromarray(refl, "RGBA").save(f"{base}-refl.png")
+    return {"wmid": float(yw[W // 2] / H), "E": E}

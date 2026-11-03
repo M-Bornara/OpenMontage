@@ -52,7 +52,14 @@ export const Stamp: React.FC<{ text: string; at: number; color?: string; x?: num
   return (
     <div style={{ position: "absolute", left: `${x}%`, top: `${y}%`, transform: `translate(-50%,-50%) rotate(${rot}deg) scale(${interpolate(s, [0, 1], [2.4, 1])})`,
                   opacity: interpolate(f, [at, at + 3], [0, 1], clamp), textAlign: "center" }}>
-      {strike ? <div style={{ fontFamily: sans, fontWeight: 900, fontSize: size * 0.42, color: "#F3E6C8", textDecoration: `line-through ${OXBLOOD} 8px`, textShadow: "0 3px 8px #000" }}>{strike}</div> : null}
+      {/* the struck word stays READABLE: larger, on a dark plate, a thin line through the middle (user review 2026-10-26:
+          the 8 px line-through covered the whole word) */}
+      {strike ? (
+        <div style={{ position: "relative", display: "inline-block", marginBottom: 10, padding: "2px 16px", borderRadius: 8, background: "rgba(20,16,12,0.55)" }}>
+          <span style={{ fontFamily: sans, fontWeight: 800, fontSize: size * 0.5, letterSpacing: 3, color: "#F3E6C8", textShadow: "0 2px 6px #000" }}>{strike}</span>
+          <div style={{ position: "absolute", left: 8, right: 8, top: "53%", height: 4, borderRadius: 2, background: "#C0392B", boxShadow: "0 1px 2px rgba(0,0,0,0.6)" }} />
+        </div>
+      ) : null}
       <div style={{ fontFamily: sans, fontWeight: 900, fontSize: size, color, letterSpacing: 6, padding: "0 26px", border: `10px solid ${color}`, borderRadius: 14,
                     background: "rgba(243,230,200,0.12)", mixBlendMode: "normal" }}>{text}</div>
     </div>

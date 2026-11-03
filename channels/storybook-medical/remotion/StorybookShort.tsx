@@ -45,16 +45,19 @@ export interface Shot {
   motion: Motion;
   transitionIn?: "cut" | "whip" | "flash" | "dissolve";
   darken?: number;
+  /** Caption top for this shot (px of 1920), chosen per picture so the words never sit on a face or the shot's subject. */
+  captionY?: number;
 }
 
 export type Overlay =
-  | { kind: "stamp"; text: string; start: number; end: number; y?: number }
-  | { kind: "location"; text: string; sub?: string; start: number; end: number }
-  | { kind: "nameTag"; text: string; sub?: string; start: number; end: number }
-  | { kind: "counter"; to: number; label: string; start: number; end: number; countSeconds?: number }
+  | { kind: "stamp"; text: string; start: number; end: number; y?: number; x?: number }
+  | { kind: "location"; text: string; sub?: string; start: number; end: number; y?: number }
+  | { kind: "nameTag"; text: string; sub?: string; start: number; end: number; y?: number }
+  | { kind: "counter"; to: number; label: string; start: number; end: number; countSeconds?: number; y?: number }
   | { kind: "verdict"; text: string; good: boolean; start: number; end: number }
   | { kind: "gauge"; to: number; unit: string; start: number; end: number; dropSeconds?: number }
-  | { kind: "clock"; cx: number; cy: number; r: number; from: number; to: number; at?: number; spin?: number; start: number; end: number };
+  | { kind: "clock"; cx?: number; cy?: number; r?: number; pin?: [number, number]; marks?: [number, number][];
+      from: number; to: number; at?: number; spin?: number; start: number; end: number };
 
 export interface Word {
   word: string;
@@ -154,19 +157,20 @@ const textShadow = "0 6px 0 rgba(0,0,0,0.35), 0 0 24px rgba(0,0,0,0.45)";
 const fadeOut = (frame: number, dur: number) =>
   interpolate(frame, [dur - 6, dur], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
-const Stamp: React.FC<{ text: string; dur: number; y?: number }> = ({ text, dur, y }) => {
+// x = the stamp's centre (px of 1080, default the middle); the size shrinks with the text so it never leaves the frame
+const Stamp: React.FC<{ text: string; dur: number; y?: number; x?: number }> = ({ text, dur, y, x }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const s = spring({ frame, fps, config: { damping: 11, stiffness: 180, mass: 0.7 } });
   const scale = interpolate(s, [0, 1], [2.6, 1]);
   const opacity = interpolate(frame, [0, 3], [0, 1], { extrapolateRight: "clamp" }) * fadeOut(frame, dur);
   return (
-    <AbsoluteFill style={{ alignItems: "center", top: y ?? 300, height: 260, opacity }}>
+    <AbsoluteFill style={{ alignItems: "center", top: y ?? 300, height: 260, opacity, transform: `translateX(${(x ?? 540) - 540}px)` }}>
       <div
         style={{
           fontFamily,
           fontWeight: 900,
-          fontSize: 210,
+          fontSize: Math.min(210, Math.floor(900 / (0.76 * text.length))),
           letterSpacing: 6,
           color: BONE,
           WebkitTextStroke: `10px ${OXBLOOD}`,
@@ -193,16 +197,16 @@ const Card: React.FC<{ children: React.ReactNode; dur: number; top: number }> = 
   );
 };
 
-const Location: React.FC<{ text: string; sub?: string; dur: number }> = ({ text, sub, dur }) => (
-  <Card dur={dur} top={250}>
+const Location: React.FC<{ text: string; sub?: string; dur: number; y?: number }> = ({ text, sub, dur, y }) => (
+  <Card dur={dur} top={y ?? 250}>
     <div style={{ width: 120, height: 10, background: AMBER, marginBottom: 18, borderRadius: 5 }} />
     <div style={{ fontFamily, fontWeight: 900, fontSize: 74, color: BONE, letterSpacing: 4, textShadow }}>{text}</div>
     {sub ? <div style={{ fontFamily, fontWeight: 800, fontSize: 58, color: AMBER, letterSpacing: 10, textShadow }}>{sub}</div> : null}
   </Card>
 );
 
-const NameTag: React.FC<{ text: string; sub?: string; dur: number }> = ({ text, sub, dur }) => (
-  <Card dur={dur} top={250}>
+const NameTag: React.FC<{ text: string; sub?: string; dur: number; y?: number }> = ({ text, sub, dur, y }) => (
+  <Card dur={dur} top={y ?? 250}>
     <div
       style={{
         background: "rgba(34,38,42,0.82)",
@@ -217,7 +221,7 @@ const NameTag: React.FC<{ text: string; sub?: string; dur: number }> = ({ text, 
   </Card>
 );
 
-const Counter: React.FC<{ to: number; label: string; dur: number; countSeconds?: number }> = ({ to, label, dur, countSeconds }) => {
+const Counter: React.FC<{ to: number; label: string; dur: number; countSeconds?: number; y?: number }> = ({ to, label, dur, countSeconds, y }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const n = Math.round(
@@ -229,7 +233,7 @@ const Counter: React.FC<{ to: number; label: string; dur: number; countSeconds?:
   );
   const pop = spring({ frame, fps, config: { damping: 12, stiffness: 200 } });
   return (
-    <AbsoluteFill style={{ alignItems: "center", top: 790, opacity: fadeOut(frame, dur) }}>
+    <AbsoluteFill style={{ alignItems: "center", top: y ?? 790, opacity: fadeOut(frame, dur) }}>
       <div style={{ fontFamily, fontWeight: 900, fontSize: 230, color: AMBER, transform: `scale(${pop})`, WebkitTextStroke: `8px ${CHARCOAL}`, paintOrder: "stroke fill", textShadow }}>
         {n}
       </div>
@@ -307,19 +311,19 @@ const OverlayLayer: React.FC<{ o: Overlay }> = ({ o }) => {
   const dur = Math.round((o.end - o.start) * FPS);
   switch (o.kind) {
     case "stamp":
-      return <Stamp text={o.text} dur={dur} y={o.y} />;
+      return <Stamp text={o.text} dur={dur} y={o.y} x={o.x} />;
     case "location":
-      return <Location text={o.text} sub={o.sub} dur={dur} />;
+      return <Location text={o.text} sub={o.sub} dur={dur} y={o.y} />;
     case "nameTag":
-      return <NameTag text={o.text} sub={o.sub} dur={dur} />;
+      return <NameTag text={o.text} sub={o.sub} dur={dur} y={o.y} />;
     case "counter":
-      return <Counter to={o.to} label={o.label} dur={dur} countSeconds={o.countSeconds} />;
+      return <Counter to={o.to} label={o.label} dur={dur} countSeconds={o.countSeconds} y={o.y} />;
     case "verdict":
       return <Verdict text={o.text} good={o.good} dur={dur} />;
     case "gauge":
       return <Gauge to={o.to} unit={o.unit} dur={dur} dropSeconds={o.dropSeconds} />;
     case "clock":
-      return <Clock cx={o.cx} cy={o.cy} r={o.r} from={o.from} to={o.to} at={o.at} spin={o.spin} W={1080} H={1920} />;
+      return <Clock cx={o.cx} cy={o.cy} r={o.r} pin={o.pin} marks={o.marks} from={o.from} to={o.to} at={o.at} spin={o.spin} W={1080} H={1920} />;
   }
 };
 
@@ -339,13 +343,17 @@ function pages(words: Word[], per: number): Word[][] {
   return out;
 }
 
-const Captions: React.FC<{ words: Word[]; per: number; y: number }> = ({ words, per, y }) => {
+const Captions: React.FC<{ words: Word[]; per: number; y: number; shots: Shot[] }> = ({ words, per, y, shots }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const t = frame / fps;
   const ps = pages(words, per);
   const page = ps.find((p, i) => t >= p[0].start && t < (ps[i + 1]?.[0].start ?? p[p.length - 1].end + 0.6));
   if (!page) return null;
+  // the words take the position of the shot on screen NOW: at a cut they move with the picture, so a page that starts
+  // on one shot never sits on the next shot's face (user review 2026-10-26, S3 "Four years later" on the canoe)
+  const shot = shots.find((s) => t >= s.start && t < s.end);
+  y = shot?.captionY ?? y;
   const pageStart = Math.round(page[0].start * fps);
   const enter = spring({ frame: frame - pageStart, fps, config: { damping: 14, stiffness: 260, mass: 0.5 } });
   return (
@@ -422,7 +430,7 @@ export const StorybookShort: React.FC<StorybookShortProps> = ({ totalSeconds, sh
             <OverlayLayer o={o} />
           </Sequence>
         ))}
-        <Captions words={words} per={wordsPerPage ?? 3} y={captionY ?? 1180} />
+        <Captions words={words} per={wordsPerPage ?? 3} y={captionY ?? 1180} shots={shots} />
       </AbsoluteFill>
     </AbsoluteFill>
   );

@@ -32,13 +32,21 @@ def s(id, img, cam, fx=(), life=(), **kw):
 K = "cut/"
 # 0 · hook (letterboxed)
 s("0.01", None, None, clip="cut/clips/v0.01.mp4")
-s("0.02", None, None, clip="cut/clips/v0.02.mp4")
-s("0.03", K + "wI03a.jpg", C([50, 52], 1.12, 1.2), [dict(t="clock", x=50.0, y=50.7, r=10.5, from_=12, to=1, at=4, dur=40),
+# 0.02 / 0.04 / 0.06 (user review 2026-10-26: the clips looked AI — food sinking on a still string, Alexis walking back to
+# a window): stills under the same timing. 0.02 = a slow dissolve from the beef beside the opening (s0.02a) to the string
+# going in (s0.02b) while the camera pushes in; 0.04 = the same dissolve backwards; 0.06 = Alexis toward the real door.
+s("0.02", None, C([44, 54], 1.04, 1.14), morph=dict(dir="cut/morph-0.02", n=48))
+# the painted dial (scripts/dial_fit.py on keyframes/wI03a.png, in image-space px): the hands pivot on the pin and land on
+# the painted hour marks, 12 = the mark under the stem; one steady hour in 2 s (user review 2026-10-26: the old hands spun off-centre and lurched)
+WI03A_PIN = [945.3, 544.5]
+WI03A_MARKS = [[1046.5, 458.3], [1084.9, 498.6], [1101.1, 555.5], [1075.3, 612.7], [1015.5, 653.1], [941.5, 663.6],
+               [873.0, 644.4], [826.2, 600.5], [817.8, 541.8], [855.5, 493.2], [906.9, 455.9], [979.1, 440.6]]
+s("0.03", K + "wI03a.jpg", C([50, 52], 1.12, 1.2), [dict(t="clock", pin=WI03A_PIN, marks=WI03A_MARKS, from_=12, to=1, at=6, dur=60),
                                                     dict(t="shine", mask="wI03a-watch", at=30)])
-s("0.04", None, None, clip="cut/clips/v0.02-rev.mp4")
+s("0.04", None, C([42, 60], 1.18, 1.06), morph=dict(dir="cut/morph-0.04", n=48))
 s("0.05", K + "s0.05.jpg", C([84, 50], 1.04, 1.22, centre=0.6),
   [dict(t="ink", x=85, y=52, rx=8, ry=30, at=8, note="half. gone.", noteAt=[62, 22]), dict(t="shine", mask="s0.05-beef", at=30)])
-s("0.06", None, None, clip="cut/clips/v0.06.mp4")
+s("0.06", K + "s0.06.jpg", C([70, 52], 1.12, 1.12, panTo=[84, 52], centre=0.6))
 # 0.07 + 0.08: ONE slow pull-back from the opening over both beats (user review 2026-10-24: Beaumont after Beaumont in the
 # same room was a jump cut; the opening covers "Nobody cut him open… three years" instead)
 s("0.07", K + "s4.07b.jpg", C([49, 73], 2.6, 1.7, centre=1.0))
@@ -53,7 +61,7 @@ s("1.04", K + "s1.04.jpg", C([55, 40], 1.04, 1.14), life=[dict(t="spray", x=88, 
 s("1.05", K + "s1.05.jpg", C([74, 42], 1.03, 1.15),
   [dict(t="callout", name="ALEXIS ST. MARTIN", sub="ABOUT 18 · VOYAGEUR", aside="about to have a very bad summer", x=74, y=36, side="left", at=10),
    # which one is Alexis: his friends dim while the name card is up, and he lights up as it lands
-   dict(t="isolate", mask="s1.05-alexis", at=6, dur=120, soft=True), dict(t="pulse", mask="s1.05-alexis", at=12, dur=26)])
+   dict(t="isolate", mask="s1.05-alexis2", at=6, dur=120, soft=True), dict(t="pulse", mask="s1.05-alexis2", at=12, dur=26)])
 s("1.05b", K + "s1.05b.jpg", C([58, 42], 1.12, 1.12, panTo=[66, 55], centre=0.6))
 s("1.06", K + "s1.06.jpg", C([45, 40], 1.04, 1.18), [dict(t="spot", x=48, y=48, rx=16, ry=26, at=14, dur=80),
                                                        dict(t="date", text="6 JUNE 1822", at=4)],
@@ -65,13 +73,16 @@ s("1.08", K + "s1.08.jpg", C([55, 78], 1.04, 1.2, centre=0.55), [dict(t="ink", x
 # runs under the barrel from Alexis's side to the clerk, its label on "meter"
 s("1.09", K + "s1.09c.jpg", C([55, 52], 1.04, 1.14), [dict(t="measure", x0=38, x1=74, y=57, at=4, labelAt=18, text="< 1 m")])
 s("1.10", None, None, clip="cut/clips/v1.10.mp4", fx=[dict(t="tag", text="DR. WILLIAM BEAUMONT", sub="ARMY SURGEON", at=12)])
-s("1.11", K + "s1.11.jpg", C([86, 32], 1.03, 1.14, centre=0.5), [dict(t="pulse", mask="s1.11-beaumont", at=8)])
+# a steady highlight (user review 2026-10-26: the pulse's growing halo made him look as if he stepped in and back)
+s("1.11", K + "s1.11.jpg", C([86, 32], 1.03, 1.14, centre=0.5), [dict(t="lift", mask="s1.11-beaumont", at=8)])
 s("1.12", K + "s1.12.jpg", C([38, 22], 1.03, 1.14, centre=0.5), [dict(t="spot", x=38, y=24, rx=16, ry=26, at=10, dur=90)],
   life=[dict(t="glow", x=64.5, y=26.4, r=160)])
-s("1.13", K + "s1.13.jpg", C([21, 76], 1.04, 1.28, centre=0.65))
+s("1.13", K + "s1.13-soft.jpg", C([21, 76], 1.04, 1.28, centre=0.65))
 s("1.14", K + "s1.14.jpg", C([66, 70], 1.18, 1.04), [dict(t="isolate", mask="s1.14-alexis3", at=10, dur=999)])
-s("1.15", None, None, clip="cut/clips/v1.15.mp4")
-s("1.16", K + "s1.16.jpg", C([48, 27], 1.04, 1.2))
+# 1.15 + 1.16 (user review 2026-10-26: the eyes-opening clip gasped "like a fish", and both close-ups sat on the same sharp
+# store as the wide shot): the eyes-open still, and a shallow depth of field on both so they read as close-ups
+s("1.15", K + "s1.15b.jpg", C([52, 80], 1.06, 1.14), [dict(t="dof", mask="s1.15b-alexis2")])
+s("1.16", K + "s1.16.jpg", C([48, 27], 1.04, 1.2), [dict(t="dof", mask="s1.16-beaumont")])
 # 2 · what happened next (Mackinac post hospital)
 s("2.01", K + "s2.01.jpg", C([80, 60], 1.03, 1.14, centre=0.5), [dict(t="counter", text=[f"DAY {d}" for d in (1, 3, 6, 9, 12, 15, 17)], at=6, every=10)],
   life=[dict(t="glow", x=70, y=55, r=120)])
@@ -89,7 +100,8 @@ s("2.13", K + "s2.13.jpg", C([66, 22], 1.04, 1.18, centre=0.6), life=[dict(t="gl
 s("3.02", K + "s3.02.jpg", C([30, 30], 1.12, 1.12, panTo=[66, 30], centre=0.6), [dict(t="rack", a="s3.02-prof1", b="s3.02-prof2b", at=50)])
 s("3.03", K + "wI20.jpg", C([50, 40]))
 s("3.04", K + "wI21.jpg", C([50, 45]))
-s("3.05", K + "s3.05.jpg", C([45, 60]), life=[dict(t="glow", x=45, y=77, r=150), dict(t="glow", x=86, y=72, r=160)])
+# "you'd need to watch a living stomach while it worked" (user review 2026-10-26: the closed door wasn't related)
+s("3.05", K + "s4.07a.jpg", C([47, 66], 1.04, 1.16))
 s("3.06", K + "s3.06.jpg", C([48, 22], 1.25, 1.04, centre=0.4))
 s("3.07", "img/M15.jpg", C([25, 45], 1.12, 1.12, panTo=[70, 45], centre=0.6), [dict(t="pulse", mask="img/M15-alexis.png", at=40)])
 # 4 · the experiments
@@ -100,10 +112,12 @@ s("4.03", K + "s4.03.jpg", C([28, 56], 1.22, 1.22, panTo=[72, 33], centre=0.7),
   [dict(t="foods", at=6, items=FOOD_TAGS)])
 # v3 image (user review 2026-10-24): cabbage, bread, pork and boiled beef gone, raw beef left, spiced beef half-dissolved; the
 # tags keep their names; an ink circle lands on each empty string as its word is spoken (cabbage 35, bread 54, pork 72, beef 91)
-s("4.05", K + "s4.05c.jpg", C([55, 50], 1.04, 1.12), [dict(t="clock", x=86, y=18, r=7, from_=12, to=2, at=2, dur=30, chip=True),
-                                                      dict(t="foods", at=0, every=2, items=FOOD_TAGS),
+# the clock (user review 2026-10-26): top centre on the empty table, drawn LAST so no ink circle crosses it, one steady
+# forward sweep 12 -> 2 landing on "2 hours"
+s("4.05", K + "s4.05c.jpg", C([55, 50], 1.04, 1.12), [dict(t="foods", at=0, every=2, items=FOOD_TAGS),
                                                       dict(t="ink", x=80, y=31, rx=5.5, ry=6, at=33), dict(t="ink", x=69, y=37, rx=5.5, ry=6, at=52),
-                                                      dict(t="ink", x=32, y=57, rx=5.5, ry=6, at=70), dict(t="ink", x=57, y=42, rx=5.5, ry=6, at=90)])
+                                                      dict(t="ink", x=32, y=57, rx=5.5, ry=6, at=70), dict(t="ink", x=57, y=42, rx=5.5, ry=6, at=90),
+                                                      dict(t="clock", x=56, y=15, r=7, from_=12, to=2, at=2, dur=48, chip=True)])
 s("4.06", K + "s4.06.jpg", C([62, 28]))
 s("4.07", None, None, clip="cut/clips/v4.07.mp4", fx=[dict(t="note", text="no forms. none.", x=72, y=30, at=40)])
 s("4.08", K + "s4.08.jpg", C([48, 40], 1.3, 1.36), [dict(t="stamp", text="NO FORMS", x=28, y=30, size=90, at=10),
@@ -128,7 +142,8 @@ s("5.03", K + "s5.03.jpg", C([65, 47], 1.04, 1.18, centre=0.5))
 s("5.04", "img/M20.jpg", C([50, 45]))
 s("5.05", K + "s5.05.jpg", C([28, 38], 1.14, 1.14, panTo=[60, 50], centre=0.6))
 s("5.07", None, None)  # graphic
-s("5.08", None, None, clip="cut/clips/v5.08.mp4", use=[0, 3.0])
+# a still (user review 2026-10-26: the clip chopped nothing while logs fell by themselves)
+s("5.08", K + "s5.08.jpg", C([52, 48], 1.04, 1.14))
 s("5.09", K + "s5.09.jpg", C([72, 34], 1.14, 1.14, panTo=[25, 40], centre=0.6))
 # canoes (user review 2026-10-24: "flying"): y = the hull bottom, the lower 14% of the hull sits under the waterline;
 # the family canoe 10 points lower than before; the lake's water starts at y≈56%. (The old glint here had no glasses to sit on.)
@@ -199,13 +214,30 @@ MASKS = {
     "s3.02-prof1": ("s3.02", (18, 18, 42, 100)), "s3.02-prof2b": ("s3.02", (46, 22, 82, 100), 0.08),
     "s4.11-vials": ("s4.11", (41, 44, 79, 89)), "s6.03-coins": ("s6.03", (18, 50, 60, 95)), "s8.03-jar": ("s8.03", (45, 36, 58, 62)),
     "s9.03-tuque": ("s9.03", (51, 20, 67, 46)),
+    # depth of field on the 1.15 / 1.16 close-ups (user review 2026-10-26)
+    "s1.15b-alexis": ("s1.15b", (66, 62, 100, 100), 0.1), "s1.16-beaumont": ("s1.16", (36, 12, 64, 100), 0.1),
 }
 # subjects a box can't isolate, outlined on a coordinate grid (% of the frame, checked on an overlay):
 # 1.05 — whole-picture cut-out, limited to Alexis's side along his back and the top of his arm (the three friends touch)
 # 1.14 — Alexis lying under the blanket, the barrel rim in front of him: a measured polygon (no model separates him)
-WHOLE = {"s1.05-alexis": ("s1.05", (70, 32, 86, 90), [(68, 0), (100, 0), (100, 100), (71.5, 100), (71.4, 86), (68.8, 83), (63.5, 83),
+# 1.05 v2 (user review 2026-10-26: the old limit cut through his nose and hands): traced generously around the cap, the
+#   face profile (nose, open mouth), both hands and the bread between them, the shirt and the sash
+WHOLE = {"s1.05-alexis2": ("s1.05", (70, 32, 86, 90), [(67.4, 37.5), (69.3, 32), (72.5, 29.8), (76.5, 29.6), (79.8, 32.3), (80.6, 36.5),
+                                                       (80.1, 40.5), (79.2, 44), (79.4, 47.5), (81.4, 50.4), (83.6, 55), (85, 60.5), (85.3, 67),
+                                                       (85, 74), (84.7, 80), (84, 86), (83.2, 91), (82.7, 100), (71, 100), (70.8, 93), (71.2, 88.5),
+                                                       (72, 84.5), (70, 82), (66, 81.4), (62, 82.4), (58.4, 80.8), (55.6, 78.4), (55.8, 75.8),
+                                                       (60.6, 71.8), (61.1, 69.3), (63.6, 69.2), (65.6, 70.7), (68.2, 70.7), (69.6, 68.8),
+                                                       (69.8, 64), (69.4, 59), (70.2, 55), (70.3, 53.4), (69.1, 52), (68.8, 49.6), (68.1, 48.2),
+                                                       (67.9, 46.8), (66.9, 45.7), (67.3, 43.8), (67.7, 41.5), (67.1, 39.5)]),
+         "s1.05-alexis": ("s1.05", (70, 32, 86, 90), [(68, 0), (100, 0), (100, 100), (71.5, 100), (71.4, 86), (68.8, 83), (63.5, 83),
                                                       (60.4, 79.4), (60.7, 71.9), (62, 70.5), (65.6, 70), (71.9, 62.6), (71.9, 55), (68, 37)])}
-POLY = {"s1.14-alexis3": ("s1.14", [(72.5, 71.6), (74.5, 71.6), (76.3, 73.5), (76.2, 76.5), (75.4, 79.5), (75.6, 84), (74.5, 87.5), (73.5, 89.8),
+# 1.15b — Alexis lying (face, cap, shirt, sash), the barrel in front left OUT so it blurs as a foreground (rembg took the
+#   fur bundle and missed his face)
+POLY = {"s1.15b-alexis2": ("s1.15b", [(43, 73), (46, 69.5), (50, 68.3), (54, 68.8), (55.6, 71), (57, 73.5), (58.8, 76.5), (60.2, 79),
+                                      (61.4, 81.5), (63, 80.2), (66, 77.2), (70, 75.2), (74, 74), (78, 74.4), (80.6, 75.8), (83.8, 76.2),
+                                      (85.2, 80), (85.6, 90), (85.2, 99.5), (81, 99.5), (78, 94.5), (74, 90.6), (68, 88.6), (63, 89),
+                                      (58, 90.6), (55, 91.2), (51, 92.6), (48, 90.8), (45, 89), (42.2, 86), (41, 82), (41.4, 77)]),
+        "s1.14-alexis3": ("s1.14", [(72.5, 71.6), (74.5, 71.6), (76.3, 73.5), (76.2, 76.5), (75.4, 79.5), (75.6, 84), (74.5, 87.5), (73.5, 89.8),
                                     (68, 89.6), (62, 89.7), (56, 90.6), (51.5, 92.8), (50, 95.2), (46, 94.6), (42, 93.2), (38, 92.2), (35.3, 91.8),
                                     (36.5, 90.2), (40, 88.6), (44, 87.2), (48, 85.8), (52, 84.6), (55.5, 83.2), (57, 81.5), (57.8, 80), (60, 79),
                                     (62.5, 78.4), (64.5, 77.2), (66.5, 76), (68.5, 74.6), (70.5, 73), (71.5, 72.2)])}
@@ -223,6 +255,18 @@ def build_masks():
         out = PUB / f"cut/{name}.png"
         if not out.exists():
             subject_mask(str(PUB / f"cut/{img}.jpg"), str(out), box, width=1920, **({"pad": pad[0]} if pad else {}))
+
+
+def hold_dissolve(a, b, out, mix, n=48):
+    """n frames: picture a, then a `mix`-frame eased dissolve centred in the sequence, then picture b."""
+    import math
+    from PIL import Image
+    A, B = Image.open(a).convert("RGB"), Image.open(b).convert("RGB")
+    out.mkdir(parents=True, exist_ok=True)
+    s0 = (n - mix) // 2
+    for i in range(n):
+        t = min(1, max(0, (i - s0) / mix))
+        Image.blend(A, B, 0.5 - 0.5 * math.cos(math.pi * t)).save(out / f"{i:03d}.jpg", quality=92)
 
 
 def verify_sheet(path):
@@ -282,8 +326,22 @@ def verify_sheet(path):
 if __name__ == "__main__":
     build_masks()
     from trans_prep import morph
+    # 0.02 / 0.04: hold, ONE short film dissolve at the action, hold (a flow morph smeared the arm; a full-length dissolve
+    # showed three ghost hands, user review 2026-10-26)
+    for name, a_, b_, mix in (("morph-0.02", "s0.02a", "s0.02b", 8), ("morph-0.04", "s0.02b", "s0.02a", 12)):
+        if not (PUB / f"cut/{name}/047.jpg").exists():
+            hold_dissolve(PUB / f"cut/{a_}.jpg", PUB / f"cut/{b_}.jpg", PUB / f"cut/{name}", mix)
     if not (PUB / "cut/morph-4.12/047.jpg").exists():
         morph(str(PUB / "cut/s4.12.jpg"), str(PUB / "cut/s4.12b.jpg"), str(PUB / "cut/morph-4.12"), frames=48)
+    # canoes: the waterline along the measured keel + the reflection under it (masks.canoe_water)
+    from masks import canoe_water
+    for sp in SH.values():
+        spr = sp.get("sprite")
+        if spr:
+            src = PUB / spr["src"]
+            base = spr["src"][:-4]
+            info = canoe_water(str(src), spr.get("sink", 0.14))
+            spr.update(water=f"{base}-water.png", refl=f"{base}-refl.png", wmid=round(info["wmid"], 4), E=info["E"], tilt=9.55)
     json.dump({"shots": SH}, open(OUT, "w", encoding="utf-8"), indent=1, ensure_ascii=False)
     print(len(SH), "shots ->", OUT)
     if len(sys.argv) > 1:

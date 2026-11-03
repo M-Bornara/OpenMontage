@@ -140,6 +140,29 @@ export const Isolate: React.FC<{ src: string; mask: string; at: number; dur: num
 
 // ── Character pulse: the person lights up as their name is said. Default "tint": a soft white lift + a thin bright rim
 // + a light sweep across them (user's preference). "glow": the stronger amber halo, for other uses.
+// Lift: a STEADY highlight on a masked subject — fades in once over 10 frames and holds (no pulsing halo: a halo that grows
+// and shrinks reads as the person stepping in and back, user review 2026-10-26)
+export const Lift: React.FC<{ src: string; mask: string; at: number }> = ({ src, mask, at }) => {
+  const f = useCurrentFrame();
+  const k = interpolate(f, [at, at + 10], [0, 1], { ...clamp, easing: Easing.out(Easing.sin) });
+  if (k <= 0) return null;
+  return (
+    <>
+      <Img src={staticFile(mask)} style={{ ...fill, opacity: 0.55 * k, filter: "drop-shadow(0 0 3px rgba(255,248,230,0.9)) drop-shadow(0 0 7px rgba(255,248,230,0.7))" }} />
+      <Img src={staticFile(src)} style={{ ...fill, ...masked(mask), filter: `brightness(${1 + 0.14 * k}) saturate(${1 + 0.08 * k})` }} />
+    </>
+  );
+};
+
+// Dof: a shallow depth of field for a close-up — the picture blurred, the masked subject sharp on top (so a close-up on the
+// same set as the wide shot reads as a different lens, not the same background at a bigger scale, user review 2026-10-26)
+export const Dof: React.FC<{ src: string; mask: string; blur?: number }> = ({ src, mask, blur = 7 }) => (
+  <>
+    <Img src={staticFile(src)} style={{ ...fill, filter: `blur(${blur}px) brightness(0.96)`, transform: "scale(1.01)" }} />
+    <Img src={staticFile(src)} style={{ ...fill, ...masked(mask) }} />
+  </>
+);
+
 export const Pulse: React.FC<{ src: string; mask: string; at: number; dur?: number; variant?: "tint" | "glow"; color?: string; times?: number }> = ({
   src, mask, at, dur = 22, variant = "tint", color, times = 1,
 }) => {

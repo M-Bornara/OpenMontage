@@ -19,7 +19,9 @@ from episode import DISCLOSURE, _write_srt, duration  # noqa: E402
 PID = "hc001-window-into-his-stomach"
 P = REPO / "projects" / PID
 LAB = REPO / "projects/_fxlab"
-VIDEO = LAB / "renders/HC001-cut-v3.1.mp4"
+# v5 (2026-10-27, user review of v4): clock 12 under the stem + forward, no burned-in captions (YouTube shows captions.srt),
+# calm canoes on a keel-parallel waterline, stills for the AI-looking clips, wound blurred, no black frames at cuts
+VIDEO = LAB / "renders/HC001-cut-v5.mp4"
 OUT = P / "renders/deliverables-long"
 
 TITLE = "The Man With a Window Into His Stomach"

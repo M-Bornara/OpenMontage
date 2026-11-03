@@ -56,7 +56,8 @@ B("1.05b", "working for the american", "MS", "Alexis heaves a fur bale onto the 
   "alexis@C", "new", "pan", mood=3)
 B("1.06", "on the 6th of june", "WS", "inside the crowded company store: a man fumbles a musket by the counter; Alexis in the foreground",
   "alexis@L clerk@R", "new", "push>clerk", "cut", life="dust motes in window light", fx="spotlight on the musket · date tag", sfx="murmur", mood=4)
-B("1.07", "a musket goes off", "ECU", "the musket's hammer falls: flash and smoke", "musket@C", "reuse:I06", "snap", "flash",
+# 1.07 lands on "off" (the bang) (user review 2026-10-26: the wide 6 June shot was too short against the gun close-up)
+B("1.07", "off", "ECU", "the musket's hammer falls: flash and smoke", "musket@C", "reuse:I06", "snap", "flash",
   fx="shake (big hit)", sfx="musket shot", mood=5)
 B("1.08", "loaded with powder", "CU", "a spilled powder horn and duck-shot pellets on the floorboards, smoke curling", "pellets@C", "new",
   "push>pellets", life="smoke wisps (overlay)", fx="ink circle 'duck shot'", mood=4)
@@ -169,7 +170,8 @@ B("5.06", "then in 1829", "MAP", "the 1829 map: the family brought back (dotted 
   "zoom", "ink bleed", mood=3)
 B("5.07", "at great expense", "ECU", "Beaumont's ledger line 'At great expense to me'", "ledger@C", "graphic:journal", "push",
   fx="shine · Matt note 'expense: one voyageur.'", mood=3)
-B("5.08", "between experiments", "MS", "Alexis chopping wood (clip, 2 s)", "alexis@C", "clip", "static", sfx="axe", mood=3)
+# a still now (the clip chopped nothing while logs fell by themselves): no axe sound without a chop on screen
+B("5.08", "between experiments", "MS", "Alexis chopping wood (still s5.08, slow push)", "alexis@C", "reuse:s5.08", "push", mood=3)
 B("5.09", "carrying loads", "MS", "Alexis carrying a heavy sack across the yard; Beaumont reading", "alexis@CR beaumont@L", "new",
   "pan:alexis>beaumont", mood=2)
 B("5.10", "in 1831 the family", "MAP", "the 1831 map: the family's canoe follows the rivers to Montreal (camera rides along)", "",

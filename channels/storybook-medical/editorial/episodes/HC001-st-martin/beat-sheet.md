@@ -1,8 +1,8 @@
 # HC001 · Beat sheet v1 (for review)
 
-**131 beats**, on average **3.91 s** each (longest 12.72 s). Estimated generation cost: **$13.23** (new stills $0.12, clips $0.40 incl. their image, first+last-frame clips $0.73, props $0.24; reused / callbacks / maps / graphics are free).
+**131 beats**, on average **3.91 s** each (longest 12.72 s). Estimated generation cost: **$12.83** (new stills $0.12, clips $0.40 incl. their image, first+last-frame clips $0.73, props $0.24; reused / callbacks / maps / graphics are free).
 
-Sources: clip 6, flf 3, reuse 15, callback 9, new 66, trailer 1, newline 1, map 5, graphic 13, card 2, props 2, file 7, brand 1
+Sources: clip 5, flf 3, reuse 16, callback 9, new 66, trailer 1, newline 1, map 5, graphic 13, card 2, props 2, file 7, brand 1
 
 Transitions: cut 68, film dissolve 17, ink bleed 13, light dissolve 11, whip 5, cut! 3, dip to black 3, match 2, cold open: sound first 1, flash cuts 1, sting → bars open 1, flash 1, morph 1, dip to parchment 1, case-file drop 1, case-file exit 1, zoom-through 1
 
@@ -84,8 +84,8 @@ ch9  ▂▂▄▂▆▄
 | 1.04 | 0:41.3 | 2.4 | one stroke at a time | MS | MAC_SHORE | three voyageurs (distinct faces) pulling together, water spraying off the blades | new | push | cut | spray particles | ▄ |
 | 1.05 | 0:43.7 | 5.68 | one of them is | MCU | MAC_SHORE | Alexis laughing on the dock with two friends, sharing bread; red tuque | new | push>alexis | cut | freeze-frame callout: ALEXIS ST. MARTIN · ABOUT 18 · VOYAGEUR · 'about to have a very bad summer' | ▄ |
 | 1.05b | 0:49.4 | 2.72 | working for the american | MS | MAC_SHORE | Alexis heaves a fur bale onto the dock; bales stamped with the company mark (no lettering) | new | pan | cut |  | ▄ |
-| 1.06 | 0:52.1 | 1.2 | on the 6th of june | WS | MAC_STORE | inside the crowded company store: a man fumbles a musket by the counter; Alexis in the foreground | new | push>clerk | whip *(auto: set change)* | spotlight on the musket · date tag · dust motes in window light | ▆ |
-| 1.07 | 0:53.3 | 3.28 | a musket goes off | ECU | MAC_STORE | the musket's hammer falls: flash and smoke | reuse:I06 | snap | flash | shake (big hit) | █ |
+| 1.06 | 0:52.1 | 2.0 | on the 6th of june | WS | MAC_STORE | inside the crowded company store: a man fumbles a musket by the counter; Alexis in the foreground | new | push>clerk | whip *(auto: set change)* | spotlight on the musket · date tag · dust motes in window light | ▆ |
+| 1.07 | 0:54.1 | 2.48 | off | ECU | MAC_STORE | the musket's hammer falls: flash and smoke | reuse:I06 | snap | flash | shake (big hit) | █ |
 | 1.08 | 0:56.6 | 2.56 | loaded with powder | CU | MAC_STORE | a spilled powder horn and duck-shot pellets on the floorboards, smoke curling | new | push>pellets | cut | ink circle 'duck shot' · smoke wisps (overlay) | ▆ |
 | 1.09 | 0:59.1 | 2.32 | less than a meter | GFX |  | hand-drawn diagram: muzzle → Alexis's silhouette, measuring line '< 1 m' | graphic:distance | static | cut | cut to black 4 frames after | █ |
 | 1.10 | 1:01.5 | 2.32 | the army surgeon | WS | MAC_FORT | Beaumont runs up the hill path from the fort, bag in hand | clip | static | whip | name tag DR. WILLIAM BEAUMONT | ▆ |
@@ -144,7 +144,7 @@ ch9  ▂▂▄▂▆▄
 | 5.05 | 4:11.8 | 2.72 | paddled for the | WS | NORTH | Alexis in a big freight canoe on a northern river | new | pan | ink bleed *(auto: set change)* |  | ▂ |
 | 5.06 | 4:14.5 | 9.92 | then in 1829 | MAP |  | the 1829 map: the family brought back (dotted arc), counter NEARLY 2,000 MILES | map:1829 | zoom | ink bleed |  | ▄ |
 | 5.07 | 4:24.4 | 3.68 | at great expense | ECU |  | Beaumont's ledger line 'At great expense to me' | graphic:journal | push | cut | shine · Matt note 'expense: one voyageur.' | ▄ |
-| 5.08 | 4:28.1 | 5.04 | between experiments | MS | CRAWFORD | Alexis chopping wood (clip, 2 s) | clip | static | cut |  | ▄ |
+| 5.08 | 4:28.1 | 5.04 | between experiments | MS | CRAWFORD | Alexis chopping wood (still s5.08, slow push) | reuse:s5.08 | push | cut |  | ▄ |
 | 5.09 | 4:33.1 | 1.84 | carrying loads | MS | CRAWFORD | Alexis carrying a heavy sack across the yard; Beaumont reading | new | pan:alexis>beaumont | cut |  | ▂ |
 | 5.10 | 4:35.0 | 12.72 | in 1831 the family | MAP |  | the 1831 map: the family's canoe follows the rivers to Montreal (camera rides along) | map:1831 | follow | ink bleed |  | ▄ |
 | 5.11 | 4:47.7 | 3.6 | think about that | EWS | LAKE | the family canoe tiny under a huge sunset sky on an empty lake | props:canoe-family | pull | film dissolve | GLASSES GAG: on the canoe's thwart · the canoe sprite bobs and drifts · glow | ▆ |

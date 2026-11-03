@@ -1,6 +1,6 @@
 # Open items: read at the start of every session; mention anything due or unresolved
 
-Updated 2026-10-21.
+Updated 2026-11-03.
 
 ## Decisions waiting for the user
 - [x] editing-v2 approved (2026-10-19); the original structure is kept (see section 0).
@@ -9,13 +9,31 @@ Updated 2026-10-21.
 - [ ] Liam: a hyped take for the hook / myth / ending, compared against the archived take.
 - [ ] The user reviews the 3 HC001 Shorts (not watched yet).
 
+## From 2026-10-26
+- [x] Shorts final-v4 approved (2026-11-03). Packages built: projects/hc001-s1..s3/renders/deliverables/ (short.mp4, cover.jpg,
+      captions.srt, publish.md with title/description/tags/pinned challenge). User uploads + schedules: S2 Mon Nov 9, S1 Wed Nov 11,
+      S3 Fri Nov 13, all 13:00 MT, Related Video = HC001-L (set after Nov 8 if Studio can't pick a scheduled video).
+- [x] Cluster 2 shifted one week (user, 2026-11-03): Forssmann Tue Nov 24, HC002-L Sun Nov 29 (upload-schedule.md).
+- [ ] **HC001-L v5 re-upload** (2026-10-27): renders/deliverables-long/HC001-L.mp4 = cut v5 (clock fixed, no burned-in captions,
+      hook stills, 6 June longer, steady highlight, depth-of-field close-ups, wound blur, no black frames, readable strike,
+      2:21 new shot, clock badge top centre, chopping still, smoother map, canoe waterline + reflection, lake ghost removed).
+      User: watch it, then delete the scheduled upload and upload v5 with the same settings, before Nov 8.
+- [ ] **growth-strategy.md:** approve (a) Shorts at 15:00 ET = 13:00 MT, (b) the soft bridge line on half the Case Shorts,
+      (c) the fact meter, (d) research packages: Burnt City eye + al-Razi, and a Montagu story map.
+
 ## HC001 now
 - [x] User review of cut v2 (20 notes + music gaps) — fixed in v3 (2026-10-25).
 - [x] Cut approved: HC001-cut-v3.1.mp4 (v3 + Case File tab 'CASE FILE · ALEXIS ST. MARTIN', section-only render spliced in), 2026-10-25.
 - [x] Thumbnails: A main, B + C Test & compare (B kicker fixed to FORT NIAGARA · 1825).
 - [ ] **Upload package review** (projects/hc001-window-into-his-stomach/renders/deliverables-long/publish.md): title, description, chapters, sources, credits, tags, pinned comment, captions.srt.
 - [ ] rights.csv: 2 PENDING rows — user saves PDF copies of the fal.ai / Google / Kling terms.
-- [ ] Then: the 3 Shorts re-check.
+- [x] HC001-L uploaded and scheduled by the user (2026-10-26) for Sun Nov 8, 9:00 MT.
+- [ ] **The 3 Shorts** (rendered Oct 19, before the cut-v2 review rules; never watched by the user): user watches and
+      gives numbered notes -> audit against the HC001 edit rules -> free re-render -> publish package (short.mp4, cover.jpg,
+      captions.srt, crops check, publish.md) -> user approves -> scheduled S2 Mon Nov 9, S1 Wed Nov 11, S3 Fri Nov 13,
+      17:00 MT, Related Video = HC001-L. Ready by Wed Nov 4. S2 (59.6 s) and S3 (57.3 s) run over the 35-55 s target.
+- [x] The old "Hired as a Human Test Tube" Short (Oct 17) is NOT published: superseded by HC001-S3, flagged REWRITE
+      in master instructions v3, and titled "Part 2" (trailer-style). Kept as an art source only.
 - [ ] **End screen HC001-L** (editable any time, no re-upload): Nov 8 = Subscribe only (8:35-end, left under STILL CURIOUS?).
       **Remind Mon Nov 9** after the first Short is live: add Video "Most recent upload" (top right) + "Best for viewer"
       (bottom right); if a Short can't be picked, use the "Alexis St. Martin" playlist. **Remind Sun Nov 22**: top box =
