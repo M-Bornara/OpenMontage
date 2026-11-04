@@ -66,7 +66,9 @@ import cost_ledger  # noqa: E402
 import prompt_kit  # noqa: E402
 
 PLAYBOOK = "storybook-medical"
-VOICE = {"voice": "Liam", "model_id": "eleven-v3", "stability": 0.4, "speed": 1.2}
+# Speed comes from atempo only: ElevenLabs speed 1.2 + atempo stacked to ~1.37x and warbled (HC001). Blind A/B
+# 2026-11-04 (scripts/voice_ab.py): the user picked v3 at speed 1.0, stability 0.5 ("Natural") + atempo 1.14.
+VOICE = {"voice": "Liam", "model_id": "eleven-v3", "stability": 0.5, "speed": 1.0}
 # Channel narrator: Liam, always (master instructions v3.1). "narration": {"convert": true} (Chatterbox voice
 # conversion with a reference kept outside git) exists but is not used for the channel.
 VOICE_REF = REPO / "projects/voice/ref-hook.mp3"

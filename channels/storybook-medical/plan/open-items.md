@@ -39,7 +39,7 @@ Updated 2026-11-03.
       (bottom right) in place of the playlist; if a Short can't be picked, keep the playlist. **Remind Sun Nov 22**: top box =
       HC002-L (specific video).
 - [ ] **Instagram Reels by hand** (no schedule option found): **Remind** Tue Nov 10, Thu Nov 12, Sat Nov 14 at 17:00 Alberta: post S2 / S1 / S3 as a Reel (settings in each Short's publish.md). Try Meta Business Suite → Planner for scheduling next time.
-- [~] Next episode: clean narration (no warble) Blind A/B ready 2026-11-04: projects/voice-ab/forssmann-1 (1-6.wav, key.json), waiting for the user's pick. — A/B the speed-up before recording (memory: narration-audio-processing).
+- [x] Clean narration (no warble): blind A/B 2026-11-04, user picked #3 = v3 speed 1.0, stability 0.5 + atempo 1.14 (#6, same at stability 0.4, second). Now the default in episode.py VOICE.
 
 ## Before ANY paid HC001 generation (so nothing is paid for twice)
 - [x] Animatic v3 reviewed (2026-10-20): 0:10 string pull, 0:20 stray glow, hook music + SFX, 8.01 dissolve fixed → v3.1.
