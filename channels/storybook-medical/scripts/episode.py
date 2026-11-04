@@ -918,12 +918,19 @@ CHECKLIST = """## Upload checklist
 - Wait for **Content check lite** to finish with no issues before scheduling.
 - During the YouTube probe cross-posting is optional: keep the watermark-free master and post natively later.
 
-**Instagram Reels**
-- Upload `short.mp4`; Edit cover → Add from camera roll → `cover.jpg`; check the profile-grid preview.
-- Paste the Instagram caption; add the AI label if Instagram prompts for it.
+**Facebook Reels** (Page, not your personal profile; the day after YouTube, 18:00 ET = winter 17:00 Alberta)
+- Upload `short.mp4`; cover `cover.jpg`; paste the Facebook caption. Edit section (music, filters, text): nothing.
+- Schedule: the slot above. Playlist: the cluster playlist (create it the first time). Post visibility: Public.
+- **AI label: on** (same as TikTok; the narration is AI voice). Allow remixing: on. Share to story: on (free reach to
+  followers).
 
-**Facebook Reels**
-- Upload `short.mp4` with the Facebook caption and `cover.jpg`.
+**Instagram Reels** (same day and time as Facebook)
+- Post as a **Reel** (only Reels reach non-followers); share to story: on. "Also share to Facebook": **off** (the Page
+  gets its own post above). Trial reel: off.
+- Cover → Add from camera roll → `cover.jpg`; check the profile-grid crop (`cover-crops.jpg`).
+- Paste the Instagram caption. No location, no tagged people, no added music. **AI label: on**. Allow remix: on.
+- Scheduling: with a professional (Creator) account, Advanced settings → Schedule, or schedule it in Meta Business
+  Suite together with the Facebook Reel. If neither shows, post it by hand at the slot time.
 
 Credits: every description must include `CREDITS.txt` (CC-BY sound effects).
 """
