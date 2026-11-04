@@ -891,7 +891,7 @@ def studio_settings(kind, playlists, related=None, schedule=None):
             ("Comments", "On · Moderation Basic · Who can comment: Anyone · Sort by Top"),
             ("Show how many viewers like this video", "on")]
     if related:
-        rows.insert(1, ("Related video", f"**{related}** (the link under the Short; the most important field)"))
+        rows.insert(1, ("Related video", f"**{related}** (the link under the Short; the most important field. Studio lists public videos only: if the long isn't live yet, leave it and add it as soon as it is)"))
     if schedule:
         rows.append(("Visibility", f"upload as Private, watch it once, then **Schedule: {schedule}**"))
     return ["## YouTube Studio settings", "", "| Field | Value |", "|---|---|"] + [f"| {a} | {b} |" for a, b in rows] + [""]
@@ -902,11 +902,11 @@ CHECKLIST = """## Upload checklist
 **YouTube Shorts** (Studio on desktop)
 - Upload `short.mp4`; paste title, description, tags.
 - Thumbnail: upload `cover.jpg` if your account shows the custom-thumbnail option for Shorts; otherwise pick the frame closest to the cover.
-- Subtitles → upload `captions.srt` (English).
+- Subtitles: **don't upload** `captions.srt` (burned in already; a CC track would show the words twice).
 - Every other field: the **YouTube Studio settings** table above.
 - Before publishing: Stage 7 review (whole video watched; claims.csv has no UNKNOWN/REMOVE claims left in the script;
   rights.csv complete). Upload as Private first; never auto-publish.
-- After publishing: post and pin the pinned comment. When a long video exists, set it as the Short's **Related video**.
+- After publishing: post and pin the pinned comment. Related video lists public videos only: if the long isn't live yet, add it the moment it is.
 
 **TikTok**
 - Upload `short.mp4`; Edit cover → upload `cover.jpg`; paste the TikTok caption.

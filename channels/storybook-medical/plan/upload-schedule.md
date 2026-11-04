@@ -117,11 +117,12 @@ Everything you need is in the episode's `renders/deliverables/`:
      phone app: Short → Edit → Thumbnail.
    - **Playlist:** the cluster playlist.
    - **Audience:** not made for kids.
-   - **Related video:** choose the long video in the table above. This is the most important field for a
-     Short: it puts a link to the long video under the Short.
-   - **Show more:** Altered content **No**, Category Education, Language English.
-3. **Subtitles:** upload `captions.srt`. The captions are already burned into the video; the file helps search
-   and accessibility.
+   - **Related video:** the long video. This is the most important field for a Short: it puts a link to the
+     long video under the Short. Studio only lists **public** videos, so if the long isn't live yet, schedule the
+     Short without it and add it the moment the long goes public (a scheduled Short can still be edited).
+   - **Show more:** the Studio settings table in `publish.md`.
+3. **Subtitles:** **don't upload** `captions.srt`. The captions are burned into the video; a caption track would
+   print a second copy on top for anyone with CC on. (The file stays in the folder for TikTok/Instagram if needed.)
 4. **Visibility** → **Schedule** → date and 15:00 ET (winter 14:00 Alberta).
 5. After it's live: pin the comment-challenge comment from `publish.md`.
 

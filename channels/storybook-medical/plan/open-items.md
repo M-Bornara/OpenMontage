@@ -12,7 +12,7 @@ Updated 2026-11-03.
 ## From 2026-10-26
 - [x] Shorts final-v4 approved (2026-11-03). Packages built: projects/hc001-s1..s3/renders/deliverables/ (short.mp4, cover.jpg,
       captions.srt, publish.md with title/description/tags/pinned challenge). User uploads + schedules: S2 Mon Nov 9, S1 Wed Nov 11,
-      S3 Fri Nov 13, all 15:00 ET = 14:00 Alberta, Related Video = HC001-L (set after Nov 8 if Studio can't pick a scheduled video).
+      S3 Fri Nov 13, all 15:00 ET = 14:00 Alberta, Related Video = HC001-L: Studio lists public videos only, so **Remind Sun Nov 8 right after 11:00 ET**: add HC001-L as Related video on all 3 scheduled Shorts (before S2 goes live Mon). No captions.srt on Shorts (burned in).
 - [x] Cluster 2 shifted one week (user, 2026-11-03): Forssmann Tue Nov 24, HC002-L Sun Nov 29 (upload-schedule.md).
 - [ ] **HC001-L v5 re-upload** (2026-10-27): renders/deliverables-long/HC001-L.mp4 = cut v5 (clock fixed, no burned-in captions,
       hook stills, 6 June longer, steady highlight, depth-of-field close-ups, wound blur, no black frames, readable strike,
