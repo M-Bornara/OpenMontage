@@ -36,10 +36,13 @@ def finish(src, af, out):
     sped = out.with_name("_sped.wav")
     ff("-i", str(src), *(["-af", af] if af else []), "-ar", "48000", "-ac", "1", "-c:a", "pcm_s16le", str(sped))
     i, _ = loudness(sped)
-    d = duration(sped)
-    ff("-i", str(sped), "-af", f"volume={-14 - i:.2f}dB,{LIM},afade=t=in:st=0:d=0.015,afade=t=out:st={d - 0.08:.3f}:d=0.08",
+    stage = out.with_name("_stage.wav")
+    ff("-i", str(sped), "-af", f"volume={-14 - i:.2f}dB,{LIM}", str(stage))
+    i2, _ = loudness(stage)
+    d = duration(stage)
+    ff("-i", str(stage), "-af", f"volume={-14 - i2:.2f}dB,{LIM},afade=t=in:st=0:d=0.015,afade=t=out:st={d - 0.08:.3f}:d=0.08",
        "-ar", "48000", "-ac", "1", "-c:a", "pcm_s16le", str(out))
-    sped.unlink()
+    sped.unlink(); stage.unlink()
 
 
 def main():
