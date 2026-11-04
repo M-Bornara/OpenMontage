@@ -127,11 +127,15 @@ def main():
           f"**Tags:** {', '.join(TAGS)}", "", f"**Pinned comment:** {PINNED}", "",
           "**Thumbnails:** upload `thumb-A.jpg`; Test & compare: add `thumb-B.jpg` and `thumb-C.jpg`.", "",
           *studio_settings("long", "Season Zero · Alexis St. Martin", schedule="Sun Nov 8, 9:00 MT (11:00 ET)"),
-          "**Subtitles (Video elements):** Upload file → With timing → `captions.srt`. The video has no burned-in "
-          "captions; this file is the only one.", "",
-          "**End screen:** the brand end screen runs 8:35–8:47 (12 s). Set all three elements (Best for viewer, "
-          "Most recent upload, Subscribe) from 8:35 to the end.", "",
-          "**Cards:** none yet (no other video to link). From cluster 2 on, add one where another case is mentioned.", "",
+          "## Video elements", "", "| Element | Value |", "|---|---|",
+          "| Subtitles | Upload file → With timing → `captions.srt` (no burned-in captions; this file is the only one) |",
+          "| End screen | 8:35 to the end (12 s, the brand end screen). YouTube needs at least one video or playlist "
+          "element, so Subscribe alone is refused. **Launch (Nov 8):** Subscribe (left, under STILL CURIOUS?) + "
+          "Playlist \"Season Zero · Alexis St. Martin\" (right). **From Nov 9** (first Short live): replace the playlist "
+          "with Video \"Most recent upload\" (top right) + \"Best for viewer\" (bottom right). **From HC002-L:** top box = "
+          "that specific video. Editable any time, no re-upload. |",
+          "| Cards | none yet (no other video to link). From cluster 2 on, one card where another case is mentioned. |",
+          "| Quiz | skip for HC001 (new feature, no evidence yet that it helps; we can test it on a later video) |", "",
           "**Before scheduling:** rights.csv has 2 PENDING rows: save PDF copies of the fal.ai and Google generative-AI "
           "terms (images) and of the fal.ai / Kling terms (clips) into the episode folder."]
     (OUT / "publish.md").write_text("\n".join(md), encoding="utf-8")

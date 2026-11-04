@@ -34,9 +34,9 @@ Updated 2026-11-03.
       17:00 MT, Related Video = HC001-L. Ready by Wed Nov 4. S2 (59.6 s) and S3 (57.3 s) run over the 35-55 s target.
 - [x] The old "Hired as a Human Test Tube" Short (Oct 17) is NOT published: superseded by HC001-S3, flagged REWRITE
       in master instructions v3, and titled "Part 2" (trailer-style). Kept as an art source only.
-- [ ] **End screen HC001-L** (editable any time, no re-upload): Nov 8 = Subscribe only (8:35-end, left under STILL CURIOUS?).
+- [ ] **End screen HC001-L** (editable any time, no re-upload): Nov 8 = Subscribe + Season Zero playlist (set by the user; Subscribe alone is refused).
       **Remind Mon Nov 9** after the first Short is live: add Video "Most recent upload" (top right) + "Best for viewer"
-      (bottom right); if a Short can't be picked, use the "Alexis St. Martin" playlist. **Remind Sun Nov 22**: top box =
+      (bottom right) in place of the playlist; if a Short can't be picked, keep the playlist. **Remind Sun Nov 22**: top box =
       HC002-L (specific video).
 - [ ] Next episode: clean narration (no warble) — A/B the speed-up before recording (memory: narration-audio-processing).
 
