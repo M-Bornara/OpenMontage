@@ -4,6 +4,7 @@ import { FPS, StorybookCover, StorybookShort, StorybookShortProps } from "./Stor
 import { OddlyEndScreen, OddlySting, OddlyThumbnail } from "./Brand";
 import { StorybookLong, StorybookLongProps } from "./StorybookLong";
 import { Animatic, AnimaticProps } from "./Animatic";
+import { HeartRoute, Medal } from "./Three3D";
 import { FOCUS, FocusReel, LIFE, LifeReel, MAPS, MapReel, PUPPETS, PuppetReel, reelFrames, SECTIONS, SectionsReel, TRANS, TRANS2, TransReel, TransV2Reel } from "./LabReels";
 
 const calculateMetadata: CalculateMetadataFunction<StorybookShortProps> = async ({ props }) => ({
@@ -66,6 +67,8 @@ export const Root: React.FC = () => (
                  defaultProps={{ beats: "animatic/beats.json", words: "animatic/words.json", narration: "animatic/narration.wav", music: [], totalSeconds: 60 } as AnimaticProps}
                  calculateMetadata={async ({ props }) => ({ durationInFrames: Math.ceil((props as AnimaticProps).totalSeconds * FPS) })} />
     <Composition id="PuppetReel" component={PuppetReel} durationInFrames={reelFrames(PUPPETS, FPS)} fps={FPS} width={1920} height={1080} />
+    <Composition id="HeartRoute" component={HeartRoute} durationInFrames={FPS * 4} fps={FPS} width={1080} height={1920} />
+    <Composition id="Medal" component={Medal} durationInFrames={FPS * 3} fps={FPS} width={1080} height={1920} />
     <Composition id="LifeReel" component={LifeReel} durationInFrames={reelFrames(LIFE, FPS)} fps={FPS} width={1920} height={1080} />
   </>
 );
