@@ -27,7 +27,7 @@ SHOTS = [
      "push in to her · FX: the key ring is cut out and swings gently", "LOW", None, "keys jingle with the swing"),
     ("s5", 3.2, "He TRICKED her. He numbed his OWN ARM instead.", ("push", .6, .55, 1.4),
      "comedy hold · FX: she dims, he is highlighted on 'own arm'", "TOP", None, "small swab 'tsk'"),
-    ("s6a", 1.6, "He slid the CATHETER in.", ("push", .6, .35, 1.12), "slow push in on his face", "LOW", None, "—"),
+    ("s6a", 1.6, "He slid the CATHETER in.", ("push", .35, .72, 1.3), "slow push down to his hands feeding the tube in under the gauze", "TOP", None, "—"),
     ("s6b", 1.7, "SIXTY-FIVE CENTIMETERS.", ("slide", -.06), "slide along the tube to its top end", None, ("65 cm", ZONE["MID"]), "stamp thud on 'five'"),
     ("s7", 4.1, "Then he WALKED to the X-ray room, the tube still in his arm.", ("pull", .5, .45, 1.45),
      "2.5D: the camera pulls back down the corridor, walls sliding past · CLIP? only if this feels dead in the rough cut", "TOP", None, "footsteps only if it becomes a clip"),
