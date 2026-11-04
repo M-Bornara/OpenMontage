@@ -909,8 +909,13 @@ CHECKLIST = """## Upload checklist
 - After publishing: post and pin the pinned comment. Related video lists public videos only: if the long isn't live yet, add it the moment it is.
 
 **TikTok**
-- Upload `short.mp4`; Edit cover → upload `cover.jpg`; paste the TikTok caption.
-- Turn on the **AI-generated content** label (safe default for AI-assisted visuals). Allow Duet/Stitch.
+- Upload `short.mp4` (Web Studio, HD); Edit cover → upload `cover.jpg`; paste the TikTok caption.
+- Location: empty (a city tag pushes it to local viewers, not to the topic's audience).
+- When to post: the day after the YouTube Short, **18:00 ET** (TikTok shows your local time: winter 17:00 Alberta).
+- Who can see: Everyone. Allow comments, Duet and Stitch.
+- Disclose post content: off (no sponsor). **AI-generated content: on** (TikTok's label covers any AI-made visuals,
+  unlike YouTube's question, which is only about realistic ones). Audience control (18+): off (the wound is blurred).
+- Wait for **Content check lite** to finish with no issues before scheduling.
 - During the YouTube probe cross-posting is optional: keep the watermark-free master and post natively later.
 
 **Instagram Reels**
