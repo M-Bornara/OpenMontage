@@ -101,7 +101,9 @@ def lint(name: str, spec: dict) -> list[str]:
         issues.append("L6: body opening without a side (use body_mark(..., side='LEFT'))")
     if re.search(r"\b(and|with)\b[^.]{0,60}\b(alexis|beaumont|osler)\b", p) and "cast:" not in p and not people_free:
         issues.append("L7: several characters but no CAST line (the model adds duplicates/onlookers)")
-    if re.search(r"\b(map|contract|letters?|poster|signpost|label|document|title page)\b", p) and "wavy ink lines" not in p \
+    # the kit's own "no text, letters, labels" lines are not writing-bearing props
+    props_p = p.replace(NO_TEXT.lower(), "").replace("no text, labels or watermark", "").replace("no text, no labels", "")
+    if re.search(r"\b(map|contract|letters?|poster|signpost|label|document|title page)\b", props_p) and "wavy ink lines" not in p \
             and "no lettering" not in p and "only legible writing" not in p:
         issues.append("L8/L15: a writing-bearing prop without WAVY_WRITING or real_writing() ('illegible' still produces lorem ipsum)")
     if spec.get("aspect", "16:9") in ("16:9", "9:16") and not people_free_plate(p) and not model_sheet and "central 70%" not in p:

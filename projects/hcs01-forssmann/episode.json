@@ -1,0 +1,202 @@
+{
+  "title": "He Pushed a Tube Into His Own Heart",
+  "playbook": "storybook-medical",
+  "narration": {
+    "v3_text": "[excited] In 1929, a young doctor pushed a tube through his own arm… all the way into his own heart.\nWerner Forssmann, a trainee surgeon in Germany, wanted to reach a living heart through a vein.\nHis boss said no. Far too dangerous.\nThe nurse with the supplies agreed to help… if he tried it on HER.\n[mischievously] He tricked her. He numbed his own arm instead.\nHe slid the catheter in. Sixty-five centimeters.\nThen he walked to the X-ray room, the tube still in his arm.\n[curious] The picture showed the tip… inside his heart. He was fine.\nHis reward? Fired from his next job.\nTwenty-seven years later, the world caught up. Nobel Prize.\n[serious] But in 1932, he had joined the Nazi Party.",
+    "punch_words": []
+  },
+  "references": {
+    "sheet-forssmann": {
+      "aspect": "16:9",
+      "refs": [
+        "projects/hc001-window-into-his-stomach/assets/images/refs/sheet-osler.png"
+      ],
+      "roles": "Reference 1 shows our character model-sheet layout and painting style only (not this person). ",
+      "prompt": "Clean character model sheet on plain bone-white paper: WERNER FORSSMANN (25, lean, dark hair slicked straight back, clean-shaven, narrow face, dark eyes, a keen restless look; white surgical coat over a white shirt and dark tie), Germany, 1929. Front view, three-quarter view, profile view, back view, plus three head close-ups (determined, sly half-smile, relieved). Same scale in every view. No text, labels or watermark."
+    },
+    "sheet-schneider": {
+      "aspect": "16:9",
+      "refs": [
+        "projects/hc001-window-into-his-stomach/assets/images/refs/sheet-osler.png"
+      ],
+      "roles": "Reference 1 shows our character model-sheet layout and painting style only (not this person). ",
+      "prompt": "Clean character model sheet on plain bone-white paper: DR. SCHNEIDER, the chief surgeon (about 55, heavy-set, grey hair, a thick grey moustache, heavy eyebrows, dark three-piece suit under an open white coat), Germany, 1929. Front view, three-quarter view, profile view, plus three head close-ups (stern, saying no, impatient). Same scale in every view. No text, labels or watermark."
+    },
+    "sheet-ditzen": {
+      "aspect": "16:9",
+      "refs": [
+        "projects/hc001-window-into-his-stomach/assets/images/refs/sheet-osler.png"
+      ],
+      "roles": "Reference 1 shows our character model-sheet layout and painting style only (not this person). ",
+      "prompt": "Clean character model sheet on plain bone-white paper: NURSE GERDA DITZEN (about 30, kind round face, light-brown hair pinned up under a starched white nurse's cap, a pale grey-blue dress with a white apron and white collar, a ring of large iron keys at her belt), Germany, 1929. Front view, three-quarter view, profile view, back view, plus three head close-ups (eyebrows raised pointing at herself, eyes closed waiting, surprised). Same scale in every view. No text, labels or watermark."
+    },
+    "plate-or": {
+      "aspect": "9:16",
+      "refs": [
+        "projects/hc001-window-into-his-stomach/assets/images/refs/plate-study.png"
+      ],
+      "roles": "Reference 1 is a people-free room plate used for STYLE only: copy its painting style, never its room. ",
+      "prompt": "SET: The operating room of the Auguste-Viktoria hospital, Eberswalde, Germany, 1929. pale green-white tiled walls, white enamel and nickel-steel fittings, a tall frosted window, a tall glass-fronted supply cabinet, a narrow steel operating table with a white sheet, one amber lamp hanging low; cool green-white light with one warm pool of amber under the lamp. This place has its own materials, palette and light, and must not look like any other room or place in the film. Vertical frame of the room from the door: the operating table in the middle distance, the supply cabinet on the left, the lamp above. EMPTY location plate: no people. Three clear depth layers. Period-accurate only: nothing modern, no modern maps or borders, no anachronistic objects. No text, letters, numbers, labels, signatures or watermark anywhere; any writing is illegible scribble."
+    },
+    "plate-corridor": {
+      "aspect": "9:16",
+      "refs": [
+        "ref:plate-or"
+      ],
+      "roles": "Reference 1 is the same hospital (match its tiles, colours and painting style). ",
+      "prompt": "SET: The long hospital corridor, Eberswalde, 1929. a very long straight corridor, cream tiles with a green band, a row of white globe lamps receding to a vanishing point, doors on both sides, a polished floor reflecting the lamps; cool and quiet. This place has its own materials, palette and light, and must not look like any other room or place in the film. Perfectly centred, symmetric one-point perspective down the corridor. EMPTY location plate: no people. Period-accurate only: nothing modern, no modern maps or borders, no anachronistic objects. No text, letters, numbers, labels, signatures or watermark anywhere; any writing is illegible scribble."
+    },
+    "plate-xray": {
+      "aspect": "9:16",
+      "refs": [
+        "ref:plate-or"
+      ],
+      "roles": "Reference 1 is the same hospital (match its painting style; this room is blue, not green). ",
+      "prompt": "SET: The X-ray room, Eberswalde, 1929. dim blue light, a tall wooden-cabinet X-ray apparatus with a glowing glass tube and thick cables, a glowing wall lightbox; the only blue room in the film. This place has its own materials, palette and light, and must not look like any other room or place in the film. Vertical frame: the apparatus on the left, the glowing lightbox on the right wall at chest height, empty. EMPTY location plate: no people. Period-accurate only: nothing modern, no modern maps or borders, no anachronistic objects. No text, letters, numbers, labels, signatures or watermark anywhere; any writing is illegible scribble."
+    }
+  },
+  "keyframes": {
+    "s1a": {
+      "aspect": "9:16",
+      "refs": [
+        "ref:plate-or"
+      ],
+      "roles": "Reference 1 is this operating room (style and colours). ",
+      "prompt": "SET: The operating room of the Auguste-Viktoria hospital, Eberswalde, Germany, 1929. pale green-white tiled walls, white enamel and nickel-steel fittings, a tall frosted window, a tall glass-fronted supply cabinet, a narrow steel operating table with a white sheet, one amber lamp hanging low; cool green-white light with one warm pool of amber under the lamp. This place has its own materials, palette and light, and must not look like any other room or place in the film. Extreme close-up: a long coiled red-brown rubber catheter tube lying in loose loops in a steel kidney-shaped tray on the white sheet, one open end pointing toward the camera, lit by the single amber lamp; the tiles soft and out of focus behind. The coil fills the lower two thirds of the frame; the top third is calm out-of-focus tiles. NO PEOPLE anywhere in the frame: no figures, no faces, no hands unless stated. Reference 1 is a STYLE reference only: copy its painting style, never its contents. FRAMING: every story-relevant person, object and action sits inside the central 70% of the frame (not touching or cut by any edge), with room around it so the camera can zoom and pan toward it; the edges hold only background. Period-accurate only: nothing modern, no modern maps or borders, no anachronistic objects."
+    },
+    "s1b": {
+      "aspect": "9:16",
+      "refs": [
+        "ref:plate-or"
+      ],
+      "roles": "Reference 1 is for the painting style and palette only (never its room). ",
+      "prompt": "SET: an anatomy plate in an old illustrated medical book, Germany, 1920s. A storybook anatomy plate on warm cream paper, like a page from an old illustrated medical book painted in our style: a man seen from the front FROM THE TOP OF THE HEAD DOWN TO THE WAIST ONLY (cropped at the waist, nothing below), drawn as a simple ink outline with a soft cream wash, both arms hanging slightly away from the body. Inside, drawn in soft colour: ONE blue vein, ONLY in the arm on the VIEWER'S RIGHT (his LEFT arm), running up the inner arm from the elbow crease, over the shoulder, under the collarbone and down into the top of the heart; the heart painted in muted warm red, slightly to the VIEWER'S RIGHT of the chest centre. The arm on the viewer's left has no vein. Nothing else inside the body. The figure is centred and fills the middle 70% of the frame; plain cream paper around it. No face details (a simple blank oval head). Full-bleed image to every edge: no border, no frame, no white margin, no vignette card. FRAMING: every story-relevant person, object and action sits inside the central 70% of the frame (not touching or cut by any edge), with room around it so the camera can zoom and pan toward it; the edges hold only background. No text, letters, numbers, labels, signatures or watermark anywhere; any writing is illegible scribble."
+    },
+    "s2": {
+      "aspect": "9:16",
+      "refs": [
+        "ref:plate-or",
+        "ref:sheet-forssmann",
+        "kit:glasses-sheet.jpg"
+      ],
+      "roles": "Reference 1 is the hospital style. Reference 2 is WERNER FORSSMANN (same face, hair, white coat). Reference 3 shows Matt's amber spectacles. ",
+      "prompt": "SET: A doctors' room in the same hospital, Eberswalde, 1929. green-white tiled lower walls, cream plaster above, a tall window with white muslin, an oak desk, a large framed anatomy wall chart of a human arm and chest; soft morning light. This place has its own materials, palette and light, and must not look like any other room or place in the film. Wide vertical frame. CAST: exactly 1 person: WERNER FORSSMANN (25, lean, dark hair slicked straight back, clean-shaven, narrow face, dark eyes, a keen restless look; white surgical coat over a white shirt and dark tie), standing in the left third of the frame, three-quarter view, gazing up at the anatomy chart, one hand on his chin. Nobody else in the frame. The large anatomy wall chart hangs on the right wall: a human arm and chest with one vein in blue running from the elbow to the heart, painted simply. The top 20% of the frame is calm cream wall. Hidden detail, small and easy to miss: a pair of round wire spectacles with amber-tinted lenses (exactly as in the glasses reference) folded on the windowsill next to a potted geranium. It is a gentle visual joke, physically plausible, in the background or midground, never the focus. FRAMING: every story-relevant person, object and action sits inside the central 70% of the frame (not touching or cut by any edge), with room around it so the camera can zoom and pan toward it; the edges hold only background. Period-accurate only: nothing modern, no modern maps or borders, no anachronistic objects. No text, letters, numbers, labels, signatures or watermark anywhere; any writing is illegible scribble."
+    },
+    "s3": {
+      "aspect": "9:16",
+      "refs": [
+        "ref:plate-or",
+        "ref:sheet-schneider"
+      ],
+      "roles": "Reference 1 is the hospital painting style (this office is dark oak, not tiles). Reference 2 is DR. SCHNEIDER (same face, moustache, suit). ",
+      "prompt": "SET: The chief surgeon's office, Eberswalde, 1929. dark oak panelling, a heavy oak desk, a crank wall telephone, glass-fronted bookcases of medical books, a small skull used as a paperweight; warm brown lamplight, the only room in the film that is dark and wooden. This place has its own materials, palette and light, and must not look like any other room or place in the film. Medium close-up from a LOW angle, so he looms: CAST: exactly 1 person: DR. SCHNEIDER, the chief surgeon (about 55, heavy-set, grey hair, a thick grey moustache, heavy eyebrows, dark three-piece suit under an open white coat), seated behind the desk, leaning forward, one flat hand pressed on the desk, a firm stern look straight at the viewer. Nobody else in the frame. The crank telephone on the wall behind him, the skull paperweight on the desk. The top 20% of the frame is dark calm panelling. FRAMING: every story-relevant person, object and action sits inside the central 70% of the frame (not touching or cut by any edge), with room around it so the camera can zoom and pan toward it; the edges hold only background. Period-accurate only: nothing modern, no modern maps or borders, no anachronistic objects. No text, letters, numbers, labels, signatures or watermark anywhere; any writing is illegible scribble."
+    },
+    "s4": {
+      "aspect": "9:16",
+      "refs": [
+        "ref:plate-or",
+        "ref:sheet-ditzen"
+      ],
+      "roles": "Reference 1 is this operating room. Reference 2 is NURSE GERDA DITZEN (same face, cap, dress). ",
+      "prompt": "SET: The operating room of the Auguste-Viktoria hospital, Eberswalde, Germany, 1929. pale green-white tiled walls, white enamel and nickel-steel fittings, a tall frosted window, a tall glass-fronted supply cabinet, a narrow steel operating table with a white sheet, one amber lamp hanging low; cool green-white light with one warm pool of amber under the lamp. This place has its own materials, palette and light, and must not look like any other room or place in the film. Medium shot: CAST: exactly 1 person: NURSE GERDA DITZEN (about 30, kind round face, light-brown hair pinned up under a starched white nurse's cap, a pale grey-blue dress with a white apron and white collar, a ring of large iron keys at her belt), standing in front of the glass supply cabinet, holding up her ring of large iron keys in her right hand at shoulder height, pointing at her own chest with her left index finger, eyebrows raised, a bold half-smile. Nobody else in the frame. The keys hang clearly separated from her hand against the cabinet glass. Her head is in the upper half of the frame; the bottom 20% is plain floor and table edge. FRAMING: every story-relevant person, object and action sits inside the central 70% of the frame (not touching or cut by any edge), with room around it so the camera can zoom and pan toward it; the edges hold only background. Period-accurate only: nothing modern, no modern maps or borders, no anachronistic objects. No text, letters, numbers, labels, signatures or watermark anywhere; any writing is illegible scribble."
+    },
+    "s5": {
+      "aspect": "9:16",
+      "refs": [
+        "ref:plate-or",
+        "ref:sheet-forssmann",
+        "ref:sheet-ditzen"
+      ],
+      "roles": "Reference 1 is this operating room. Reference 2 is WERNER FORSSMANN. Reference 3 is NURSE GERDA DITZEN. ",
+      "prompt": "SET: The operating room of the Auguste-Viktoria hospital, Eberswalde, Germany, 1929. pale green-white tiled walls, white enamel and nickel-steel fittings, a tall frosted window, a tall glass-fronted supply cabinet, a narrow steel operating table with a white sheet, one amber lamp hanging low; cool green-white light with one warm pool of amber under the lamp. This place has its own materials, palette and light, and must not look like any other room or place in the film. Side view, comedy two-shot. CAST: exactly 2 people: NURSE GERDA DITZEN (about 30, kind round face, light-brown hair pinned up under a starched white nurse's cap, a pale grey-blue dress with a white apron and white collar, a ring of large iron keys at her belt), lying on her back on the operating table in the lower half of the frame, fully dressed, eyes closed, hands folded, patiently waiting; WERNER FORSSMANN (25, lean, dark hair slicked straight back, clean-shaven, narrow face, dark eyes, a keen restless look; white surgical coat over a white shirt and dark tie), standing behind the head of the table in the right half of the frame, turned AWAY from her, his LEFT shirt and coat sleeve rolled up above the elbow, holding out his bare LEFT forearm (the arm with the rolled sleeve) and dabbing it with a cotton swab held in his RIGHT hand, glancing back at her with a sly look. Nobody else in the frame. The top 20% of the frame is calm tiled wall. FRAMING: every story-relevant person, object and action sits inside the central 70% of the frame (not touching or cut by any edge), with room around it so the camera can zoom and pan toward it; the edges hold only background. Period-accurate only: nothing modern, no modern maps or borders, no anachronistic objects. No text, letters, numbers, labels, signatures or watermark anywhere; any writing is illegible scribble."
+    },
+    "s6a": {
+      "aspect": "9:16",
+      "refs": [
+        "ref:plate-or",
+        "ref:sheet-forssmann"
+      ],
+      "roles": "Reference 1 is this operating room. Reference 2 is WERNER FORSSMANN (same face). ",
+      "prompt": "SET: The operating room of the Auguste-Viktoria hospital, Eberswalde, Germany, 1929. pale green-white tiled walls, white enamel and nickel-steel fittings, a tall frosted window, a tall glass-fronted supply cabinet, a narrow steel operating table with a white sheet, one amber lamp hanging low; cool green-white light with one warm pool of amber under the lamp. This place has its own materials, palette and light, and must not look like any other room or place in the film. Close-up of FORSSMANN's face, three-quarter view, eyes down toward his own arm (out of frame below), intensely focused, lips pressed, one bead of sweat at his temple, lit warm from the amber lamp above, the tiles dark behind. CAST: exactly 1 person: WERNER FORSSMANN (25, lean, dark hair slicked straight back, clean-shaven, narrow face, dark eyes, a keen restless look; white surgical coat over a white shirt and dark tie). Nobody else in the frame. The bottom 25% is his white coat collar. FRAMING: every story-relevant person, object and action sits inside the central 70% of the frame (not touching or cut by any edge), with room around it so the camera can zoom and pan toward it; the edges hold only background. Period-accurate only: nothing modern, no modern maps or borders, no anachronistic objects. No text, letters, numbers, labels, signatures or watermark anywhere; any writing is illegible scribble."
+    },
+    "s6b": {
+      "aspect": "9:16",
+      "refs": [
+        "ref:plate-or"
+      ],
+      "roles": "Reference 1 is this operating room (style and colours). ",
+      "prompt": "SET: The operating room of the Auguste-Viktoria hospital, Eberswalde, Germany, 1929. pale green-white tiled walls, white enamel and nickel-steel fittings, a tall frosted window, a tall glass-fronted supply cabinet, a narrow steel operating table with a white sheet, one amber lamp hanging low; cool green-white light with one warm pool of amber under the lamp. This place has its own materials, palette and light, and must not look like any other room or place in the film. Extreme close-up on the white sheet: a thin red-brown rubber catheter tube (one plain single tube with simple rounded ends, NO fork, NO Y-branch) laid straight beside a long brass measuring rule, running diagonally from the lower left to the upper right; the rule has fine engraved tick marks only, with NO numbers. No skin, no needle, no blood. The middle 30% of the frame height is the plainest part of the sheet. NO PEOPLE anywhere in the frame: no figures, no faces, no hands unless stated. Reference 1 is a STYLE reference only: copy its painting style, never its contents. FRAMING: every story-relevant person, object and action sits inside the central 70% of the frame (not touching or cut by any edge), with room around it so the camera can zoom and pan toward it; the edges hold only background. Period-accurate only: nothing modern, no modern maps or borders, no anachronistic objects. No text, letters, numbers, labels, signatures or watermark anywhere; any writing is illegible scribble."
+    },
+    "s7": {
+      "aspect": "9:16",
+      "refs": [
+        "ref:plate-corridor",
+        "ref:sheet-forssmann"
+      ],
+      "roles": "Reference 1 is this corridor (same tiles, lamps, perspective). Reference 2 is WERNER FORSSMANN. ",
+      "prompt": "SET: The long hospital corridor, Eberswalde, 1929. a very long straight corridor, cream tiles with a green band, a row of white globe lamps receding to a vanishing point, doors on both sides, a polished floor reflecting the lamps; cool and quiet. This place has its own materials, palette and light, and must not look like any other room or place in the film. Perfectly centred symmetric frame down the corridor. CAST: exactly 1 person: WERNER FORSSMANN (25, lean, dark hair slicked straight back, clean-shaven, narrow face, dark eyes, a keen restless look; white surgical coat over a white shirt and dark tie), small in the middle distance at the centre, walking toward the camera with purpose, his LEFT shirt and coat sleeve rolled up above the elbow, a thin rubber tube taped along his inner left forearm with white tape, his right hand steadying it. Nobody else in the frame. The top 25% of the frame is the receding ceiling and lamps. FRAMING: every story-relevant person, object and action sits inside the central 70% of the frame (not touching or cut by any edge), with room around it so the camera can zoom and pan toward it; the edges hold only background. Period-accurate only: nothing modern, no modern maps or borders, no anachronistic objects. No text, letters, numbers, labels, signatures or watermark anywhere; any writing is illegible scribble."
+    },
+    "s8a": {
+      "aspect": "9:16",
+      "refs": [
+        "ref:plate-xray"
+      ],
+      "roles": "Reference 1 is this X-ray room (blue light). ",
+      "prompt": "SET: The X-ray room, Eberswalde, 1929. dim blue light, a tall wooden-cabinet X-ray apparatus with a glowing glass tube and thick cables, a glowing wall lightbox; the only blue room in the film. This place has its own materials, palette and light, and must not look like any other room or place in the film. Close-up of the glowing wall lightbox filling the frame, an X-ray film clipped to it: a human chest seen from the front in soft grey-blue, the ribs, the spine, and the shadow of the heart slightly to the viewer's right of centre; the patient's left shoulder and upper arm at the VIEWER'S RIGHT edge of the film. No tube or line on the film. The film fills the middle 70% of the frame. NO PEOPLE anywhere in the frame: no figures, no faces, no hands unless stated. Reference 1 is a STYLE reference only: copy its painting style, never its contents. FRAMING: every story-relevant person, object and action sits inside the central 70% of the frame (not touching or cut by any edge), with room around it so the camera can zoom and pan toward it; the edges hold only background. Period-accurate only: nothing modern, no modern maps or borders, no anachronistic objects. No text, letters, numbers, labels, signatures or watermark anywhere; any writing is illegible scribble."
+    },
+    "s8b": {
+      "aspect": "9:16",
+      "refs": [
+        "ref:plate-xray",
+        "ref:sheet-forssmann"
+      ],
+      "roles": "Reference 1 is this X-ray room. Reference 2 is WERNER FORSSMANN (same face). ",
+      "prompt": "SET: The X-ray room, Eberswalde, 1929. dim blue light, a tall wooden-cabinet X-ray apparatus with a glowing glass tube and thick cables, a glowing wall lightbox; the only blue room in the film. This place has its own materials, palette and light, and must not look like any other room or place in the film. Medium shot: CAST: exactly 1 person: WERNER FORSSMANN (25, lean, dark hair slicked straight back, clean-shaven, narrow face, dark eyes, a keen restless look; white surgical coat over a white shirt and dark tie), standing beside the glowing lightbox on the right, his LEFT shirt and coat sleeve rolled up above the elbow, the thin tube still taped to his inner left forearm, looking at the film with a small relieved half-smile, lit cool blue from the lightbox. Nobody else in the frame. The bottom 20% of the frame is the dark floor and apparatus base. FRAMING: every story-relevant person, object and action sits inside the central 70% of the frame (not touching or cut by any edge), with room around it so the camera can zoom and pan toward it; the edges hold only background. Period-accurate only: nothing modern, no modern maps or borders, no anachronistic objects. No text, letters, numbers, labels, signatures or watermark anywhere; any writing is illegible scribble."
+    },
+    "s9": {
+      "aspect": "9:16",
+      "refs": [
+        "ref:plate-or",
+        "ref:sheet-forssmann"
+      ],
+      "roles": "Reference 1 is the hospital painting style. Reference 2 is WERNER FORSSMANN (his coat). ",
+      "prompt": "SET: a plain wooden desk in a hospital office, Berlin, 1929, grey daylight. Extreme close-up from above: a single typed letter on official paper lying on the desk, a dark wax seal at its foot; at the right edge of the frame his hand (only the hand and white coat sleeve) pulls a dark overcoat from the back of a chair. The letter fills the centre. The only legible writing is \"Charité · Berlin\", handwritten in period ink as a small printed letterhead at the top, spelled exactly like that. Every other line is soft wavy ink lines with no letters. Never Latin or placeholder text. Any handwriting is drawn ONLY as rows of soft wavy ink lines with no letters, words, numbers or signature, slightly out of focus, like writing seen from too far away to read. No heading or title on the page. No greeting line. FRAMING: every story-relevant person, object and action sits inside the central 70% of the frame (not touching or cut by any edge), with room around it so the camera can zoom and pan toward it; the edges hold only background. Period-accurate only: nothing modern, no modern maps or borders, no anachronistic objects."
+    },
+    "s10a": {
+      "aspect": "9:16",
+      "refs": [
+        "ref:plate-or"
+      ],
+      "roles": "Reference 1 is for the painting style only. ",
+      "prompt": "SET: a café table, Germany, 1956, warm golden morning light, muted colours. Close-up from above: a folded 1956 newspaper lying on the table next to a coffee cup. The only legible writing is \"NOBEL PRIZE\", handwritten in period ink as the big headline across the top of the front page, spelled exactly like that. Every other line is soft wavy ink lines with no letters. Never Latin or placeholder text. A blurred photograph block under the headline. NO PEOPLE anywhere in the frame: no figures, no faces, no hands unless stated. Reference 1 is a STYLE reference only: copy its painting style, never its contents. FRAMING: every story-relevant person, object and action sits inside the central 70% of the frame (not touching or cut by any edge), with room around it so the camera can zoom and pan toward it; the edges hold only background. Period-accurate only: nothing modern, no modern maps or borders, no anachronistic objects."
+    },
+    "s10b": {
+      "aspect": "1:1",
+      "refs": [
+        "ref:plate-or"
+      ],
+      "roles": "Reference 1 is for the painting style only. ",
+      "prompt": "Front view, perfectly flat and centred: the face of a round gold medal, painted in our storybook style, a laurel wreath around the rim and a small torch in the centre, warm gold with soft highlights. The circle fills 90% of the frame on a plain dark-red background. Generic design, not any real medal. Full-bleed image to every edge: no border, no frame, no white margin, no vignette card. NO PEOPLE anywhere in the frame: no figures, no faces, no hands unless stated. Reference 1 is a STYLE reference only: copy its painting style, never its contents. No text, letters, numbers, labels, signatures or watermark anywhere; any writing is illegible scribble."
+    },
+    "s11": {
+      "aspect": "9:16",
+      "refs": [
+        "ref:plate-or",
+        "ref:sheet-forssmann"
+      ],
+      "roles": "Reference 1 is the hospital painting style. Reference 2 is WERNER FORSSMANN (same face; now in a dark suit, a few years older). ",
+      "prompt": "SET: a plain dark-green studio backdrop, Germany, 1932, soft side light. Head-and-shoulders portrait of WERNER FORSSMANN (25, lean, dark hair slicked straight back, clean-shaven, narrow face, dark eyes, a keen restless look; dark suit, white shirt and dark tie), 28 here, a serious neutral expression, looking just past the camera. His head is in the upper half; his suit and the painted backdrop continue all the way to the bottom edge (no flat band, no empty strip). CAST: exactly 1 person: FORSSMANN. Nobody else in the frame. No badges, pins, symbols or uniforms of any kind. FRAMING: every story-relevant person, object and action sits inside the central 70% of the frame (not touching or cut by any edge), with room around it so the camera can zoom and pan toward it; the edges hold only background. Period-accurate only: nothing modern, no modern maps or borders, no anachronistic objects. No text, letters, numbers, labels, signatures or watermark anywhere; any writing is illegible scribble."
+    }
+  },
+  "clips": {},
+  "music": {
+    "prompts": {},
+    "selected": ""
+  },
+  "shots": [],
+  "overlays": [],
+  "sfx": [],
+  "format": "short",
+  "dual_format": false,
+  "image_resolution": "2K"
+}
