@@ -14,7 +14,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[4]
 sys.path.insert(0, str(REPO / "channels/storybook-medical/scripts"))
-from episode import DISCLOSURE, _write_srt, duration  # noqa: E402
+from episode import DISCLOSURE, _write_srt, duration, studio_settings  # noqa: E402
 
 PID = "hc001-window-into-his-stomach"
 P = REPO / "projects" / PID
@@ -126,11 +126,12 @@ def main():
           "## YouTube (long video)", f"**Title:** {TITLE}", "", "**Description:**", "```", desc, "```", "",
           f"**Tags:** {', '.join(TAGS)}", "", f"**Pinned comment:** {PINNED}", "",
           "**Thumbnails:** upload `thumb-A.jpg`; Test & compare: add `thumb-B.jpg` and `thumb-C.jpg`.", "",
-          "**Playlists:** Season Zero · Alexis St. Martin", "",
+          *studio_settings("long", "Season Zero · Alexis St. Martin", schedule="Sun Nov 8, 9:00 MT (11:00 ET)"),
+          "**Subtitles (Video elements):** Upload file → With timing → `captions.srt`. The video has no burned-in "
+          "captions; this file is the only one.", "",
           "**End screen:** the brand end screen runs 8:35–8:47 (12 s). Set all three elements (Best for viewer, "
           "Most recent upload, Subscribe) from 8:35 to the end.", "",
           "**Cards:** none yet (no other video to link). From cluster 2 on, add one where another case is mentioned.", "",
-          "**Schedule:** Sun Nov 8, 9:00 MT. Upload as Private first and watch it once in Studio.", "",
           "**Before scheduling:** rights.csv has 2 PENDING rows: save PDF copies of the fal.ai and Google generative-AI "
           "terms (images) and of the fal.ai / Kling terms (clips) into the episode folder."]
     (OUT / "publish.md").write_text("\n".join(md), encoding="utf-8")

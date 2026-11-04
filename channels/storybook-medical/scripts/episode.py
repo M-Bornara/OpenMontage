@@ -864,15 +864,46 @@ def loop_len(ep):
     return ep.get("loop_seconds", LOOP_SECONDS) if ep.get("loop") else 0
 
 
+def studio_settings(kind, playlists, related=None, schedule=None):
+    """Every YouTube Studio field, in the order Studio shows it, with our value (plan/upload-schedule.md has the why).
+    kind = "long" or "short"."""
+    rows = [("Playlists", playlists),
+            ("Audience", "**No, it's not made for kids**"),
+            ("Age restriction", "No, don't restrict"),
+            ("Paid promotion", "No"),
+            ("Brand partnerships", "leave empty (no access code)"),
+            ("AI use", "**No** (illustrated, no real person made to say/do anything, no altered real footage, no "
+                       "realistic fake scene, music is background; the description carries the AI line)"),
+            ("Collaboration", "leave empty"),
+            ("Automatic chapters", "**off** (the description has our chapters)" if kind == "long" else "off"),
+            ("Featured places", "off"),
+            ("Automatic concepts", "off"),
+            ("Tags", "the list above"),
+            ("Video language", "**English**"),
+            ("Caption certification", "This content has never aired on television in the U.S."),
+            ("Recording date / Video location", "leave empty (the story's place is not where it was made)"),
+            ("License", "Standard YouTube License"),
+            ("Allow embedding", "on"),
+            ("Publish to subscriptions feed and notify subscribers", "on"),
+            ("Shorts remixing", "Allow video and audio remixing (free Shorts made from our clips can point back to us)"),
+            ("Category", "**Education** (change it from People & Blogs); Type \"Concept overview\" if offered, "
+                         "every other Education field None/empty"),
+            ("Comments", "On · Moderation Basic · Who can comment: Anyone · Sort by Top"),
+            ("Show how many viewers like this video", "on")]
+    if related:
+        rows.insert(1, ("Related video", f"**{related}** (the link under the Short; the most important field)"))
+    if schedule:
+        rows.append(("Visibility", f"upload as Private, watch it once, then **Schedule: {schedule}**"))
+    return ["## YouTube Studio settings", "", "| Field | Value |", "|---|---|"] + [f"| {a} | {b} |" for a, b in rows] + [""]
+
+
 CHECKLIST = """## Upload checklist
 
 **YouTube Shorts** (Studio on desktop)
 - Upload `short.mp4`; paste title, description, tags.
 - Thumbnail: upload `cover.jpg` if your account shows the custom-thumbnail option for Shorts; otherwise pick the frame closest to the cover.
 - Subtitles → upload `captions.srt` (English).
-- Audience: **No, it's not made for kids**. Category: Education. Add to the series playlist.
-- Altered or synthetic content: tick it only if a scene could be mistaken for real footage or a real event; illustrated
-  reconstructions are covered by the transparency line in the description.
+- Every other field: the **YouTube Studio settings** table above.
 - Before publishing: Stage 7 review (whole video watched; claims.csv has no UNKNOWN/REMOVE claims left in the script;
   rights.csv complete). Upload as Private first; never auto-publish.
 - After publishing: post and pin the pinned comment. When a long video exists, set it as the Short's **Related video**.
@@ -934,6 +965,7 @@ def step_publish(pid, *_):
     md = [f"# {ep['title']}", "", f"Length {duration(out / 'short.mp4'):.1f}s · 1080×1920 · -14 LUFS" + (" · loops seamlessly" if loop_len(ep) else ""), "",
           "## YouTube Shorts", f"**Title:** {yt['title']}", "", "**Description:**", "```", desc, "```",
           f"**Tags:** {', '.join(yt.get('tags', []))}", "", f"**Pinned comment:** {yt.get('pinned_comment', '')}", ""]
+    md += studio_settings("short", yt.get("playlists", "the series playlist"), yt.get("related_video"), yt.get("schedule"))
     for plat in ("tiktok", "instagram", "facebook"):
         if plat in pub:
             md += [f"## {plat.title()}", "```", pub[plat]["caption"].strip(), "```", ""]
