@@ -91,11 +91,14 @@ right reference. Be honest about the size of this lever, though: YouTube says th
 long-term results, and Shorts are spread over days. What timing can do is make the video available when the first
 interested viewers are online, and keep us consistent.
 
-| Slot | ET (plan) | MT (Studio, your time) | Pacific |
-|---|---|---|---|
-| Long video, Sunday | **11:00** | 9:00 (already set for HC001-L) | 8:00 |
-| Shorts, Mon / Wed / Fri | **15:00** | 13:00 | 12:00 |
-| TikTok / Instagram copies (from cluster 2) | 18:00 | 16:00 | 15:00 |
+| Slot | ET (plan) | Alberta, winter (ET − 1) | Alberta, summer from Mar 14 (ET − 2) | US Pacific |
+|---|---|---|---|---|
+| Long video, Sunday | **11:00** | 10:00 | 9:00 | 8:00 |
+| Shorts, Mon / Wed / Fri | **15:00** | 14:00 | 13:00 | 12:00 |
+| TikTok / Instagram copies (from cluster 2) | 18:00 | 17:00 | 16:00 | 15:00 |
+
+Alberta stays on UTC-6 all year from Nov 2026, so only the Alberta columns change with the US clock change; the ET
+plan never moves.
 
 The long video stays as scheduled: 11:00 ET on Sunday is a strong slot for the whole continent. The Shorts move from
 17:00 MT (19:00 ET) to 13:00 MT, so they go live mid-afternoon in ET, in the window most studies point to, and are

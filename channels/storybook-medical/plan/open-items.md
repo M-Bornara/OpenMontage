@@ -12,7 +12,7 @@ Updated 2026-11-03.
 ## From 2026-10-26
 - [x] Shorts final-v4 approved (2026-11-03). Packages built: projects/hc001-s1..s3/renders/deliverables/ (short.mp4, cover.jpg,
       captions.srt, publish.md with title/description/tags/pinned challenge). User uploads + schedules: S2 Mon Nov 9, S1 Wed Nov 11,
-      S3 Fri Nov 13, all 13:00 MT, Related Video = HC001-L (set after Nov 8 if Studio can't pick a scheduled video).
+      S3 Fri Nov 13, all 15:00 ET = 14:00 Alberta, Related Video = HC001-L (set after Nov 8 if Studio can't pick a scheduled video).
 - [x] Cluster 2 shifted one week (user, 2026-11-03): Forssmann Tue Nov 24, HC002-L Sun Nov 29 (upload-schedule.md).
 - [ ] **HC001-L v5 re-upload** (2026-10-27): renders/deliverables-long/HC001-L.mp4 = cut v5 (clock fixed, no burned-in captions,
       hook stills, 6 June longer, steady highlight, depth-of-field close-ups, wound blur, no black frames, readable strike,
@@ -27,7 +27,7 @@ Updated 2026-11-03.
 - [x] Thumbnails: A main, B + C Test & compare (B kicker fixed to FORT NIAGARA · 1825).
 - [ ] **Upload package review** (projects/hc001-window-into-his-stomach/renders/deliverables-long/publish.md): title, description, chapters, sources, credits, tags, pinned comment, captions.srt.
 - [ ] rights.csv: 2 PENDING rows — user saves PDF copies of the fal.ai / Google / Kling terms.
-- [x] HC001-L uploaded and scheduled by the user (2026-10-26) for Sun Nov 8, 9:00 MT.
+- [x] HC001-L uploaded and scheduled by the user (2026-10-26) for Sun Nov 8, 9:00 MT. **Move to 10:00 Alberta (= 11:00 ET)**: Alberta no longer falls back, so 9:00 is now 10:00 ET.
 - [ ] **The 3 Shorts** (rendered Oct 19, before the cut-v2 review rules; never watched by the user): user watches and
       gives numbered notes -> audit against the HC001 edit rules -> free re-render -> publish package (short.mp4, cover.jpg,
       captions.srt, crops check, publish.md) -> user approves -> scheduled S2 Mon Nov 9, S1 Wed Nov 11, S3 Fri Nov 13,

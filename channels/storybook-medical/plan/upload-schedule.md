@@ -2,13 +2,16 @@
 
 Written 2026-10-18. Rules from [`master-instructions-v3.md`](master-instructions-v3.md) §37–39: per story cluster,
 **Day 1 long · Day 2 strongest Short · Day 4 second Short · Day 6 third Short**; one long every two weeks;
-YouTube first; TikTok and Instagram start once the YouTube routine is smooth. Times are **Mountain Time
-(MT)**. They are a starting experiment, not "best times"; YouTube Analytics takes over after ~4 weeks.
+YouTube first; TikTok and Instagram start once the YouTube routine is smooth. Times are set in **New York
+time (ET)**, where most of the North American audience lives (growth-strategy.md §5). They are a starting
+experiment, not "best times"; YouTube Analytics takes over after ~4 weeks.
 
-Planned around **New York time (ET = MT + 2)**, where most of the North American audience lives (growth-strategy.md §5):
-- **Long videos:** Sunday **9:00 MT** (11:00 ET)
-- **Shorts:** **13:00 MT** (15:00 ET) on the listed day
-- **TikTok and Instagram copies** (from cluster 2): the next day, **16:00 MT** (18:00 ET)
+**Alberta Time (AB)** is UTC-6 all year since Nov 2026 (no more clock changes, alberta.ca). So the gap to New York
+changes when the US does: **winter (Nov 1 2026 → Mar 14 2027): AB = ET − 1**; **summer (Mar 14 → Nov 7 2027):
+AB = ET − 2**. Always schedule from the ET time below.
+- **Long videos:** Sunday **11:00 ET** (winter 10:00 AB, summer 9:00 AB)
+- **Shorts:** **15:00 ET** on the listed day (winter 14:00 AB, summer 13:00 AB)
+- **TikTok and Instagram copies** (from cluster 2): the next day, **18:00 ET** (winter 17:00 AB, summer 16:00 AB)
 
 ## Ready-by rule
 A cluster is **finished and privately uploaded by the Wednesday before its Sunday**: long video, all its Shorts,
@@ -20,22 +23,22 @@ days to catch a mistake.
 | Week | Date | What | Ready by |
 |---|---|---|---|
 | 0 | Sun Oct 18 → Wed Nov 4 | Produce HC001 (St. Martin long + 3 Shorts) | **Wed Nov 4** |
-| 1 | **Sun Nov 8**, 9:00 | **HC001-L** The Man With a Window Into His Stomach | |
-| 1 | Mon Nov 9, 13:00 | HC001-S2 The Doctor Who Put Food on a String (Related → HC001-L) | |
-| 1 | Wed Nov 11, 13:00 | HC001-S1 He Survived a Hole in His Stomach (Related → HC001-L) | |
-| 1 | Fri Nov 13, 13:00 | HC001-S3 The Human Experiment Who Walked Away (Related → HC001-L) | |
+| 1 | **Sun Nov 8**, 11:00 ET | **HC001-L** The Man With a Window Into His Stomach | |
+| 1 | Mon Nov 9, 15:00 ET | HC001-S2 The Doctor Who Put Food on a String (Related → HC001-L) | |
+| 1 | Wed Nov 11, 15:00 ET | HC001-S1 He Survived a Hole in His Stomach (Related → HC001-L) | |
+| 1 | Fri Nov 13, 15:00 ET | HC001-S3 The Human Experiment Who Walked Away (Related → HC001-L) | |
 | 2 | Sun Nov 15 | 7-day review of HC001-L (no upload) | Forssmann by **Wed Nov 18** |
 | 2–3 | | production week for cluster 2 | HC002 + Marshall by **Wed Nov 25** |
-| 3 | Tue Nov 24, 13:00 | HCS01 He Pushed a Tube Into His Own Heart (Forssmann) (Related → HC001-L) | |
-| 4 | **Sun Nov 29**, 9:00 | **HC002-L** Phineas Gage: The Story Everyone Gets Wrong | |
-| 4 | Mon Nov 30, 13:00 | HC002-S1 An Iron Rod Went Through His Skull (Related → HC002-L) | |
-| 4 | Wed Dec 2, 13:00 | HC002-S2 Did Phineas Gage Really Become a Different Person? (Related → HC002-L) | |
-| 4 | Fri Dec 4, 13:00 | HCS02 The Doctor Who Drank Bacteria (Marshall) (Related → HC001-L) | |
+| 3 | Tue Nov 24, 15:00 ET | HCS01 He Pushed a Tube Into His Own Heart (Forssmann) (Related → HC001-L) | |
+| 4 | **Sun Nov 29**, 11:00 ET | **HC002-L** Phineas Gage: The Story Everyone Gets Wrong | |
+| 4 | Mon Nov 30, 15:00 ET | HC002-S1 An Iron Rod Went Through His Skull (Related → HC002-L) | |
+| 4 | Wed Dec 2, 15:00 ET | HC002-S2 Did Phineas Gage Really Become a Different Person? (Related → HC002-L) | |
+| 4 | Fri Dec 4, 15:00 ET | HCS02 The Doctor Who Drank Bacteria (Marshall) (Related → HC001-L) | |
 | 5 | Sun Dec 6 | 28-day review of HC001-L; 7-day review of HC002-L | HC003 + Bågenholm by **Wed Dec 9** |
-| 6 | **Sun Dec 13**, 9:00 | **HC003-L** The Dancing Plague of 1518: What Actually Happened? | |
-| 6 | Mon Dec 14, 13:00 | HC003-S1 The Woman Who Couldn't Stop Dancing (Related → HC003-L) | |
-| 6 | Wed Dec 16, 13:00 | HC003-S2 The City Hired Musicians. It Made Things Worse. (Related → HC003-L) | |
-| 6 | Fri Dec 18, 13:00 | HCS03 She Was Trapped Under Ice for 80 Minutes (Bågenholm) (Related → best long so far) | |
+| 6 | **Sun Dec 13**, 11:00 ET | **HC003-L** The Dancing Plague of 1518: What Actually Happened? | |
+| 6 | Mon Dec 14, 15:00 ET | HC003-S1 The Woman Who Couldn't Stop Dancing (Related → HC003-L) | |
+| 6 | Wed Dec 16, 15:00 ET | HC003-S2 The City Hired Musicians. It Made Things Worse. (Related → HC003-L) | |
+| 6 | Fri Dec 18, 15:00 ET | HCS03 She Was Trapped Under Ice for 80 Minutes (Bågenholm) (Related → best long so far) | |
 | 8 | Sun Dec 27 | 28-day review of HC002-L; decide cluster 4 from the results | |
 | – | **Sat Feb 6, 2027** | Day-90 review: Continue / Pivot packaging / Pivot story / Pivot topics / Park | |
 
@@ -99,7 +102,7 @@ Everything you need is in the episode's `renders/deliverables/`:
    - **Add cards:** one card at the moment the story mentions another case. Link to that video (from
      cluster 2 on).
 4. **Checks:** wait for "No issues found" (copyright). If a claim appears, stop and tell me.
-5. **Visibility** → **Schedule** → pick the date and 9:00 (Mountain Time) → **Schedule**.
+5. **Visibility** → **Schedule** → pick the date and 11:00 ET (winter 10:00 Alberta) → **Schedule**.
 6. **After it goes live** (first hour):
    - Post the pinned comment from `publish.md` ("Did you spot Matt's glasses?") and pin it.
    - Reply to the first comments.
@@ -119,7 +122,7 @@ Everything you need is in the episode's `renders/deliverables/`:
    - **Show more:** Altered content **No**, Category Education, Language English.
 3. **Subtitles:** upload `captions.srt`. The captions are already burned into the video; the file helps search
    and accessibility.
-4. **Visibility** → **Schedule** → date and 13:00 MT (15:00 ET).
+4. **Visibility** → **Schedule** → date and 15:00 ET (winter 14:00 Alberta).
 5. After it's live: pin the comment-challenge comment from `publish.md`.
 
 ## TikTok and Instagram copies (from cluster 2, the day after YouTube)

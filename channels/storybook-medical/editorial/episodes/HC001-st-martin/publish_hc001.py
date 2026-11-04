@@ -126,7 +126,7 @@ def main():
           "## YouTube (long video)", f"**Title:** {TITLE}", "", "**Description:**", "```", desc, "```", "",
           f"**Tags:** {', '.join(TAGS)}", "", f"**Pinned comment:** {PINNED}", "",
           "**Thumbnails:** upload `thumb-A.jpg`; Test & compare: add `thumb-B.jpg` and `thumb-C.jpg`.", "",
-          *studio_settings("long", "Season Zero · Alexis St. Martin", schedule="Sun Nov 8, 9:00 MT (11:00 ET)"),
+          *studio_settings("long", "Season Zero · Alexis St. Martin", schedule="Sun Nov 8, 11:00 ET = 10:00 Alberta"),
           "## Video elements", "", "| Element | Value |", "|---|---|",
           "| Subtitles | Upload file → With timing → `captions.srt` (no burned-in captions; this file is the only one) |",
           "| End screen | 8:35 to the end (12 s, the brand end screen). YouTube needs at least one video or playlist "

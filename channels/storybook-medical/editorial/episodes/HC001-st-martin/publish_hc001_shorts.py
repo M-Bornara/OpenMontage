@@ -23,7 +23,7 @@ PLAYLIST = "Season Zero · Alexis St. Martin"
 
 SHORTS = {
     "hc001-s1": dict(
-        schedule="Wed Nov 11, 13:00 MT (15:00 ET)",
+        schedule="Wed Nov 11, 15:00 ET = 14:00 Alberta",
         kicker="MACKINAC · 1822",                      # one line on the cover
         title="He Survived a Hole in His Stomach",
         description="1822, Mackinac Island. A musket went off by accident less than a meter from Alexis St. Martin, an "
@@ -35,7 +35,7 @@ SHORTS = {
                 "True story. #history #medicalhistory #truestory #oddlymatt",
     ),
     "hc001-s2": dict(
-        schedule="Mon Nov 9, 13:00 MT (15:00 ET)",
+        schedule="Mon Nov 9, 15:00 ET = 14:00 Alberta",
         kicker="FORT NIAGARA · 1825", textY=220,       # the title clears his cap
         title="The Doctor Who Put Food on a String",
         description="1825. Army surgeon William Beaumont tied six foods to a silk string and lowered them into a living "
@@ -47,7 +47,7 @@ SHORTS = {
                 "#history #medicalhistory #truestory #oddlymatt",
     ),
     "hc001-s3": dict(
-        schedule="Fri Nov 13, 13:00 MT (15:00 ET)",
+        schedule="Fri Nov 13, 15:00 ET = 14:00 Alberta",
         kicker="1825 · 1852",
         title="The Human Experiment Who Walked Away",
         description="The most famous stomach in medical history belonged to a man who kept leaving. Alexis St. Martin "
