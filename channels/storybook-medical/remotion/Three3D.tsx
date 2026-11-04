@@ -2,7 +2,7 @@
 // outline, cream paper, grain). HeartRoute = a catheter line travelling arm vein -> heart (HCS01 shot 1b);
 // Medal = a generic 1956 gold medal turning half a turn and settling (HCS01 shot 10b).
 import React, { useMemo } from "react";
-import { AbsoluteFill, Easing, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
+import { AbsoluteFill, continueRender, delayRender, Easing, interpolate, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
 import { ThreeCanvas } from "@remotion/three";
 import { useThree } from "@react-three/fiber";
 import * as THREE from "three";
@@ -155,13 +155,30 @@ const medalFace = (): THREE.CanvasTexture => {
   return t;
 };
 
-export const Medal: React.FC = () => {
+// face = a painted medal (public path, square, the medal filling ~90%); without it a drawn placeholder face
+export const Medal: React.FC<{ face?: string }> = ({ face: src }) => {
   const f = useCurrentFrame();
   const { width, height, fps } = useVideoConfig();
-  const face = useMemo(medalFace, []);
+  // the frame is held until the loaded face is in the material and drawn (two animation frames), so no frame is
+  // captured with an empty (black) face
+  const [handle] = React.useState(() => (src ? delayRender("medal face") : null));
+  const placeholder = useMemo(() => (src ? null : medalFace()), [src]);
+  const [loaded, setLoaded] = React.useState<THREE.Texture | null>(null);
+  React.useEffect(() => {
+    if (!src || handle === null) return;
+    new THREE.TextureLoader().load(staticFile(src), (t) => {
+      t.colorSpace = THREE.SRGBColorSpace;
+      t.center.set(0.5, 0.5);
+      t.rotation = Math.PI / 2;
+      t.repeat.set(0.9, 0.9);          // crop to the painted circle (it fills ~90% of the square)
+      setLoaded(t);
+      requestAnimationFrame(() => requestAnimationFrame(() => continueRender(handle)));
+    });
+  }, [src, handle]);
+  const face = loaded ?? placeholder;
   const geo = useMemo(() => new THREE.CylinderGeometry(1.6, 1.6, 0.22, 96), []);
   // half a turn + a little overshoot, settling face-on at 1.6 s (the word "Prize")
-  const turn = interpolate(f, [0, 1.6 * fps], [Math.PI * 1.1, 0], { extrapolateRight: "clamp", easing: Easing.out(Easing.back(1.4)) });
+  const turn = interpolate(f, [0, 1.6 * fps], [Math.PI * 0.46, 0], { extrapolateRight: "clamp", easing: Easing.out(Easing.back(1.4)) });
   const glint = interpolate(f, [1.6 * fps, 2.4 * fps], [-2.5, 2.5], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   return (
     <AbsoluteFill style={{ background: "radial-gradient(circle at 50% 45%, #5A2A22 0%, #2A1210 70%)" }}>
@@ -170,11 +187,11 @@ export const Medal: React.FC = () => {
         <directionalLight position={[2, 3, 5]} intensity={2.2} color="#FFE2B0" />
         <pointLight position={[glint, 1.5, 3]} intensity={8} color="#FFF4D8" distance={8} />
         <group rotation={[0, turn, 0]}>
-          <mesh geometry={geo} rotation={[Math.PI / 2, 0, 0]}>
+          {face && <mesh key={face.uuid} geometry={geo} rotation={[Math.PI / 2, 0, 0]}>
             <meshStandardMaterial attach="material-0" color="#B98432" metalness={0.9} roughness={0.35} />
             <meshStandardMaterial attach="material-1" map={face} metalness={0.75} roughness={0.38} />
             <meshStandardMaterial attach="material-2" map={face} metalness={0.75} roughness={0.38} />
-          </mesh>
+          </mesh>}
         </group>
       </ThreeCanvas>
       <Grain />

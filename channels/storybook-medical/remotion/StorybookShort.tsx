@@ -47,6 +47,11 @@ export interface Shot {
   darken?: number;
   /** Caption top for this shot (px of 1920), chosen per picture so the words never sit on a face or the shot's subject. */
   captionY?: number;
+  /** Lines that draw themselves ON the picture (they move with the camera): points in 0..1 of the 9:16 frame, drawn
+   *  between from..to seconds after the shot starts (HCS01: the catheter up the vein, the line on the X-ray). */
+  draw?: { points: [number, number][]; from: number; to: number; color?: string; width?: number; glow?: boolean }[];
+  /** Colour drains to grey between from..to seconds after the shot starts. */
+  grey?: { from: number; to: number };
 }
 
 export type Overlay =
@@ -121,6 +126,8 @@ export const ShotLayer: React.FC<{ shot: Shot }> = ({ shot }) => {
     blur = interpolate(frame, [0, 7], [24, 0], { extrapolateRight: "clamp" });
   }
 
+  const grey = shot.grey ? interpolate(frame, [shot.grey.from * FPS, shot.grey.to * FPS], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) : 0;
+  const filters = [blur ? `blur(${blur}px)` : "", grey ? `grayscale(${grey}) brightness(${1 - 0.15 * grey})` : ""].filter(Boolean).join(" ");
   const style: React.CSSProperties = {
     position: "absolute",
     inset: 0,
@@ -129,8 +136,19 @@ export const ShotLayer: React.FC<{ shot: Shot }> = ({ shot }) => {
     objectFit: "cover",
     objectPosition: m.type === "pan" ? `${(m.from ?? 0) + ((m.to ?? 100) - (m.from ?? 0)) * t}% 50%` : undefined,
     transform: `translate(${tx + whipX}%, ${ty}%) scale(${scale})`,
-    filter: blur ? `blur(${blur}px)` : undefined,
+    filter: filters || undefined,
   };
+  // drawn lines share the picture's transform, so they stay on the vein / the film while the camera moves
+  const lines = (shot.draw ?? []).map((d, i) => {
+    const k = interpolate(frame, [d.from * FPS, d.to * FPS], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.inOut(Easing.cubic) });
+    const pts = d.points.map(([x, y]) => `${x * 1080},${y * 1920}`).join(" ");
+    const w = d.width ?? 14;
+    return (
+      <polyline key={i} points={pts} pathLength={1} fill="none" stroke={d.color ?? AMBER} strokeWidth={w} strokeLinecap="round"
+        strokeLinejoin="round" strokeDasharray="1 1" strokeDashoffset={1 - k}
+        style={{ opacity: k > 0 ? 1 : 0, filter: d.glow === false ? undefined : `drop-shadow(0 0 ${w}px ${d.color ?? AMBER})` }} />
+    );
+  });
 
   return (
     <AbsoluteFill style={{ backgroundColor: shot.transitionIn === "dissolve" ? "transparent" : CHARCOAL, overflow: "hidden",
@@ -140,6 +158,9 @@ export const ShotLayer: React.FC<{ shot: Shot }> = ({ shot }) => {
       ) : (
         <Img src={staticFile(shot.src)} style={style} />
       )}
+      {lines.length ? (
+        <svg viewBox="0 0 1080 1920" style={{ ...style, objectFit: undefined, objectPosition: undefined, filter: undefined }}>{lines}</svg>
+      ) : null}
       {shot.darken ? <AbsoluteFill style={{ backgroundColor: `rgba(0,0,0,${shot.darken})` }} /> : null}
       {shot.transitionIn === "flash" ? (
         <AbsoluteFill

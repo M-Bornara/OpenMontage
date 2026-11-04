@@ -638,7 +638,7 @@ def step_build(pid, *_):
         shots.append({"id": s["id"], "src": rel, "kind": kind, "start": s["start"], "end": s["end"],
                       "inPoint": s.get("in", 0), "motion": s.get("motion", {"type": "push"}),
                       "transitionIn": s.get("transition", "cut"), "darken": s.get("darken", 0),
-                      **({"captionY": s["captionY"]} if "captionY" in s else {})})
+                      **{k: s[k] for k in ("captionY", "draw", "grey") if k in s}})
     # a dissolve needs the previous shot underneath it: overlap by 0.5 s
     for a, b in zip(shots, shots[1:]):
         if b["transitionIn"] == "dissolve":
