@@ -68,6 +68,13 @@ class FluxImage(BaseTool):
             "seed": {"type": "integer"},
             "num_inference_steps": {"type": "integer"},
             "guidance_scale": {"type": "number"},
+            "safety_tolerance": {
+                "type": "string",
+                "enum": ["1", "2", "3", "4", "5", "6"],
+                "description": "fal FLUX Pro moderation strictness; 1 is strictest, 6 most permissive. "
+                "Raise for clinical/anatomical subjects that the default blacks out.",
+            },
+            "enable_safety_checker": {"type": "boolean"},
             "output_path": {"type": "string"},
         },
     }
@@ -76,7 +83,7 @@ class FluxImage(BaseTool):
         cpu_cores=1, ram_mb=512, vram_mb=0, disk_mb=100, network_required=True
     )
     retry_policy = RetryPolicy(max_retries=2, retryable_errors=["rate_limit", "timeout"])
-    idempotency_key_fields = ["prompt", "width", "height", "seed", "model"]
+    idempotency_key_fields = ["prompt", "width", "height", "seed", "model", "safety_tolerance"]
     side_effects = ["writes image file to output_path", "calls fal.ai API"]
     user_visible_verification = ["Inspect generated image for relevance and quality"]
 
@@ -122,6 +129,10 @@ class FluxImage(BaseTool):
             payload["guidance_scale"] = inputs["guidance_scale"]
         if inputs.get("negative_prompt"):
             payload["negative_prompt"] = inputs["negative_prompt"]
+        if inputs.get("safety_tolerance"):
+            payload["safety_tolerance"] = str(inputs["safety_tolerance"])
+        if inputs.get("enable_safety_checker") is not None:
+            payload["enable_safety_checker"] = bool(inputs["enable_safety_checker"])
 
         try:
             response = requests.post(
