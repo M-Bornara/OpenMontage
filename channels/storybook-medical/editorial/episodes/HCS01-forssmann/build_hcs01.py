@@ -131,12 +131,17 @@ KEYFRAMES = {
         roles="Reference 1 is this operating room. Reference 2 is WERNER FORSSMANN. Reference 3 is NURSE GERDA DITZEN. ",
         prompt=f"{OR} Side view, comedy two-shot. {cast(DITZEN + ', lying on her back on the operating table in the lower half of the frame, fully dressed, eyes closed, hands folded, patiently waiting', FORSSMANN + ', standing behind the head of the table in the right half of the frame, turned AWAY from her, ' + SLEEVE + ', holding out his bare LEFT forearm (the arm with the rolled sleeve) and dabbing it with a cotton swab held in his RIGHT hand, glancing back at her with a sly look')} "
                f"The top 20% of the frame is calm tiled wall. {SAFE_FRAMING} {PERIOD} {NO_TEXT}"),
-    "s6a": dict(aspect="9:16", refs=["ref:plate-or", F],
-        roles="Reference 1 is this operating room. Reference 2 is WERNER FORSSMANN (same face). ",
-        prompt=f"{OR} Close-up of FORSSMANN's face, three-quarter view, eyes down toward his own arm (out of frame "
-               "below), intensely focused, lips pressed, one bead of sweat at his temple, lit warm from the amber lamp "
-               f"above, the tiles dark behind. {cast(FORSSMANN)} The bottom 25% is his white coat collar. {SAFE_FRAMING} "
-               f"{PERIOD} {NO_TEXT}"),
+    # v2: v1 was only his face, so the line "he slid the catheter in" had no action (user review of the storybook)
+    "s6a": dict(aspect="9:16", resolution="4K", refs=["ref:plate-or", F],
+        roles="Reference 1 is this operating room. Reference 2 is WERNER FORSSMANN (same face, hair, white coat). ",
+        prompt=f"{OR} Close-up from over his right shoulder, looking down at the action: {cast(FORSSMANN)} He sits at "
+               "the operating table; his bare LEFT forearm (the arm with the rolled-up sleeve) rests on the white sheet, "
+               "palm up. With his RIGHT hand he is feeding a thin red-brown rubber tube into the crook of his left elbow; "
+               "the point where it enters is completely hidden under a small square of white gauze pressed by his "
+               "fingers. A long loop of the tube trails back from his hand into the steel tray. His face is in partial "
+               "profile in the upper third of the frame, eyes on his arm, intensely focused, one bead of sweat. Warm "
+               "amber lamp light. NO blood, NO needle, NO visible skin opening. The arm and hands fill the centre of the "
+               f"frame. {SAFE_FRAMING} {PERIOD} {NO_TEXT}"),
     "s6b": dict(aspect="9:16", refs=["ref:plate-or"],
         roles="Reference 1 is this operating room (style and colours). ",
         prompt=f"{OR} Extreme close-up on the white sheet: a thin red-brown rubber catheter tube (one plain single tube with simple rounded "
@@ -155,9 +160,12 @@ KEYFRAMES = {
                "slightly to the viewer's right of centre; the patient's left shoulder and upper arm at the VIEWER'S "
                "RIGHT edge of the film. No tube or line on the film. The film fills the middle 70% of the frame. "
                f"{NO_PEOPLE} {SAFE_FRAMING} {PERIOD} {NO_TEXT}"),
-    "s8b": dict(aspect="9:16", refs=["ref:plate-xray", F],
+    # v2: v1 showed the tube on his right arm (user review); v2 did too, so s8b.png is the MIRRORED s8b.orig.png (L25)
+    "s8b": dict(aspect="9:16", resolution="4K", refs=["ref:plate-xray", F],
         roles="Reference 1 is this X-ray room. Reference 2 is WERNER FORSSMANN (same face). ",
         prompt=f"{XRAY} Medium shot: {cast(FORSSMANN + ', standing beside the glowing lightbox on the right, ' + SLEEVE + ', the thin tube still taped to his inner left forearm, looking at the film with a small relieved half-smile, lit cool blue from the lightbox')} "
+               "He faces the camera, so his LEFT arm (rolled sleeve, taped tube) is on the VIEWER'S RIGHT side of the "
+               "image; his RIGHT arm, on the viewer's left, has its sleeve down and no tube. "
                f"The bottom 20% of the frame is the dark floor and apparatus base. {SAFE_FRAMING} {PERIOD} {NO_TEXT}"),
     "s9": dict(aspect="9:16", refs=["ref:plate-or", F],
         roles="Reference 1 is the hospital painting style. Reference 2 is WERNER FORSSMANN (his coat). ",
