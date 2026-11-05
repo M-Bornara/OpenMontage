@@ -2,6 +2,7 @@
 
 Written 2026-10-18. Rules from [`master-instructions-v3.md`](master-instructions-v3.md) §37–39: per story cluster,
 **Day 1 long · Day 2 strongest Short · Day 4 second Short · Day 6 third Short**; one long every two weeks;
+since plan v2 (2026-11-05): **one YouTube upload every 2 days**, standalone Shorts fill the gaps;
 YouTube first; TikTok and Instagram start once the YouTube routine is smooth. Times are set in **New York
 time (ET)**, where most of the North American audience lives (growth-strategy.md §5). They are a starting
 experiment, not "best times"; YouTube Analytics takes over after ~4 weeks.
@@ -18,36 +19,56 @@ A cluster is **finished and privately uploaded by the Wednesday before its Sunda
 3 thumbnails and publish texts, reviewed by you. Nothing goes up the same day it's finished. That gives four
 days to catch a mistake.
 
-## The calendar
+## The calendar: one upload every 2 days (plan v2, proposed 2026-11-05, waiting for approval)
 
-| Week | Date | What | Ready by |
-|---|---|---|---|
-| 0 | Sun Oct 18 → Wed Nov 4 | Produce HC001 (St. Martin long + 3 Shorts) | **Wed Nov 4** |
-| 1 | **Sun Nov 8**, 11:00 ET | **HC001-L** The Man With a Window Into His Stomach | |
-| 1 | Mon Nov 9, 15:00 ET | HC001-S2 The Doctor Who Put Food on a String (Related → HC001-L) | |
-| 1 | Wed Nov 11, 15:00 ET | HC001-S1 He Survived a Hole in His Stomach (Related → HC001-L) | |
-| 1 | Fri Nov 13, 15:00 ET | HC001-S3 The Human Experiment Who Walked Away (Related → HC001-L) | |
-| 2 | Sun Nov 15 | 7-day review of HC001-L (no upload) | Forssmann by **Wed Nov 18** |
-| 2–3 | | production week for cluster 2 | HC002 + Marshall by **Wed Nov 25** |
-| 3 | Tue Nov 24, 15:00 ET | HCS01 He Pushed a Tube Into His Own Heart (Forssmann) (Related → HC001-L) | |
-| 4 | **Sun Nov 29**, 11:00 ET | **HC002-L** Phineas Gage: The Story Everyone Gets Wrong | |
-| 4 | Mon Nov 30, 15:00 ET | HC002-S1 An Iron Rod Went Through His Skull (Related → HC002-L) | |
-| 4 | Wed Dec 2, 15:00 ET | HC002-S2 Did Phineas Gage Really Become a Different Person? (Related → HC002-L) | |
-| 4 | Fri Dec 4, 15:00 ET | HCS02 The Doctor Who Drank Bacteria (Marshall) (Related → HC001-L) | |
-| 5 | Sun Dec 6 | 28-day review of HC001-L; 7-day review of HC002-L | HC003 + Bågenholm by **Wed Dec 9** |
-| 6 | **Sun Dec 13**, 11:00 ET | **HC003-L** The Dancing Plague of 1518: What Actually Happened? | |
-| 6 | Mon Dec 14, 15:00 ET | HC003-S1 The Woman Who Couldn't Stop Dancing (Related → HC003-L) | |
-| 6 | Wed Dec 16, 15:00 ET | HC003-S2 The City Hired Musicians. It Made Things Worse. (Related → HC003-L) | |
-| 6 | Fri Dec 18, 15:00 ET | HCS03 She Was Trapped Under Ice for 80 Minutes (Bågenholm) (Related → best long so far) | |
-| 8 | Sun Dec 27 | 28-day review of HC002-L; decide cluster 4 from the results | |
-| – | **Sat Feb 6, 2027** | Day-90 review: Continue / Pivot packaging / Pivot story / Pivot topics / Park | |
+**Why every 2 days:** YouTube doesn't punish a slow channel. But each Short is one test, and the old plan went
+silent for 11 days after launch week (Nov 13 → Nov 24). Every 2 days on YouTube = about 3.5 uploads a week. The
+other platforms get each YouTube piece **the next day at 18:00 ET (17:00 Alberta)**, so they also get something
+every 2 days, always one day after YouTube. Long videos land on a Sunday every 14 days (the 2-day rhythm comes back
+to Sunday every 14 days).
 
-**Shifted one week (2026-11-03)** from cluster 2 on: production of HC001 ran ~3 weeks with its review rounds, and the
-rule below says to move a cluster rather than release it unready.
+| # | YouTube date (Shorts 15:00 ET / long 11:00 ET) | What | Related video | TikTok · FB · IG (next day, 18:00 ET) | Ready by (4 days before) | State |
+|---|---|---|---|---|---|---|
+| 1 | **Sun Nov 8** · L | **HC001-L** The Man With a Window Into His Stomach | – | (FB: optional, the long as a Page video) | – | scheduled |
+| 2 | Mon Nov 9 | HC001-S2 The Doctor Who Put Food on a String | HC001-L | Tue Nov 10 | – | scheduled |
+| 3 | Wed Nov 11 | HC001-S1 He Survived a Hole in His Stomach | HC001-L | Thu Nov 12 | – | scheduled |
+| 4 | Fri Nov 13 | HC001-S3 The Human Experiment Who Walked Away | HC001-L | Sat Nov 14 | – | scheduled |
+| 5 | Sun Nov 15 | **HCS01** He Pushed a Tube Into His Own Heart (Forssmann) | HC001-L | Mon Nov 16 | **Wed Nov 11** | rough cut v5 |
+| 6 | Tue Nov 17 | **HC001-S4** the tongue test (reserve; reuses HC001 art, cheapest) | HC001-L | Wed Nov 18 | Fri Nov 13 | researched, no script |
+| 7 | Thu Nov 19 | **HCS02** The Doctor Who Drank Bacteria (Marshall) | HC001-L | Fri Nov 20 | Sun Nov 15 | script v2 |
+| 8 | Sat Nov 21 | **HCS03** She Was Trapped Under Ice for 80 Minutes (Bågenholm) | HC001-L | Sun Nov 22 | Tue Nov 17 | script v2 |
+| 9 | Mon Nov 23 | **HCS04** The 5,000-year-old artificial eye (Burnt City) | HC001-L | Tue Nov 24 | Thu Nov 19 | needs research package |
+| 10 | Wed Nov 25 | **HCS05** The doctor who tested bloodletting on two groups (al-Razi) | HC001-L | Thu Nov 26 | Sat Nov 21 | needs research package |
+| 11 | Fri Nov 27 | **HCS06** Onesimus and the 1721 Boston inoculation | HC001-L | Sat Nov 28 | Mon Nov 23 | needs research |
+| 12 | **Sun Nov 29** · L | **HC002-L** Phineas Gage: The Story Everyone Gets Wrong | – | (FB: optional, Mon Nov 30) | **Wed Nov 25** | script v2 |
+| 13 | Tue Dec 1 | HC002-S1 An Iron Rod Went Through His Skull | HC002-L | Wed Dec 2 | Fri Nov 27 | script v2 |
+| 14 | Thu Dec 3 | HC002-S2 Did Phineas Gage Really Become a Different Person? | HC002-L | Fri Dec 4 | Sun Nov 29 | script v2 |
+| 15 | Sat Dec 5 | HC002-S3 his skull (reserve) | HC002-L | Sun Dec 6 | Tue Dec 1 | researched, no script |
+| 16 | Mon Dec 7 | **HCS07** Carlos Finlay: the mosquito idea nobody believed | HC002-L | Tue Dec 8 | Thu Dec 3 | needs research |
+| – | Dec 9 / Dec 11 | two Shorts (HC003 reserve "what caused it?" + one standalone) | | | | |
+| – | **Sun Dec 13** · L | **HC003-L** The Dancing Plague of 1518, then HC003-S1, S2 | | | | script v2 |
 
-**Gaps on purpose:** weeks 2 and 5 are lighter. Use them for production and review, not filler uploads.
-Week 4 can take a reserve Short (St. Martin "the tongue test") if it's ready and good. Never post something
-weaker just to fill a slot.
+**Reviews (no upload needed):** Sun Nov 15 7-day review of HC001-L · Sun Dec 6 28-day review of HC001-L, 7-day
+review of HC002-L · Sun Dec 27 28-day review of HC002-L · Sat Feb 6 2027 day-90 review.
+
+**What this needs:**
+- **Production:** 9 new Shorts and the HC002-L long in about 3 weeks. HC001-L alone took about 3 weeks, so HC002-L
+  is made **in parallel from now**, and the Shorts go through the storybook-first pipeline (production-v3.md),
+  which made HCS01 in a few days.
+- **Your review time** is the real limit: about 3–4 pieces a week, each through script → storybook → rough cut →
+  final. Batch it: all scripts for a week in one review, then all storybooks.
+- **Money:** a Short costs about $5 (HCS01: $4.97), HC002-L about $15–18. The month ≈ **$65–80**, so Gate 0 ends
+  near $105–120 of $350. **The fal balance is $22.24**: top it up before cluster 2's images.
+- **Research first** for HCS04–HCS07 (claims.csv + core rating, as for the others). A topic that fails the
+  documented-core rule is swapped for the next one, not forced.
+
+**Swap rule:** if a piece isn't ready by its ready-by date, the next ready standalone Short takes its slot and it
+moves back one slot. Standalone Shorts (HCS..) can move freely; the long stays on its Sunday or moves 14 days with
+its Shorts. Never post something weaker just to fill a slot. A missed slot is better than a weak Short.
+
+**Instagram:** no schedule option found in the app, so every copy is posted by hand at 17:00 Alberta. Try
+**Meta Business Suite → Planner** once (it can schedule Reels for a professional account); if it works, schedule
+FB + IG there together.
 
 **If production slips:** move the whole cluster one week. Don't release a long video without its Shorts
 ready behind it.

@@ -9,6 +9,12 @@ Updated 2026-11-03.
 - [ ] Liam: a hyped take for the hook / myth / ending, compared against the archived take.
 - [ ] The user reviews the 3 HC001 Shorts (not watched yet).
 
+## From 2026-11-05
+- [ ] **Approve plan v2** (upload-schedule.md "The calendar"): one YouTube upload every 2 days through Dec 13, platforms the
+      next day. If approved: HCS01 moves to **Sun Nov 15** (ready Wed Nov 11), research packages for HCS04–HCS07, HC002-L
+      production starts now in parallel, fal balance top-up ($22.24 left).
+- [ ] HCS01 rough cut v5 (new "his new boss in Berlin fired him" line, longer pauses, music stretched 0.889): user listens.
+
 ## From 2026-10-26
 - [x] Shorts final-v4 approved (2026-11-03). Packages built: projects/hc001-s1..s3/renders/deliverables/ (short.mp4, cover.jpg,
       captions.srt, publish.md with title/description/tags/pinned challenge). User uploads + schedules: S2 Mon Nov 9, S1 Wed Nov 11,
