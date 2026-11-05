@@ -42,10 +42,10 @@ to Sunday every 14 days).
 | 11 | Fri Nov 27 | **HCS06** Onesimus and the 1721 Boston inoculation | HC001-L | Sat Nov 28 | Mon Nov 23 | needs research |
 | 12 | **Sun Nov 29** · L | **HC002-L** Phineas Gage: The Story Everyone Gets Wrong | – | (FB: optional, Mon Nov 30) | **Wed Nov 25** | script v2 |
 | 13 | Tue Dec 1 | HC002-S1 An Iron Rod Went Through His Skull | HC002-L | Wed Dec 2 | Fri Nov 27 | script v2 |
-| 14 | Thu Dec 3 | HC002-S2 Did Phineas Gage Really Become a Different Person? | HC002-L | Fri Dec 4 | Sun Nov 29 | script v2 |
-| 15 | Sat Dec 5 | HC002-S3 his skull (reserve) | HC002-L | Sun Dec 6 | Tue Dec 1 | researched, no script |
-| 16 | Mon Dec 7 | **HCS07** Carlos Finlay: the mosquito idea nobody believed | HC002-L | Tue Dec 8 | Thu Dec 3 | needs research |
-| – | Dec 9 / Dec 11 | two Shorts (HC003 reserve "what caused it?" + one standalone) | | | | |
+| 14 | Thu Dec 3 | **HCS07** Carlos Finlay: the mosquito idea nobody believed | HC002-L | Fri Dec 4 | Sun Nov 29 | needs research |
+| 15 | Sat Dec 5 | HC002-S2 Did Phineas Gage Really Become a Different Person? | HC002-L | Sun Dec 6 | Tue Dec 1 | script v2 |
+| 16 | Mon Dec 7 | **HCS08** next standalone from the world slate | HC002-L | Tue Dec 8 | Thu Dec 3 | needs research |
+| – | Dec 9 / Dec 11 | two standalone Shorts | | | | |
 | – | **Sun Dec 13** · L | **HC003-L** The Dancing Plague of 1518, then HC003-S1, S2 | | | | script v2 |
 
 **Reviews (no upload needed):** Sun Nov 15 7-day review of HC001-L · Sun Dec 6 28-day review of HC001-L, 7-day
@@ -61,6 +61,13 @@ review of HC002-L · Sun Dec 27 28-day review of HC002-L · Sat Feb 6 2027 day-9
   near $105–120 of $350. **The fal balance is $22.24**: top it up before cluster 2's images.
 - **Research first** for HCS04–HCS07 (claims.csv + core rating, as for the others). A topic that fails the
   documented-core rule is swapped for the next one, not forced.
+
+**Same-story Shorts (user question, 2026-11-05):** at most **2 Shorts per long story**, and never back to back:
+a standalone Short sits between them. Each one tells **one angle the long only touches or doesn't have** (a
+different scene, a myth check, an aftermath fact), so a viewer who saw the long still gets something new. Most
+Shorts viewers never see the long (growth-strategy.md §1), so a Short must work on its own, but it must not be a
+cut-down of the long. The reserves "his skull" and "what caused it?" are dropped unless one tests a new angle.
+HC001's three are already scheduled and stay as they are; we'll read their numbers on the 7-day review.
 
 **Swap rule:** if a piece isn't ready by its ready-by date, the next ready standalone Short takes its slot and it
 moves back one slot. Standalone Shorts (HCS..) can move freely; the long stays on its Sunday or moves 14 days with

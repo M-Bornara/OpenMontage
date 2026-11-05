@@ -10,10 +10,10 @@ Updated 2026-11-03.
 - [ ] The user reviews the 3 HC001 Shorts (not watched yet).
 
 ## From 2026-11-05
-- [ ] **Approve plan v2** (upload-schedule.md "The calendar"): one YouTube upload every 2 days through Dec 13, platforms the
+- [x] **Plan v2 approved** (2026-11-05; user: produce faster, most of it in a week; max 2 Shorts per long story, spread out). Was: **Approve plan v2** (upload-schedule.md "The calendar"): one YouTube upload every 2 days through Dec 13, platforms the
       next day. If approved: HCS01 moves to **Sun Nov 15** (ready Wed Nov 11), research packages for HCS04–HCS07, HC002-L
       production starts now in parallel, fal balance top-up ($22.24 left).
-- [ ] HCS01 rough cut v5 (new "his new boss in Berlin fired him" line, longer pauses, music stretched 0.889): user listens.
+- [x] HCS01 rough cut v5 approved by the user (2026-11-05). Next: final package (sting, cover, publish.md), live Sun Nov 15. Was: rough cut v5 (new "his new boss in Berlin fired him" line, longer pauses, music stretched 0.889): user listens.
 
 ## From 2026-10-26
 - [x] Shorts final-v4 approved (2026-11-03). Packages built: projects/hc001-s1..s3/renders/deliverables/ (short.mp4, cover.jpg,
