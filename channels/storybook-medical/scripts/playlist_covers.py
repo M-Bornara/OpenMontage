@@ -19,6 +19,10 @@ PLAYLISTS = {
                                 (P / "hc001-s2/assets/images/covers/cover.png", 0.36)]),
     "alexis-st-martin": dict(name="Season Zero · Alexis St. Martin", kicker="MACKINAC · 1822", lines=["ALEXIS", "ST. MARTIN"],
                              panels=[(P / f"hc001-s{n}/assets/images/covers/cover.png", 0.28) for n in (2, 1, 3)], size=96),
+    # family playlists (upload-schedule.md "Playlists"): one per story family, made when the family's first video is out
+    "strange-medical-cases": dict(name="Strange Medical Cases", kicker="TRUE STORIES", lines=["STRANGE", "MEDICAL", "CASES"], size=104,
+                                  panels=[(P / f"hc001-window-into-his-stomach/assets/images/thumbnails/{n}.png", fx)
+                                          for n, fx in (("A", 0.3), ("B", 0.8), ("C", 0.25))]),
     # one story so far: swap a panel for Marshall (HCS02) when it's out
     "crazy-science": dict(name="Crazy Science (true stories)", kicker="TRUE STORIES", lines=["CRAZY", "SCIENCE"],
                           panels=[(P / "hcs01-forssmann/assets/images/keyframes/s2.png", 0.5), (P / "hcs01-forssmann/assets/images/keyframes/s6a.png", 0.55),
@@ -38,9 +42,15 @@ def background(panels):
         x, deg = FAN[i]
         path, fy = panels[i] if isinstance(panels[i], tuple) else (panels[i], 0.5)
         src = Image.open(path).convert("RGB")
-        ch = int(src.width * 4 / 3)                                                  # 3:4 crop centred on fy of the height
-        top = max(0, min(src.height - ch, int(fy * src.height - ch / 2)))
-        im = src.crop((0, top, src.width, top + ch)).resize((PW, PH), Image.LANCZOS)
+        if src.width * 4 / 3 <= src.height:                                          # portrait: 3:4 crop centred on fy of the height
+            ch = int(src.width * 4 / 3)
+            top = max(0, min(src.height - ch, int(fy * src.height - ch / 2)))
+            box = (0, top, src.width, top + ch)
+        else:                                                                         # landscape: fy is the centre across the width
+            cw = int(src.height * 3 / 4)
+            left = max(0, min(src.width - cw, int(fy * src.width - cw / 2)))
+            box = (left, 0, left + cw, src.height)
+        im = src.crop(box).resize((PW, PH), Image.LANCZOS)
         card = Image.new("RGBA", (PW + 16, PH + 16), (244, 238, 226, 255))           # bone-white print border
         card.paste(im, (8, 8))
         card = card.rotate(deg, resample=Image.BICUBIC, expand=True)
