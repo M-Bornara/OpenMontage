@@ -72,11 +72,11 @@ c.shot(t, KF + "s1b.png", push(0.6, 0.45, 1.15), cap=LOW,
        draw=[{"points": VEIN, "from": 0.3, "to": round(heart - t + 0.15, 2), "color": "#F0A23A", "width": 16}])
 c.s("whoosh", t + 0.35, -24); c.s("heartbeat", heart + 0.1, -12)
 t = c.at("werner")
-c.shot(t, KF + "s2.png", {"type": "slide", "from": -3, "to": 3, "scale": 1.1}, cap=LOW)
+c.shot(t, KF + "s2.png", {"type": "slide", "from": -3, "to": 3, "scale": 1.1}, cap=1150)   # LOW covered Matt's glasses on the sill
 c.o("nameTag", t + 0.2, t + 2.8, text="Werner Forssmann", sub="trainee surgeon · 1929", y=190)
 t = c.at("his boss said no")
 no = c.at("no")
-c.shot(t, KF + "s3.png", {"type": "push", "from": 1.04, "to": 1.06}, cap=TOP)   # LOW sat on his hand + the skull
+c.shot(t, KF + "s3.png", {"type": "push", "from": 1.04, "to": 1.06}, cap=180)   # LOW sat on his hand + the skull
 c.shot(no, KF + "s3.png", push(0.5, 0.38, 1.16, 1.08), cap=180)          # the quick push on "no"
 c.shot(c.at("the nurse"), KF + "s4.png", push(0.33, 0.5, 1.4), cap=LOW)
 c.s("key-lock", c.at("her") + 0.1, -20)
