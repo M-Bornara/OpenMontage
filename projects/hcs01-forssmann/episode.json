@@ -192,13 +192,719 @@
   },
   "clips": {},
   "music": {
-    "prompts": {},
-    "selected": ""
+    "lufs": -22,
+    "selected": "m1s",
+    "prompts": {
+      "m1": "Instrumental, 1920s chamber music with a mischievous, curious mood: pizzicato strings, a bassoon and clarinet, light brushed percussion like a ticking clock, building tension in the middle, then a warm brass swell of triumph near the end and a quiet, solemn close. No vocals.",
+      "m2": "Instrumental, playful suspense score for a true story told like a storybook: plucked cello, celesta, soft muted trumpet, a steady ticking pulse that grows, a short bright fanfare, then a sombre low piano ending. No vocals."
+    }
   },
-  "shots": [],
-  "overlays": [],
-  "sfx": [],
+  "shots": [
+    {
+      "id": "s01",
+      "start": 0.0,
+      "source": "projects/hcs01-forssmann/assets/images/keyframes/s1a.png",
+      "motion": {
+        "type": "push",
+        "from": 1.04,
+        "to": 1.25,
+        "x": 6.25,
+        "y": -12.5
+      },
+      "captionY": 300,
+      "end": 2.78
+    },
+    {
+      "id": "s02",
+      "start": 2.78,
+      "source": "projects/hcs01-forssmann/assets/images/keyframes/s1b.png",
+      "motion": {
+        "type": "push",
+        "from": 1.04,
+        "to": 1.15,
+        "x": -7.5,
+        "y": 5.75
+      },
+      "captionY": 1430,
+      "draw": [
+        {
+          "points": [
+            [
+              0.806,
+              0.6301
+            ],
+            [
+              0.8099,
+              0.6257
+            ],
+            [
+              0.8099,
+              0.6214
+            ],
+            [
+              0.8099,
+              0.617
+            ],
+            [
+              0.8099,
+              0.6126
+            ],
+            [
+              0.8099,
+              0.6083
+            ],
+            [
+              0.8099,
+              0.6039
+            ],
+            [
+              0.8112,
+              0.5996
+            ],
+            [
+              0.8125,
+              0.5952
+            ],
+            [
+              0.8125,
+              0.5908
+            ],
+            [
+              0.8099,
+              0.5865
+            ],
+            [
+              0.8086,
+              0.5821
+            ],
+            [
+              0.806,
+              0.5778
+            ],
+            [
+              0.8047,
+              0.5734
+            ],
+            [
+              0.8021,
+              0.569
+            ],
+            [
+              0.7995,
+              0.5647
+            ],
+            [
+              0.7982,
+              0.5603
+            ],
+            [
+              0.7969,
+              0.556
+            ],
+            [
+              0.7956,
+              0.5516
+            ],
+            [
+              0.7943,
+              0.5472
+            ],
+            [
+              0.793,
+              0.5429
+            ],
+            [
+              0.7917,
+              0.5385
+            ],
+            [
+              0.7904,
+              0.5342
+            ],
+            [
+              0.7891,
+              0.5298
+            ],
+            [
+              0.7878,
+              0.5254
+            ],
+            [
+              0.7878,
+              0.5211
+            ],
+            [
+              0.7865,
+              0.5167
+            ],
+            [
+              0.7852,
+              0.5124
+            ],
+            [
+              0.7839,
+              0.508
+            ],
+            [
+              0.7826,
+              0.5036
+            ],
+            [
+              0.7812,
+              0.4993
+            ],
+            [
+              0.7799,
+              0.4949
+            ],
+            [
+              0.7786,
+              0.4906
+            ],
+            [
+              0.7773,
+              0.4862
+            ],
+            [
+              0.7747,
+              0.4818
+            ],
+            [
+              0.7721,
+              0.4775
+            ],
+            [
+              0.7708,
+              0.4731
+            ],
+            [
+              0.7643,
+              0.4688
+            ],
+            [
+              0.7643,
+              0.4644
+            ],
+            [
+              0.763,
+              0.46
+            ],
+            [
+              0.7617,
+              0.4557
+            ],
+            [
+              0.7604,
+              0.4513
+            ],
+            [
+              0.7591,
+              0.4469
+            ],
+            [
+              0.7565,
+              0.4426
+            ],
+            [
+              0.7526,
+              0.4382
+            ],
+            [
+              0.75,
+              0.4339
+            ],
+            [
+              0.7487,
+              0.4295
+            ],
+            [
+              0.7448,
+              0.4251
+            ],
+            [
+              0.7396,
+              0.4208
+            ],
+            [
+              0.7344,
+              0.4164
+            ],
+            [
+              0.7305,
+              0.4121
+            ],
+            [
+              0.7253,
+              0.4077
+            ],
+            [
+              0.7188,
+              0.4033
+            ],
+            [
+              0.7122,
+              0.399
+            ],
+            [
+              0.7044,
+              0.3953
+            ],
+            [
+              0.6966,
+              0.391
+            ],
+            [
+              0.6901,
+              0.3866
+            ],
+            [
+              0.6823,
+              0.383
+            ],
+            [
+              0.6745,
+              0.3801
+            ],
+            [
+              0.6667,
+              0.3779
+            ],
+            [
+              0.6589,
+              0.3757
+            ],
+            [
+              0.651,
+              0.3743
+            ],
+            [
+              0.6432,
+              0.3735
+            ],
+            [
+              0.6354,
+              0.3721
+            ],
+            [
+              0.6276,
+              0.3721
+            ],
+            [
+              0.6198,
+              0.3721
+            ],
+            [
+              0.612,
+              0.3721
+            ],
+            [
+              0.6042,
+              0.3721
+            ],
+            [
+              0.5964,
+              0.3721
+            ],
+            [
+              0.5885,
+              0.3743
+            ],
+            [
+              0.5807,
+              0.3765
+            ],
+            [
+              0.5729,
+              0.3779
+            ],
+            [
+              0.5651,
+              0.3801
+            ],
+            [
+              0.5573,
+              0.3801
+            ],
+            [
+              0.5495,
+              0.3844
+            ],
+            [
+              0.5417,
+              0.3888
+            ],
+            [
+              0.5339,
+              0.3924
+            ],
+            [
+              0.526,
+              0.3968
+            ],
+            [
+              0.5182,
+              0.4004
+            ],
+            [
+              0.5104,
+              0.4048
+            ],
+            [
+              0.5091,
+              0.4092
+            ],
+            [
+              0.5091,
+              0.4135
+            ],
+            [
+              0.5078,
+              0.4179
+            ],
+            [
+              0.5078,
+              0.4222
+            ],
+            [
+              0.5078,
+              0.4266
+            ],
+            [
+              0.5156,
+              0.431
+            ],
+            [
+              0.5156,
+              0.4324
+            ]
+          ],
+          "from": 0.3,
+          "to": 3.35,
+          "color": "#F0A23A",
+          "width": 16
+        }
+      ],
+      "end": 7.42
+    },
+    {
+      "id": "s03",
+      "start": 7.42,
+      "source": "projects/hcs01-forssmann/assets/images/keyframes/s2.png",
+      "motion": {
+        "type": "slide",
+        "from": -3,
+        "to": 3,
+        "scale": 1.1
+      },
+      "captionY": 1150,
+      "end": 12.22
+    },
+    {
+      "id": "s04",
+      "start": 12.22,
+      "source": "projects/hcs01-forssmann/assets/images/keyframes/s3.png",
+      "motion": {
+        "type": "push",
+        "from": 1.04,
+        "to": 1.06
+      },
+      "captionY": 180,
+      "end": 12.86
+    },
+    {
+      "id": "s05",
+      "start": 12.86,
+      "source": "projects/hcs01-forssmann/assets/images/keyframes/s3.png",
+      "motion": {
+        "type": "push",
+        "from": 1.06,
+        "to": 1.16,
+        "x": -0.0,
+        "y": 8.0
+      },
+      "captionY": 180,
+      "end": 15.02
+    },
+    {
+      "id": "s06",
+      "start": 15.02,
+      "source": "projects/hcs01-forssmann/assets/images/keyframes/s4.png",
+      "motion": {
+        "type": "push",
+        "from": 1.04,
+        "to": 1.4,
+        "x": 20.0,
+        "y": -0.0
+      },
+      "captionY": 1430,
+      "end": 19.1
+    },
+    {
+      "id": "s07",
+      "start": 19.1,
+      "source": "projects/hcs01-forssmann/assets/images/keyframes/s5.png",
+      "motion": {
+        "type": "push",
+        "from": 1.04,
+        "to": 1.3,
+        "x": -13.0,
+        "y": -2.6
+      },
+      "captionY": 300,
+      "end": 21.9
+    },
+    {
+      "id": "s08",
+      "start": 21.9,
+      "source": "projects/hcs01-forssmann/assets/images/keyframes/s6a.png",
+      "motion": {
+        "type": "push",
+        "from": 1.04,
+        "to": 1.3,
+        "x": 15.0,
+        "y": -15.0
+      },
+      "captionY": 300,
+      "end": 23.58
+    },
+    {
+      "id": "s09",
+      "start": 23.58,
+      "source": "projects/hcs01-forssmann/assets/images/keyframes/s6b.png",
+      "motion": {
+        "type": "slide",
+        "from": 3,
+        "to": -3,
+        "scale": 1.12
+      },
+      "captionY": 300,
+      "end": 25.5
+    },
+    {
+      "id": "s10",
+      "start": 25.5,
+      "source": "projects/hcs01-forssmann/assets/images/keyframes/s7.png",
+      "motion": {
+        "type": "pull",
+        "from": 1.4,
+        "to": 1.04
+      },
+      "captionY": 300,
+      "end": 28.86
+    },
+    {
+      "id": "s11",
+      "start": 28.86,
+      "source": "projects/hcs01-forssmann/assets/images/keyframes/s8a.png",
+      "motion": {
+        "type": "push",
+        "from": 1.04,
+        "to": 1.35,
+        "x": -13.5,
+        "y": 6.75
+      },
+      "captionY": 300,
+      "draw": [
+        {
+          "points": [
+            [
+              0.765,
+              0.57
+            ],
+            [
+              0.75,
+              0.47
+            ],
+            [
+              0.74,
+              0.4
+            ],
+            [
+              0.71,
+              0.36
+            ],
+            [
+              0.65,
+              0.355
+            ],
+            [
+              0.58,
+              0.365
+            ],
+            [
+              0.53,
+              0.38
+            ],
+            [
+              0.48,
+              0.41
+            ],
+            [
+              0.465,
+              0.45
+            ],
+            [
+              0.46,
+              0.49
+            ]
+          ],
+          "from": 0.15,
+          "to": 1.05,
+          "color": "#F4FBFF",
+          "width": 14
+        }
+      ],
+      "end": 30.22
+    },
+    {
+      "id": "s12",
+      "start": 30.22,
+      "source": "projects/hcs01-forssmann/assets/images/keyframes/s8b.png",
+      "motion": {
+        "type": "push",
+        "from": 1.04,
+        "to": 1.35,
+        "x": 17.5,
+        "y": 10.8
+      },
+      "captionY": 1430,
+      "end": 32.94
+    },
+    {
+      "id": "s13",
+      "start": 32.94,
+      "source": "projects/hcs01-forssmann/assets/images/keyframes/s9.png",
+      "motion": {
+        "type": "static"
+      },
+      "captionY": 150,
+      "end": 36.14
+    },
+    {
+      "id": "s14",
+      "start": 36.14,
+      "source": "projects/hcs01-forssmann/assets/images/keyframes/s10a.png",
+      "motion": {
+        "type": "push",
+        "from": 1.04,
+        "to": 1.3,
+        "x": -6.5,
+        "y": 15.0
+      },
+      "captionY": 300,
+      "end": 38.08
+    },
+    {
+      "id": "s15",
+      "start": 38.08,
+      "source": "projects/hcs01-forssmann/assets/video/medal.mp4",
+      "motion": {
+        "type": "static"
+      },
+      "captionY": 230,
+      "in": 0.27,
+      "end": 39.74
+    },
+    {
+      "id": "s16",
+      "start": 39.74,
+      "source": "projects/hcs01-forssmann/assets/images/keyframes/s11.png",
+      "motion": {
+        "type": "pull",
+        "from": 1.15,
+        "to": 1.03
+      },
+      "captionY": 1500,
+      "transition": "dissolve",
+      "grey": {
+        "from": 0.2,
+        "to": 2.0
+      },
+      "end": 43.07
+    }
+  ],
+  "overlays": [
+    {
+      "kind": "nameTag",
+      "start": 7.67,
+      "end": 10.27,
+      "text": "Werner Forssmann",
+      "sub": "trainee surgeon · 1929",
+      "y": 190
+    },
+    {
+      "kind": "stamp",
+      "start": 23.83,
+      "end": 25.33,
+      "text": "65 cm",
+      "x": 640,
+      "y": 1330
+    },
+    {
+      "kind": "stamp",
+      "start": 34.19,
+      "end": 35.79,
+      "text": "FIRED",
+      "y": 760
+    },
+    {
+      "kind": "stamp",
+      "start": 40.13,
+      "end": 42.43,
+      "text": "1932",
+      "y": 1230
+    }
+  ],
+  "sfx": [
+    {
+      "name": "whoosh",
+      "at": 3.18,
+      "gain_db": -24
+    },
+    {
+      "name": "heartbeat",
+      "at": 6.13,
+      "gain_db": -12
+    },
+    {
+      "name": "key-lock",
+      "at": 18.13,
+      "gain_db": -20
+    },
+    {
+      "name": "stamp-thud",
+      "at": 23.88,
+      "gain_db": -14
+    },
+    {
+      "name": "riser-drone",
+      "at": 28.91,
+      "gain_db": -26
+    },
+    {
+      "name": "stamp-thud",
+      "at": 34.24,
+      "gain_db": -12
+    },
+    {
+      "name": "paper-slide",
+      "at": 36.19,
+      "gain_db": -20
+    },
+    {
+      "name": "ding-correct",
+      "at": 38.48,
+      "gain_db": -20
+    },
+    {
+      "name": "stamp-thud",
+      "at": 40.18,
+      "gain_db": -16
+    }
+  ],
   "format": "short",
   "dual_format": false,
-  "image_resolution": "2K"
+  "image_resolution": "2K",
+  "glasses": "s2: Matt's spectacles on the windowsill by the geranium",
+  "loop": true
 }

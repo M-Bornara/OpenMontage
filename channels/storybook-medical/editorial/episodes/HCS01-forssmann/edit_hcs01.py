@@ -77,7 +77,8 @@ c.o("nameTag", t + 0.2, t + 2.8, text="Werner Forssmann", sub="trainee surgeon Â
 t = c.at("his boss said no")
 no = c.at("no")
 c.shot(t, KF + "s3.png", {"type": "push", "from": 1.04, "to": 1.06}, cap=180)   # LOW sat on his hand + the skull
-c.shot(no, KF + "s3.png", push(0.5, 0.38, 1.16, 1.08), cap=180)          # the quick push on "no"
+# the quick push on "no": starts at the first half's end zoom (1.06), or the cut snaps (user review of v3)
+c.shot(no, KF + "s3.png", push(0.5, 0.38, 1.16, 1.06), cap=180)
 c.shot(c.at("the nurse"), KF + "s4.png", push(0.33, 0.5, 1.4), cap=LOW)
 c.s("key-lock", c.at("her") + 0.1, -20)
 c.shot(c.at("he tricked her"), KF + "s5.png", push(0.6, 0.52, 1.3), cap=TOP)
