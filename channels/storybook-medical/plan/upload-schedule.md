@@ -33,20 +33,23 @@ to Sunday every 14 days).
 | 2 | Mon Nov 9 | HC001-S2 The Doctor Who Put Food on a String | HC001-L | Tue Nov 10 | – | scheduled |
 | 3 | Wed Nov 11 | HC001-S1 He Survived a Hole in His Stomach | HC001-L | Thu Nov 12 | – | scheduled |
 | 4 | Fri Nov 13 | HC001-S3 The Human Experiment Who Walked Away | HC001-L | Sat Nov 14 | – | scheduled |
-| 5 | Sun Nov 15 | **HCS01** He Pushed a Tube Into His Own Heart (Forssmann) | HC001-L | Mon Nov 16 | **Wed Nov 11** | rough cut v5 |
-| 6 | Tue Nov 17 | **HC001-S4** the tongue test (reserve; reuses HC001 art, cheapest) | HC001-L | Wed Nov 18 | Fri Nov 13 | researched, no script |
-| 7 | Thu Nov 19 | **HCS02** The Doctor Who Drank Bacteria (Marshall) | HC001-L | Fri Nov 20 | Sun Nov 15 | script v2 |
-| 8 | Sat Nov 21 | **HCS03** She Was Trapped Under Ice for 80 Minutes (Bågenholm) | HC001-L | Sun Nov 22 | Tue Nov 17 | script v2 |
-| 9 | Mon Nov 23 | **HCS04** The 5,000-year-old artificial eye (Burnt City) | HC001-L | Tue Nov 24 | Thu Nov 19 | needs research package |
-| 10 | Wed Nov 25 | **HCS05** The doctor who tested bloodletting on two groups (al-Razi) | HC001-L | Thu Nov 26 | Sat Nov 21 | needs research package |
-| 11 | Fri Nov 27 | **HCS06** Onesimus and the 1721 Boston inoculation | HC001-L | Sat Nov 28 | Mon Nov 23 | needs research |
+| 5 | Sun Nov 15 | **HCS01** He Pushed a Tube Into His Own Heart (Forssmann) | HC001-L | Mon Nov 16 | **Wed Nov 11** | package ready |
+| 6 | Tue Nov 17 | **HCS02** The Doctor Who Drank Bacteria (Marshall) | HC001-L | Wed Nov 18 | Fri Nov 13 | script v3 |
+| 7 | Thu Nov 19 | **HCS03** She Was Trapped Under Ice for 80 Minutes (Bågenholm) | HC001-L | Fri Nov 20 | Sun Nov 15 | script v3 |
+| 8 | Sat Nov 21 | **HCS04** The 5,000-year-old golden eye (Burnt City) | HC001-L | Sun Nov 22 | Tue Nov 17 | research + script v1 |
+| 9 | Mon Nov 23 | **HCS05** The doctor who refused to treat half his patients (al-Razi) | HC001-L | Tue Nov 24 | Thu Nov 19 | research + script v1 |
+| 10 | Wed Nov 25 | **HCS06** The enslaved man who saved Boston (Onesimus, 1721) | HC001-L | Thu Nov 26 | Sat Nov 21 | research + script v1 |
+| 11 | Fri Nov 27 | **HCS08** standalone (candidate: Ibn al-Nafis, the discovery lost for 300 years) | HC001-L | Sat Nov 28 | Mon Nov 23 | needs research |
 | 12 | **Sun Nov 29** · L | **HC002-L** Phineas Gage: The Story Everyone Gets Wrong | – | (FB: optional, Mon Nov 30) | **Wed Nov 25** | script v2 |
 | 13 | Tue Dec 1 | HC002-S1 An Iron Rod Went Through His Skull | HC002-L | Wed Dec 2 | Fri Nov 27 | script v2 |
-| 14 | Thu Dec 3 | **HCS07** Carlos Finlay: the mosquito idea nobody believed | HC002-L | Fri Dec 4 | Sun Nov 29 | needs research |
+| 14 | Thu Dec 3 | **HCS07** Nobody believed him about the mosquito (Finlay; Dec 3 is his birthday, to verify) | HC002-L | Fri Dec 4 | Sun Nov 29 | research + script v1 |
 | 15 | Sat Dec 5 | HC002-S2 Did Phineas Gage Really Become a Different Person? | HC002-L | Sun Dec 6 | Tue Dec 1 | script v2 |
-| 16 | Mon Dec 7 | **HCS08** next standalone from the world slate | HC002-L | Tue Dec 8 | Thu Dec 3 | needs research |
+| 16 | Mon Dec 7 | **HCS09** standalone (candidate: the Sushruta nose reconstruction) | HC002-L | Tue Dec 8 | Thu Dec 3 | needs research |
 | – | Dec 9 / Dec 11 | two standalone Shorts | | | | |
 | – | **Sun Dec 13** · L | **HC003-L** The Dancing Plague of 1518, then HC003-S1, S2 | | | | script v2 |
+
+**Dropped (2026-11-05):** the St. Martin tongue test: a 4th St. Martin video, and the long already shows the
+tasting (the max-2-Shorts rule below).
 
 **Reviews (no upload needed):** Sun Nov 15 7-day review of HC001-L · Sun Dec 6 28-day review of HC001-L, 7-day
 review of HC002-L · Sun Dec 27 28-day review of HC002-L · Sat Feb 6 2027 day-90 review.
