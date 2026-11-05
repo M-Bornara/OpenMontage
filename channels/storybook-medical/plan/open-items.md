@@ -15,6 +15,13 @@ Updated 2026-11-03.
       production starts now in parallel, fal balance top-up ($22.24 left).
 - [x] HCS01 rough cut v5 approved by the user (2026-11-05). Next: final package (sting, cover, publish.md), live Sun Nov 15. Was: rough cut v5 (new "his new boss in Berlin fired him" line, longer pauses, music stretched 0.889): user listens.
 
+- [ ] **HCS01 package ready** (projects/hcs01-forssmann/renders/deliverables/): user reviews cover + publish.md, then uploads
+      and schedules Sun Nov 15, 15:00 ET (14:00 AB); TikTok/FB Mon Nov 16 18:00 ET; IG by hand. Related video = HC001-L (public from Nov 8).
+- [ ] **Playlist covers** (projects/_playlists/renders/, 1280x720): Season Zero, Season Zero · Alexis St. Martin, new playlist
+      "Crazy Science (true stories)". User uploads on YouTube (Studio → Content → Playlists → Edit → thumbnail) and Facebook.
+      Re-run scripts/playlist_covers.py when Marshall joins Crazy Science.
+- [ ] **Remind at step 3 (Gage long images): fal balance** ($22.24 on Nov 5) — top up before.
+
 ## From 2026-10-26
 - [x] Shorts final-v4 approved (2026-11-03). Packages built: projects/hc001-s1..s3/renders/deliverables/ (short.mp4, cover.jpg,
       captions.srt, publish.md with title/description/tags/pinned challenge). User uploads + schedules: S2 Mon Nov 9, S1 Wed Nov 11,

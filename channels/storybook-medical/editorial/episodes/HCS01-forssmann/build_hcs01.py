@@ -196,6 +196,21 @@ KEYFRAMES = {
                f"uniforms of any kind. {SAFE_FRAMING} {PERIOD} {NO_TEXT}"),
 }
 
+# ── cover (plan/thumbnail-craft.md: movie poster, text band at the bottom, publish.cover.textY 1240) ─────────
+COVERS = {
+    "cover": dict(aspect="9:16", refs=["ref:plate-xray", F],
+        roles="Reference 1 is the X-ray room (style and blue light). Reference 2 is WERNER FORSSMANN (same face, hair, coat). ",
+        prompt=f"{XRAY} MOVIE-POSTER COVER ART for a vertical short film, 9:16. The hero fills 55-70% of the frame "
+               f"height, bold and clear. {cast(FORSSMANN + ', front and centre, waist up, facing the viewer, ' + SLEEVE + ', holding his bare LEFT forearm up across his chest; a thin red-brown rubber catheter tube enters the inner LEFT elbow under a small square of white gauze and loops up over his shoulder; he looks straight at the viewer with a daring, slightly mad half-smile')} "
+               "He faces the camera, so his LEFT arm (rolled sleeve, the tube) is on the VIEWER'S RIGHT side of the "
+               "image; his RIGHT arm has its sleeve down and no tube. Behind his shoulder the glowing lightbox shows a "
+               "pale X-ray of a chest with the faint shadow of the heart. One strong warm amber key light on his face "
+               "and the tube against the cool blue room, teal-charcoal falloff at the edges. His face stays between 15% "
+               "and 55% of the frame height. The bottom 30% of the frame is the same room continuing, darker and out "
+               "of focus, with nothing in it. NO blood, NO wound. NO panel, NO border, NO split screen; no lettering "
+               f"anywhere (the title is added later). {SAFE_FRAMING} {PERIOD} {NO_TEXT}"),
+}
+
 # s1b and s9 were fixed locally after generation (plan/prompt-lessons.md L25, L26, L24): the arm-side vein and the
 # letter's lorem ipsum. Originals: keyframes/s1b.orig.png, s9.orig.png. Don't regenerate them without redoing the fix.
 
@@ -204,10 +219,10 @@ def main():
     p = REPO / "projects" / PID / "episode.json"
     ep = json.load(open(p, encoding="utf-8"))
     ep.update(title="He Pushed a Tube Into His Own Heart", format="short", dual_format=False, image_resolution="2K",
-              references=REFERENCES, keyframes=KEYFRAMES)
+              references=REFERENCES, keyframes=KEYFRAMES, covers=COVERS)
     ep["narration"]["v3_text"] = NARRATION
     json.dump(ep, open(p, "w", encoding="utf-8"), indent=2, ensure_ascii=False)
-    issues = lint_all({**REFERENCES, **KEYFRAMES})
+    issues = lint_all({**REFERENCES, **KEYFRAMES, **COVERS})
     for n, v in issues.items():
         print(n, *v, sep="\n  ")
     print(f"{len(REFERENCES)} references, {len(KEYFRAMES)} keyframes -> {p}  ({len(issues)} with lint findings)")
