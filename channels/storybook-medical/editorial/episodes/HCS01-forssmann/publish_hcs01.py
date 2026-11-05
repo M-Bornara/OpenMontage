@@ -24,8 +24,8 @@ DESCRIPTION = (
     "through a vein. His boss said no. So he numbed his own arm, slid a 65 cm catheter up the vein, and walked to the "
     "X-ray room to prove the tip was inside his heart. It was.\n\n"
     "His next boss, at the Charité in Berlin, dismissed him. 27 years later he shared the 1956 Nobel Prize in "
-    "Medicine with André Cournand and Dickinson Richards, who turned his idea into cardiac catheterization, now used "
-    "millions of times a year.\n\n"
+    "Medicine with André Cournand and Dickinson Richards, who turned his idea into cardiac catheterization, now a "
+    "routine hospital procedure.\n\n"
     "He also joined the Nazi Party in 1932 and stayed a member until 1945. The experiment doesn't erase that, and we "
     "won't leave it out.\n\n"
     "More true medical stories: \"The Man With a Window Into His Stomach\" (linked above).")
