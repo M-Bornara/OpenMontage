@@ -16,8 +16,9 @@ TOP, MID, LOW = 300, 1180, 1430                 # caption tops (StorybookShort)
 norm = lambda w: re.sub(r"[^a-z0-9]", "", w.lower())
 
 # measured on the frames with a grid and checked with a marker overlay (memory: effects-on-exact-object)
-VEIN = [[0.80, 0.63], [0.787, 0.56], [0.767, 0.49], [0.747, 0.43], [0.727, 0.39], [0.69, 0.36], [0.64, 0.346],
-        [0.59, 0.347], [0.555, 0.362], [0.535, 0.392], [0.515, 0.44]]                     # s1b: elbow -> heart
+# s1b: the vein's centreline from the elbow to the heart, traced from the painting's own vein pixels (cheapest path
+# along the painted vessel, skimage route_through_array; user review of rough cut v1: hand-placed points drifted off it)
+VEIN = json.load(open(Path(__file__).with_name("vein_s1b.json")))
 FILM = [[0.765, 0.57], [0.75, 0.47], [0.74, 0.40], [0.71, 0.36], [0.65, 0.355], [0.58, 0.365], [0.53, 0.38],
         [0.48, 0.41], [0.465, 0.45], [0.46, 0.49]]                                          # s8a: left arm -> heart
 
@@ -75,34 +76,36 @@ c.shot(t, KF + "s2.png", {"type": "slide", "from": -3, "to": 3, "scale": 1.1}, c
 c.o("nameTag", t + 0.2, t + 2.8, text="Werner Forssmann", sub="trainee surgeon · 1929", y=190)
 t = c.at("his boss said no")
 no = c.at("no")
-c.shot(t, KF + "s3.png", {"type": "push", "from": 1.04, "to": 1.06}, cap=LOW)
-c.shot(no, KF + "s3.png", push(0.5, 0.38, 1.16, 1.08), cap=LOW)          # the quick push on "no"
+c.shot(t, KF + "s3.png", {"type": "push", "from": 1.04, "to": 1.06}, cap=TOP)   # LOW sat on his hand + the skull
+c.shot(no, KF + "s3.png", push(0.5, 0.38, 1.16, 1.08), cap=180)          # the quick push on "no"
 c.shot(c.at("the nurse"), KF + "s4.png", push(0.33, 0.5, 1.4), cap=LOW)
 c.s("key-lock", c.at("her") + 0.1, -20)
 c.shot(c.at("he tricked her"), KF + "s5.png", push(0.6, 0.52, 1.3), cap=TOP)
 c.shot(c.at("he slid the catheter"), KF + "s6a.png", push(0.35, 0.72, 1.3), cap=TOP)
 t = c.at("65")
-c.shot(t, KF + "s6b.png", {"type": "slide", "from": 3, "to": -3, "scale": 1.12}, cap=LOW)
-c.o("stamp", t + 0.2, t + 1.7, text="65 cm", y=1000); c.s("stamp-thud", t + 0.25, -14)
+c.shot(t, KF + "s6b.png", {"type": "slide", "from": 3, "to": -3, "scale": 1.12}, cap=TOP)
+# on the plain sheet, off the tube and the rule
+c.o("stamp", t + 0.2, t + 1.7, text="65 cm", x=640, y=1330); c.s("stamp-thud", t + 0.25, -14)
 c.shot(c.at("then he walked"), KF + "s7.png", {"type": "pull", "from": 1.4, "to": 1.04}, cap=TOP)
 t = c.at("the picture showed")
 tip = c.at("tip")
-c.shot(t, KF + "s8a.png", push(0.5, 0.45, 1.25), cap=TOP,
-       draw=[{"points": FILM, "from": 0.15, "to": round(tip - t + 0.25, 2), "color": "#FFFFFF", "width": 9}])
+c.shot(t, KF + "s8a.png", push(0.6, 0.45, 1.35), cap=TOP,
+       draw=[{"points": FILM, "from": 0.15, "to": round(tip - t + 0.25, 2), "color": "#F4FBFF", "width": 14}])
 c.s("riser-drone", t, -26)
 c.shot(c.at("inside his heart"), KF + "s8b.png", push(0.3, 0.42, 1.35), cap=LOW)   # mirrored frame: he stands on the left
 t = c.at("his reward")
 fired = c.at("fired")
-c.shot(t, KF + "s9.png", {"type": "static"}, cap=LOW)     # TOP covered the letterhead
+c.shot(t, KF + "s9.png", {"type": "static"}, cap=150)     # above the letter (TOP: letterhead, LOW: his hand)
 c.o("stamp", fired, fired + 1.6, text="FIRED", y=760); c.s("stamp-thud", fired + 0.05, -12)
 t = c.at("27 years later")
-c.shot(t, KF + "s10a.png", push(0.55, 0.3, 1.3), cap=LOW); c.s("paper-slide", t, -20)
+# LOW covered the cup and the paper
+c.shot(t, KF + "s10a.png", push(0.55, 0.3, 1.3), cap=TOP); c.s("paper-slide", t, -20)
 t = c.at("nobel prize")
-c.shot(t - 0.3, f"projects/{PID}/assets/video/medal.mp4", {"type": "static"}, cap=LOW, **{"in": 0.27})
+c.shot(t - 0.3, f"projects/{PID}/assets/video/medal.mp4", {"type": "static"}, cap=230, **{"in": 0.27})   # above the medal
 c.s("ding-correct", t + 0.05, -20)
 t = c.at("but in 1932")
 y32 = c.at("1932")
-c.shot(t, KF + "s11.png", {"type": "pull", "from": 1.15, "to": 1.03}, cap=LOW, transition="dissolve",
+c.shot(t, KF + "s11.png", {"type": "pull", "from": 1.15, "to": 1.03}, transition="dissolve", cap=1500,
        grey={"from": 0.2, "to": 2.0})
 c.o("stamp", y32 + 0.1, y32 + 2.4, text="1932", y=1230); c.s("stamp-thud", y32 + 0.15, -16)
 
@@ -112,9 +115,9 @@ for i, x in enumerate(c.shots):
     x["end"] = c.shots[i + 1]["start"] if i + 1 < len(c.shots) else total
 
 ep = json.load(open(P / "episode.json", encoding="utf-8"))
-ep.update({"shots": c.shots, "overlays": sorted(c.ov, key=lambda x: x["start"]), "sfx": sorted(c.fx, key=lambda x: x["at"]),
+ep.update({"loop": True, "shots": c.shots, "overlays": sorted(c.ov, key=lambda x: x["start"]), "sfx": sorted(c.fx, key=lambda x: x["at"]),
            "glasses": "s2: Matt's spectacles on the windowsill by the geranium"})
-ep["music"] = {"lufs": -22, "selected": ep.get("music", {}).get("selected") or "m2", "prompts": {
+ep["music"] = {"lufs": -22, "selected": "m1s", "prompts": {
     "m1": "Instrumental, 1920s chamber music with a mischievous, curious mood: pizzicato strings, a bassoon and clarinet, "
           "light brushed percussion like a ticking clock, building tension in the middle, then a warm brass swell of "
           "triumph near the end and a quiet, solemn close. No vocals.",
