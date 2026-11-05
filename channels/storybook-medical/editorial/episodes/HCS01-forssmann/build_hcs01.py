@@ -16,15 +16,15 @@ PID = "hcs01-forssmann"
 HC1 = "projects/hc001-window-into-his-stomach/assets/images/refs"
 
 NARRATION = """[excited] In 1929, a young doctor pushed a tube through his own arm… all the way into his own heart.
-Werner Forssmann, a trainee surgeon in Germany, wanted to reach a living heart through a vein.
-His boss said no. Far too dangerous.
+Werner Forssmann, a trainee surgeon in Germany, wanted to reach a living heart through a vein…
+His boss said no… Far too dangerous.
 The nurse with the supplies agreed to help… if he tried it on HER.
-[mischievously] He tricked her. He numbed his own arm instead.
-He slid the catheter in. Sixty-five centimeters.
+[mischievously] He tricked her… He numbed his own arm instead…
+He slid the catheter in… Sixty-five centimeters.
 Then he walked to the X-ray room, the tube still in his arm.
-[curious] The picture showed the tip… inside his heart. He was fine.
-His reward? Fired from his next job.
-Twenty-seven years later, the world caught up. Nobel Prize.
+[curious] The picture showed the tip… inside his heart… He was fine.
+His reward? His new boss in Berlin fired him.
+Twenty-seven years later, the world caught up… Nobel Prize.
 [serious] But in 1932, he had joined the Nazi Party."""
 
 # ── people (one look each, storyboard-v3 "Sets and cast") ───────────────────────────────────────────────────
