@@ -69,6 +69,15 @@ Shorts viewers never see the long (growth-strategy.md §1), so a Short must work
 cut-down of the long. The reserves "his skull" and "what caused it?" are dropped unless one tests a new angle.
 HC001's three are already scheduled and stay as they are; we'll read their numbers on the 7-day review.
 
+**Playlists (decided 2026-11-05): a fixed set, no new playlist per story.**
+- **Season Zero:** every video (the end screen points here).
+- **One playlist per story family**, made the first time a family has a video, then reused forever:
+  Strange Medical Cases · Crazy Science · History Got It Wrong · Weirdest Moments · Impossible Survival.
+- So a video goes into 2 playlists: Season Zero and its family. A long story's Shorts find their long through
+  the Related video link, not a playlist.
+- "Season Zero · Alexis St. Martin" already exists (HC001's Shorts are scheduled into it): keep it, make no more like it.
+- At most 7 playlists, each cover made once (scripts/playlist_covers.py), refreshed only when a new story looks better.
+
 **Swap rule:** if a piece isn't ready by its ready-by date, the next ready standalone Short takes its slot and it
 moves back one slot. Standalone Shorts (HCS..) can move freely; the long stays on its Sunday or moves 14 days with
 its Shorts. Never post something weaker just to fill a slot. A missed slot is better than a weak Short.
