@@ -24,8 +24,10 @@ Updated 2026-11-03.
       golden eye, al-Razi (moved to Dec 7; born in Rey, not Shiraz; "discovered alcohol" disputed, kept out), Onesimus
       ("grenade", not "bomb"), Finlay. Still to verify before each storybook: Bågenholm "held on to her skis", eye in the
       left socket, Onesimus "two hundred years", Finlay's Dec 3 birthday / Medicine Day.
-- [ ] **Script batch 2 review**: HCS08 John Snow (Wed Nov 25), HCS09 Semmelweis (Fri Nov 27) (research.md, script v1).
+- [x] **Script batch 2 approved** (2026-11-06): HCS08 John Snow (Wed Nov 25), HCS09 Semmelweis (Fri Nov 27) (research.md, script v1).
       Mix rule: max one non-Western story a week (upload-schedule.md).
+- [ ] **Storyboards HCS02 Marshall + HCS03 Bågenholm** (storyboard-v1.md, 12 shots each, ≈ $1.80 of images each): user
+      approves, then image prompts. Bågenholm "held on to her skis" checked (Wikipedia), stays. Next: golden eye + Onesimus.
 - [ ] **Remind at step 3 (Gage long images): fal balance** ($22.24 on Nov 5) — top up before.
 
 ## From 2026-10-26

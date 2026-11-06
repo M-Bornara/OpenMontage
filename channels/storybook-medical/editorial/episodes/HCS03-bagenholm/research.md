@@ -25,6 +25,8 @@ no likeness from photos. Our character is an illustrated stand-in.
 |---|---|
 | **1999**, skiing outside **Narvik**, northern Norway; she was a doctor, skiing with colleagues who were also doctors | VERIFIED (I1). The date is often given as 20 May 1999; L1 only. |
 | At **6:20 pm** she fell **head first** through the ice of a river; her companions saw only her skis and legs | VERIFIED (I1) |
+| Her companions **Marie Falkenberg and Torvind Næsheim** (colleagues, both doctors) found only her feet and skis above the ice and **held on to her skis** until the rescue team came; a rope pull failed and a shovel couldn't break the ice | VERIFIED (L1, checked 2026-11-06): "Her friends held on to her skis" stays |
+| The Bodø Sea King helicopter was turned around from another job to fetch her; flown to Tromsø | VERIFIED (L1) |
 | She found an **air pocket** | VERIFIED (I1) |
 | After about **40 minutes** her heart stopped (sources word this differently) | ATTRIBUTED (I1, L1). **Say "after about forty minutes, her heart stopped".** |
 | Her friends cut her out after **80 minutes** and started CPR | VERIFIED (I1) |

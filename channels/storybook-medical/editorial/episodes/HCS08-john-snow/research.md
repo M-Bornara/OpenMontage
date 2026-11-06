@@ -1,4 +1,4 @@
-# HCS08 — The Doctor Who Stopped a Plague by Breaking a Pump · research + script v1 (for approval)
+# HCS08 — The Doctor Who Stopped a Plague by Breaking a Pump · research + script v1 (approved 2026-11-06)
 
 **Thumbnail sentence:** In 1854, a London doctor stopped a cholera outbreak by taking the handle off a water pump.
 **Family:** Crazy Science (the detective). **Format:** Story Short. **Core rating:** DOCUMENTED (Snow's own book,

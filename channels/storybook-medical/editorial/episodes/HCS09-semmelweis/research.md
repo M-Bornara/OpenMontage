@@ -1,4 +1,4 @@
-# HCS09 — The Doctor They Hated for Saying "Wash Your Hands" · research + script v1 (for approval)
+# HCS09 — The Doctor They Hated for Saying "Wash Your Hands" · research + script v1 (approved 2026-11-06)
 
 **Thumbnail sentence:** In 1847, a doctor told other doctors to wash their hands, and it cost him everything.
 **Family:** History Got It Wrong. **Format:** Story Short. **Core rating:** DOCUMENTED (the clinic records,

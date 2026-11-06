@@ -32,7 +32,7 @@ an emergency-medicine rule of thumb for hypothermia, origin unknown, in print by
 | "They kept up CPR… and warmed her blood with a heart-lung machine." | "In Tromsø, they warmed her blood…" | the place, one line |
 | "At 10:15 that night…" | "That night…" | the clock shot can still show 10:15 |
 
-**To check before the storybook:** "held on to her skis" — research I1 says her friends could see only her skis
+**Checked 2026-11-06 (L1: they held on to her skis while waiting for the rescue team), so the line stays.** Was: "held on to her skis" — research I1 says her friends could see only her skis
 and legs and tried to pull her out; holding the skis is how most accounts tell it. If the Lancet report doesn't
 support it, the line goes back to v2's "Her friends fought to get her out."
 
