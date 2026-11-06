@@ -76,17 +76,20 @@ KEYFRAMES = {
         roles=RIV + "Reference 2 shows the three skiers (same jackets). ",
         prompt=f"{RIVER} Extreme wide vertical frame. {cast(ANNA + ', first in line', FRIEND_B, FRIEND_G, extra='The three skiers are tiny, in a line crossing a snowy slope in the middle of the frame, the red jacket leading.')} "
                f"A near snow ridge in the foreground, peaks behind. The top 25% is pale sky. {SAFE_FRAMING} {PERIOD} {NO_TEXT}"),
+    # v2: v1's red sleeve under the ice read as blood, and s3 v1 stood her upright on the riverbed (user review)
     "s2b": dict(aspect="9:16", refs=["ref:plate-river", S],
-        roles=RIV + "Reference 2 shows the skier's red jacket and skis. ",
-        prompt=f"{RIVER} High angle, looking straight down on the frozen river: a dark jagged hole in the grey-blue "
-               "ice in the centre; two skis and two ski boots stick up out of the hole at an angle; just under the ice "
-               "edge, a blurred patch of the red jacket sleeve. No face, no body above the ice except the boots and "
-               f"skis. {cast(ANNA + ' (only her boots and skis visible above the ice)')} {SAFE_FRAMING} {PERIOD} {NO_TEXT}"),
+        roles=RIV + "Reference 2 shows the skier's skis and boots. ",
+        prompt=f"{RIVER} High angle, looking down on the frozen river: a dark jagged hole in the grey-blue ice in the "
+               "centre; two skis and two dark ski boots stick up out of the hole at an angle, crossed slightly. "
+               "Nothing else of the person is visible: no jacket, no body, no face. NO red anywhere near the hole: the "
+               "water in the hole is dark blue-black and the ice around it is clean white and grey. "
+               f"{cast(ANNA + ' (only her boots and skis visible above the ice)')} {SAFE_FRAMING} {PERIOD} {NO_TEXT}"),
     "s3": dict(aspect="9:16", refs=["ref:plate-river", S],
-        roles="Reference 1 is for the painting style and palette only. Reference 2 shows the skier's red hood. ",
-        prompt=f"{UNDER} Calm and quiet, not frightening. In the upper middle, under the ice sheet, a small silvery "
-               f"pocket of trapped air. {cast(ANNA + ', seen from behind and below as a soft silhouette, only her red hood clear, her head tilted up into the air pocket')} "
-               f"A few small separate bubbles above her hood. {SAFE_FRAMING} {PERIOD} {NO_TEXT}"),
+        roles="Reference 1 is for the painting style and palette only. Reference 2 shows the skier's red jacket. ",
+        prompt=f"{UNDER} Calm and quiet, not frightening. The underside of the ice sheet runs across the TOP third of "
+               "the frame. Just under it, a small flat silvery pocket of trapped air. "
+               f"{cast(ANNA + ', UPSIDE DOWN (she went in head first): her body hangs down into the blue water below the ice, her legs going UP toward the hole in the ice at the top right, her head at the top in the air pocket; we see her from behind, only the back of her red hood inside the silvery air pocket, NO face visible at all')} "
+               f"A few small separate bubbles. {SAFE_FRAMING} {PERIOD} {NO_TEXT}"),
     "s4a": dict(aspect="9:16", refs=["ref:plate-river", S],
         roles=RIV + "Reference 2 shows the blue-jacket and green-jacket companions. ",
         prompt=f"{RIVER} Medium shot from the side, low on the ice. {cast(FRIEND_B + ', kneeling on the ice', FRIEND_G + ', kneeling beside him', extra='Both grip a pair of skis that stick up out of a hole in the ice, with both gloved hands, leaning back, straining; faces turned away from the viewer.')} "

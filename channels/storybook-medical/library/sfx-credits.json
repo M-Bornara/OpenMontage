@@ -358,5 +358,113 @@
   "license": "http://creativecommons.org/publicdomain/zero/1.0/",
   "duration": 58.8344,
   "url": "https://freesound.org/s/728418/"
+ },
+ "applause": {
+  "file": "applause.mp3",
+  "freesound_id": 119029,
+  "title": "polite_applause_09.wav",
+  "author": "joedeshon",
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "duration": 7.64002,
+  "url": "https://freesound.org/s/119029/"
+ },
+ "groan": {
+  "file": "groan.mp3",
+  "freesound_id": 244320,
+  "title": "groaning.mp3",
+  "author": "Philip_Daniels",
+  "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+  "duration": 7.98766,
+  "url": "https://freesound.org/s/244320/"
+ },
+ "kookaburra-laugh": {
+  "file": "kookaburra-laugh.mp3",
+  "freesound_id": 46572,
+  "title": "T01KookaburraChorusSample.mp3",
+  "author": "LITTLE MUTT",
+  "license": "http://creativecommons.org/licenses/by/3.0/",
+  "duration": 29.8721,
+  "url": "https://freesound.org/s/46572/"
+ },
+ "phone-ring-old": {
+  "file": "phone-ring-old.mp3",
+  "freesound_id": 676348,
+  "title": "ringing tone, answering, then hanging up",
+  "author": "alex36917",
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "duration": 52.1985,
+  "url": "https://freesound.org/s/676348/"
+ },
+ "pig-oink": {
+  "file": "pig-oink.mp3",
+  "freesound_id": 442906,
+  "title": "Pig Oink",
+  "author": "qubodup",
+  "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+  "duration": 0.743515,
+  "url": "https://freesound.org/s/442906/"
+ },
+ "pill-bottle-rattle": {
+  "file": "pill-bottle-rattle.mp3",
+  "freesound_id": 179009,
+  "title": "Pill Bottle Rattle.wav",
+  "author": "CodyGudmundsen",
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "duration": 0.789479,
+  "url": "https://freesound.org/s/179009/"
+ },
+ "door-swing": {
+  "file": "door-swing.mp3",
+  "freesound_id": 455540,
+  "title": "Door slam",
+  "author": "TiesWijnen",
+  "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+  "duration": 5.16667,
+  "url": "https://freesound.org/s/455540/"
+ },
+ "helicopter": {
+  "file": "helicopter.mp3",
+  "freesound_id": 348991,
+  "title": "Powerful helicopter sound Bell 407 OK-ALB",
+  "author": "bzamecnik",
+  "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+  "duration": 50.1827,
+  "url": "https://freesound.org/s/348991/"
+ },
+ "ice-crack": {
+  "file": "ice-crack.mp3",
+  "freesound_id": 70112,
+  "title": "Crack and Stress.wav",
+  "author": "JustinBW",
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "duration": 2.71127,
+  "url": "https://freesound.org/s/70112/"
+ },
+ "machine-hum": {
+  "file": "machine-hum.mp3",
+  "freesound_id": 416320,
+  "title": "AlienHum6.wav",
+  "author": "pjborg",
+  "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+  "duration": 8.56848,
+  "url": "https://freesound.org/s/416320/"
+ },
+ "monitor-beep": {
+  "file": "monitor-beep.mp3",
+  "freesound_id": 148897,
+  "title": "Heart Monitor Beep",
+  "author": "samfk360",
+  "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+  "duration": 27.8868,
+  "url": "https://freesound.org/s/148897/"
+ },
+ "wind-snow": {
+  "file": "wind-snow.mp3",
+  "freesound_id": 637566,
+  "title": "forest light wind through bare trees winter GREAT FOR FALLING SNOW.flac",
+  "author": "kyles",
+  "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+  "duration": 55.2103,
+  "url": "https://freesound.org/s/637566/"
  }
 }
