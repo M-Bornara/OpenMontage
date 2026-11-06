@@ -1,4 +1,4 @@
-# HCS03 — She Was Trapped Under Ice for 80 Minutes · script v3 (for approval)
+# HCS03 — She Was Trapped Under Ice for 80 Minutes · script v3 (approved 2026-11-06)
 
 v2 (approved 2026-10-18) reads at about **68 s** with the 2026-11-04 voice, over the 55 s limit. v3 keeps the
 impossible fact, the air pocket, the two clocks (40 and 80 minutes), the saying and the ending, and reads at about
@@ -14,11 +14,14 @@ Underneath, she found a pocket of air… and kept breathing.
 Her friends held on to her skis. After about forty minutes, her heart stopped.
 They cut her free after eighty minutes. No pulse. No breathing.
 [whispers] Most people would call that dead.
-But doctors have a saying: nobody is dead… until they're warm and dead.
+But doctors have a saying: you're not dead… until you're warm and dead.
 In Tromsø, they warmed her blood with a heart-lung machine.
 That night… her heart started beating again.
 [curious] Today, she works as a doctor.
 ```
+
+**Approved 2026-11-06** with the saying in its standard form ("you're not dead until you're warm and dead":
+an emergency-medicine rule of thumb for hypothermia, origin unknown, in print by 1982; LITFL).
 
 ## What changed from v2
 

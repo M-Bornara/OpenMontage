@@ -20,9 +20,12 @@ Updated 2026-11-03.
 - [ ] **Playlist covers** (projects/_playlists/renders/, 1280x720): Season Zero, Season Zero · Alexis St. Martin, new playlist
       "Crazy Science (true stories)". User uploads on YouTube (Studio → Content → Playlists → Edit → thumbnail) and Facebook.
       Re-run scripts/playlist_covers.py when Marshall joins Crazy Science.
-- [ ] **Script batch 1 review** (2026-11-05): HCS02 Marshall v3, HCS03 Bågenholm v3 (script-v3.md), HCS04 golden eye,
-      HCS05 al-Razi, HCS06 Onesimus, HCS07 Finlay (research.md, script v1 inside). Open checks: Bågenholm "held on to her skis",
-      eye in the left socket, Onesimus "two hundred years", Finlay's Dec 3 birthday / Medicine Day. Tongue test dropped.
+- [x] **Script batch 1 approved** (2026-11-06): Marshall, Bågenholm ("you're not dead until you're warm and dead"),
+      golden eye, al-Razi (moved to Dec 7; born in Rey, not Shiraz; "discovered alcohol" disputed, kept out), Onesimus
+      ("grenade", not "bomb"), Finlay. Still to verify before each storybook: Bågenholm "held on to her skis", eye in the
+      left socket, Onesimus "two hundred years", Finlay's Dec 3 birthday / Medicine Day.
+- [ ] **Script batch 2 review**: HCS08 John Snow (Wed Nov 25), HCS09 Semmelweis (Fri Nov 27) (research.md, script v1).
+      Mix rule: max one non-Western story a week (upload-schedule.md).
 - [ ] **Remind at step 3 (Gage long images): fal balance** ($22.24 on Nov 5) — top up before.
 
 ## From 2026-10-26

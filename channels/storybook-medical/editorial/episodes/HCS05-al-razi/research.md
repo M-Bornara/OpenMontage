@@ -1,4 +1,4 @@
-# HCS05 — The Doctor Who Refused to Treat Half His Patients · research + script v1 (for approval)
+# HCS05 — The Doctor Who Refused to Treat Half His Patients · research + script v1 (approved 2026-11-06)
 
 **Thumbnail sentence:** 1,100 years ago, a doctor left some patients untreated on purpose, to see if his cure worked.
 **Family:** Crazy Science. **Format:** Story Short. **Core rating:** DOCUMENTED (one passage in Kitab al-Hawi).
@@ -12,6 +12,8 @@
 | Claim | Status |
 |---|---|
 | Abu Bakr al-Razi, Persian physician from Rey (near today's Tehran), c. 865–925 | VERIFIED (S1) |
+| Born in Rey, worked in Rey and Baghdad, died in Rey. **Not Shiraz** (user asked, 2026-11-06; probably a mix-up with Qutb al-Din Shirazi) | VERIFIED (S1) |
+| "Al-Razi discovered alcohol" | DISPUTED: common in Iranian and popular sources; historians of distillation (Forbes 1970) note Jabir and al-Kindi already knew wine vapour burns. At most he described its preparation. **Not in the script**; a pinned-comment "myth or fact?" at most |
 | He ran hospitals in Rey and Baghdad | ATTRIBUTED (standard biographies; check S1). Not in the script. |
 | For the early signs of meningitis (*sirsam*) he advised bloodletting | VERIFIED (P1) |
 | He bled one group and "intentionally" left another group unbled, to reach a conclusion | VERIFIED (P1) |
@@ -20,7 +22,7 @@
 | Bloodletting doesn't help meningitis | VERIFIED (S1) |
 | "The first clinical trial ever" | OVERSTATEMENT (S1): the myth line |
 
-## Script v1 (~45 s)
+## Script v1 (~45 s) · approved 2026-11-06 (moved to Mon Dec 7, two weeks after the golden eye)
 ```
 [curious] Eleven hundred years ago, a doctor refused to treat some of his patients. On purpose.
 Al-Razi was a Persian physician from Rey, near today's Tehran.

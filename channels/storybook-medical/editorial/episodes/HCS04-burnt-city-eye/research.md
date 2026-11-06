@@ -1,4 +1,4 @@
-# HCS04 — The 5,000-Year-Old Golden Eye · research + script v1 (for approval)
+# HCS04 — The 5,000-Year-Old Golden Eye · research + script v1 (approved 2026-11-06)
 
 **Thumbnail sentence:** 5,000 years ago, a woman in Iran was buried wearing a golden eye.
 **Family:** Weirdest Moments (ancient medicine). **Format:** Story Short. **Core rating:** DOCUMENTED find;
@@ -22,7 +22,7 @@ what it was is DISPUTED. That dispute is the ending, and the fact meter shows it
 | "She was 1.82 m tall, a priestess or a royal" | **LEGEND** (no source). Only the myth line. |
 | Some archaeologists say it was an eyepatch, not an eye | VERIFIED as a dispute (S1) |
 
-## Script v1 (~45 s)
+## Script v1 (~45 s) · approved 2026-11-06
 ```
 [curious] Five thousand years ago, a woman in Iran was buried with a golden eye.
 The Burnt City, around 2900 BC. She died in her late twenties.

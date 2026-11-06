@@ -34,19 +34,24 @@ to Sunday every 14 days).
 | 3 | Wed Nov 11 | HC001-S1 He Survived a Hole in His Stomach | HC001-L | Thu Nov 12 | – | scheduled |
 | 4 | Fri Nov 13 | HC001-S3 The Human Experiment Who Walked Away | HC001-L | Sat Nov 14 | – | scheduled |
 | 5 | Sun Nov 15 | **HCS01** He Pushed a Tube Into His Own Heart (Forssmann) | HC001-L | Mon Nov 16 | **Wed Nov 11** | package ready |
-| 6 | Tue Nov 17 | **HCS02** The Doctor Who Drank Bacteria (Marshall) | HC001-L | Wed Nov 18 | Fri Nov 13 | script v3 |
-| 7 | Thu Nov 19 | **HCS03** She Was Trapped Under Ice for 80 Minutes (Bågenholm) | HC001-L | Fri Nov 20 | Sun Nov 15 | script v3 |
-| 8 | Sat Nov 21 | **HCS04** The 5,000-year-old golden eye (Burnt City) | HC001-L | Sun Nov 22 | Tue Nov 17 | research + script v1 |
-| 9 | Mon Nov 23 | **HCS05** The doctor who refused to treat half his patients (al-Razi) | HC001-L | Tue Nov 24 | Thu Nov 19 | research + script v1 |
-| 10 | Wed Nov 25 | **HCS06** The enslaved man who saved Boston (Onesimus, 1721) | HC001-L | Thu Nov 26 | Sat Nov 21 | research + script v1 |
-| 11 | Fri Nov 27 | **HCS08** standalone (candidate: Ibn al-Nafis, the discovery lost for 300 years) | HC001-L | Sat Nov 28 | Mon Nov 23 | needs research |
+| 6 | Tue Nov 17 | **HCS02** The Doctor Who Drank Bacteria (Marshall) | HC001-L | Wed Nov 18 | Fri Nov 13 | script approved |
+| 7 | Thu Nov 19 | **HCS03** She Was Trapped Under Ice for 80 Minutes (Bågenholm) | HC001-L | Fri Nov 20 | Sun Nov 15 | script approved |
+| 8 | Sat Nov 21 | **HCS04** The 5,000-year-old golden eye (Burnt City) | HC001-L | Sun Nov 22 | Tue Nov 17 | script approved |
+| 9 | Mon Nov 23 | **HCS06** The enslaved man who saved Boston (Onesimus, 1721) | HC001-L | Tue Nov 24 | Thu Nov 19 | script approved |
+| 10 | Wed Nov 25 | **HCS08** The doctor who stopped a plague by breaking a pump (John Snow, 1854) | HC001-L | Thu Nov 26 | Sat Nov 21 | research + script v1 |
+| 11 | Fri Nov 27 | **HCS09** The doctor they hated for saying "wash your hands" (Semmelweis, 1847) | HC001-L | Sat Nov 28 | Mon Nov 23 | research + script v1 |
 | 12 | **Sun Nov 29** · L | **HC002-L** Phineas Gage: The Story Everyone Gets Wrong | – | (FB: optional, Mon Nov 30) | **Wed Nov 25** | script v2 |
 | 13 | Tue Dec 1 | HC002-S1 An Iron Rod Went Through His Skull | HC002-L | Wed Dec 2 | Fri Nov 27 | script v2 |
-| 14 | Thu Dec 3 | **HCS07** Nobody believed him about the mosquito (Finlay; Dec 3 is his birthday, to verify) | HC002-L | Fri Dec 4 | Sun Nov 29 | research + script v1 |
+| 14 | Thu Dec 3 | **HCS07** Nobody believed him about the mosquito (Finlay; Dec 3 is his birthday, to verify) | HC002-L | Fri Dec 4 | Sun Nov 29 | script approved |
 | 15 | Sat Dec 5 | HC002-S2 Did Phineas Gage Really Become a Different Person? | HC002-L | Sun Dec 6 | Tue Dec 1 | script v2 |
-| 16 | Mon Dec 7 | **HCS09** standalone (candidate: the Sushruta nose reconstruction) | HC002-L | Tue Dec 8 | Thu Dec 3 | needs research |
+| 16 | Mon Dec 7 | **HCS05** The doctor who refused to treat half his patients (al-Razi) | HC002-L | Tue Dec 8 | Thu Dec 3 | script approved |
 | – | Dec 9 / Dec 11 | two standalone Shorts | | | | |
 | – | **Sun Dec 13** · L | **HC003-L** The Dancing Plague of 1518, then HC003-S1, S2 | | | | script v2 |
+
+**Mix rule (user, 2026-11-06):** at most **one story from outside Europe / North America per week**, never two
+back to back: the channel is still finding a Western audience. So al-Razi moved to Dec 7 (two weeks after the
+golden eye), and the two open slots went to John Snow and Semmelweis. Ibn al-Nafis and Sushruta stay candidates
+for later, one at a time.
 
 **Dropped (2026-11-05):** the St. Martin tongue test: a 4th St. Martin video, and the long already shows the
 tasting (the max-2-Shorts rule below).

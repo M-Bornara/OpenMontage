@@ -1,4 +1,4 @@
-# HCS06 — The Enslaved Man Who Saved Boston · research + script v1 (for approval)
+# HCS06 — The Enslaved Man Who Saved Boston · research + script v1 (approved 2026-11-06)
 
 **Thumbnail sentence:** In 1721, the idea that protected Boston from smallpox came from an enslaved African man.
 **Family:** History Got It Wrong (the forgotten man). **Format:** Story Short (a long candidate later, with
@@ -20,16 +20,17 @@ Montagu). **Core rating:** DOCUMENTED (Mather's letters and diary, Boylston's ow
 | Of the doctors, only Zabdiel Boylston agreed; on 26 June 1721 he inoculated his 6-year-old son and two enslaved people | VERIFIED (S1) |
 | Boylston: 247 inoculated, 6 died (about 1 in 40); other counts give 6 of 282–287 | VERIFIED (S1); the script says "about one in forty" |
 | A bomb was thrown into Mather's house (the room of his nephew, just inoculated); it didn't go off; the note began "Cotton Mather, you dog, damn you! I'll inoculate you with this…" | VERIFIED (Mather's diary, Nov 1721, via S1/S3); check the exact wording against P2 |
+| The device was a "granado" (a hand grenade: an iron shell of gunpowder with a fuse), thrown through the window about 3 a.m. on 14 Nov 1721; the fuse went out. Grenades were standard army weapons by then | VERIFIED (Mather's diary via Skeptoid, JSTOR Daily, American Heritage). The script says "grenade", not "bomb" (user check, 2026-11-06) |
 | Onesimus bought his freedom (by paying for another enslaved man) | ATTRIBUTED (S3); kept out of the script until checked |
 
-## Script v1 (~48 s)
+## Script v1 (~48 s) · approved 2026-11-06 with "grenade"
 ```
 [serious] In 1721, smallpox hit Boston. The idea that saved lives came from a man who wasn't free.
 His name was Onesimus. He was enslaved in the house of the minister Cotton Mather.
 He had told Mather how West Africans beat smallpox… a tiny cut, a little matter from a sick person… then protection for life.
 Mather begged the doctors to try it. Only one agreed: Zabdiel Boylston.
 He started with his own six-year-old son.
-[serious] The town was furious. Someone threw a bomb into Mather's house. It didn't go off.
+[serious] The town was furious. Someone threw a grenade through Mather's window. The fuse went out.
 The note said: "Cotton Mather, you dog… I'll inoculate you with this."
 About one in seven people who caught smallpox died. Among Boylston's patients… about one in forty.
 [curious] The idea came from Onesimus. For two hundred years, almost nobody said his name.

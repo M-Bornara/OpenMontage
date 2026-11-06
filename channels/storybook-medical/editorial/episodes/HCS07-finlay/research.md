@@ -1,4 +1,4 @@
-# HCS07 — Nobody Believed Him About the Mosquito · research + script v1 (for approval)
+# HCS07 — Nobody Believed Him About the Mosquito · research + script v1 (approved 2026-11-06)
 
 **Thumbnail sentence:** A Cuban doctor found what spreads yellow fever, and waited 19 years for anyone to test it.
 **Family:** History Got It Wrong. **Format:** Story Short. **Core rating:** DOCUMENTED (Finlay's 1881 paper,
@@ -22,7 +22,7 @@ the Reed Commission, Reed's own credit).
 | Reed credited Finlay; history books often credited Reed | VERIFIED (S1) |
 | Born 3 Dec 1833; Latin America marks 3 Dec as Medicine Day in his honour | **TO VERIFY**. If true: publish on Thu Dec 3 and say it in the description |
 
-## Script v1 (~45 s)
+## Script v1 (~45 s) · approved 2026-11-06
 ```
 [curious] For nineteen years, almost nobody believed the man who solved yellow fever.
 Havana, 1881. Yellow fever was killing thousands, and nobody knew how it spread.

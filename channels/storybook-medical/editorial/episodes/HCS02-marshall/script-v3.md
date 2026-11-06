@@ -1,4 +1,4 @@
-# HCS02 — The Doctor Who Drank Bacteria · script v3 (for approval)
+# HCS02 — The Doctor Who Drank Bacteria · script v3 (approved 2026-11-06)
 
 v2 (approved 2026-10-18) reads at about **69 s** with the 2026-11-04 voice, over the 55 s limit
 (`plan/production-v3.md`). v3 keeps the hook, the stakes, the gross middle, the wife's joke and the payoff, and
