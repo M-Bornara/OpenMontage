@@ -72,6 +72,38 @@ def matt_beat(era_outfit: str, beat: str) -> str:
             f"He is small in frame, never at the centre of the action, and must not draw attention on first viewing.")
 
 
+# L28 · decoupage (user review of the HCS02/HCS03 rough cuts): the same lab or valley in shot after shot, the same angle
+# with only the centre moved, one image held over three ideas of narration, a happy face on a line about being sick.
+# Every story keyframe names its shot like a cinematographer: size, angle, lens, the action of THIS line and the
+# emotion it carries. Shots that keep a set must change size and angle (long -> medium -> close).
+SHOT_SIZES = {"ELS": "extreme long shot", "LS": "long shot", "MLS": "medium long shot (knees up)",
+              "MS": "medium shot (waist up)", "MCU": "medium close-up (chest up)", "CU": "close-up",
+              "ECU": "extreme close-up", "OTS": "over-the-shoulder shot", "POV": "point-of-view shot",
+              "INSERT": "insert shot of a detail"}
+
+
+def framing(size: str, angle: str, lens: str, action: str, mood: str = "") -> str:
+    """SHOT line: e.g. framing("CU", "low angle", "85 mm, shallow focus", "he lifts the beaker to his lips", "reckless")."""
+    return (f"SHOT: {SHOT_SIZES[size]}, {angle}, {lens}. The image shows the action of this moment: {action}."
+            f"{(' Mood and faces: ' + mood + '.') if mood else ''} Background and props support the action; the "
+            f"set is seen from a new angle, not as a repeat of another shot.")
+
+
+def lint_sequence(keyframes: dict[str, dict]) -> list[str]:
+    """L28: consecutive story keyframes that repeat the same set at the same shot size (a repeat with the centre moved)."""
+    def key(spec):
+        p = spec.get("prompt", "").lower()
+        s = re.search(r"set: ([^,.]+)", p)
+        z = re.search(r"shot: ([a-z -]+?)(?: \(|,)", p)
+        return (s.group(1).strip() if s else None, z.group(1).strip() if z else None)
+    names, out = list(keyframes), []
+    for a, b in zip(names, names[1:]):
+        (sa, za), (sb, zb) = key(keyframes[a]), key(keyframes[b])
+        if sa and sa == sb and za and za == zb:
+            out.append(f"L28: {a} -> {b}: same set ({sa}) and same shot size ({za}); change the size or the angle")
+    return out
+
+
 # K1 · clips: one action, then stillness (Kling fills spare seconds by repeating the action).
 CLIP_HOLD = "ONE single action only; once it is done, everything holds completely still until the end of the clip."
 
@@ -110,6 +142,9 @@ def lint(name: str, spec: dict) -> list[str]:
         issues.append("L17: no SAFE_FRAMING (story subjects drift to the edges, where the camera can't zoom or focus on them)")
     if spec.get("aspect", "16:9") == "16:9" and "set:" not in p and not model_sheet and not re.match(r"(thumb|cover|sheet|troupe|ref|prop)", name.lower()):
         issues.append("L19: no SET line (set_block): without its place, year and look the model reuses one generic room")
+    if not people_free_plate(p) and not model_sheet and not re.match(r"(thumb|cover|sheet|troupe|ref|prop|plate)", name.lower()) \
+            and "shot:" not in p:
+        issues.append("L28: no SHOT line (framing(): size, angle, lens, this line's action and mood)")
     if "spectacles" in p and "amber" not in p and "no spectacles" not in p:
         issues.append("L11: spectacles that aren't Matt's (confuses the spot-the-glasses game)")
     return issues
@@ -120,4 +155,7 @@ def people_free_plate(p: str) -> bool:
 
 
 def lint_all(specs: dict[str, dict]) -> dict[str, list[str]]:
-    return {n: v for n, v in ((n, lint(n, s)) for n, s in specs.items()) if v}
+    out = {n: v for n, v in ((n, lint(n, s)) for n, s in specs.items()) if v}
+    for msg in lint_sequence(specs):
+        out.setdefault(msg.split()[3].rstrip(":"), []).append(msg)
+    return out

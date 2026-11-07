@@ -66,31 +66,39 @@ class Cut:
 
 
 c = Cut()
-c.shot(0.0, KF + "s1.png", push(0.45, 0.6, 1.25), cap=TOP)          # along the glass to the low red line
-c.s("ice-crack", 0.2, -24)
+# v2 decoupage (user review): one image per idea in the opening line, not one thermometer for all three
+c.shot(0.0, KF + "s1a.png", push(0.45, 0.4, 1.15), cap=LOW)         # the gloved hand under the ice
+c.s("heartbeat", 0.3, -16)
+t = c.at("her body cooled")
+c.shot(t, KF + "s1b.png", push(0.45, 0.6, 1.25), cap=TOP)          # along the glass to the low red line
+c.s("ice-crack", t + 0.1, -24)
 seven = c.at("137")
 c.o("stamp", seven + 0.3, seven + 2.6, text="13.7 °C", y=1180); c.s("stamp-thud", seven + 0.35, -14)
+c.shot(c.at("and she lived"), KF + "s1c.png", push(0.55, 0.5, 1.12), cap=TOP)   # warmth: the mug
 t = c.at("norway")
 c.shot(t, KF + "s2a.png", {"type": "slide", "from": -3, "to": 3, "scale": 1.1}, cap=LOW)
 anna = c.at("anna")
 c.o("nameTag", anna + 0.1, anna + 2.4, text="Anna Bågenholm", sub="young doctor · Norway, 1999", y=190)
 c.s("wind-snow", t, -26)
 t = c.at("when she went")
-c.shot(t, KF + "s2b.png", push(0.48, 0.62, 1.2), cap=TOP)
+c.shot(t, KF + "s2b.png", push(0.5, 0.45, 1.2), cap=TOP)            # ice level: the boots and skis
 c.s("ice-crack", c.at("headfirst"), -14)
 t = c.at("underneath")
-c.shot(t, KF + "s3.png", push(0.45, 0.4, 1.15), cap=LOW)
+c.shot(t, KF + "s3.png", push(0.4, 0.4, 1.12), cap=LOW)             # her head in the air gap
 c.s("bubbles", t + 0.4, -20)
 t = c.at("her friends held")
 c.shot(t, KF + "s4a.png", {"type": "static"}, cap=TOP)
 t = c.at("after about 40")
 forty = c.at("40")
-c.shot(t, KF + "s4b.png", push(0.6, 0.18, 1.2), cap=LOW)
-c.o("stamp", forty, forty + 1.8, text="40 MIN", y=1180); c.s("heartbeat", c.at("heart stopped"), -14)
+# the watch now reads 40:00 itself (user review: the blank screen), so no stamp
+c.shot(t, KF + "s4b.png", push(0.42, 0.45, 1.2), cap=LOW)
+c.s("heartbeat", c.at("heart stopped"), -14)
 t = c.at("they cut her free")
 eighty = c.at("80")
-c.shot(t, KF + "s5.png", {"type": "pull", "from": 1.25, "to": 1.04}, cap=LOW)
-c.o("stamp", eighty, eighty + 1.8, text="80 MIN", y=300); c.s("axe-chop", t + 0.1, -18)
+# v2: two close shots instead of the s5/s6 valley repeat (user review)
+c.shot(t, KF + "s5a.png", push(0.5, 0.6, 1.15), cap=TOP)
+c.o("stamp", eighty, eighty + 1.8, text="80 MIN", y=1560); c.s("axe-chop", t + 0.1, -18)
+c.shot(c.at("no pulse"), KF + "s5b.png", push(0.6, 0.45, 1.15), cap=LOW)
 t = c.at("most people")
 c.shot(t, KF + "s6.png", {"type": "pull", "from": 1.2, "to": 1.04}, cap=TOP)
 c.s("helicopter", t, -24)

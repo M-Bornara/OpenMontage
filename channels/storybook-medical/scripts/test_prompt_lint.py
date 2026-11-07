@@ -25,4 +25,13 @@ for path, failed, minimum in CASES:
     status = "PASS" if len(caught) >= minimum else "FAIL"
     ok &= status == "PASS"
     print(f"{status} {path.parent.name}: lint catches {len(caught)}/{len([n for n in failed if n in kf])} recorded failures (min {minimum})")
+# L28 (HCS03 v1 s5 -> s6): the same valley twice at the same size, and a story frame with no SHOT line
+valley = "SET: Snowy mountains and a frozen river outside Narvik, May 1999. "
+seq = {"s5": {"aspect": "9:16", "prompt": valley + prompt_kit.framing("ELS", "eye level", "24 mm", "rescuers at the hole")},
+       "s6": {"aspect": "9:16", "prompt": valley + prompt_kit.framing("ELS", "eye level", "24 mm", "a helicopter lands")},
+       "s7": {"aspect": "9:16", "prompt": valley + "Wide frame: a helicopter."}}
+l28 = prompt_kit.lint_all(seq)
+status = "PASS" if any("L28: s5 -> s6" in m for m in l28.get("s6", [])) and any("no SHOT" in m for m in l28.get("s7", [])) else "FAIL"
+ok &= status == "PASS"
+print(f"{status} L28 decoupage: repeated set+size and missing SHOT line caught")
 sys.exit(0 if ok else 1)

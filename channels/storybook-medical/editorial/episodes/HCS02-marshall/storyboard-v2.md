@@ -1,4 +1,4 @@
-# HCS02 — The Doctor Who Drank Bacteria · storyboard v1 (for approval)
+# HCS02 — The Doctor Who Drank Bacteria · storyboard v2 (rough cut 2 for review)
 
 Rules: `plan/production-v3.md`. Script: `script-v3.md` (approved 2026-11-06). Facts: `research.md`.
 Format: 9:16 Short, 1080×1920. Voice: Liam, the 2026-11-04 setup. No end sting (Shorts loop).
@@ -43,3 +43,18 @@ Text zones: TOP (y≈300) · MID (y≈1180) · LOW (y≈1430), each picked so it
 
 1. Any shot to change? (the kookaburra in 4 and the green haze in 6 are the jokes)
 2. If OK, I write the 12 image prompts (lint + prompt_kit) for your approval, then generate ≈ $1.80.
+
+
+## v2 decoupage (user review of the rough cut, 2026-11-06)
+
+| # | v1 | v2 shot (size · angle · set · action / emotion) |
+|---|---|---|
+| 2b | Warren in the sunny lab again | MCU · side, low · Warren's dark pathology room at night · he leans back from the eyepiece, astonished; the spiral circle glows above |
+| 4 | presenter behind the audience, giant kookaburra | LS · high angle from the back row · dark lecture theatre · he faces the doubtful backs of heads; a small kookaburra on the high window |
+| 5b | smiling medium shot, sunny lab | CU · slightly low · the lab at night, one lamp · he drinks, serious, no smile |
+| 6 | the lab again | MLS · eye level · staff corridor · he slumps green and sick on a chair; a nurse and a doctor hurry past pinching their noses |
+| 7 | the lab and microscope again | ECU · the microscope view fills the frame · sore red lining crowded with spirals |
+| 8 | happy Marshall | MS · low across the table · kitchen · he is pale and slumped over his dinner; she holds up the pills, eyebrow up |
+| 9b | a plain stomach diagram | MCU · over the doctor's shoulder · a 2005 GP room · a cured patient takes his pills, relieved |
+
+Kept: 1, 2a, 3, 5a, 9a. Cost of the redo: 7 images ≈ $0.47 (batch).

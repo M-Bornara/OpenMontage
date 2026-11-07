@@ -51,7 +51,11 @@ Every shot in the storyboard names its motion method, cheapest and most controll
 HC001's animatic was text cards over simple shapes, so it didn't show what the video would be. Images are cheap
 ($0.15) and only clips are expensive, so the new order makes the storyboard almost the final film:
 
-1. **Storyboard sheet (free).** Every shot: the narration line and its key word, what we see (composition, who
+1. **Storyboard sheet (free).** Decoupage first (L28, user review 2026-11-06): every shot is a designed shot with
+   its **size** (ELS/LS/MS/MCU/CU/ECU/insert/OTS), **angle**, **lens**, the **action of its own line** and the
+   **emotion on the faces**. One image per idea in the narration. A set that comes back changes size and angle
+   (long → medium → close, reverse angle), or the line gets its own place and light. The prompts then use
+   `framing()`, and the lint stops a SHOT-less frame or the same set at the same size twice in a row. Every shot: the narration line and its key word, what we see (composition, who
    is where, what the eye should land on), the motion code and exactly what moves, on-screen text and *where*
    it sits (never on a face), SFX tied to a visible action, and the target length. You approve it.
 2. **Image prompts** (lint + prompt_kit), then you approve them.

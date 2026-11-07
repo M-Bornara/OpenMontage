@@ -1,4 +1,4 @@
-# HCS03 — She Was Trapped Under Ice for 80 Minutes · storyboard v1 (for approval)
+# HCS03 — She Was Trapped Under Ice for 80 Minutes · storyboard v2 (rough cut 2 for review)
 
 Rules: `plan/production-v3.md`. Script: `script-v3.md` (approved 2026-11-06). Facts: `research.md`.
 Format: 9:16 Short, 1080×1920. Voice: Liam, the 2026-11-04 setup. No end sting (Shorts loop).
@@ -44,3 +44,16 @@ monitor in the picture, not a logo.
 
 1. Any shot to change?
 2. If OK, I write the 12 image prompts for your approval, then generate ≈ $1.80.
+
+
+## v2 decoupage (user review of the rough cut, 2026-11-06)
+
+| # | v1 | v2 shot (size · angle · set · action / emotion) |
+|---|---|---|
+| 1 | one thermometer over three ideas | **1a** ECU from under the ice: a red glove pressed still against the ice ("her heart stopped") · **1b** the v1 thermometer ("13.7") · **1c** CU warm hands round a steaming mug, red scarf, Tromsø window ("and she lived") |
+| 2b | the s2a valley again with a huge hole | CU · camera on the ice · only her boots and skis sticking up from a shoulder-wide hole, ice shards in front |
+| 3 | standing upright on the riverbed / legs folded outward | MCU underwater · only her head and shoulders, the red hat in the thin air gap under the ice, goggles on |
+| 4b | blank watch | INSERT · the watch reads 40:00, the gloved hand gripping a ski |
+| 5 | the valley again (then s6, the same valley) | **5a** CU low at ice level: a rescuer's ice axe smashing the ice · **5b** ECU top-down: two fingers on a still wrist in a red cuff ("no pulse") |
+
+Kept: 2a, 4a, 6, 7, 8, 9, 10. The "40 MIN" stamp is gone (the watch shows it). Cost: 7 images + 2 retries ≈ $0.60 (batch).
