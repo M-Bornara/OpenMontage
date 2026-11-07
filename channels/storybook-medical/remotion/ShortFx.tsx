@@ -39,6 +39,8 @@ export type ShotFx =
       color?: string; width?: number }
   /** the brand "?" glint: a small four-point star sparkles on one spot (Matt's spectacles), easy to miss */
   | { kind: "glint"; x: number; y: number; at: number; size?: number; dur?: number }
+  /** a surface lights up through its mask (a watch's backlight on its LCD face; the painted digits stay dark) */
+  | { kind: "light"; mask: string; at: number; rise?: number; color?: string; blend?: React.CSSProperties["mixBlendMode"] }
   /** a digital watch display counts up to its final reading over its painted digits (centre, angle, skew measured) */
   | { kind: "lcd"; cx: number; cy: number; angle: number; skew?: number; h: number; from: number; to: number; at: number;
       dur: number; bg: string; patch: [number, number]; ink?: string; blinkAfter?: number };
@@ -346,6 +348,12 @@ export const ShotFxLayer: React.FC<{ fx: ShotFx[]; src: string; shotId: string }
           case "ecg": return <Ecg key={id} fx={e} />;
           case "glint": return <Glint key={id} fx={e} />;
           case "lcd": return <Lcd key={id} fx={e} />;
+          case "light": {
+            const k = interpolate(s, [e.at, e.at + (e.rise ?? 0.15)], [0, 1], CL);
+            const flick = k > 0 ? 0.92 + 0.08 * Math.sin(f / 5) : 0;
+            return k > 0 ? <div key={id} style={{ ...fill, ...maskImg(e.mask), backgroundColor: e.color ?? "rgba(80,215,235,0.75)",
+              mixBlendMode: e.blend ?? "screen", opacity: k * flick, filter: "blur(0.5px)" }} /> : null;
+          }
           default: return null;
         }
       })}

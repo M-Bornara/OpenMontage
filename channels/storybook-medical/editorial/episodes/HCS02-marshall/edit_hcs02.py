@@ -118,13 +118,14 @@ t = c.at("and most ulcers")
 c.shot(t, KF + "s9b.png", push(0.7, 0.35, 1.15), cap=LOW, transition="dissolve")   # v2: the cured patient
 c.s("ding-correct", c.at("curable"), -20)
 
-total = round(c.words[-1]["end"] + 0.8, 2)
+TAIL = 1.0                                       # user review: a breath after "curable" before the loop restarts
+total = round(c.words[-1]["end"] + 0.8 + TAIL, 2)
 c.shots.sort(key=lambda x: x["start"])
 for i, x in enumerate(c.shots):
     x["end"] = c.shots[i + 1]["start"] if i + 1 < len(c.shots) else total
 
 ep = json.load(open(P / "episode.json", encoding="utf-8"))
-ep.update({"loop": True, "shots": c.shots, "overlays": sorted(c.ov, key=lambda x: x["start"]), "sfx": sorted(c.fx, key=lambda x: x["at"]),
+ep.update({"loop": True, "tail_seconds": TAIL, "shots": c.shots, "overlays": sorted(c.ov, key=lambda x: x["start"]), "sfx": sorted(c.fx, key=lambda x: x["at"]),
            "glasses": "s2a: Matt's spectacles on the reception counter behind the glass doors"})
 ep["music"] = {"lufs": -22, "selected": "m1", "prompts": {
     "m1": "Instrumental, bright and cheeky 1980s-flavoured comedy score for a true science story: plucky marimba, "

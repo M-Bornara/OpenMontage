@@ -30,10 +30,11 @@ Updated 2026-11-03.
 - [x] Rough cut 2: **HCS02 Marshall approved** (2026-11-06, "no issues"; loop kept). HCS03 Bågenholm rough cut 3 after the
       user's notes (frozen heart opening, clock hands end on the cut, 1.5 s hold after "doctor"): user checks it.
 - [x] HCS03 rough cut 3 approved (2026-11-07).
-- [ ] **Mask FX rendered** (2026-11-07, ShortFx.tsx + fx_prep.py): Marshall spirals wiggle, zigzag flash, tail wag, green
-      haze, pill shake; Bågenholm heartbeat + frost, frost on the thermometer, mug steam + warm glow, spotlight on Anna,
-      bubbles, ski pull, blue-to-amber warm-up, glow through the tubing. User watches both renders/final.mp4.
-      Then: publish packages (covers, publish.md). Storyboards golden eye + Onesimus with the L28 decoupage.
+- [ ] **FX v3 rendered** (2026-11-07) after the user's notes: monitor sweep, watch backlight on "forty" (painted digits
+      kept), "?" glint on both glasses, phone handset rattle (replaces the zigzag flash), captions end at a cut, SFX
+      leading silence skipped (the phone ring was silent before), Marshall 1 s hold before the loop. User checks both
+      renders/final.mp4, then publish packages. Matt: one cameo per video from now on (L29), in new shots only.
+      Storyboards golden eye + Onesimus with L28 + L29.
 - [ ] **Remind at step 3 (Gage long images): fal balance** ($22.24 on Nov 5) — top up before.
 
 ## From 2026-10-26

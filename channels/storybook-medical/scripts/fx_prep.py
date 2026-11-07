@@ -60,7 +60,11 @@ def cut(image: str, name: str, box, how: str = "rembg", grow: int = 3, focus: fl
     src = Path(image)
     im = Image.open(src).convert("RGB")
     X0, Y0, X1, Y1 = frame_box(im, box, focus)
-    a = _rembg(im.crop((X0, Y0, X1, Y1))) if how == "rembg" else _color(im.crop((X0, Y0, X1, Y1)))
+    crop = im.crop((X0, Y0, X1, Y1))
+    if how == "bright":          # a lit surface without the dark ink on it (a watch's LCD face around its digits)
+        a = ((np.array(crop.convert("L")) > 110) * 255).astype(np.uint8)
+    else:
+        a = _rembg(crop) if how == "rembg" else _color(crop)
     full = np.zeros((im.height, im.width), np.uint8)
     full[Y0:Y1, X0:X1] = a
     if poly:
@@ -68,7 +72,8 @@ def cut(image: str, name: str, box, how: str = "rembg", grow: int = 3, focus: fl
         pts = [frame_box(im, (x, y, x, y), focus)[:2] for x, y in poly]
         ImageDraw.Draw(clip).polygon(pts, fill=255)
         full = np.minimum(full, np.array(clip.filter(ImageFilter.GaussianBlur(2))))
-    m = Image.fromarray(full).filter(ImageFilter.MaxFilter(grow * 2 + 1)).filter(ImageFilter.GaussianBlur(1.5))
+    m = Image.fromarray(full)
+    m = (m.filter(ImageFilter.MaxFilter(grow * 2 + 1)) if grow else m).filter(ImageFilter.GaussianBlur(1.5))
     out = src.parent / "fx"
     out.mkdir(exist_ok=True)
     mask = Image.new("RGBA", im.size, (255, 255, 255, 0))
@@ -95,7 +100,7 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("image"); ap.add_argument("name")
     ap.add_argument("box", nargs=4, type=float)
-    ap.add_argument("--how", default="rembg", choices=("rembg", "color"))
+    ap.add_argument("--how", default="rembg", choices=("rembg", "color", "bright"))
     ap.add_argument("--grow", type=int, default=3)
     ap.add_argument("--check", action="store_true")
     ap.add_argument("--poly", help="x,y x,y ... outline in frame fractions")

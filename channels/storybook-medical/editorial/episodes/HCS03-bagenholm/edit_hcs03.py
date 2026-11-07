@@ -117,12 +117,11 @@ c.shot(t, KF + "s4a.png", {"type": "static"}, cap=TOP,
 t = c.at("after about 40")
 forty = c.at("40")
 # the watch now reads 40:00 itself (user review: the blank screen), so no stamp
-# FX: the painted 40:00 counts up and lands on "forty", then blinks (user review: animate the digits). The display is
-# tilted -18 deg with italic digits; centre and size measured on the still, patch in the LCD's own colour.
+# FX: the watch's backlight comes on over the painted 40:00 on "forty" (user review: the drawn count-up digits sat on a
+# rectangle that didn't fit the watch; the painted digits stay as they are). Mask: fx_prep.py --how bright (the LCD face
+# without its dark digits).
 c.shot(t, KF + "s4b.png", push(0.42, 0.45, 1.2), cap=LOW,
-       fx=[{"kind": "lcd", "cx": 0.494, "cy": 0.447, "angle": -18, "skew": -10, "h": 64, "patch": [266, 108],
-            "bg": "rgb(156,166,158)", "from": 39 * 60 + 40, "to": 40 * 60, "at": 0.0, "dur": max(0.4, rel(forty, t)),
-            "blinkAfter": 1.5}])
+       fx=[{"kind": "light", "mask": KF + "fx/s4b-lcd.mask.png", "at": rel(forty, t) - 0.05}])
 c.s("heartbeat", c.at("heart stopped"), -14)
 t = c.at("they cut her free")
 eighty = c.at("80")

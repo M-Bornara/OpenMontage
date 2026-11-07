@@ -79,3 +79,4 @@ Every generation round teaches us something. A lesson only counts once it's **en
 ## Open (no code fix possible, review catches it)
 - An extra person in a scene that has a valid cast (HC001 M25), or people added around a grave (M34).
 - Mirror-fixes when the side is wrong.
+| L29 | 2026-11-07 | HCS02/HCS03: no Matt in any Short (user: "I thought we included him") | One Matt cameo in a new shot of every video, Shorts included: `matt_beat()`; lint L29 flags a video without one (`require_matt=False` only for images made before the rule) | test_prompt_lint.py L29 |

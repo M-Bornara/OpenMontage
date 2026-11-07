@@ -34,4 +34,11 @@ l28 = prompt_kit.lint_all(seq)
 status = "PASS" if any("L28: s5 -> s6" in m for m in l28.get("s6", [])) and any("no SHOT" in m for m in l28.get("s7", [])) else "FAIL"
 ok &= status == "PASS"
 print(f"{status} L28 decoupage: repeated set+size and missing SHOT line caught")
+# L29 (user 2026-11-07): a video with no Matt cameo in any story shot
+l29 = prompt_kit.lint_all({"s1": {"prompt": "SHOT: MS, eye level. A doctor at a desk."}})
+l29ok = prompt_kit.lint_all({"s1": {"prompt": "SHOT: MS, eye level. A doctor at a desk. " + prompt_kit.matt_beat("a 1980s suit", "reading a newspaper")}})
+status = "PASS" if any("L29" in m for m in l29.get("s1", [])) and not any("L29" in m for v in l29ok.values() for m in v) else "FAIL"
+print(f"{status} L29 Matt cameo: missing cameo caught, matt_beat() accepted")
+ok = ok and status == "PASS"
 sys.exit(0 if ok else 1)
+

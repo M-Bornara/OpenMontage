@@ -154,8 +154,13 @@ def people_free_plate(p: str) -> bool:
     return "empty location plate" in p
 
 
-def lint_all(specs: dict[str, dict]) -> dict[str, list[str]]:
+def lint_all(specs: dict[str, dict], require_matt: bool = True) -> dict[str, list[str]]:
     out = {n: v for n, v in ((n, lint(n, s)) for n, s in specs.items()) if v}
     for msg in lint_sequence(specs):
         out.setdefault(msg.split()[3].rstrip(":"), []).append(msg)
+    # L29 (user, 2026-11-07): every video, Shorts included, has Matt in one of its new shots (matt_beat), besides the
+    # hidden spectacles. Existing images are never regenerated just for him.
+    story = [n for n, s in specs.items() if "shot:" in s.get("prompt", "").lower()]
+    if require_matt and story and not any("cameo of matt" in specs[n].get("prompt", "").lower() for n in story):
+        out.setdefault(story[0], []).append("L29: no Matt cameo in any shot; add matt_beat() to one shot with people in it")
     return out
