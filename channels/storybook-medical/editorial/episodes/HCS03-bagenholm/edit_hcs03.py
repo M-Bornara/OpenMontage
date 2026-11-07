@@ -117,7 +117,12 @@ c.shot(t, KF + "s4a.png", {"type": "static"}, cap=TOP,
 t = c.at("after about 40")
 forty = c.at("40")
 # the watch now reads 40:00 itself (user review: the blank screen), so no stamp
-c.shot(t, KF + "s4b.png", push(0.42, 0.45, 1.2), cap=LOW)
+# FX: the painted 40:00 counts up and lands on "forty", then blinks (user review: animate the digits). The display is
+# tilted -18 deg with italic digits; centre and size measured on the still, patch in the LCD's own colour.
+c.shot(t, KF + "s4b.png", push(0.42, 0.45, 1.2), cap=LOW,
+       fx=[{"kind": "lcd", "cx": 0.494, "cy": 0.447, "angle": -18, "skew": -10, "h": 64, "patch": [266, 108],
+            "bg": "rgb(156,166,158)", "from": 39 * 60 + 40, "to": 40 * 60, "at": 0.0, "dur": max(0.4, rel(forty, t)),
+            "blinkAfter": 1.5}])
 c.s("heartbeat", c.at("heart stopped"), -14)
 t = c.at("they cut her free")
 eighty = c.at("80")
@@ -126,7 +131,9 @@ c.shot(t, KF + "s5a.png", push(0.5, 0.6, 1.15), cap=TOP)
 c.o("stamp", eighty, eighty + 1.8, text="80 MIN", y=1560); c.s("axe-chop", t + 0.1, -18)
 c.shot(c.at("no pulse"), KF + "s5b.png", push(0.6, 0.45, 1.15), cap=LOW)
 t = c.at("most people")
-c.shot(t, KF + "s6.png", {"type": "pull", "from": 1.2, "to": 1.04}, cap=TOP)
+# FX: the brand "?" glint on Matt's spectacles on the snowy rock (left lens, measured 0.49 / 0.882)
+c.shot(t, KF + "s6.png", {"type": "pull", "from": 1.2, "to": 1.04}, cap=TOP,
+       fx=[{"kind": "glint", "x": 0.487, "y": 0.877, "at": 1.0, "size": 30}])
 c.s("helicopter", t, -24)
 t = c.at("but doctors have")
 warm = c.at("warm")
@@ -146,10 +153,12 @@ t = c.at("that night")
 beat = c.at("beating")
 # static: the clock hands are a frame-space overlay, so the camera must not move on this shot
 c.shot(t, KF + "s9.png", {"type": "static"}, cap=LOW,
-       draw=[{"points": FLAT, "from": 0.0, "to": 0.4, "color": "#7CFF9A", "width": 8, "glow": True},
-             {"points": BEAT, "from": round(beat - t, 2), "to": round(beat - t + 1.2, 2), "color": "#7CFF9A", "width": 8, "glow": True}])
+       # a real monitor sweep (user review: the line froze, then jumped): flat and moving from the cut, the first
+       # heartbeat spike exactly on "beating", then one every 0.8 s
+       fx=[{"kind": "ecg", "x0": 0.40, "x1": 0.73, "y": SCREEN_Y, "amp": 0.06, "beatAt": rel(beat, t), "period": 0.8,
+            "sweep": 1.5, "width": 7}])
 clock_on = t
-c.s("monitor-beep", beat + 0.1, -16); c.s("monitor-beep", beat + 0.9, -16)
+c.s("monitor-beep", beat, -16); c.s("monitor-beep", beat + 0.8, -16)
 t = c.at("today")
 # the hands end on the cut (user review: they stayed on into the corridor while s9 dissolved away)
 c.o("clock", clock_on, t - 0.05, pin=PIN, marks=MARKS, **{"from": 10.25, "to": 10.25})

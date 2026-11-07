@@ -651,7 +651,7 @@ def step_build(pid, *_):
             for i, e in enumerate(s["fx"]):
                 e = dict(e)
                 for key in ("mask", "bg"):
-                    if key in e:
+                    if key in e and str(e[key]).lower().endswith(".png"):
                         out = pub / "fx" / f"{s['id']}-{i}-{key}.png"
                         fit_frame(Path(resolve_ref(p.name, e[key])), out, frame_size, s.get("focus", 0.5))
                         e[key] = f"fx/{out.name}"
@@ -695,6 +695,18 @@ def step_build(pid, *_):
     }
     json.dump(edit, open(p / "artifacts/edit_decisions.json", "w", encoding="utf-8"), indent=1)
     print(f"props: {len(shots)} shots, {len(ep['overlays'])} overlays, {len(words)} words, {total}s, gaps={gaps or 'none'}")
+
+
+def lead_silence(f: Path, db: float = -40) -> float:
+    """Seconds before a sound file first rises within `db` of its own peak (0 if it starts at once)."""
+    import numpy as np
+    raw = subprocess.run(["ffmpeg", "-v", "error", "-i", str(f), "-ac", "1", "-ar", "8000", "-f", "s16le", "-"],
+                         capture_output=True).stdout
+    a = np.abs(np.frombuffer(raw, np.int16).astype(float))
+    if not len(a) or a.max() == 0:
+        return 0.0
+    i = int(np.argmax(a > a.max() * 10 ** (db / 20)))
+    return max(0.0, round(i / 8000 - 0.02, 3))
 
 
 def step_mix(pid, *_):
@@ -755,9 +767,11 @@ def step_mix(pid, *_):
         gain = c.get("gain_db", -12) - 1 - peak_db(f) if not c.get("as_is") else 0.0
         chain = f"[{n + 2}:a]aformat=sample_rates=48000:channel_layouts=stereo"
         # Library files can hold several hits or long beds; without an explicit "dur" cap one-shots at 3 s.
-        d = c.get("dur") or min(3.0, duration(f))
+        # skip a file's leading silence (phone-ring-old.mp3 is silent for 9.5 s: under the 3 s cap it was never heard)
+        st = c.get("in", lead_silence(f))
+        d = c.get("dur") or min(3.0, duration(f) - st)
         loop = ",aloop=loop=-1:size=2e9" if c.get("dur") and c["dur"] > duration(f) else ""
-        chain += f"{loop},atrim=0:{d},afade=t=out:st={max(0, d - 0.2)}:d=0.2"
+        chain += f"{loop},atrim={st:.3f}:{st + d:.3f},asetpts=PTS-STARTPTS,afade=t=out:st={max(0, d - 0.2)}:d=0.2"
         ms = int(round(c["at"] * 1000))
         chain += f",volume={gain:.2f}dB,adelay={ms}|{ms}[s{n}]"
         parts.append(chain)

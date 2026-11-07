@@ -377,7 +377,14 @@ const Captions: React.FC<{ words: Word[]; per: number; y: number; shots: Shot[] 
   const { fps } = useVideoConfig();
   const t = frame / fps;
   const ps = pages(words, per);
-  const page = ps.find((p, i) => t >= p[0].start && t < (ps[i + 1]?.[0].start ?? p[p.length - 1].end + 0.6));
+  // a page also ends at a cut that comes after its last word, so finished words never leak onto the next shot
+  // (user review HCS03: "beating again" flashed on the corridor shot for 2-3 frames before "Today")
+  const endOf = (p: Word[], i: number) => {
+    const next = ps[i + 1]?.[0].start ?? p[p.length - 1].end + 0.6;
+    const cut = shots.find((s) => s.start >= p[p.length - 1].end && s.start < next);
+    return cut ? cut.start : next;
+  };
+  const page = ps.find((p, i) => t >= p[0].start && t < endOf(p, i));
   if (!page) return null;
   // the words take the position of the shot on screen NOW: at a cut they move with the picture, so a page that starts
   // on one shot never sits on the next shot's face (user review 2026-10-26, S3 "Four years later" on the canoe)

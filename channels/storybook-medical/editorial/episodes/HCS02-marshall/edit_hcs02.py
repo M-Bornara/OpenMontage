@@ -2,7 +2,7 @@
 projects/hcs02-marshall/episode.json. Every shot starts on its line's first word in the timed narration.
 Then: episode.py sfx -> music -> build -> mix -> render.
 Not in the rough cut yet (need masks): the wiggling spirals (s2b), the wagging tail (s5a), the green haze (s6), the pill
-bottle shake (s8), the stress zigzag flash (s3), 2.5D parallax on s2a (a slide stands in).
+bottle shake (s8), the phone handset rattle (s3), 2.5D parallax on s2a (a slide stands in).
     python channels/storybook-medical/editorial/episodes/HCS02-marshall/edit_hcs02.py
 """
 import json
@@ -59,7 +59,9 @@ c = Cut()
 c.shot(0.0, KF + "s1.png", push(0.3, 0.25, 1.22), cap=LOW)            # the beaker, upper left
 c.s("glass-clink", 0.4, -18)
 t = c.at("barry marshall")
-c.shot(t, KF + "s2a.png", {"type": "slide", "from": -3, "to": 3, "scale": 1.1}, cap=LOW)
+# FX: the brand "?" glint on Matt's spectacles on the reception counter (left lens, measured 0.666 / 0.689)
+c.shot(t, KF + "s2a.png", {"type": "slide", "from": -3, "to": 3, "scale": 1.1}, cap=LOW,
+       fx=[{"kind": "glint", "x": 0.671, "y": 0.689, "at": 1.1, "size": 30}])
 c.o("nameTag", t + 0.2, t + 2.2, text="Barry Marshall", sub="young doctor · Perth, 1984", y=190)
 t = c.at("and pathologist")
 t2b = t
@@ -72,11 +74,13 @@ c.shot(t2b, KF + "s2b.png", push(0.45, 0.3, 1.15), cap=LOW,           # v2: up f
 t = c.at("back then")
 t3 = t
 stress = c.at("stress")
-# FX: the drawn zigzag on his stomach flashes on "stress" (measured 0.48-0.73 / 0.50-0.58)
+# FX: the ringing phone IS the stress: its handset (fx_prep.py cut-out, clipped to its outline) rattles on its cradle
+# with each ring (user review: the zigzag flash meant nothing)
+RATTLE = {"kind": "shake", "mask": KF + "fx/s3-handset.mask.png", "bg": KF + "fx/s3-handset.clean.png", "hinge": [0.83, 0.628],
+          "dur": 0.75, "deg": 4, "amp": 0.005}
 c.shot(t3, KF + "s3.png", push(0.45, 0.55, 1.15), cap=TOP,
-       fx=[{"kind": "pulse", "cx": 0.61, "cy": 0.54, "rx": 0.15, "ry": 0.05, "at": rel(stress, t3), "dur": 0.3, "times": 2,
-            "gap": 0.32, "scale": 1.06, "bright": 1.55}])
-c.s("phone-ring-old", t + 0.1, -22)
+       fx=[{**RATTLE, "at": a} for a in (0.12, 0.82, 1.52)])             # through the 2 s ring burst
+c.s("phone-ring-old", t + 0.1, -22, dur=2.0)
 t = c.at("marshall said")
 c.shot(t, KF + "s4.png", push(0.35, 0.5, 1.18), cap=LOW)              # v2 reverse angle: push down the tiers to him
 c.s("kookaburra-laugh", c.at("believed"), -16)

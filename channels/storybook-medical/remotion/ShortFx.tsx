@@ -33,7 +33,15 @@ export type ShotFx =
   /** a glow travels along a measured path (blood warming through a tube), leaving the tube lit behind it */
   | { kind: "travel"; points: [number, number][]; at: number; dur: number; colors?: [string, string]; width?: number }
   /** a soft light blooms at a point and breathes */
-  | { kind: "glow"; x: number; y: number; r: number; at: number; dur?: number; color?: string; strength?: number };
+  | { kind: "glow"; x: number; y: number; r: number; at: number; dur?: number; color?: string; strength?: number }
+  /** a heart monitor trace: a sweep writes left -> right and wraps; flat until beatAt, then a heartbeat every period */
+  | { kind: "ecg"; x0: number; x1: number; y: number; amp: number; beatAt: number; period?: number; sweep?: number;
+      color?: string; width?: number }
+  /** the brand "?" glint: a small four-point star sparkles on one spot (Matt's spectacles), easy to miss */
+  | { kind: "glint"; x: number; y: number; at: number; size?: number; dur?: number }
+  /** a digital watch display counts up to its final reading over its painted digits (centre, angle, skew measured) */
+  | { kind: "lcd"; cx: number; cy: number; angle: number; skew?: number; h: number; from: number; to: number; at: number;
+      dur: number; bg: string; patch: [number, number]; ink?: string; blinkAfter?: number };
 
 const fill: React.CSSProperties = { position: "absolute", inset: 0, width: "100%", height: "100%" };
 const maskImg = (m: string): React.CSSProperties => ({
@@ -201,6 +209,106 @@ const Glow: React.FC<{ fx: Extract<ShotFx, { kind: "glow" }> }> = ({ fx }) => {
     background: `radial-gradient(circle, rgba(${c},${k}) 0%, rgba(${c},0) 70%)`, mixBlendMode: "screen" }} />;
 };
 
+// ── heart monitor ──────────────────────────────────────────────────────────────────────────────────────────
+const ECG_SHAPE: [number, number][] = [[0, 0], [0.05, 0.1], [0.09, 0], [0.12, -0.18], [0.155, 1], [0.19, -0.4], [0.22, 0],
+  [0.36, 0], [0.43, 0.24], [0.5, 0], [1, 0]];
+const ecgAt = (ph: number) => {
+  for (let i = 1; i < ECG_SHAPE.length; i++) {
+    const [a, va] = ECG_SHAPE[i - 1], [b, vb] = ECG_SHAPE[i];
+    if (ph <= b) return va + ((vb - va) * (ph - a)) / (b - a);
+  }
+  return 0;
+};
+const Ecg: React.FC<{ fx: Extract<ShotFx, { kind: "ecg" }> }> = ({ fx }) => {
+  const s = useCurrentFrame() / FPS;
+  const period = fx.period ?? 0.8, sweep = fx.sweep ?? 1.6;
+  // the R spike lands exactly on beatAt; before it the line is flat
+  const sig = (tau: number) => (tau < fx.beatAt - 0.155 * period ? 0
+    : ecgAt((((tau - fx.beatAt + 0.155 * period) / period) % 1 + 1) % 1));
+  const k = (s / sweep) % 1;
+  const lap = Math.floor(s / sweep);
+  const N = 160, gap = 0.05;
+  const cur: string[] = [], old: string[] = [];
+  for (let i = 0; i <= N; i++) {
+    const u = i / N;
+    const x = (fx.x0 + (fx.x1 - fx.x0) * u) * 1080;
+    if (u <= k) cur.push(`${x},${(fx.y - fx.amp * sig((lap + u) * sweep)) * 1920}`);
+    else if (u > k + gap && lap > 0) old.push(`${x},${(fx.y - fx.amp * sig((lap - 1 + u) * sweep)) * 1920}`);
+  }
+  const c = fx.color ?? "#7CFF9A", w = fx.width ?? 7;
+  const head = cur[cur.length - 1]?.split(",").map(Number);
+  const line = (pts: string[], o: number) => pts.length > 1 ? <polyline points={pts.join(" ")} fill="none" stroke={c} strokeWidth={w}
+    strokeLinejoin="round" strokeLinecap="round" opacity={o} style={{ filter: `drop-shadow(0 0 ${w}px ${c})` }} /> : null;
+  return (
+    <svg viewBox="0 0 1080 1920" style={fill}>
+      {line(old, 0.45)}
+      {line(cur, 1)}
+      {head ? <circle cx={head[0]} cy={head[1]} r={w * 0.9} fill="#EFFFF2" style={{ filter: `drop-shadow(0 0 ${w * 2}px ${c})` }} /> : null}
+    </svg>
+  );
+};
+
+// ── "?" glint on the spectacles ─────────────────────────────────────────────────────────────────────────────
+const Glint: React.FC<{ fx: Extract<ShotFx, { kind: "glint" }> }> = ({ fx }) => {
+  const s = useCurrentFrame() / FPS;
+  const dur = fx.dur ?? 0.7;
+  const p = (s - fx.at) / dur;
+  if (p <= 0 || p >= 1) return null;
+  const k = Math.sin(Math.PI * p);
+  const r = (fx.size ?? 34) * (0.3 + 0.7 * k);
+  const star = (a: number, l: number) => `M0,${-l} L${a},0 L0,${l} L${-a},0 Z M${-l},0 L0,${a} L${l},0 L0,${-a} Z`;
+  return (
+    <svg viewBox="0 0 1080 1920" style={fill}>
+      <g transform={`translate(${fx.x * 1080},${fx.y * 1920}) rotate(${p * 70})`} opacity={k}>
+        <circle r={r * 0.55} fill="rgba(255,236,190,0.55)" style={{ filter: "blur(6px)" }} />
+        <path d={star(r * 0.12, r)} fill="#FFFDF5" style={{ filter: "drop-shadow(0 0 6px #FFE6A8)" }} />
+        <path d={star(r * 0.08, r * 0.55)} fill="#FFFDF5" transform="rotate(45)" opacity={0.8} />
+      </g>
+    </svg>
+  );
+};
+
+// ── digital watch count-up: 7-segment digits drawn over a patch of the painted LCD ────────────────────────────
+const SEG: Record<string, string> = { "0": "abcdef", "1": "bc", "2": "abged", "3": "abgcd", "4": "fgbc", "5": "afgcd",
+  "6": "afgedc", "7": "abc", "8": "abcdefg", "9": "abcdfg" };
+const Digit: React.FC<{ d: string; x: number; w: number; h: number; t: number; ink: string }> = ({ d, x, w, h, t, ink }) => {
+  const on = SEG[d] ?? "";
+  const g = t * 0.25;
+  const H = (y: number) => `${x + g + t / 2},${y} ${x + t},${y - t / 2} ${x + w - t},${y - t / 2} ${x + w - g - t / 2},${y} ${x + w - t},${y + t / 2} ${x + t},${y + t / 2}`;
+  const V = (xx: number, y0: number, y1: number) => `${xx},${y0 + g} ${xx + t / 2},${y0 + t / 2 + g} ${xx + t / 2},${y1 - t / 2 - g} ${xx},${y1 - g} ${xx - t / 2},${y1 - t / 2 - g} ${xx - t / 2},${y0 + t / 2 + g}`;
+  const m = h / 2;
+  const segs: Record<string, string> = { a: H(t / 2), g: H(m), d: H(h - t / 2), f: V(x + t / 2, t / 2, m), b: V(x + w - t / 2, t / 2, m),
+    e: V(x + t / 2, m, h - t / 2), c: V(x + w - t / 2, m, h - t / 2) };
+  return <>{[...on].map((k) => <polygon key={k} points={segs[k]} fill={ink} />)}</>;
+};
+const Lcd: React.FC<{ fx: Extract<ShotFx, { kind: "lcd" }> }> = ({ fx }) => {
+  const s = useCurrentFrame() / FPS;
+  const p = interpolate(s, [fx.at, fx.at + fx.dur], [0, 1], { ...CL, easing: Easing.out(Easing.cubic) });
+  const v = Math.round(fx.from + (fx.to - fx.from) * p);          // seconds shown
+  const blink = fx.blinkAfter !== undefined && s > fx.at + fx.dur && s < fx.at + fx.dur + (fx.blinkAfter ?? 0)
+    && Math.floor((s - fx.at - fx.dur) / 0.25) % 2 === 1;
+  const txt = `${String(Math.floor(v / 60)).padStart(2, "0")}${String(v % 60).padStart(2, "0")}`;
+  const h = fx.h, w = h * 0.52, t = h * 0.15, gap = h * 0.16, colon = h * 0.3;
+  const total = 4 * w + 3 * gap + colon;
+  const xs = [0, w + gap, 2 * w + 2 * gap + colon, 3 * w + 3 * gap + colon];
+  const ink = fx.ink ?? "#121618";
+  const [pw, ph] = fx.patch;
+  return (
+    <svg viewBox="0 0 1080 1920" style={fill}>
+      <g transform={`translate(${fx.cx * 1080},${fx.cy * 1920}) rotate(${fx.angle}) skewX(${fx.skew ?? -10})`}>
+        <rect x={-pw / 2} y={-ph / 2} width={pw} height={ph} rx={ph * 0.2} fill={fx.bg} style={{ filter: "blur(2.5px)" }} />
+        {blink ? null : (
+          <g transform={`translate(${-total / 2},${-h / 2})`}>
+            {xs.map((x, i) => <Digit key={i} d={txt[i]} x={x} w={w} h={h} t={t} ink={ink} />)}
+            <rect x={2 * w + gap + colon / 2 + gap / 2 - t / 2} y={h * 0.27} width={t} height={t} fill={ink} />
+            <rect x={2 * w + gap + colon / 2 + gap / 2 - t / 2} y={h * 0.66} width={t} height={t} fill={ink} />
+          </g>
+        )}
+      </g>
+    </svg>
+  );
+};
+
 export const ShotFxLayer: React.FC<{ fx: ShotFx[]; src: string; shotId: string }> = ({ fx, src, shotId }) => {
   const f = useCurrentFrame();
   const s = f / FPS;
@@ -235,6 +343,9 @@ export const ShotFxLayer: React.FC<{ fx: ShotFx[]; src: string; shotId: string }
           case "tint": return <Tint key={id} fx={e} />;
           case "travel": return <Travel key={id} fx={e} />;
           case "glow": return <Glow key={id} fx={e} />;
+          case "ecg": return <Ecg key={id} fx={e} />;
+          case "glint": return <Glint key={id} fx={e} />;
+          case "lcd": return <Lcd key={id} fx={e} />;
           default: return null;
         }
       })}

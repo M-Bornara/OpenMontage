@@ -53,7 +53,9 @@ def _color(crop: Image.Image) -> np.ndarray:
     return far * 255
 
 
-def cut(image: str, name: str, box, how: str = "rembg", grow: int = 3, focus: float = 0.5, check: bool = False):
+def cut(image: str, name: str, box, how: str = "rembg", grow: int = 3, focus: float = 0.5, check: bool = False, poly=None):
+    """poly: optional outline [(x, y), ...] in frame fractions; the cut is clipped to it (keeps only that object
+    when rembg also grabs what touches it, e.g. the phone's cradle and the binders behind the handset)."""
     import cv2
     src = Path(image)
     im = Image.open(src).convert("RGB")
@@ -61,6 +63,11 @@ def cut(image: str, name: str, box, how: str = "rembg", grow: int = 3, focus: fl
     a = _rembg(im.crop((X0, Y0, X1, Y1))) if how == "rembg" else _color(im.crop((X0, Y0, X1, Y1)))
     full = np.zeros((im.height, im.width), np.uint8)
     full[Y0:Y1, X0:X1] = a
+    if poly:
+        clip = Image.new("L", im.size, 0)
+        pts = [frame_box(im, (x, y, x, y), focus)[:2] for x, y in poly]
+        ImageDraw.Draw(clip).polygon(pts, fill=255)
+        full = np.minimum(full, np.array(clip.filter(ImageFilter.GaussianBlur(2))))
     m = Image.fromarray(full).filter(ImageFilter.MaxFilter(grow * 2 + 1)).filter(ImageFilter.GaussianBlur(1.5))
     out = src.parent / "fx"
     out.mkdir(exist_ok=True)
@@ -91,5 +98,7 @@ if __name__ == "__main__":
     ap.add_argument("--how", default="rembg", choices=("rembg", "color"))
     ap.add_argument("--grow", type=int, default=3)
     ap.add_argument("--check", action="store_true")
+    ap.add_argument("--poly", help="x,y x,y ... outline in frame fractions")
     a = ap.parse_args()
-    cut(a.image, a.name, a.box, a.how, a.grow, check=a.check)
+    poly = [tuple(map(float, q.split(","))) for q in a.poly.split()] if a.poly else None
+    cut(a.image, a.name, a.box, a.how, a.grow, check=a.check, poly=poly)
