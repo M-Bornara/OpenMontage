@@ -24,6 +24,11 @@ def push(cx=0.5, cy=0.5, to=1.18, frm=1.04):
             "y": round(clamp(-(cy - 0.5) * to * 100), 2)}
 
 
+def rel(word_t, shot_t):
+    """A word's time in seconds after the shot starts (Cut.shot starts each shot 0.05 s before its first word)."""
+    return round(word_t - (shot_t - 0.05), 2)
+
+
 class Cut:
     def __init__(self):
         self.words = json.load(open(P / "artifacts/word_timestamps.json", encoding="utf-8"))
@@ -57,30 +62,51 @@ t = c.at("barry marshall")
 c.shot(t, KF + "s2a.png", {"type": "slide", "from": -3, "to": 3, "scale": 1.1}, cap=LOW)
 c.o("nameTag", t + 0.2, t + 2.2, text="Barry Marshall", sub="young doctor · Perth, 1984", y=190)
 t = c.at("and pathologist")
-c.shot(t, KF + "s2b.png", push(0.45, 0.3, 1.15), cap=LOW)             # v2: up from Warren to the glowing circle
+t2b = t
 c.o("nameTag", c.at("robin warren") + 0.1, t + 3.0, text="Robin Warren", sub="pathologist", y=190)
-c.s("bubbles", c.at("spiral") , -24)
+spiral = c.at("spiral")
+c.s("bubbles", spiral, -24)
+# FX: the spirals wiggle from "spiral" on (the microscope circle, measured: centre 0.50/0.215, radius 0.33 of the width)
+c.shot(t2b, KF + "s2b.png", push(0.45, 0.3, 1.15), cap=LOW,           # v2: up from Warren to the glowing circle
+       fx=[{"kind": "wiggle", "cx": 0.50, "cy": 0.215, "rx": 0.31, "ry": 0.175, "strength": 14, "period": 2.2, "from": rel(spiral, t2b)}])
 t = c.at("back then")
-c.shot(t, KF + "s3.png", push(0.45, 0.55, 1.15), cap=TOP)
+t3 = t
+stress = c.at("stress")
+# FX: the drawn zigzag on his stomach flashes on "stress" (measured 0.48-0.73 / 0.50-0.58)
+c.shot(t3, KF + "s3.png", push(0.45, 0.55, 1.15), cap=TOP,
+       fx=[{"kind": "pulse", "cx": 0.61, "cy": 0.54, "rx": 0.15, "ry": 0.05, "at": rel(stress, t3), "dur": 0.3, "times": 2,
+            "gap": 0.32, "scale": 1.06, "bright": 1.55}])
 c.s("phone-ring-old", t + 0.1, -22)
 t = c.at("marshall said")
 c.shot(t, KF + "s4.png", push(0.35, 0.5, 1.18), cap=LOW)              # v2 reverse angle: push down the tiers to him
 c.s("kookaburra-laugh", c.at("believed"), -16)
 t = c.at("the bacteria wouldnt")
-c.shot(t, KF + "s5a.png", push(0.6, 0.55, 1.2), cap=TOP)
+# FX: the curly tail (fx_prep.py cut-out) wags over its clean plate, hinged where it meets the back
+c.shot(t, KF + "s5a.png", push(0.6, 0.55, 1.2), cap=TOP,
+       fx=[{"kind": "wag", "mask": KF + "fx/s5a-tail.mask.png", "bg": KF + "fx/s5a-tail.clean.png", "hinge": [0.237, 0.538],
+            "deg": 14, "period": 0.45, "from": 0.2}])
 c.s("pig-oink", c.at("pigs"), -16)
 t = c.at("so he tested")
 c.shot(t, KF + "s5b.png", push(0.5, 0.4, 1.12), cap=TOP)              # v2 close-up at night; LOW sat on the beaker
 t = c.at("within days")
-c.shot(t, KF + "s6.png", push(0.4, 0.55, 1.12), cap=TOP)              # v2 corridor: toward him on his chair
+t6 = t
+breath = c.at("breath")
+# FX: a green haze drifts from him to the two colleagues on "breath" (along the painted haze, 0.20 -> 0.72)
+c.shot(t6, KF + "s6.png", push(0.4, 0.55, 1.12), cap=TOP,             # v2 corridor: toward him on his chair
+       fx=[{"kind": "particles", "style": "haze", "x": 0.21, "y": 0.47, "tx": 0.72, "ty": 0.43, "spread": 0.02, "size": 170,
+            "every": 0.12, "life": 1.8, "from": rel(breath, t6) - 0.3, "opacity": 0.4}])
 c.s("groan", t + 0.3, -18)
 t = c.at("on day 10")
 ten = c.at("10")
 c.shot(t, KF + "s7.png", push(0.5, 0.45, 1.2), cap=LOW)               # v2: the view fills the frame
 c.o("stamp", ten, ten + 1.8, text="DAY 10", y=1180); c.s("stamp-thud", ten + 0.05, -14)
 t = c.at("his wife")
-c.shot(t, KF + "s8.png", push(0.5, 0.45, 1.1), cap=TOP)               # v2: pale him in front, her with the pills behind
-c.s("pill-bottle-rattle", c.at("treat"), -16)
+treat = c.at("treat")
+# FX: the pill bottle (with her hand, fx_prep.py cut-out) gives one shake on "treat", pivoting at the wrist
+c.shot(t, KF + "s8.png", push(0.5, 0.45, 1.1), cap=TOP,               # v2: pale him in front, her with the pills behind
+       fx=[{"kind": "shake", "mask": KF + "fx/s8-bottle.mask.png", "bg": KF + "fx/s8-bottle.clean.png", "hinge": [0.56, 0.395],
+            "at": rel(treat, t), "dur": 0.7, "deg": 9, "amp": 0.004}])
+c.s("pill-bottle-rattle", treat, -16)
 t = c.at("21 years later")
 c.shot(t, KF + "s9a.png", {"type": "pull", "from": 1.3, "to": 1.04}, cap=LOW)
 c.o("stamp", t + 0.3, t + 2.6, text="2005", y=300); c.s("applause", c.at("nobel"), -20)

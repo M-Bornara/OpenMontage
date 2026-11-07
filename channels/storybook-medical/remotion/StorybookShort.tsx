@@ -14,6 +14,7 @@ import {
 } from "remotion";
 import { loadFont } from "@remotion/google-fonts/Montserrat";
 import { Clock } from "./Clock";
+import { ShotFx, ShotFxLayer } from "./ShortFx";
 
 const { fontFamily } = loadFont("normal", { weights: ["700", "800", "900"] });
 
@@ -52,6 +53,8 @@ export interface Shot {
   draw?: { points: [number, number][]; from: number; to: number; color?: string; width?: number; glow?: boolean }[];
   /** Colour drains to grey between from..to seconds after the shot starts. */
   grey?: { from: number; to: number };
+  /** Masked effects on measured objects (ShortFx.tsx), under the same camera transform as the picture. */
+  fx?: ShotFx[];
 }
 
 export type Overlay =
@@ -160,6 +163,11 @@ export const ShotLayer: React.FC<{ shot: Shot }> = ({ shot }) => {
       )}
       {lines.length ? (
         <svg viewBox="0 0 1080 1920" style={{ ...style, objectFit: undefined, objectPosition: undefined, filter: undefined }}>{lines}</svg>
+      ) : null}
+      {shot.fx?.length && shot.kind === "image" ? (
+        <div style={{ position: "absolute", inset: 0, transform: style.transform, overflow: "hidden" }}>
+          <ShotFxLayer fx={shot.fx} src={shot.src} shotId={shot.id} />
+        </div>
       ) : null}
       {shot.darken ? <AbsoluteFill style={{ backgroundColor: `rgba(0,0,0,${shot.darken})` }} /> : null}
       {shot.transitionIn === "flash" ? (

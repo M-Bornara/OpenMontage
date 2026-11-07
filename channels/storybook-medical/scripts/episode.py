@@ -86,7 +86,7 @@ TIERS = {
     "budget": ("nano-banana-2", "h3-max"),                      # tested on episode 2, ~$2.60
 }
 PREMIUM = TIERS["premium"]
-KIT_REMOTION = ("StorybookShort.tsx", "StorybookLong.tsx", "Clock.tsx", "Brand.tsx", "Fx.tsx", "Life.tsx", "Transitions.tsx", "MapScene.tsx", "Sections.tsx", "Animatic.tsx", "Puppet.tsx", "Stage.tsx", "Graphics.tsx", "Cut.tsx", "LabReels.tsx", "Three3D.tsx", "Root.tsx", "index.tsx")
+KIT_REMOTION = ("StorybookShort.tsx", "ShortFx.tsx", "StorybookLong.tsx", "Clock.tsx", "Brand.tsx", "Fx.tsx", "Life.tsx", "Transitions.tsx", "MapScene.tsx", "Sections.tsx", "Animatic.tsx", "Puppet.tsx", "Stage.tsx", "Graphics.tsx", "Cut.tsx", "LabReels.tsx", "Three3D.tsx", "Root.tsx", "index.tsx")
 
 
 def model_choice(ep: dict) -> tuple[str, str]:
@@ -587,7 +587,9 @@ def fit_frame(src: Path, dst: Path, size: tuple[int, int], focus: float = 0.5, k
     """Fit a still to the format without distortion. Normally: crop a window of the target aspect, centred on
     `focus` (0 = left/top edge, 1 = right/bottom), then resize. keep_full (for "pan" shots): keep the whole
     master and only scale it to the target height, so the template can slide across it."""
-    im = Image.open(src).convert("RGB")
+    im = Image.open(src)
+    alpha = dst.suffix.lower() == ".png"           # fx masks / clean plates (fx_prep.py): same crop, keep alpha
+    im = im.convert("RGBA" if alpha else "RGB")
     W, H = size
     if keep_full:
         h = H
@@ -603,6 +605,9 @@ def fit_frame(src: Path, dst: Path, size: tuple[int, int], focus: float = 0.5, k
         ch = round(im.width / target)
         y = round((im.height - ch) * min(1, max(0, focus)))
         im = im.crop((0, y, im.width, y + ch))
+    if alpha:
+        im.resize((W, H), Image.LANCZOS).save(dst)
+        return
     if im.width < W * 0.75:
         print(f"  WARNING {src.name}: only {im.width}px wide for a {W}px frame (quality rule: no soft crops)")
     im.resize((W, H), Image.LANCZOS).save(dst, "JPEG", quality=92)
@@ -640,6 +645,18 @@ def step_build(pid, *_):
                       "inPoint": s.get("in", 0), "motion": s.get("motion", {"type": "push"}),
                       "transitionIn": s.get("transition", "cut"), "darken": s.get("darken", 0),
                       **{k: s[k] for k in ("captionY", "draw", "grey") if k in s}})
+        if s.get("fx") and kind == "image":   # masks / plates go through the still's own crop, so they line up
+            (pub / "fx").mkdir(exist_ok=True)
+            fxs = []
+            for i, e in enumerate(s["fx"]):
+                e = dict(e)
+                for key in ("mask", "bg"):
+                    if key in e:
+                        out = pub / "fx" / f"{s['id']}-{i}-{key}.png"
+                        fit_frame(Path(resolve_ref(p.name, e[key])), out, frame_size, s.get("focus", 0.5))
+                        e[key] = f"fx/{out.name}"
+                fxs.append(e)
+            shots[-1]["fx"] = fxs
     # a dissolve needs the previous shot underneath it: overlap by 0.5 s
     for a, b in zip(shots, shots[1:]):
         if b["transitionIn"] == "dissolve":

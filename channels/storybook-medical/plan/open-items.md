@@ -29,8 +29,11 @@ Updated 2026-11-03.
 - [x] Storyboards HCS02 + HCS03 approved (2026-11-06); images, narration, music done ($2.58 for both).
 - [x] Rough cut 2: **HCS02 Marshall approved** (2026-11-06, "no issues"; loop kept). HCS03 Bågenholm rough cut 3 after the
       user's notes (frozen heart opening, clock hands end on the cut, 1.5 s hold after "doctor"): user checks it.
-- [ ] Next: mask FX for both (spirals, tail, pill shake, frost, bubbles, tubing glow, warm-up), then finals + publish
-      packages. Storyboards golden eye + Onesimus with the L28 decoupage.
+- [x] HCS03 rough cut 3 approved (2026-11-07).
+- [ ] **Mask FX rendered** (2026-11-07, ShortFx.tsx + fx_prep.py): Marshall spirals wiggle, zigzag flash, tail wag, green
+      haze, pill shake; Bågenholm heartbeat + frost, frost on the thermometer, mug steam + warm glow, spotlight on Anna,
+      bubbles, ski pull, blue-to-amber warm-up, glow through the tubing. User watches both renders/final.mp4.
+      Then: publish packages (covers, publish.md). Storyboards golden eye + Onesimus with the L28 decoupage.
 - [ ] **Remind at step 3 (Gage long images): fal balance** ($22.24 on Nov 5) — top up before.
 
 ## From 2026-10-26

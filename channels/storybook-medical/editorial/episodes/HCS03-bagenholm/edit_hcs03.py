@@ -39,6 +39,11 @@ def push(cx=0.5, cy=0.5, to=1.18, frm=1.04):
             "y": round(clamp(-(cy - 0.5) * to * 100), 2)}
 
 
+def rel(word_t, shot_t):
+    """A word's time in seconds after the shot starts (Cut.shot starts each shot 0.05 s before its first word)."""
+    return round(word_t - (shot_t - 0.05), 2)
+
+
 class Cut:
     def __init__(self):
         self.words = json.load(open(P / "artifacts/word_timestamps.json", encoding="utf-8"))
@@ -67,27 +72,48 @@ class Cut:
 
 c = Cut()
 # v2 decoupage (user review): one image per idea in the opening line, not one thermometer for all three
-c.shot(0.0, KF + "s1a.png", push(0.5, 0.45, 1.15), cap=LOW)         # v2: a frozen heart (the hand meant nothing)
+# FX: one last heartbeat (lub-dub) on the heart in the ice, then frost closes in from the edges
+c.shot(0.0, KF + "s1a.png", push(0.5, 0.45, 1.15), cap=LOW,         # v2: a frozen heart (the hand meant nothing)
+       fx=[{"kind": "pulse", "cx": 0.49, "cy": 0.47, "rx": 0.33, "ry": 0.25, "at": 0.3, "dur": 0.26, "times": 2, "gap": 0.3,
+            "scale": 1.035, "bright": 1.15},
+           {"kind": "frost", "from": 0.9, "to": 2.2, "reach": 62, "opacity": 0.85}])
 c.s("heartbeat", 0.3, -16)
 t = c.at("her body cooled")
-c.shot(t, KF + "s1b.png", push(0.45, 0.6, 1.25), cap=TOP)          # along the glass to the low red line
-c.s("ice-crack", t + 0.1, -24)
 seven = c.at("137")
+# FX: the frost keeps spreading over the thermometer until "13.7" lands
+c.shot(t, KF + "s1b.png", push(0.45, 0.6, 1.25), cap=TOP,          # along the glass to the low red line
+       fx=[{"kind": "frost", "from": -0.6, "to": rel(seven, t) + 0.3, "reach": 50, "opacity": 0.85}])
+c.s("ice-crack", t + 0.1, -24)
 c.o("stamp", seven + 0.3, seven + 2.6, text="13.7 °C", y=1180); c.s("stamp-thud", seven + 0.35, -14)
-c.shot(c.at("and she lived"), KF + "s1c.png", push(0.55, 0.5, 1.12), cap=TOP)   # warmth: the mug
+# FX: steam rises off the mug (along the painted steam) and a warm glow blooms on "lived"
+lived = c.at("and she lived")
+c.shot(lived, KF + "s1c.png", push(0.55, 0.5, 1.12), cap=TOP,      # warmth: the mug
+       fx=[{"kind": "particles", "style": "steam", "x": 0.57, "y": 0.44, "tx": 0.54, "ty": 0.2, "spread": 0.07, "size": 150,
+            "every": 0.16, "life": 2.2, "opacity": 0.42},
+           {"kind": "glow", "x": 0.57, "y": 0.5, "r": 0.5, "at": 0.25, "dur": 1.0, "strength": 0.35}])
 t = c.at("norway")
-c.shot(t, KF + "s2a.png", {"type": "slide", "from": -3, "to": 3, "scale": 1.1}, cap=LOW)
 anna = c.at("anna")
+# FX: everything but the red-jacket skier (measured 0.43 / 0.59) dims on her name
+c.shot(t, KF + "s2a.png", {"type": "slide", "from": -3, "to": 3, "scale": 1.1}, cap=LOW,
+       fx=[{"kind": "spot", "cx": 0.432, "cy": 0.59, "rx": 0.11, "ry": 0.075, "at": rel(anna, t), "dur": 2.2, "dim": 0.62}])
 c.o("nameTag", anna + 0.1, anna + 2.4, text="Anna Bågenholm", sub="young doctor · Norway, 1999", y=190)
 c.s("wind-snow", t, -26)
 t = c.at("when she went")
 c.shot(t, KF + "s2b.png", push(0.5, 0.45, 1.2), cap=TOP)            # ice level: the boots and skis
 c.s("ice-crack", c.at("headfirst"), -14)
 t = c.at("underneath")
-c.shot(t, KF + "s3.png", push(0.4, 0.4, 1.12), cap=LOW)             # her head in the air gap
-c.s("bubbles", t + 0.4, -20)
+breathing = c.at("breathing")
+# FX: small bubbles leave her lips (0.65 / 0.355) and rise to the ice like the painted ones, on "breathing"
+c.shot(t, KF + "s3.png", push(0.4, 0.4, 1.12), cap=LOW,             # her head in the air gap
+       fx=[{"kind": "particles", "style": "bubbles", "x": 0.652, "y": 0.352, "tx": 0.68, "ty": 0.305, "spread": 0.008, "size": 13,
+            "every": 0.2, "life": 1.0, "from": rel(breathing, t) - 0.1}])
+c.s("bubbles", breathing, -20)
 t = c.at("her friends held")
-c.shot(t, KF + "s4a.png", {"type": "static"}, cap=TOP)
+held = c.at("held")
+# FX: the skis + gloved hands (fx_prep.py cut-out) give one pull up out of the hole on "held"
+c.shot(t, KF + "s4a.png", {"type": "static"}, cap=TOP,
+       fx=[{"kind": "nudge", "mask": KF + "fx/s4a-hands.mask.png", "bg": KF + "fx/s4a-hands.clean.png", "at": rel(held, t) + 0.1,
+            "dur": 0.8, "dy": -0.009}])
 t = c.at("after about 40")
 forty = c.at("40")
 # the watch now reads 40:00 itself (user review: the blank screen), so no stamp
@@ -103,10 +129,18 @@ t = c.at("most people")
 c.shot(t, KF + "s6.png", {"type": "pull", "from": 1.2, "to": 1.04}, cap=TOP)
 c.s("helicopter", t, -24)
 t = c.at("but doctors have")
-c.shot(t, KF + "s7.png", push(0.5, 0.5, 1.2), cap=LOW)
+warm = c.at("warm")
+# FX: the cold blue night warms to amber on "warm"
+c.shot(t, KF + "s7.png", push(0.5, 0.5, 1.2), cap=LOW,
+       fx=[{"kind": "tint", "at": rel(warm, t) - 0.15, "dur": 1.1, "from": "rgba(40,90,190,0.55)", "to": "rgba(255,160,60,0.35)"}])
 c.s("door-swing", t + 0.1, -20)
 t = c.at("in tromsa")
-c.shot(t, KF + "s8.png", {"type": "slide", "from": 3, "to": -3, "scale": 1.1}, cap=TOP)
+hl = c.at("heartlung")
+# FX: a glow runs through the tubing (traced on the still) from the machine to the bed, blue -> amber, on "heart-lung"
+TUBE = [[0.367, 0.461], [0.459, 0.483], [0.552, 0.501], [0.617, 0.505], [0.70, 0.49], [0.774, 0.463], [0.848, 0.445],
+        [0.918, 0.45], [0.95, 0.476], [0.945, 0.505], [0.927, 0.536]]
+c.shot(t, KF + "s8.png", {"type": "slide", "from": 3, "to": -3, "scale": 1.1}, cap=TOP,
+       fx=[{"kind": "travel", "points": TUBE, "at": rel(hl, t) - 0.1, "dur": 1.8, "width": 16, "colors": ["rgba(110,180,255,1)", "rgba(255,150,50,1)"]}])
 c.s("machine-hum", t, -24)
 t = c.at("that night")
 beat = c.at("beating")
