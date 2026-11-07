@@ -30,11 +30,12 @@ Updated 2026-11-03.
 - [x] Rough cut 2: **HCS02 Marshall approved** (2026-11-06, "no issues"; loop kept). HCS03 Bågenholm rough cut 3 after the
       user's notes (frozen heart opening, clock hands end on the cut, 1.5 s hold after "doctor"): user checks it.
 - [x] HCS03 rough cut 3 approved (2026-11-07).
-- [ ] **FX v3 rendered** (2026-11-07) after the user's notes: monitor sweep, watch backlight on "forty" (painted digits
-      kept), "?" glint on both glasses, phone handset rattle (replaces the zigzag flash), captions end at a cut, SFX
-      leading silence skipped (the phone ring was silent before), Marshall 1 s hold before the loop. User checks both
-      renders/final.mp4, then publish packages. Matt: one cameo per video from now on (L29), in new shots only.
-      Storyboards golden eye + Onesimus with L28 + L29.
+- [x] FX v3 approved (2026-11-07): both Shorts final.
+- [ ] **HCS02 + HCS03 packages ready** (projects/hcs02-marshall + hcs03-bagenholm/renders/deliverables/): user reviews
+      cover + publish.md, then uploads: Marshall Tue Nov 17, Bågenholm Thu Nov 19, both 15:00 ET (14:00 AB); TikTok/FB
+      next day 18:00 ET; IG by hand. Related video = HC001-L. Playlists: Marshall → Crazy Science; Bågenholm → **new
+      "Impossible Survival"** (create it; cover via scripts/playlist_covers.py). Re-run playlist covers for Crazy Science.
+- [ ] Storyboards golden eye + Onesimus with L28 + L29 (Matt cameo).
 - [ ] **Remind at step 3 (Gage long images): fal balance** ($22.24 on Nov 5) — top up before.
 
 ## From 2026-10-26
