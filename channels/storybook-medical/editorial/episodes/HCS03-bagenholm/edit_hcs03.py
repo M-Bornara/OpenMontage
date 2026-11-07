@@ -67,7 +67,7 @@ class Cut:
 
 c = Cut()
 # v2 decoupage (user review): one image per idea in the opening line, not one thermometer for all three
-c.shot(0.0, KF + "s1a.png", push(0.45, 0.4, 1.15), cap=LOW)         # the gloved hand under the ice
+c.shot(0.0, KF + "s1a.png", push(0.5, 0.45, 1.15), cap=LOW)         # v2: a frozen heart (the hand meant nothing)
 c.s("heartbeat", 0.3, -16)
 t = c.at("her body cooled")
 c.shot(t, KF + "s1b.png", push(0.45, 0.6, 1.25), cap=TOP)          # along the glass to the low red line
@@ -114,19 +114,22 @@ beat = c.at("beating")
 c.shot(t, KF + "s9.png", {"type": "static"}, cap=LOW,
        draw=[{"points": FLAT, "from": 0.0, "to": 0.4, "color": "#7CFF9A", "width": 8, "glow": True},
              {"points": BEAT, "from": round(beat - t, 2), "to": round(beat - t + 1.2, 2), "color": "#7CFF9A", "width": 8, "glow": True}])
-c.o("clock", t, beat + 2.5, pin=PIN, marks=MARKS, **{"from": 10.25, "to": 10.25})
+clock_on = t
 c.s("monitor-beep", beat + 0.1, -16); c.s("monitor-beep", beat + 0.9, -16)
 t = c.at("today")
-c.shot(t, KF + "s10.png", push(0.5, 0.55, 1.15), cap=TOP, transition="dissolve")
+# the hands end on the cut (user review: they stayed on into the corridor while s9 dissolved away)
+c.o("clock", clock_on, t - 0.05, pin=PIN, marks=MARKS, **{"from": 10.25, "to": 10.25})
+c.shot(t, KF + "s10.png", push(0.5, 0.55, 1.15), cap=TOP)
 c.s("running-footsteps", t + 0.2, -28)
 
-total = round(c.words[-1]["end"] + 0.8, 2)
+TAIL = 1.5                                       # user review: hold the last shot after "doctor"
+total = round(c.words[-1]["end"] + 0.8 + TAIL, 2)
 c.shots.sort(key=lambda x: x["start"])
 for i, x in enumerate(c.shots):
     x["end"] = c.shots[i + 1]["start"] if i + 1 < len(c.shots) else total
 
 ep = json.load(open(P / "episode.json", encoding="utf-8"))
-ep.update({"loop": True, "shots": c.shots, "overlays": sorted(c.ov, key=lambda x: x["start"]), "sfx": sorted(c.fx, key=lambda x: x["at"]),
+ep.update({"loop": True, "tail_seconds": TAIL, "shots": c.shots, "overlays": sorted(c.ov, key=lambda x: x["start"]), "sfx": sorted(c.fx, key=lambda x: x["at"]),
            "glasses": "s6: Matt's spectacles on the snowy rock in the foreground"})
 ep["music"] = {"lufs": -22, "selected": "m1", "prompts": {
     "m1": "Instrumental, cold and suspenseful Nordic score for a true survival story: soft felt piano, glassy high "

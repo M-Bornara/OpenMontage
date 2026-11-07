@@ -27,10 +27,10 @@ Updated 2026-11-03.
 - [x] **Script batch 2 approved** (2026-11-06): HCS08 John Snow (Wed Nov 25), HCS09 Semmelweis (Fri Nov 27) (research.md, script v1).
       Mix rule: max one non-Western story a week (upload-schedule.md).
 - [x] Storyboards HCS02 + HCS03 approved (2026-11-06); images, narration, music done ($2.58 for both).
-- [ ] **Rough cuts HCS02 Marshall + HCS03 Bågenholm** (projects/hcs02-marshall/renders/final.mp4 41.0 s,
-      projects/hcs03-bagenholm/renders/final.mp4 43.1 s): user reviews. Open: Bågenholm s2b (boots apart from the skis),
-      s3 (air pocket drawn as a bubble round her head); Marshall s8 (wife not in the doorway). Mask FX still to add
-      (spirals, tail, pill shake, frost, glow, warm-up). Next storyboards: golden eye + Onesimus.
+- [x] Rough cut 2: **HCS02 Marshall approved** (2026-11-06, "no issues"; loop kept). HCS03 Bågenholm rough cut 3 after the
+      user's notes (frozen heart opening, clock hands end on the cut, 1.5 s hold after "doctor"): user checks it.
+- [ ] Next: mask FX for both (spirals, tail, pill shake, frost, bubbles, tubing glow, warm-up), then finals + publish
+      packages. Storyboards golden eye + Onesimus with the L28 decoupage.
 - [ ] **Remind at step 3 (Gage long images): fal balance** ($22.24 on Nov 5) — top up before.
 
 ## From 2026-10-26

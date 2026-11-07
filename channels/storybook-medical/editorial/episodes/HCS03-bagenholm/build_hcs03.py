@@ -68,12 +68,15 @@ RIV = "Reference 1 is this river and these mountains (style, colours, light). "
 KEYFRAMES = {
     # v2 (user review): v1 held one thermometer over three ideas. Now one image per idea: the stopped heart (a hand
     # under the ice), the 13.7 degrees (the v1 thermometer, kept), and "she lived" (warmth).
-    "s1a": dict(aspect="9:16", refs=["ref:plate-river", S],
-        roles="Reference 1 is for the painting style and palette only. Reference 2 shows the skier's red glove and jacket. ",
-        prompt=f"{UNDER} {framing('ECU', 'from below the ice, looking up', '50 mm', 'a red-gloved hand rests flat and still against the underside of the ice', 'silent, frozen, ominous')} "
-               f"{cast(ANNA + ', only one hand in a red ski glove and the cuff of the red sleeve visible, nothing else of her')} "
-               "The thick ice fills the top of the frame like a frosted ceiling, faint light glowing through it; the "
-               f"hand is in the centre, pressed against it. Deep blue below. {SAFE_FRAMING} {PERIOD} {NO_TEXT}"),
+    # v3 (user review): the gloved hand under the ice meant nothing on "her heart stopped". Now the heart itself, frozen.
+    "s1a": dict(aspect="9:16", refs=["ref:plate-river"],
+        roles="Reference 1 is for the painting style and palette only. ",
+        prompt="SET: a storybook anatomy painting, cold blue, 1999. "
+               f"{framing('ECU', 'straight on', '100 mm macro', 'a human heart has stopped, frozen still inside a block of ice', 'silent, frozen, ominous but beautiful, not gory')} "
+               "A softly painted anatomical human heart, muted dusty red, held motionless inside a clear block of blue "
+               "ice, frost crystals growing over its surface, fine cracks in the ice, a faint cold glow. The heart is "
+               "in the centre and fills the middle 60% of the frame; deep blue darkness all around. No blood, no body. "
+               f"{NO_PEOPLE} {FULL_BLEED} {SAFE_FRAMING} {NO_TEXT}"),
     "s1b": dict(aspect="9:16", resolution="4K", refs=["ref:plate-river"],
         roles=RIV,
         prompt=f"{RIVER} {framing('ECU', 'top-down', '100 mm macro', 'the thermometer reads a deadly low body temperature', 'cold')} "

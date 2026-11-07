@@ -620,7 +620,8 @@ def step_build(pid, *_):
     (pub / "img").mkdir(parents=True, exist_ok=True)
     (pub / "vid").mkdir(parents=True, exist_ok=True)
     words_raw = json.load(open(p / "artifacts/word_timestamps.json", encoding="utf-8"))
-    total = round(duration(p / "assets/audio/narration.wav"), 2)
+    # "tail_seconds": the picture holds after the last word (user review HCS03: the video ended on "doctor")
+    total = round(duration(p / "assets/audio/narration.wav") + ep.get("tail_seconds", 0), 2)
     long = ep.get("format", "short") == "long"
     frame_size = (3840, 2160) if long else (1440, 2560)
     shots = []
