@@ -35,6 +35,7 @@ Updated 2026-11-03.
       cover + publish.md, then uploads: Marshall Tue Nov 17, Bågenholm Thu Nov 19, both 15:00 ET (14:00 AB); TikTok/FB
       next day 18:00 ET; IG by hand. Related video = HC001-L. Playlists: Marshall → Crazy Science; Bågenholm → **new
       "Impossible Survival"** (create it on upload; cover ready in projects/_playlists/renders/).
+- [ ] **Promotion research done** (2026-11-08, plan/promotion-research.md): no automated posting (spam policy). User, free: Reddit account warm-up, check Posts tab eligibility, first poll. Nov 15 review decides: comment inbox (YouTube API + Meta) and opportunity finder (drafts only, user posts).
 - [ ] Storyboards golden eye + Onesimus with L28 + L29 (Matt cameo).
 - [ ] **Remind at step 3 (Gage long images): fal balance** ($22.24 on Nov 5) — top up before.
 
