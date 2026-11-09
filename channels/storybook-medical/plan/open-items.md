@@ -19,7 +19,7 @@ Updated 2026-11-03.
       and schedules Sun Nov 15, 15:00 ET (14:00 AB); TikTok/FB Mon Nov 16 18:00 ET; IG by hand. Related video = HC001-L (public from Nov 8).
 - [ ] **Playlist covers** (projects/_playlists/renders/, 1280x720): Season Zero, Season Zero · Alexis St. Martin, new playlist
       "Crazy Science (true stories)". User uploads on YouTube (Studio → Content → Playlists → Edit → thumbnail) and Facebook.
-      Re-run scripts/playlist_covers.py when Marshall joins Crazy Science.
+      Crazy Science cover re-made with Marshall in front (Nov 8); Impossible Survival cover made (Nov 8): upload both.
 - [x] **Script batch 1 approved** (2026-11-06): Marshall, Bågenholm ("you're not dead until you're warm and dead"),
       golden eye, al-Razi (moved to Dec 7; born in Rey, not Shiraz; "discovered alcohol" disputed, kept out), Onesimus
       ("grenade", not "bomb"), Finlay. Still to verify before each storybook: Bågenholm "held on to her skis", eye in the
@@ -34,7 +34,7 @@ Updated 2026-11-03.
 - [ ] **HCS02 + HCS03 packages ready** (projects/hcs02-marshall + hcs03-bagenholm/renders/deliverables/): user reviews
       cover + publish.md, then uploads: Marshall Tue Nov 17, Bågenholm Thu Nov 19, both 15:00 ET (14:00 AB); TikTok/FB
       next day 18:00 ET; IG by hand. Related video = HC001-L. Playlists: Marshall → Crazy Science; Bågenholm → **new
-      "Impossible Survival"** (create it; cover via scripts/playlist_covers.py). Re-run playlist covers for Crazy Science.
+      "Impossible Survival"** (create it on upload; cover ready in projects/_playlists/renders/).
 - [ ] Storyboards golden eye + Onesimus with L28 + L29 (Matt cameo).
 - [ ] **Remind at step 3 (Gage long images): fal balance** ($22.24 on Nov 5) — top up before.
 

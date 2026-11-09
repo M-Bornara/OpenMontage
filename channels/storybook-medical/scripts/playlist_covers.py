@@ -23,10 +23,14 @@ PLAYLISTS = {
     "strange-medical-cases": dict(name="Strange Medical Cases", kicker="TRUE STORIES", lines=["STRANGE", "MEDICAL", "CASES"], size=104,
                                   panels=[(P / f"hc001-window-into-his-stomach/assets/images/thumbnails/{n}.png", fx)
                                           for n, fx in (("A", 0.3), ("B", 0.8), ("C", 0.25))]),
-    # one story so far: swap a panel for Marshall (HCS02) when it's out
+    # Forssmann (HCS01) at the back, Marshall (HCS02) drinking the bacteria in front
     "crazy-science": dict(name="Crazy Science (true stories)", kicker="TRUE STORIES", lines=["CRAZY", "SCIENCE"],
-                          panels=[(P / "hcs01-forssmann/assets/images/keyframes/s2.png", 0.5), (P / "hcs01-forssmann/assets/images/keyframes/s6a.png", 0.55),
-                                  (P / "hcs01-forssmann/assets/images/keyframes/s8b.png", 0.45)]),
+                          panels=[(P / "hcs01-forssmann/assets/images/keyframes/s6a.png", 0.55), (P / "hcs02-marshall/assets/images/keyframes/s5b.png", 0.4),
+                                  (P / "hcs01-forssmann/assets/images/keyframes/s2.png", 0.5)]),
+    # Bågenholm (HCS03): skis out of the hole, her face in the air gap in front, the frozen heart
+    "impossible-survival": dict(name="Impossible Survival", kicker="TRUE STORIES", lines=["IMPOSSIBLE", "SURVIVAL"], size=86,
+                                panels=[(P / "hcs03-bagenholm/assets/images/keyframes/s2b.png", 0.45), (P / "hcs03-bagenholm/assets/images/keyframes/s3.png", 0.35),
+                                        (P / "hcs03-bagenholm/assets/images/keyframes/s1a.png", 0.5)]),
 }
 W, H = 2560, 1440
 PH, PW = 880, 660                        # 3:4 panels: the action part of each 9:16 frame (Shorts covers keep an empty text band at the bottom)
