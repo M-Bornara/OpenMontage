@@ -2,6 +2,17 @@
 
 Length 42.0s · 1080×1920 · -14 LUFS · loops seamlessly
 
+## Publish times
+
+| Platform | When | Scheduled in |
+|---|---|---|
+| YouTube Shorts | **Tue Nov 17, 15:00 ET = 14:00 Alberta** | YouTube Studio |
+| TikTok | **Wed Nov 18, 18:00 ET = 17:00 Alberta** | TikTok Studio (web) |
+| Instagram Reel | **Wed Nov 18, 18:00 ET = 17:00 Alberta** | Meta Business Suite → Planner |
+| Facebook Reel | **Wed Nov 18, 18:00 ET = 17:00 Alberta** | Meta Business Suite → Planner |
+
+First comments can't be scheduled: post + pin them when each post goes live.
+
 ## YouTube Shorts
 **Title:** The Doctor Who Drank Bacteria
 
@@ -73,16 +84,22 @@ Educational historical content. Not medical advice.
 | Visibility | upload as Private, watch it once, then **Schedule: Tue Nov 17, 15:00 ET = 14:00 Alberta** |
 
 ## Tiktok
+**Publish:** Wed Nov 18, 18:00 ET = 17:00 Alberta
+
 ```
 1984: nobody believed bacteria caused ulcers, so this doctor drank them. His wife had the last word. #history #medicalhistory #truestory #oddlymatt
 ```
 
 ## Instagram
+**Publish:** Wed Nov 18, 18:00 ET = 17:00 Alberta
+
 ```
 1984: nobody believed bacteria caused ulcers, so this doctor drank them. His wife had the last word. #history #medicalhistory #truestory #oddlymatt
 ```
 
 ## Facebook
+**Publish:** Wed Nov 18, 18:00 ET = 17:00 Alberta
+
 ```
 1984: nobody believed bacteria caused ulcers, so this doctor drank them. His wife had the last word. #history #medicalhistory #truestory #oddlymatt
 ```

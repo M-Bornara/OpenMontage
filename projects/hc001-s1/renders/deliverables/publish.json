@@ -3,7 +3,7 @@
     "image": "proj:assets/images/covers/cover.png",
     "textY": 1240,
     "title": "He Survived",
-    "kicker": "MACKINAC \u00b7 1822",
+    "kicker": "MACKINAC · 1822",
     "accent": [
       "SURVIVED"
     ]
@@ -28,19 +28,39 @@
       "#medicalhistory",
       "#oddlymatt"
     ],
-    "pinned_comment": "Alexis refused the surgery that could have closed it. Would you have said no? \ud83e\udd14",
+    "pinned_comment": "Alexis refused the surgery that could have closed it. Would you have said no? 🤔",
     "related_video": "The Man With a Window Into His Stomach",
-    "playlists": "Season Zero \u00b7 Alexis St. Martin",
+    "playlists": "Season Zero · Alexis St. Martin",
     "schedule": "Wed Nov 11, 15:00 ET = 14:00 Alberta",
-    "full_description": "1822, Mackinac Island. A musket went off by accident less than a meter from Alexis St. Martin, an 18-year-old canoeman. For 17 days, everything he swallowed came back out through the wound. He should have died. He lived 58 more years, with an opening into his stomach that never closed.\n\nThe full story, from the accident to the last letter: \"The Man With a Window Into His Stomach\" (linked above).\n\nSOURCES\n- William Beaumont, Experiments and Observations on the Gastric Juice, and the Physiology of Digestion (1833). https://archive.org/details/2543009R.nlm.nih.gov\n- William Osler, \"William Beaumont: A Backwoods Physiologist\" (1902). https://archive.org/details/b31349092\n- Becker Medical Library, Washington University. https://becker.wustl.edu/news/william-beaumonts-momentous-and-unethical-experiments/\n\nCREDITS\n\nMusic: original, generated with MiniMax Music v2.\nNarration: ElevenLabs v3 (voice: Liam). Illustrations/animation: AI-assisted, art-directed.\n\nSound effects from Freesound.org:\n- 2 CC0 (public domain) sounds\n\nIllustrations are AI-assisted artistic reconstructions based on the cited historical record. Research, scripting, editorial decisions and final production are human-directed.\n\nEducational historical content. Not medical advice.\n\n#history #medicalhistory #oddlymatt"
+    "full_description": "1822, Mackinac Island. A musket went off by accident less than a meter from Alexis St. Martin, an 18-year-old canoeman. For 17 days, everything he swallowed came back out through the wound. He should have died. He lived 58 more years, with an opening into his stomach that never closed.\n\nThe full story, from the accident to the last letter: \"The Man With a Window Into His Stomach\" (linked above).\n\nSOURCES\n- William Beaumont, Experiments and Observations on the Gastric Juice, and the Physiology of Digestion (1833). https://archive.org/details/2543009R.nlm.nih.gov\n- William Osler, \"William Beaumont: A Backwoods Physiologist\" (1902). https://archive.org/details/b31349092\n- Becker Medical Library, Washington University. https://becker.wustl.edu/news/william-beaumonts-momentous-and-unethical-experiments/\n\nCREDITS\n\nMusic: original, generated with MiniMax Music v2.\nNarration: ElevenLabs v3 (voice: Liam). Illustrations/animation: AI-assisted, art-directed.\n\nSound effects from Freesound.org:\n- 2 CC0 (public domain) sounds\n\nIllustrations are AI-assisted artistic reconstructions based on the cited historical record. Research, scripting, editorial decisions and final production are human-directed.\n\nEducational historical content. Not medical advice.\n\n#history #medicalhistory #oddlymatt",
+    "publish_at": {
+      "date": "2026-11-11",
+      "et": "15:00",
+      "alberta": "14:00"
+    }
   },
   "tiktok": {
-    "caption": "He was shot from less than a meter away in 1822, and lived 58 more years with a hole in his stomach. True story. #history #medicalhistory #truestory #oddlymatt"
+    "caption": "He was shot from less than a meter away in 1822, and lived 58 more years with a hole in his stomach. True story. #history #medicalhistory #truestory #oddlymatt",
+    "publish_at": {
+      "date": "2026-11-12",
+      "et": "18:00",
+      "alberta": "17:00"
+    }
   },
   "instagram": {
-    "caption": "He was shot from less than a meter away in 1822, and lived 58 more years with a hole in his stomach. True story. #history #medicalhistory #truestory #oddlymatt"
+    "caption": "He was shot from less than a meter away in 1822, and lived 58 more years with a hole in his stomach. True story. #history #medicalhistory #truestory #oddlymatt",
+    "publish_at": {
+      "date": "2026-11-12",
+      "et": "18:00",
+      "alberta": "17:00"
+    }
   },
   "facebook": {
-    "caption": "He was shot from less than a meter away in 1822, and lived 58 more years with a hole in his stomach. True story. #history #medicalhistory #truestory #oddlymatt"
+    "caption": "He was shot from less than a meter away in 1822, and lived 58 more years with a hole in his stomach. True story. #history #medicalhistory #truestory #oddlymatt",
+    "publish_at": {
+      "date": "2026-11-12",
+      "et": "18:00",
+      "alberta": "17:00"
+    }
   }
 }

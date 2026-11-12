@@ -1,6 +1,6 @@
 # Open items: read at the start of every session; mention anything due or unresolved
 
-Updated 2026-11-08.
+Updated 2026-11-11.
 
 ## Social media (2026-11-11)
 - [x] HC001-S1 pinned comment on YouTube: done by the user 2026-11-11.
@@ -13,6 +13,10 @@ Updated 2026-11-08.
 - [ ] Instagram + Facebook are scheduled in Meta Business Suite → Planner: the "post Instagram by hand at 17:00" reminders below are retired.
 - [x] 2-step verification on Google, TikTok, Instagram, Facebook: done by the user 2026-11-11.
 - [x] claude.ai Project "Oddly Matt" set up (instructions + knowledge from claude-project/, re-uploaded 2026-11-11); Metricool (all 4 platforms) and vidIQ (YouTube) connected. TikTok: stays a personal account; verification badge later, once there is press coverage.
+
+- [x] **Publish times per platform** added to every unreleased package (2026-11-11): a "Publish times" table at the top of each publish.md (S1 socials, S3, HCS01-04, HCS06, HCS08, HCS09) + `publish_at` in publish.json. Captions of the older packages left as one shared caption on purpose: they are the C001 baseline.
+- [ ] **Commit regularly** (2026-11-11): Claude Code, the claude.ai Project and the daily comment agent all edit this folder. Commit at the end of every working session and after every approved package. publish.md/publish.json are tracked now (force-added; projects/ is gitignored): a new package needs `git add -f`.
+- [ ] **Comment agent check**: editorial/comments-log.csv doesn't exist yet: confirm the daily run reaches the repo + the Oddly Matt Chrome profile. Skill fix (claude.ai): Shorts have no claims.csv; facts are in the claims table in research.md.
 
 ## Decisions waiting for the user
 - [x] editing-v2 approved (2026-10-19); the original structure is kept (see section 0).

@@ -2,6 +2,17 @@
 
 Length 46.9s · 1080×1920 · -14 LUFS · loops seamlessly
 
+## Publish times
+
+| Platform | When | Scheduled in |
+|---|---|---|
+| YouTube Shorts | **Fri Nov 27, 15:00 ET = 14:00 Alberta** | YouTube Studio |
+| TikTok | **Sat Nov 28, 18:00 ET = 17:00 Alberta** | TikTok Studio (web) |
+| Instagram Reel | **Sat Nov 28, 18:00 ET = 17:00 Alberta** | Meta Business Suite → Planner |
+| Facebook Reel | **Sat Nov 28, 18:00 ET = 17:00 Alberta** | Meta Business Suite → Planner |
+
+First comments can't be scheduled: post + pin them when each post goes live.
+
 ## YouTube Shorts
 **Title:** They Hated Him for Saying "Wash Your Hands"
 
@@ -70,6 +81,8 @@ Educational historical content. Not medical advice.
 | Visibility | upload as Private, watch it once, then **Schedule: Fri Nov 27, 15:00 ET = 14:00 Alberta** |
 
 ## Tiktok
+**Publish:** Sat Nov 28, 18:00 ET = 17:00 Alberta
+
 **Caption:**
 ```
 Ignaz Semmelweis and handwashing, Vienna 1847 🧼 A doctor told other doctors to wash their hands. Deaths fell, and many of them still refused to believe him.
@@ -87,6 +100,8 @@ More true stories: search Oddly Matt on YouTube
 **Playlist:** none
 
 ## Instagram
+**Publish:** Sat Nov 28, 18:00 ET = 17:00 Alberta
+
 **Caption:**
 ```
 1847, Vienna: a doctor told other doctors to wash their hands. Many refused, and he lost his job.
@@ -107,6 +122,8 @@ More true stories: link in bio
 **Playlist:** none (Instagram has no playlists)
 
 ## Facebook
+**Publish:** Sat Nov 28, 18:00 ET = 17:00 Alberta
+
 **Caption:**
 ```
 In 1847, about one mother in ten was dying of fever in the doctors' maternity clinic at Vienna's General Hospital.

@@ -2,6 +2,17 @@
 
 Length 44.6s · 1080×1920 · -14 LUFS · loops seamlessly
 
+## Publish times
+
+| Platform | When | Scheduled in |
+|---|---|---|
+| YouTube Shorts | **Thu Nov 19, 15:00 ET = 14:00 Alberta** | YouTube Studio |
+| TikTok | **Fri Nov 20, 18:00 ET = 17:00 Alberta** | TikTok Studio (web) |
+| Instagram Reel | **Fri Nov 20, 18:00 ET = 17:00 Alberta** | Meta Business Suite → Planner |
+| Facebook Reel | **Fri Nov 20, 18:00 ET = 17:00 Alberta** | Meta Business Suite → Planner |
+
+First comments can't be scheduled: post + pin them when each post goes live.
+
 ## YouTube Shorts
 **Title:** She Was Trapped Under Ice for 80 Minutes
 
@@ -68,16 +79,22 @@ Educational historical content. Not medical advice.
 | Visibility | upload as Private, watch it once, then **Schedule: Thu Nov 19, 15:00 ET = 14:00 Alberta** |
 
 ## Tiktok
+**Publish:** Fri Nov 20, 18:00 ET = 17:00 Alberta
+
 ```
 1999: she fell through river ice and was under for 80 minutes. Her body hit 13.7 °C. She lived. #survival #medicalhistory #truestory #oddlymatt
 ```
 
 ## Instagram
+**Publish:** Fri Nov 20, 18:00 ET = 17:00 Alberta
+
 ```
 1999: she fell through river ice and was under for 80 minutes. Her body hit 13.7 °C. She lived. #survival #medicalhistory #truestory #oddlymatt
 ```
 
 ## Facebook
+**Publish:** Fri Nov 20, 18:00 ET = 17:00 Alberta
+
 ```
 1999: she fell through river ice and was under for 80 minutes. Her body hit 13.7 °C. She lived. #survival #medicalhistory #truestory #oddlymatt
 ```

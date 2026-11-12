@@ -3,7 +3,7 @@
     "image": "proj:assets/images/covers/cover.png",
     "textY": 330,
     "title": "He Kept Leaving",
-    "kicker": "1825 \u00b7 1852",
+    "kicker": "1825 · 1852",
     "accent": [
       "LEAVING"
     ]
@@ -29,19 +29,39 @@
       "#medicalhistory",
       "#oddlymatt"
     ],
-    "pinned_comment": "Who was right: Alexis \ud83d\udef6 or Beaumont \ud83e\ude7a?",
+    "pinned_comment": "Who was right: Alexis 🛶 or Beaumont 🩺?",
     "related_video": "The Man With a Window Into His Stomach",
-    "playlists": "Season Zero \u00b7 Alexis St. Martin",
+    "playlists": "Season Zero · Alexis St. Martin",
     "schedule": "Fri Nov 13, 15:00 ET = 14:00 Alberta",
-    "full_description": "The most famous stomach in medical history belonged to a man who kept leaving. Alexis St. Martin walked away from Dr. Beaumont in 1825, was brought back with his wife and two children, signed a contract as a \"covenant servant\" in 1833, and then never went back, despite 18 years of letters and bigger offers.\n\nThe full story, from the accident to the last letter: \"The Man With a Window Into His Stomach\" (linked above).\n\nSOURCES\n- William Beaumont, Experiments and Observations on the Gastric Juice, and the Physiology of Digestion (1833). https://archive.org/details/2543009R.nlm.nih.gov\n- William Osler, \"William Beaumont: A Backwoods Physiologist\" (1902). https://archive.org/details/b31349092\n- Becker Medical Library, Washington University. https://becker.wustl.edu/news/william-beaumonts-momentous-and-unethical-experiments/\n\nCREDITS\n\nMusic: original, generated with MiniMax Music v2.\nNarration: ElevenLabs v3 (voice: Liam). Illustrations/animation: AI-assisted, art-directed.\n\nSound effects from Freesound.org:\n- 2 CC0 (public domain) sounds\n\nIllustrations are AI-assisted artistic reconstructions based on the cited historical record. Research, scripting, editorial decisions and final production are human-directed.\n\nEducational historical content. Not medical advice.\n\n#history #medicalhistory #oddlymatt"
+    "full_description": "The most famous stomach in medical history belonged to a man who kept leaving. Alexis St. Martin walked away from Dr. Beaumont in 1825, was brought back with his wife and two children, signed a contract as a \"covenant servant\" in 1833, and then never went back, despite 18 years of letters and bigger offers.\n\nThe full story, from the accident to the last letter: \"The Man With a Window Into His Stomach\" (linked above).\n\nSOURCES\n- William Beaumont, Experiments and Observations on the Gastric Juice, and the Physiology of Digestion (1833). https://archive.org/details/2543009R.nlm.nih.gov\n- William Osler, \"William Beaumont: A Backwoods Physiologist\" (1902). https://archive.org/details/b31349092\n- Becker Medical Library, Washington University. https://becker.wustl.edu/news/william-beaumonts-momentous-and-unethical-experiments/\n\nCREDITS\n\nMusic: original, generated with MiniMax Music v2.\nNarration: ElevenLabs v3 (voice: Liam). Illustrations/animation: AI-assisted, art-directed.\n\nSound effects from Freesound.org:\n- 2 CC0 (public domain) sounds\n\nIllustrations are AI-assisted artistic reconstructions based on the cited historical record. Research, scripting, editorial decisions and final production are human-directed.\n\nEducational historical content. Not medical advice.\n\n#history #medicalhistory #oddlymatt",
+    "publish_at": {
+      "date": "2026-11-13",
+      "et": "15:00",
+      "alberta": "14:00"
+    }
   },
   "tiktok": {
-    "caption": "The most famous stomach in medical history belonged to a man who kept walking away. #history #medicalhistory #truestory #oddlymatt"
+    "caption": "The most famous stomach in medical history belonged to a man who kept walking away. #history #medicalhistory #truestory #oddlymatt",
+    "publish_at": {
+      "date": "2026-11-14",
+      "et": "18:00",
+      "alberta": "17:00"
+    }
   },
   "instagram": {
-    "caption": "The most famous stomach in medical history belonged to a man who kept walking away. #history #medicalhistory #truestory #oddlymatt"
+    "caption": "The most famous stomach in medical history belonged to a man who kept walking away. #history #medicalhistory #truestory #oddlymatt",
+    "publish_at": {
+      "date": "2026-11-14",
+      "et": "18:00",
+      "alberta": "17:00"
+    }
   },
   "facebook": {
-    "caption": "The most famous stomach in medical history belonged to a man who kept walking away. #history #medicalhistory #truestory #oddlymatt"
+    "caption": "The most famous stomach in medical history belonged to a man who kept walking away. #history #medicalhistory #truestory #oddlymatt",
+    "publish_at": {
+      "date": "2026-11-14",
+      "et": "18:00",
+      "alberta": "17:00"
+    }
   }
 }

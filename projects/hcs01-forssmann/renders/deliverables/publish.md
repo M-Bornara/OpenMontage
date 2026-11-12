@@ -2,6 +2,17 @@
 
 Length 45.9s · 1080×1920 · -14 LUFS · loops seamlessly
 
+## Publish times
+
+| Platform | When | Scheduled in |
+|---|---|---|
+| YouTube Shorts | **Sun Nov 15, 15:00 ET = 14:00 Alberta** | YouTube Studio |
+| TikTok | **Mon Nov 16, 18:00 ET = 17:00 Alberta** | TikTok Studio (web) |
+| Instagram Reel | **Mon Nov 16, 18:00 ET = 17:00 Alberta** | Meta Business Suite → Planner |
+| Facebook Reel | **Mon Nov 16, 18:00 ET = 17:00 Alberta** | Meta Business Suite → Planner |
+
+First comments can't be scheduled: post + pin them when each post goes live.
+
 ## YouTube Shorts
 **Title:** He Pushed a Tube Into His Own Heart
 
@@ -72,16 +83,22 @@ Educational historical content. Not medical advice.
 | Visibility | upload as Private, watch it once, then **Schedule: Sun Nov 15, 15:00 ET = 14:00 Alberta** |
 
 ## Tiktok
+**Publish:** Mon Nov 16, 18:00 ET = 17:00 Alberta
+
 ```
 1929: his boss said no, so this doctor pushed a tube through his own arm into his own heart. Then he walked to the X-ray room. #history #medicalhistory #truestory #oddlymatt
 ```
 
 ## Instagram
+**Publish:** Mon Nov 16, 18:00 ET = 17:00 Alberta
+
 ```
 1929: his boss said no, so this doctor pushed a tube through his own arm into his own heart. Then he walked to the X-ray room. #history #medicalhistory #truestory #oddlymatt
 ```
 
 ## Facebook
+**Publish:** Mon Nov 16, 18:00 ET = 17:00 Alberta
+
 ```
 1929: his boss said no, so this doctor pushed a tube through his own arm into his own heart. Then he walked to the X-ray room. #history #medicalhistory #truestory #oddlymatt
 ```

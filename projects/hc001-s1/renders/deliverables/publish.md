@@ -2,6 +2,17 @@
 
 Length 48.1s · 1080×1920 · -14 LUFS
 
+## Publish times
+
+| Platform | When | Scheduled in |
+|---|---|---|
+| YouTube Shorts | **Wed Nov 11, 15:00 ET = 14:00 Alberta** | YouTube Studio |
+| TikTok | **Thu Nov 12, 18:00 ET = 17:00 Alberta** | TikTok Studio (web) |
+| Instagram Reel | **Thu Nov 12, 18:00 ET = 17:00 Alberta** | Meta Business Suite → Planner |
+| Facebook Reel | **Thu Nov 12, 18:00 ET = 17:00 Alberta** | Meta Business Suite → Planner |
+
+First comments can't be scheduled: post + pin them when each post goes live.
+
 ## YouTube Shorts
 **Title:** He Survived a Hole in His Stomach
 
@@ -63,16 +74,22 @@ Educational historical content. Not medical advice.
 | Visibility | upload as Private, watch it once, then **Schedule: Wed Nov 11, 15:00 ET = 14:00 Alberta** |
 
 ## Tiktok
+**Publish:** Thu Nov 12, 18:00 ET = 17:00 Alberta
+
 ```
 He was shot from less than a meter away in 1822, and lived 58 more years with a hole in his stomach. True story. #history #medicalhistory #truestory #oddlymatt
 ```
 
 ## Instagram
+**Publish:** Thu Nov 12, 18:00 ET = 17:00 Alberta
+
 ```
 He was shot from less than a meter away in 1822, and lived 58 more years with a hole in his stomach. True story. #history #medicalhistory #truestory #oddlymatt
 ```
 
 ## Facebook
+**Publish:** Thu Nov 12, 18:00 ET = 17:00 Alberta
+
 ```
 He was shot from less than a meter away in 1822, and lived 58 more years with a hole in his stomach. True story. #history #medicalhistory #truestory #oddlymatt
 ```

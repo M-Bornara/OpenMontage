@@ -2,6 +2,17 @@
 
 Length 44.6s · 1080×1920 · -14 LUFS · loops seamlessly
 
+## Publish times
+
+| Platform | When | Scheduled in |
+|---|---|---|
+| YouTube Shorts | **Sat Nov 21, 15:00 ET = 14:00 Alberta** | YouTube Studio |
+| TikTok | **Sun Nov 22, 18:00 ET = 17:00 Alberta** | TikTok Studio (web) |
+| Instagram Reel | **Sun Nov 22, 18:00 ET = 17:00 Alberta** | Meta Business Suite → Planner |
+| Facebook Reel | **Sun Nov 22, 18:00 ET = 17:00 Alberta** | Meta Business Suite → Planner |
+
+First comments can't be scheduled: post + pin them when each post goes live.
+
 ## YouTube Shorts
 **Title:** She Was Buried With a Golden Eye
 
@@ -65,16 +76,22 @@ Educational historical content. Not medical advice.
 | Visibility | upload as Private, watch it once, then **Schedule: Sat Nov 21, 15:00 ET = 14:00 Alberta** |
 
 ## Tiktok
+**Publish:** Sun Nov 22, 18:00 ET = 17:00 Alberta
+
 ```
 5,000 years ago, a woman in Iran was buried wearing a golden eye. Archaeologists still argue about what it was. #history #archaeology #truestory #oddlymatt
 ```
 
 ## Instagram
+**Publish:** Sun Nov 22, 18:00 ET = 17:00 Alberta
+
 ```
 5,000 years ago, a woman in Iran was buried wearing a golden eye. Archaeologists still argue about what it was. #history #archaeology #truestory #oddlymatt
 ```
 
 ## Facebook
+**Publish:** Sun Nov 22, 18:00 ET = 17:00 Alberta
+
 ```
 5,000 years ago, a woman in Iran was buried wearing a golden eye. Archaeologists still argue about what it was. #history #archaeology #truestory #oddlymatt
 ```

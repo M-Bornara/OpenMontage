@@ -2,6 +2,17 @@
 
 Length 57.3s · 1080×1920 · -14 LUFS
 
+## Publish times
+
+| Platform | When | Scheduled in |
+|---|---|---|
+| YouTube Shorts | **Fri Nov 13, 15:00 ET = 14:00 Alberta** | YouTube Studio |
+| TikTok | **Sat Nov 14, 18:00 ET = 17:00 Alberta** | TikTok Studio (web) |
+| Instagram Reel | **Sat Nov 14, 18:00 ET = 17:00 Alberta** | Meta Business Suite → Planner |
+| Facebook Reel | **Sat Nov 14, 18:00 ET = 17:00 Alberta** | Meta Business Suite → Planner |
+
+First comments can't be scheduled: post + pin them when each post goes live.
+
 ## YouTube Shorts
 **Title:** The Human Experiment Who Walked Away
 
@@ -63,16 +74,22 @@ Educational historical content. Not medical advice.
 | Visibility | upload as Private, watch it once, then **Schedule: Fri Nov 13, 15:00 ET = 14:00 Alberta** |
 
 ## Tiktok
+**Publish:** Sat Nov 14, 18:00 ET = 17:00 Alberta
+
 ```
 The most famous stomach in medical history belonged to a man who kept walking away. #history #medicalhistory #truestory #oddlymatt
 ```
 
 ## Instagram
+**Publish:** Sat Nov 14, 18:00 ET = 17:00 Alberta
+
 ```
 The most famous stomach in medical history belonged to a man who kept walking away. #history #medicalhistory #truestory #oddlymatt
 ```
 
 ## Facebook
+**Publish:** Sat Nov 14, 18:00 ET = 17:00 Alberta
+
 ```
 The most famous stomach in medical history belonged to a man who kept walking away. #history #medicalhistory #truestory #oddlymatt
 ```

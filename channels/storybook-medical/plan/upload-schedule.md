@@ -33,11 +33,11 @@ to Sunday every 14 days).
 |---|---|---|---|---|---|---|
 | 1 | **Sun Nov 8** · L | **HC001-L** The Man With a Window Into His Stomach | – | (FB: optional, the long as a Page video) | – | scheduled |
 | 2 | Mon Nov 9 | HC001-S2 The Doctor Who Put Food on a String | HC001-L | Tue Nov 10 | – | scheduled |
-| 3 | Wed Nov 11 | HC001-S1 He Survived a Hole in His Stomach | HC001-L | Thu Nov 12 | – | scheduled |
+| 3 | Wed Nov 11 | HC001-S1 He Survived a Hole in His Stomach | HC001-L | Thu Nov 12 | – | YouTube live Nov 11; socials Thu Nov 12 |
 | 4 | Fri Nov 13 | HC001-S3 The Human Experiment Who Walked Away | HC001-L | Sat Nov 14 | – | scheduled |
-| 5 | Sun Nov 15 | **HCS01** He Pushed a Tube Into His Own Heart (Forssmann) | HC001-L | Mon Nov 16 | **Wed Nov 11** | package ready |
-| 6 | Tue Nov 17 | **HCS02** The Doctor Who Drank Bacteria (Marshall) | HC001-L | Wed Nov 18 | Fri Nov 13 | script approved |
-| 7 | Thu Nov 19 | **HCS03** She Was Trapped Under Ice for 80 Minutes (Bågenholm) | HC001-L | Fri Nov 20 | Sun Nov 15 | script approved |
+| 5 | Sun Nov 15 | **HCS01** He Pushed a Tube Into His Own Heart (Forssmann) | HC001-L | Mon Nov 16 | **Wed Nov 11** | scheduled (user, Nov 9) |
+| 6 | Tue Nov 17 | **HCS02** The Doctor Who Drank Bacteria (Marshall) | HC001-L | Wed Nov 18 | Fri Nov 13 | scheduled (user, Nov 9) |
+| 7 | Thu Nov 19 | **HCS03** She Was Trapped Under Ice for 80 Minutes (Bågenholm) | HC001-L | Fri Nov 20 | Sun Nov 15 | scheduled (user, Nov 9) |
 | 8 | Sat Nov 21 | **HCS04** The 5,000-year-old golden eye (Burnt City) | HC001-L | Sun Nov 22 | Tue Nov 17 | package ready |
 | 9 | Mon Nov 23 | **HCS06** The enslaved man who saved Boston (Onesimus, 1721) | HC001-L | Tue Nov 24 | Thu Nov 19 | package ready |
 | 10 | Wed Nov 25 | **HCS08** The doctor who stopped a plague by breaking a pump (John Snow, 1854) | HC001-L | Thu Nov 26 | Sat Nov 21 | package ready (2026-11-10) |

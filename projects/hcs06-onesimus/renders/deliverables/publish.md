@@ -2,6 +2,17 @@
 
 Length 48.3s · 1080×1920 · -14 LUFS · loops seamlessly
 
+## Publish times
+
+| Platform | When | Scheduled in |
+|---|---|---|
+| YouTube Shorts | **Mon Nov 23, 15:00 ET = 14:00 Alberta** | YouTube Studio |
+| TikTok | **Tue Nov 24, 18:00 ET = 17:00 Alberta** | TikTok Studio (web) |
+| Instagram Reel | **Tue Nov 24, 18:00 ET = 17:00 Alberta** | Meta Business Suite → Planner |
+| Facebook Reel | **Tue Nov 24, 18:00 ET = 17:00 Alberta** | Meta Business Suite → Planner |
+
+First comments can't be scheduled: post + pin them when each post goes live.
+
 ## YouTube Shorts
 **Title:** The Enslaved Man Who Saved Boston
 
@@ -69,16 +80,22 @@ Educational historical content. Not medical advice.
 | Visibility | upload as Private, watch it once, then **Schedule: Mon Nov 23, 15:00 ET = 14:00 Alberta** |
 
 ## Tiktok
+**Publish:** Tue Nov 24, 18:00 ET = 17:00 Alberta
+
 ```
 1721: smallpox hit Boston. The idea that saved lives came from an enslaved man named Onesimus. #history #blackhistory #medicalhistory #oddlymatt
 ```
 
 ## Instagram
+**Publish:** Tue Nov 24, 18:00 ET = 17:00 Alberta
+
 ```
 1721: smallpox hit Boston. The idea that saved lives came from an enslaved man named Onesimus. #history #blackhistory #medicalhistory #oddlymatt
 ```
 
 ## Facebook
+**Publish:** Tue Nov 24, 18:00 ET = 17:00 Alberta
+
 ```
 1721: smallpox hit Boston. The idea that saved lives came from an enslaved man named Onesimus. #history #blackhistory #medicalhistory #oddlymatt
 ```

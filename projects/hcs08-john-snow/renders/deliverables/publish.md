@@ -2,6 +2,17 @@
 
 Length 45.6s · 1080×1920 · -14 LUFS · loops seamlessly
 
+## Publish times
+
+| Platform | When | Scheduled in |
+|---|---|---|
+| YouTube Shorts | **Wed Nov 25, 15:00 ET = 14:00 Alberta** | YouTube Studio |
+| TikTok | **Thu Nov 26, 18:00 ET = 17:00 Alberta** | TikTok Studio (web) |
+| Instagram Reel | **Thu Nov 26, 18:00 ET = 17:00 Alberta** | Meta Business Suite → Planner |
+| Facebook Reel | **Thu Nov 26, 18:00 ET = 17:00 Alberta** | Meta Business Suite → Planner |
+
+First comments can't be scheduled: post + pin them when each post goes live.
+
 ## YouTube Shorts
 **Title:** He Stopped a Plague by Breaking a Pump?
 
@@ -75,6 +86,8 @@ Educational historical content. Not medical advice.
 | Visibility | upload as Private, watch it once, then **Schedule: Wed Nov 25, 15:00 ET = 14:00 Alberta** |
 
 ## Tiktok
+**Publish:** Thu Nov 26, 18:00 ET = 17:00 Alberta
+
 **Caption:**
 ```
 John Snow and the Broad Street pump, London 1854 🗺️ A doctor blamed cholera on the water, not bad air, and had the pump's handle taken off. Then he admitted a twist.
@@ -92,6 +105,8 @@ More true stories: search Oddly Matt on YouTube
 **Playlist:** none
 
 ## Instagram
+**Publish:** Thu Nov 26, 18:00 ET = 17:00 Alberta
+
 **Caption:**
 ```
 1854, London: one doctor blamed cholera on the water and had a pump's handle taken off. Then he admitted a twist.
@@ -112,6 +127,8 @@ More true stories: link in bio
 **Playlist:** none (Instagram has no playlists)
 
 ## Facebook
+**Publish:** Thu Nov 26, 18:00 ET = 17:00 Alberta
+
 **Caption:**
 ```
 In 1854, cholera killed about five hundred people in ten days, in a few streets of London.
