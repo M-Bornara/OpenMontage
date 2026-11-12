@@ -10,6 +10,14 @@ Judge Shorts and long-form separately. Don't call a video dead at 24 h.
 | Shown in feed | Stayed to watch % | Engaged views | AVD | APV | Shares | Comments | Subs / 1k engaged | Related-video clicks |
 |---|---|---|---|---|---|---|---|---|
 
+## All platforms (Shorts; 7 d and 28 d)
+| Platform | Views | Avg watch (s) | Avg % | Likes | Comments | Shares | Saves | Follows | Follows / 1k views |
+|---|---|---|---|---|---|---|---|---|---|
+| YouTube |  |  |  |  |  |  |  |  |  |
+| TikTok |  |  |  |  |  |  |  |  |  |
+| Instagram |  |  |  |  |  |  |  |  |  |
+| Facebook |  |  |  |  |  |  |  |  |  |
+
 ## Diagnosis
 - 24 h: upload/copyright problems? title–thumbnail mismatch? catastrophic opening drop?
 - 7 d: low CTR + good retention → packaging · good CTR + poor retention → story/opening · both good → repeat

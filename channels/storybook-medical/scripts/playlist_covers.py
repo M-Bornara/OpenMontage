@@ -31,6 +31,14 @@ PLAYLISTS = {
     "impossible-survival": dict(name="Impossible Survival", kicker="TRUE STORIES", lines=["IMPOSSIBLE", "SURVIVAL"], size=86,
                                 panels=[(P / "hcs03-bagenholm/assets/images/keyframes/s2b.png", 0.45), (P / "hcs03-bagenholm/assets/images/keyframes/s3.png", 0.35),
                                         (P / "hcs03-bagenholm/assets/images/keyframes/s1a.png", 0.5)]),
+    # golden eye (HCS04). A back panel shows only its OUTER strip (left panel: the image's left side, right panel: its
+    # right side), and the focus value moves the 3:4 crop up/down only, so back images are picked by where their subject
+    # sits: the eyepatch try-on (left of s8), her profile with the eye in front, the craftsman's gold ball (right of s9)
+    "weirdest-moments": dict(name="Weirdest Moments", kicker="TRUE STORIES", lines=["WEIRDEST", "MOMENTS"], size=92,
+                             panels=[(P / "hcs04-burnt-city-eye/assets/images/keyframes/s8.png", 0.35), (P / "hcs04-burnt-city-eye/assets/images/keyframes/s5.png", 0.43), (P / "hcs04-burnt-city-eye/assets/images/keyframes/s9.png", 0.6)]),
+    # Onesimus (HCS06): Boylston and his son (left of s5), his face in front, Onesimus in Mather's doorway (right of s2)
+    "history-got-it-wrong": dict(name="History Got It Wrong", kicker="TRUE STORIES", lines=["HISTORY", "GOT IT", "WRONG"], size=96,
+                                 panels=[(P / "hcs06-onesimus/assets/images/keyframes/s5.png", 0.4), (P / "hcs06-onesimus/assets/images/keyframes/s9.png", 0.5), (P / "hcs06-onesimus/assets/images/keyframes/s2.png", 0.45)]),
 }
 W, H = 2560, 1440
 PH, PW = 880, 660                        # 3:4 panels: the action part of each 9:16 frame (Shorts covers keep an empty text band at the bottom)

@@ -40,5 +40,55 @@ l29ok = prompt_kit.lint_all({"s1": {"prompt": "SHOT: MS, eye level. A doctor at 
 status = "PASS" if any("L29" in m for m in l29.get("s1", [])) and not any("L29" in m for v in l29ok.values() for m in v) else "FAIL"
 print(f"{status} L29 Matt cameo: missing cameo caught, matt_beat() accepted")
 ok = ok and status == "PASS"
+# L30 (HCS04 prop-eye v1): a prop model sheet referencing a room plate
+l30 = prompt_kit.lint_all({"prop-eye": {"aspect": "16:9", "refs": ["x/plate-study.png"], "prompt": "Clean prop model sheet: a gold eye."}}, require_matt=False)
+l30ok = prompt_kit.lint_all({"prop-eye": {"aspect": "16:9", "refs": ["x/sheet-osler.png"], "prompt": "Clean prop model sheet: a gold eye."}}, require_matt=False)
+status = "PASS" if any("L30" in m for m in l30.get("prop-eye", [])) and not l30ok else "FAIL"
+print(f"{status} L30 model sheet with a room plate reference caught")
+ok = ok and status == "PASS"
+# L31 (HCS06 s3b v1): a memory look "with a soft vignette" painted as a bordered card
+l31 = prompt_kit.lint_all({"s3b": {"prompt": "SHOT: insert. A village with a soft vignette at the edges. " + prompt_kit.matt_beat("x", "y")}})
+l31ok = prompt_kit.lint_all({"s3b": {"prompt": "SHOT: insert. A village with a soft vignette. " + prompt_kit.FULL_BLEED + prompt_kit.matt_beat("x", "y")}})
+status = "PASS" if any("L31" in m for m in l31.get("s3b", [])) and not any("L31" in m for v in l31ok.values() for m in v) else "FAIL"
+print(f"{status} L31 vignette without full-bleed caught")
+ok = ok and status == "PASS"
+# L32 (HCS06 s6a v1): a crowd passed to cast() as one person
+l32 = prompt_kit.lint_all({"s6a": {"prompt": "SHOT: LS. " + prompt_kit.cast("six angry townspeople at the door") + prompt_kit.matt_beat("x", "y")}})
+l32ok = prompt_kit.lint_all({"s6a": {"prompt": "SHOT: LS. " + prompt_kit.cast("a doctor", "his son") + prompt_kit.matt_beat("x", "y")}})
+status = "PASS" if any("L32" in m for m in l32.get("s6a", [])) and not any("L32" in m for v in l32ok.values() for m in v) else "FAIL"
+print(f"{status} L32 crowd passed to cast() as one person caught")
+ok = ok and status == "PASS"
+# L34 (HCS08 s2/s9a v1): a plate role without "only" was copied whole
+mb = prompt_kit.matt_beat("x", "y")
+l34 = prompt_kit.lint_all({"s2": {"refs": ["ref:plate-x"], "roles": "Reference 1 is the plate, for the painting style and the pump's design. ", "prompt": "SHOT: LS. " + mb}})
+l34ok = prompt_kit.lint_all({"s2": {"refs": ["ref:plate-x"], "roles": "Reference 1 is the plate, for the painting style ONLY. ", "prompt": "SHOT: LS. " + mb}})
+status = "PASS" if any("L34" in m for m in l34.get("s2", [])) and not any("L34" in m for v in l34ok.values() for m in v) else "FAIL"
+print(f"{status} L34 plate reference without 'only' caught")
+ok = ok and status == "PASS"
+# L35 (HCS09 s4a v1): a macro insert painted as a framed card
+l35 = prompt_kit.lint_all({"s4a": {"prompt": "SHOT: insert shot of a detail, macro. A scalpel. " + mb}})
+l35ok = prompt_kit.lint_all({"s4a": {"prompt": "SHOT: insert shot of a detail, macro. A scalpel. " + prompt_kit.FULL_BLEED + mb}})
+status = "PASS" if any("L35" in m for m in l35.get("s4a", [])) and not any("L35" in m for v in l35ok.values() for m in v) else "FAIL"
+print(f"{status} L35 macro insert without full-bleed caught")
+ok = ok and status == "PASS"
+# L36 (HCS08 s1b/s2/s3/s4b/s8 v1): five shots on one street, different sizes, same background
+st = "SET: Broad Street, Soho (1854). "
+l36 = prompt_kit.lint_all({"s2": {"prompt": st + "SHOT: long shot, eye level. " + mb},
+                           "s3": {"prompt": "SET: elsewhere. SHOT: medium shot, x."},
+                           "s8": {"prompt": st + "SHOT: medium shot, low. " + mb}})
+l36b = prompt_kit.lint_all({"s2": {"prompt": st + "SHOT: long shot. " + prompt_kit.camera("across", "north", "three doors") + mb},
+                            "s8": {"prompt": st + "SHOT: medium shot. " + prompt_kit.camera("across", "north", "three doors") + mb}})
+l36ok = prompt_kit.lint_all({"s2": {"prompt": st + "SHOT: long shot. " + prompt_kit.camera("across", "north", "three doors") + mb},
+                             "s8": {"prompt": st + "SHOT: medium shot. " + prompt_kit.camera("on the corner", "south-east", "the crossroads") + mb}})
+has = lambda r: any("L36" in m for v in r.values() for m in v)  # noqa: E731
+status = "PASS" if has(l36) and has(l36b) and not has(l36ok) else "FAIL"
+print(f"{status} L36 same set without distinct camera() lines caught (non-consecutive shots too)")
+ok = ok and status == "PASS"
+# L37 (user 2026-11-09): every story shot carries a camera() line
+l37 = prompt_kit.lint_all({"s1": {"prompt": "SHOT: close-up, low. A pump. " + mb}})
+l37ok = prompt_kit.lint_all({"s1": {"prompt": "SHOT: close-up, low. " + prompt_kit.camera("at the kerb", "north", "a brick wall") + mb}})
+status = "PASS" if any("L37" in m for m in l37.get("s1", [])) and not any("L37" in m for v in l37ok.values() for m in v) else "FAIL"
+print(f"{status} L37 story shot without a camera() line caught")
+ok = ok and status == "PASS"
 sys.exit(0 if ok else 1)
 

@@ -18,7 +18,7 @@ what it was is DISPUTED. That dispute is the ending, and the fact meter shows it
 | A half-ball about 2.5 cm across, bitumen paste with a thin gold layer; an iris circle and gold lines like rays | VERIFIED (S2); the rays per S2/S4, check S3 |
 | Tiny holes on both sides; held with fine thread | VERIFIED (S1); "gold" thread ATTRIBUTED (S2) |
 | An imprint in her eye socket: worn for a long time | VERIFIED (S1) |
-| Found in her left eye socket | **TO VERIFY** (S2/S3). Until then the script says "buried with". |
+| Found in her left eye socket | VERIFIED 2026-11-08 (S3: Moghadasi, IJPH 2014, https://pmc.ncbi.nlm.nih.gov/articles/PMC4449516; PopSci agrees). The script keeps "buried with"; pictures show it on her left. |
 | "She was 1.82 m tall, a priestess or a royal" | **LEGEND** (no source). Only the myth line. |
 | Some archaeologists say it was an eyepatch, not an eye | VERIFIED as a dispute (S1) |
 

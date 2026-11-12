@@ -26,11 +26,11 @@ are the usual recommendations.
 |---|---|---|---|
 | **YouTube** | profile pic · banner · watermark · handle **@oddlymatt** · name · description · links · contact email · playlists (one per story universe) + covers · channel trailer (later) · end-screen template · thumbnail template | profile 800×800 · banner 2560×1440 (min 2048×1152; text inside the ~1235×338 safe area) · watermark 150×150 · thumbnails 1280×720 | channel created |
 | **TikTok** | profile pic · name · bio (80 chars) · link (when allowed) · pinned-video plan | profile ≥ 200×200 · cover frames from our 9:16 covers | handle to reserve: **@oddlymatt** |
-| **Instagram** | profile pic · name "Oddly Matt \| True Stories" · bio (150 chars) · link · Reels covers (grid-safe 3:4) · highlight covers (later) | profile 320×320 · Reels covers 1080×1920 with a 1080×1440 grid-safe centre | created: **@oddlymatt.tv** |
+| **Instagram** | profile pic · name "Oddly Matt \| True Stories" · bio (150 chars) · link · Reels covers (grid-safe 3:4) · highlight covers (later) | profile 320×320 · Reels covers 1080×1920 with a 1080×1440 grid-safe centre | created: **@oddly.matt** (instagram.com/oddly.matt) |
 | **Facebook Page** | profile pic · cover · username oddlymatt · About · category: Digital creator · CTA button | profile ≥ 320×320 · cover ≈ 851×315 desktop (mobile crops the sides; keep text centred) | to create from your real-name profile |
 | **Google account** | display name, profile pic | – | the channel Google account |
-| **Email** | **hello@oddlymatt.com** (business enquiries) | – | after the domain is registered |
-| **Domain** | oddlymatt.com (+ .ca optional) | – | free at the last check: **register soon** |
+| **Email** | **hello@oddlymatt.com** (business enquiries) | – | **active** (user, 2026-11-09) |
+| **Domain** | oddlymatt.com (+ .ca optional) | – | **registered**; redirects to youtube.com/@oddlymatt (user, 2026-11-09). Use oddlymatt.com as the link everywhere: change the redirect target later, not every profile |
 | **X / Threads / Bluesky** | reserve the handle only | – | optional, not used in the probe |
 
 ## Copy (draft)

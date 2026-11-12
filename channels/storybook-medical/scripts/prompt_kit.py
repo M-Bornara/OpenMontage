@@ -89,18 +89,49 @@ def framing(size: str, angle: str, lens: str, action: str, mood: str = "") -> st
             f"set is seen from a new angle, not as a repeat of another shot.")
 
 
+# L36 (user, HCS08 Snow, 2026-11-09): s1b, s2, s3, s4b and s8 all came back with the same street behind them. framing()
+# said "a new angle" but never WHICH, and the set plate (one fixed camera view) won over the words. Every shot on a set
+# that appears more than once states where the camera stands, which way it faces and exactly what fills the background,
+# from the set's map (a fixed geography: where the pump, the brewery, the houses are). Draw it in the free pre-viz first.
+def camera(position: str, facing: str, background: str, landmark: str = "") -> str:
+    """CAMERA line: camera("on the kerb across the street", "north", "three front doors side by side, flat-on, filling the frame",
+    "the pump is NOT in view")."""
+    return (f"CAMERA: standing {position}, facing {facing}. BACKGROUND (exactly this, nothing else): {background}."
+            f"{(' ' + landmark[0].upper() + landmark[1:] + '.') if landmark else ''} Do not reuse the reference's "
+            f"camera position or composition.")
+
+
 def lint_sequence(keyframes: dict[str, dict]) -> list[str]:
-    """L28: consecutive story keyframes that repeat the same set at the same shot size (a repeat with the centre moved)."""
+    """L28: consecutive story keyframes that repeat the same set at the same shot size (a repeat with the centre moved).
+    L36: any two keyframes on the same set must each carry a camera() line, facing different ways or with different
+    backgrounds (not only consecutive shots, and not only the size label)."""
     def key(spec):
         p = spec.get("prompt", "").lower()
         s = re.search(r"set: ([^,.]+)", p)
         z = re.search(r"shot: ([a-z -]+?)(?: \(|,)", p)
         return (s.group(1).strip() if s else None, z.group(1).strip() if z else None)
+
+    def cam(spec):
+        m = re.search(r"camera: standing (.+?), facing (.+?)\. background \(exactly this, nothing else\): (.+?)\.",
+                      spec.get("prompt", "").lower())
+        return (m.group(2), m.group(3)) if m else None
     names, out = list(keyframes), []
     for a, b in zip(names, names[1:]):
         (sa, za), (sb, zb) = key(keyframes[a]), key(keyframes[b])
         if sa and sa == sb and za and za == zb:
             out.append(f"L28: {a} -> {b}: same set ({sa}) and same shot size ({za}); change the size or the angle")
+    story = [n for n in names if "shot:" in keyframes[n].get("prompt", "").lower()]
+    for i, a in enumerate(story):
+        for b in story[i + 1:]:
+            sa, sb = key(keyframes[a])[0], key(keyframes[b])[0]
+            if not sa or sa != sb:
+                continue
+            ca, cb = cam(keyframes[a]), cam(keyframes[b])
+            if not ca or not cb:
+                out.append(f"L36: {b if ca else a}: same set as {a if ca else b} ({sa}) without a camera() line "
+                           "(position, facing, exact background)")
+            elif ca == cb:
+                out.append(f"L36: {b}: same set, facing and background as {a}; the two images will look the same")
     return out
 
 
@@ -145,6 +176,33 @@ def lint(name: str, spec: dict) -> list[str]:
     if not people_free_plate(p) and not model_sheet and not re.match(r"(thumb|cover|sheet|troupe|ref|prop|plate)", name.lower()) \
             and "shot:" not in p:
         issues.append("L28: no SHOT line (framing(): size, angle, lens, this line's action and mood)")
+    # L30 (HCS04 prop-eye, 2026-11-09): a prop sheet with a ROOM plate as reference came back as the room (a log cabin)
+    # with four giant foggy half-domes in it. Model sheets take a plain-paper sheet as reference, never a room plate.
+    if model_sheet and any("plate-" in r for r in refs):
+        issues.append("L30: a model sheet with a room plate as reference (the model paints the room): use a plain-paper "
+                      "model sheet (e.g. sheet-osler) for layout + style")
+    # L31 (HCS06 s3b, 2026-11-09): "a soft vignette at the edges" for a memory look came back as a painted card with a
+    # white paper border. The vignette is added in the edit; the image itself stays full-bleed.
+    if "vignette" in p and "no border" not in p:
+        issues.append("L31: 'vignette' without FULL_BLEED (the model paints a white-bordered card); do the vignette in the edit")
+    # L32 (HCS06 s6a, 2026-11-09): cast() counts its arguments, so one string "six angry townspeople" became "CAST: exactly
+    # 1 person: six angry townspeople", and the crowd shot came out confused (a door standing alone among them).
+    if re.search(r"cast: exactly 1 person: (two|three|four|five|six|seven|eight|nine|ten|a crowd|a group|several|about|rows of) ", p):
+        issues.append("L32: a group passed to cast() as ONE person ('exactly 1 person: six ...'): write a CROWD line instead")
+    # L34 (HCS08 s2/s9a, 2026-11-09): a plate given as "the painting style, palette and the pump's exact design" (no
+    # "only") was copied whole: same camera, same fog, so two different story beats came back as the same picture.
+    if any("plate-" in r for r in refs) and not model_sheet and "plate" in spec.get("roles", "").lower() \
+            and "only" not in spec.get("roles", "").lower() and "do not copy" not in spec.get("roles", "").lower():
+        issues.append("L34: plate reference without 'ONLY' / 'do NOT copy its composition' in roles (the model copies "
+                      "the plate's camera and composition)")
+    # L35 (HCS09 s4a, 2026-11-09): a macro insert came back as a framed picture-in-picture card with a border.
+    if "insert shot" in p and "macro" in p and "no border" not in p:
+        issues.append("L35: macro insert without FULL_BLEED (the model may paint it as a framed card)")
+    # L37 (user, 2026-11-09: "do this for every single shot analysis from now, high restrictions on rules"): every story
+    # keyframe states its camera (position, facing, exact background) with camera(), and appears on the pre-viz map.
+    if "shot:" in p and "camera: standing" not in p:
+        issues.append("L37: story shot without a camera() line (position, facing, exact background): every shot is "
+                      "mapped, then drawn in the free pre-viz before generation")
     if "spectacles" in p and "amber" not in p and "no spectacles" not in p:
         issues.append("L11: spectacles that aren't Matt's (confuses the spot-the-glasses game)")
     return issues
@@ -157,7 +215,7 @@ def people_free_plate(p: str) -> bool:
 def lint_all(specs: dict[str, dict], require_matt: bool = True) -> dict[str, list[str]]:
     out = {n: v for n, v in ((n, lint(n, s)) for n, s in specs.items()) if v}
     for msg in lint_sequence(specs):
-        out.setdefault(msg.split()[3].rstrip(":"), []).append(msg)
+        out.setdefault((msg.split()[3] if msg.startswith("L28") else msg.split()[1]).rstrip(":"), []).append(msg)
     # L29 (user, 2026-11-07): every video, Shorts included, has Matt in one of its new shots (matt_beat), besides the
     # hidden spectacles. Existing images are never regenerated just for him.
     story = [n for n, s in specs.items() if "shot:" in s.get("prompt", "").lower()]

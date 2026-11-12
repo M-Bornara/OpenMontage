@@ -18,7 +18,7 @@ Shared details:
 - Website: **https://oddlymatt.com**
 - YouTube: https://www.youtube.com/@oddlymatt
 - TikTok: https://www.tiktok.com/@oddlymatt
-- Instagram: https://www.instagram.com/oddlymatt.tv
+- Instagram: https://www.instagram.com/oddly.matt
 
 ---
 
@@ -52,7 +52,7 @@ Business: hello@oddlymatt.com
 4. **Links** → Add link, three times:
    - Title `Website`, URL `https://oddlymatt.com`
    - Title `TikTok`, URL `https://www.tiktok.com/@oddlymatt`
-   - Title `Instagram`, URL `https://www.instagram.com/oddlymatt.tv`
+   - Title `Instagram`, URL `https://www.instagram.com/oddly.matt`
    - Leave "Links on banner" at **1** (the website).
 5. **Contact info → Email:** `hello@oddlymatt.com`
 6. Click **Publish**.
@@ -77,18 +77,18 @@ Profile → **Edit profile**:
 4. **Bio** (80 characters max), paste:
    `True stories too strange to sound true. Illustrated. Fact-checked.`
 5. **YouTube / Instagram / Website:** not offered on new accounts (checked 2026-10-18). TikTok shows them later,
-   usually around 1,000 followers. Add YouTube, @oddlymatt.tv and `https://oddlymatt.com` when they appear.
+   usually around 1,000 followers. Add YouTube, @oddly.matt and `https://oddlymatt.com` when they appear.
 
 Settings and privacy → **Account**: keep it a **Personal account**. Creator Rewards needs a personal account, and Business accounts only get the commercial music library.
 
 ---
 
-## 3. Instagram @oddlymatt.tv (phone app)
+## 3. Instagram @oddly.matt (phone app)
 
 1. Profile → **Edit profile**:
    - **Picture** → `profile-icon-1080.png`
    - **Name:** `Oddly Matt | True strange stories` (this field is searchable)
-   - **Username:** `oddlymatt.tv`
+   - **Username:** `oddly.matt`
    - **Bio**, paste:
      ```
      True stories from the strange side of being human.

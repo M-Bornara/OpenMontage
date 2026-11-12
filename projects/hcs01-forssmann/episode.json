@@ -2,7 +2,7 @@
   "title": "He Pushed a Tube Into His Own Heart",
   "playbook": "storybook-medical",
   "narration": {
-    "v3_text": "[excited] In 1929, a young doctor pushed a tube through his own arm… all the way into his own heart.\nWerner Forssmann, a trainee surgeon in Germany, wanted to reach a living heart through a vein.\nHis boss said no. Far too dangerous.\nThe nurse with the supplies agreed to help… if he tried it on HER.\n[mischievously] He tricked her. He numbed his own arm instead.\nHe slid the catheter in. Sixty-five centimeters.\nThen he walked to the X-ray room, the tube still in his arm.\n[curious] The picture showed the tip… inside his heart. He was fine.\nHis reward? Fired from his next job.\nTwenty-seven years later, the world caught up. Nobel Prize.\n[serious] But in 1932, he had joined the Nazi Party.",
+    "v3_text": "[excited] In 1929, a young doctor pushed a tube through his own arm… all the way into his own heart.\nWerner Forssmann, a trainee surgeon in Germany, wanted to reach a living heart through a vein…\nHis boss said no… Far too dangerous.\nThe nurse with the supplies agreed to help… if he tried it on HER.\n[mischievously] He tricked her… He numbed his own arm instead…\nHe slid the catheter in… Sixty-five centimeters.\nThen he walked to the X-ray room, the tube still in his arm.\n[curious] The picture showed the tip… inside his heart… He was fine.\nHis reward? His new boss in Berlin fired him.\nTwenty-seven years later, the world caught up… Nobel Prize.\n[serious] But in 1932, he had joined the Nazi Party.",
     "punch_words": []
   },
   "references": {
@@ -579,16 +579,16 @@
             ]
           ],
           "from": 0.3,
-          "to": 3.35,
+          "to": 2.95,
           "color": "#F0A23A",
           "width": 16
         }
       ],
-      "end": 7.42
+      "end": 6.78
     },
     {
       "id": "s03",
-      "start": 7.42,
+      "start": 6.78,
       "source": "projects/hcs01-forssmann/assets/images/keyframes/s2.png",
       "motion": {
         "type": "slide",
@@ -597,11 +597,11 @@
         "scale": 1.1
       },
       "captionY": 1150,
-      "end": 12.22
+      "end": 11.74
     },
     {
       "id": "s04",
-      "start": 12.22,
+      "start": 11.74,
       "source": "projects/hcs01-forssmann/assets/images/keyframes/s3.png",
       "motion": {
         "type": "push",
@@ -609,11 +609,11 @@
         "to": 1.06
       },
       "captionY": 180,
-      "end": 12.86
+      "end": 12.54
     },
     {
       "id": "s05",
-      "start": 12.86,
+      "start": 12.54,
       "source": "projects/hcs01-forssmann/assets/images/keyframes/s3.png",
       "motion": {
         "type": "push",
@@ -623,11 +623,11 @@
         "y": 8.0
       },
       "captionY": 180,
-      "end": 15.02
+      "end": 14.86
     },
     {
       "id": "s06",
-      "start": 15.02,
+      "start": 14.86,
       "source": "projects/hcs01-forssmann/assets/images/keyframes/s4.png",
       "motion": {
         "type": "push",
@@ -651,11 +651,11 @@
         "y": -2.6
       },
       "captionY": 300,
-      "end": 21.9
+      "end": 22.22
     },
     {
       "id": "s08",
-      "start": 21.9,
+      "start": 22.22,
       "source": "projects/hcs01-forssmann/assets/images/keyframes/s6a.png",
       "motion": {
         "type": "push",
@@ -665,11 +665,11 @@
         "y": -15.0
       },
       "captionY": 300,
-      "end": 23.58
+      "end": 23.9
     },
     {
       "id": "s09",
-      "start": 23.58,
+      "start": 23.9,
       "source": "projects/hcs01-forssmann/assets/images/keyframes/s6b.png",
       "motion": {
         "type": "slide",
@@ -678,11 +678,11 @@
         "scale": 1.12
       },
       "captionY": 300,
-      "end": 25.5
+      "end": 26.38
     },
     {
       "id": "s10",
-      "start": 25.5,
+      "start": 26.38,
       "source": "projects/hcs01-forssmann/assets/images/keyframes/s7.png",
       "motion": {
         "type": "pull",
@@ -690,11 +690,11 @@
         "to": 1.04
       },
       "captionY": 300,
-      "end": 28.86
+      "end": 30.05
     },
     {
       "id": "s11",
-      "start": 28.86,
+      "start": 30.05,
       "source": "projects/hcs01-forssmann/assets/images/keyframes/s8a.png",
       "motion": {
         "type": "push",
@@ -749,16 +749,16 @@
             ]
           ],
           "from": 0.15,
-          "to": 1.05,
+          "to": 1.25,
           "color": "#F4FBFF",
           "width": 14
         }
       ],
-      "end": 30.22
+      "end": 31.89
     },
     {
       "id": "s12",
-      "start": 30.22,
+      "start": 31.89,
       "source": "projects/hcs01-forssmann/assets/images/keyframes/s8b.png",
       "motion": {
         "type": "push",
@@ -768,21 +768,21 @@
         "y": 10.8
       },
       "captionY": 1430,
-      "end": 32.94
+      "end": 35.09
     },
     {
       "id": "s13",
-      "start": 32.94,
+      "start": 35.09,
       "source": "projects/hcs01-forssmann/assets/images/keyframes/s9.png",
       "motion": {
         "type": "static"
       },
       "captionY": 150,
-      "end": 36.14
+      "end": 38.77
     },
     {
       "id": "s14",
-      "start": 36.14,
+      "start": 38.77,
       "source": "projects/hcs01-forssmann/assets/images/keyframes/s10a.png",
       "motion": {
         "type": "push",
@@ -792,22 +792,22 @@
         "y": 15.0
       },
       "captionY": 300,
-      "end": 38.08
+      "end": 40.71
     },
     {
       "id": "s15",
-      "start": 38.08,
+      "start": 40.71,
       "source": "projects/hcs01-forssmann/assets/video/medal.mp4",
       "motion": {
         "type": "static"
       },
       "captionY": 230,
       "in": 0.27,
-      "end": 39.74
+      "end": 42.53
     },
     {
       "id": "s16",
-      "start": 39.74,
+      "start": 42.53,
       "source": "projects/hcs01-forssmann/assets/images/keyframes/s11.png",
       "motion": {
         "type": "pull",
@@ -820,37 +820,37 @@
         "from": 0.2,
         "to": 2.0
       },
-      "end": 43.07
+      "end": 46.18
     }
   ],
   "overlays": [
     {
       "kind": "nameTag",
-      "start": 7.67,
-      "end": 10.27,
+      "start": 7.03,
+      "end": 9.63,
       "text": "Werner Forssmann",
       "sub": "trainee surgeon · 1929",
       "y": 190
     },
     {
       "kind": "stamp",
-      "start": 23.83,
-      "end": 25.33,
+      "start": 24.15,
+      "end": 25.65,
       "text": "65 cm",
       "x": 640,
       "y": 1330
     },
     {
       "kind": "stamp",
-      "start": 34.19,
-      "end": 35.79,
+      "start": 37.46,
+      "end": 39.06,
       "text": "FIRED",
       "y": 760
     },
     {
       "kind": "stamp",
-      "start": 40.13,
-      "end": 42.43,
+      "start": 42.96,
+      "end": 45.26,
       "text": "1932",
       "y": 1230
     }
@@ -863,42 +863,42 @@
     },
     {
       "name": "heartbeat",
-      "at": 6.13,
+      "at": 5.73,
       "gain_db": -12
     },
     {
       "name": "key-lock",
-      "at": 18.13,
+      "at": 18.21,
       "gain_db": -20
     },
     {
       "name": "stamp-thud",
-      "at": 23.88,
+      "at": 24.2,
       "gain_db": -14
     },
     {
       "name": "riser-drone",
-      "at": 28.91,
+      "at": 30.1,
       "gain_db": -26
     },
     {
       "name": "stamp-thud",
-      "at": 34.24,
+      "at": 37.51,
       "gain_db": -12
     },
     {
       "name": "paper-slide",
-      "at": 36.19,
+      "at": 38.82,
       "gain_db": -20
     },
     {
       "name": "ding-correct",
-      "at": 38.48,
+      "at": 41.11,
       "gain_db": -20
     },
     {
       "name": "stamp-thud",
-      "at": 40.18,
+      "at": 43.01,
       "gain_db": -16
     }
   ],
@@ -906,5 +906,62 @@
   "dual_format": false,
   "image_resolution": "2K",
   "glasses": "s2: Matt's spectacles on the windowsill by the geranium",
-  "loop": true
+  "loop": true,
+  "covers": {
+    "cover": {
+      "aspect": "9:16",
+      "refs": [
+        "ref:plate-xray",
+        "ref:sheet-forssmann"
+      ],
+      "roles": "Reference 1 is the X-ray room (style and blue light). Reference 2 is WERNER FORSSMANN (same face, hair, coat). ",
+      "prompt": "SET: The X-ray room, Eberswalde, 1929. dim blue light, a tall wooden-cabinet X-ray apparatus with a glowing glass tube and thick cables, a glowing wall lightbox; the only blue room in the film. This place has its own materials, palette and light, and must not look like any other room or place in the film. MOVIE-POSTER COVER ART for a vertical short film, 9:16. The hero fills 55-70% of the frame height, bold and clear. CAST: exactly 1 person: WERNER FORSSMANN (25, lean, dark hair slicked straight back, clean-shaven, narrow face, dark eyes, a keen restless look; white surgical coat over a white shirt and dark tie), front and centre, waist up, facing the viewer, his LEFT shirt and coat sleeve rolled up above the elbow, holding his bare LEFT forearm up across his chest; a thin red-brown rubber catheter tube enters the inner LEFT elbow under a small square of white gauze and loops up over his shoulder; he looks straight at the viewer with a daring, slightly mad half-smile. Nobody else in the frame. He faces the camera, so his LEFT arm (rolled sleeve, the tube) is on the VIEWER'S RIGHT side of the image; his RIGHT arm has its sleeve down and no tube. Behind his shoulder the glowing lightbox shows a pale X-ray of a chest with the faint shadow of the heart. One strong warm amber key light on his face and the tube against the cool blue room, teal-charcoal falloff at the edges. His face stays between 15% and 55% of the frame height. The bottom 30% of the frame is the same room continuing, darker and out of focus, with nothing in it. NO blood, NO wound. NO panel, NO border, NO split screen; no lettering anywhere (the title is added later). FRAMING: every story-relevant person, object and action sits inside the central 70% of the frame (not touching or cut by any edge), with room around it so the camera can zoom and pan toward it; the edges hold only background. Period-accurate only: nothing modern, no modern maps or borders, no anachronistic objects. No text, letters, numbers, labels, signatures or watermark anywhere; any writing is illegible scribble."
+    }
+  },
+  "publish": {
+    "cover": {
+      "image": "proj:assets/images/keyframes/s6a.png",
+      "title": "Into His Own Heart",
+      "accent": [
+        "HEART"
+      ],
+      "kicker": "EBERSWALDE · 1929",
+      "textY": 290,
+      "scale": 1.12,
+      "y": 5.5,
+      "x": -4
+    },
+    "youtube": {
+      "title": "He Pushed a Tube Into His Own Heart",
+      "description": "1929, Eberswalde, Germany. Werner Forssmann, a 25-year-old trainee surgeon, wanted to reach a living heart through a vein. His boss said no. So he numbed his own arm, slid a 65 cm catheter up the vein, and walked to the X-ray room to prove the tip was inside his heart. It was.\n\nHis next boss, at the Charité in Berlin, dismissed him. 27 years later he shared the 1956 Nobel Prize in Medicine with André Cournand and Dickinson Richards, who turned his idea into cardiac catheterization, now a routine hospital procedure.\n\nHe also joined the Nazi Party in 1932 and stayed a member until 1945. The experiment doesn't erase that, and we won't leave it out.\n\nMore true medical stories: \"The Man With a Window Into His Stomach\" (linked above).",
+      "sources": "SOURCES\n- Werner Forssmann, Biographical (Les Prix Nobel, 1956). https://www.nobelprize.org/prizes/medicine/1956/forssmann/biographical/\n- W. Forssmann, \"Die Sondierung des rechten Herzens\", Klinische Wochenschrift 8 (1929): 2085-2087.\n- H. W. Heiss, J. W. Hurst, \"Werner Forssmann: a German problem with the Nobel Prize\", Clinical Cardiology 15 (1992): 547-549.\n- D. Siegel, \"Werner Forssmann and the Nazis\", American Journal of Cardiology 80 (1997): 1643-1644.\n- LITFL, \"Werner Forssmann\". https://litfl.com/werner-forssmann/",
+      "tags": [
+        "Werner Forssmann",
+        "cardiac catheterization",
+        "self experimentation",
+        "Nobel Prize 1956",
+        "history of medicine",
+        "medical history",
+        "Oddly Matt"
+      ],
+      "hashtags": [
+        "#history",
+        "#medicalhistory",
+        "#oddlymatt"
+      ],
+      "pinned_comment": "Brave genius 🧠 or reckless rule-breaker ⚠️? Pick one. (And did you spot Matt's glasses? 👓)",
+      "related_video": "The Man With a Window Into His Stomach",
+      "playlists": "Season Zero + Crazy Science (true stories)",
+      "schedule": "Sun Nov 15, 15:00 ET = 14:00 Alberta"
+    },
+    "tiktok": {
+      "caption": "1929: his boss said no, so this doctor pushed a tube through his own arm into his own heart. Then he walked to the X-ray room. #history #medicalhistory #truestory #oddlymatt"
+    },
+    "instagram": {
+      "caption": "1929: his boss said no, so this doctor pushed a tube through his own arm into his own heart. Then he walked to the X-ray room. #history #medicalhistory #truestory #oddlymatt"
+    },
+    "facebook": {
+      "caption": "1929: his boss said no, so this doctor pushed a tube through his own arm into his own heart. Then he walked to the X-ray room. #history #medicalhistory #truestory #oddlymatt"
+    }
+  }
 }

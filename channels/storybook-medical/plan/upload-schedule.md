@@ -1,5 +1,7 @@
 # Oddly Matt: upload schedule and how-to (Season Zero)
 
+> TikTok, Instagram and Facebook: [`social-plan.md`](social-plan.md) wins where it differs (captions per platform, Business Suite scheduling, per-platform review).
+
 Written 2026-10-18. Rules from [`master-instructions-v3.md`](master-instructions-v3.md) §37–39: per story cluster,
 **Day 1 long · Day 2 strongest Short · Day 4 second Short · Day 6 third Short**; one long every two weeks;
 since plan v2 (2026-11-05): **one YouTube upload every 2 days**, standalone Shorts fill the gaps;
@@ -36,10 +38,10 @@ to Sunday every 14 days).
 | 5 | Sun Nov 15 | **HCS01** He Pushed a Tube Into His Own Heart (Forssmann) | HC001-L | Mon Nov 16 | **Wed Nov 11** | package ready |
 | 6 | Tue Nov 17 | **HCS02** The Doctor Who Drank Bacteria (Marshall) | HC001-L | Wed Nov 18 | Fri Nov 13 | script approved |
 | 7 | Thu Nov 19 | **HCS03** She Was Trapped Under Ice for 80 Minutes (Bågenholm) | HC001-L | Fri Nov 20 | Sun Nov 15 | script approved |
-| 8 | Sat Nov 21 | **HCS04** The 5,000-year-old golden eye (Burnt City) | HC001-L | Sun Nov 22 | Tue Nov 17 | script approved |
-| 9 | Mon Nov 23 | **HCS06** The enslaved man who saved Boston (Onesimus, 1721) | HC001-L | Tue Nov 24 | Thu Nov 19 | script approved |
-| 10 | Wed Nov 25 | **HCS08** The doctor who stopped a plague by breaking a pump (John Snow, 1854) | HC001-L | Thu Nov 26 | Sat Nov 21 | script approved |
-| 11 | Fri Nov 27 | **HCS09** The doctor they hated for saying "wash your hands" (Semmelweis, 1847) | HC001-L | Sat Nov 28 | Mon Nov 23 | script approved |
+| 8 | Sat Nov 21 | **HCS04** The 5,000-year-old golden eye (Burnt City) | HC001-L | Sun Nov 22 | Tue Nov 17 | package ready |
+| 9 | Mon Nov 23 | **HCS06** The enslaved man who saved Boston (Onesimus, 1721) | HC001-L | Tue Nov 24 | Thu Nov 19 | package ready |
+| 10 | Wed Nov 25 | **HCS08** The doctor who stopped a plague by breaking a pump (John Snow, 1854) | HC001-L | Thu Nov 26 | Sat Nov 21 | package ready (2026-11-10) |
+| 11 | Fri Nov 27 | **HCS09** The doctor they hated for saying "wash your hands" (Semmelweis, 1847) | HC001-L | Sat Nov 28 | Mon Nov 23 | package ready (2026-11-10) |
 | 12 | **Sun Nov 29** · L | **HC002-L** Phineas Gage: The Story Everyone Gets Wrong | – | (FB: optional, Mon Nov 30) | **Wed Nov 25** | script v2 |
 | 13 | Tue Dec 1 | HC002-S1 An Iron Rod Went Through His Skull | HC002-L | Wed Dec 2 | Fri Nov 27 | script v2 |
 | 14 | Thu Dec 3 | **HCS07** Nobody believed him about the mosquito (Finlay; Dec 3 is his birthday, to verify) | HC002-L | Fri Dec 4 | Sun Nov 29 | script approved |

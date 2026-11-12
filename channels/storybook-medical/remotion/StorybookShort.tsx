@@ -13,10 +13,29 @@ import {
   useVideoConfig,
 } from "remotion";
 import { loadFont } from "@remotion/google-fonts/Montserrat";
+import { loadFont as loadLalezar } from "@remotion/google-fonts/Lalezar";
+import { loadFont as loadFell } from "@remotion/google-fonts/IMFellEnglish";
 import { Clock } from "./Clock";
 import { ShotFx, ShotFxLayer } from "./ShortFx";
 
-const { fontFamily } = loadFont("normal", { weights: ["700", "800", "900"] });
+const { fontFamily } = loadFont("normal", { weights: ["600", "700", "800", "900"] });
+
+// Font for captions AND stamps: the channel's Montserrat Black by default (user, 2026-11-09: "keep the original setup
+// for the fonts"); a culture font only where it truly fits (Lalezar for the Persian story, approved). A SemiBold-caption
+// and an IM Fell variant were tried the same day and dropped. episode.json "theme": {"font": "lalezar"} ->
+// props.captionFont. Name tags stay Montserrat.
+const THEME_FONTS: Record<string, { family: string; weight: number; scale: number }> = {
+  montserrat: { family: fontFamily, weight: 900, scale: 1 },
+  lalezar: { family: loadLalezar("normal", { weights: ["400"], subsets: ["latin", "latin-ext"] }).fontFamily, weight: 400, scale: 1.08 },
+  "im-fell": { family: loadFell("normal", { weights: ["400"], subsets: ["latin"] }).fontFamily, weight: 400, scale: 1.12 },
+};
+const ThemeFont = React.createContext(THEME_FONTS.montserrat);
+
+// Platform safe zone on 1080x1920 (user, 2026-11-09: YouTube/TikTok's title, channel name and buttons covered the low
+// captions). Strictest common margins (Google vertical-video guidance; Meta/TikTok are close): top 288, bottom 672,
+// left 48-65, right 192 (the like/comment/share column). All captions and stamps live inside x 65-888, y 288-1248.
+export const SAFE = { top: 288, bottom: 1248, left: 65, right: 888 };
+const SAFE_CX = (SAFE.left + SAFE.right) / 2;         // 476.5: the visual centre of the safe area, not the frame
 
 export const FPS = 30;
 
@@ -84,6 +103,8 @@ export interface StorybookShortProps {
   captionY?: number;
   /** Seconds at the end that dissolve into frame 0 so a looping player wraps without a jump. */
   loopSeconds?: number;
+  /** Theme font for captions and stamps: "montserrat" (default), "lalezar" (Persian), "im-fell" (17th-18th c. English). */
+  captionFont?: string;
 }
 
 const ease = Easing.bezier(0.33, 0, 0.2, 1);
@@ -188,18 +209,19 @@ const fadeOut = (frame: number, dur: number) =>
 
 // x = the stamp's centre (px of 1080, default the middle); the size shrinks with the text so it never leaves the frame
 const Stamp: React.FC<{ text: string; dur: number; y?: number; x?: number }> = ({ text, dur, y, x }) => {
+  const theme = React.useContext(ThemeFont);
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const s = spring({ frame, fps, config: { damping: 11, stiffness: 180, mass: 0.7 } });
   const scale = interpolate(s, [0, 1], [2.6, 1]);
   const opacity = interpolate(frame, [0, 3], [0, 1], { extrapolateRight: "clamp" }) * fadeOut(frame, dur);
   return (
-    <AbsoluteFill style={{ alignItems: "center", top: y ?? 300, height: 260, opacity, transform: `translateX(${(x ?? 540) - 540}px)` }}>
+    <AbsoluteFill style={{ alignItems: "center", top: y ?? 300, height: 260, opacity, transform: `translateX(${(x ?? SAFE_CX) - 540}px)` }}>
       <div
         style={{
-          fontFamily,
-          fontWeight: 900,
-          fontSize: Math.min(210, Math.floor(900 / (0.76 * text.length))),
+          fontFamily: theme.family,
+          fontWeight: theme.weight,
+          fontSize: Math.min(210, Math.floor((SAFE.right - SAFE.left - 40) / (0.76 * text.length))) * theme.scale,
           letterSpacing: 6,
           color: BONE,
           WebkitTextStroke: `10px ${OXBLOOD}`,
@@ -373,6 +395,7 @@ function pages(words: Word[], per: number): Word[][] {
 }
 
 const Captions: React.FC<{ words: Word[]; per: number; y: number; shots: Shot[] }> = ({ words, per, y, shots }) => {
+  const theme = React.useContext(ThemeFont);
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const t = frame / fps;
@@ -393,14 +416,16 @@ const Captions: React.FC<{ words: Word[]; per: number; y: number; shots: Shot[] 
   const pageStart = Math.round(page[0].start * fps);
   const enter = spring({ frame: frame - pageStart, fps, config: { damping: 14, stiffness: 260, mass: 0.5 } });
   return (
-    <AbsoluteFill style={{ top: y, height: 300, alignItems: "center" }}>
+    <AbsoluteFill style={{ top: y, height: 300, left: SAFE.left, width: SAFE.right - SAFE.left, alignItems: "center" }}>
       <div
         style={{
           display: "flex",
           flexWrap: "wrap",
           justifyContent: "center",
-          gap: "0 46px",
-          maxWidth: 940,
+          // the active word scales 1.1x with its 14px stroke: at 46px long neighbours touched and read as one word
+          // ("COTTONMATHER" HCS06, "BELIEVEDSTRONG" HC001)
+          gap: "0 72px",
+          maxWidth: SAFE.right - SAFE.left,
           transform: `scale(${interpolate(enter, [0, 1], [0.85, 1])})`,
         }}
       >
@@ -412,9 +437,9 @@ const Captions: React.FC<{ words: Word[]; per: number; y: number; shots: Shot[] 
             <span
               key={i}
               style={{
-                fontFamily,
-                fontWeight: 900,
-                fontSize: w.punch ? 112 : 96,
+                fontFamily: theme.family,
+                fontWeight: theme.weight,
+                fontSize: (w.punch ? 104 : 88) * theme.scale,     // user: "a very tiny amount" smaller (was 112 / 96)
                 lineHeight: 1.08,
                 color,
                 textTransform: "uppercase",
@@ -436,7 +461,7 @@ const Captions: React.FC<{ words: Word[]; per: number; y: number; shots: Shot[] 
 
 // ── Composition ──────────────────────────────────────────────────────────
 
-export const StorybookShort: React.FC<StorybookShortProps> = ({ totalSeconds, shots, overlays, words, wordsPerPage, captionY, loopSeconds }) => {
+export const StorybookShort: React.FC<StorybookShortProps> = ({ totalSeconds, shots, overlays, words, wordsPerPage, captionY, loopSeconds, captionFont }) => {
   const frame = useCurrentFrame();
   const total = Math.round(totalSeconds * FPS);
   const loopFrames = Math.round((loopSeconds ?? 0) * FPS);
@@ -444,6 +469,7 @@ export const StorybookShort: React.FC<StorybookShortProps> = ({ totalSeconds, sh
     ? interpolate(frame, [total - loopFrames, total - 1], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: ease })
     : 0;
   return (
+    <ThemeFont.Provider value={THEME_FONTS[captionFont ?? "montserrat"] ?? THEME_FONTS.montserrat}>
     <AbsoluteFill style={{ backgroundColor: CHARCOAL }}>
       {shots.map((s) => (
         <Sequence key={s.id} from={Math.round(s.start * FPS)} durationInFrames={Math.max(1, Math.round((s.end - s.start) * FPS))}>
@@ -469,6 +495,7 @@ export const StorybookShort: React.FC<StorybookShortProps> = ({ totalSeconds, sh
         <Captions words={words} per={wordsPerPage ?? 3} y={captionY ?? 1180} shots={shots} />
       </AbsoluteFill>
     </AbsoluteFill>
+    </ThemeFont.Provider>
   );
 };
 
@@ -490,10 +517,18 @@ export const StorybookCover: React.FC<StorybookCoverProps> = ({ image, kicker, t
   const accent = new Set((accentWords ?? []).map((w) => w.toUpperCase()));
   return (
     <AbsoluteFill style={{ backgroundColor: CHARCOAL, overflow: "hidden" }}>
+      {/* Fill: a soft blurred copy of the painting behind, so moving the picture (e.g. down under a top-band title)
+          never leaves a bare charcoal band at an edge (HCS04/HCS06 covers, 2026-11-09). */}
       <Img
         src={staticFile(image)}
         style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover",
-                 transform: `translate(${x ?? 0}%, ${y ?? 0}%) scale(${scale ?? 1.05})` }}
+                 transform: "scale(1.5)", filter: "blur(36px) brightness(0.8)" }}
+      />
+      <Img
+        src={staticFile(image)}
+        style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover",
+                 transform: `translate(${x ?? 0}%, ${y ?? 0}%) scale(${scale ?? 1.05})`,
+                 WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 6%, black 94%, transparent 100%)" }}
       />
       <AbsoluteFill style={{ background: `linear-gradient(to bottom, rgba(10,12,14,0.0) ${band - 12}%, rgba(10,12,14,0.55) ${band + 10}%, rgba(10,12,14,0.0) ${band + 32}%)` }} />
       <AbsoluteFill style={{ background: "radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0) 55%, rgba(10,12,14,0.55) 100%)" }} />

@@ -1,6 +1,18 @@
 # Open items: read at the start of every session; mention anything due or unresolved
 
-Updated 2026-11-03.
+Updated 2026-11-08.
+
+## Social media (2026-11-11)
+- [x] HC001-S1 pinned comment on YouTube: done by the user 2026-11-11.
+- [ ] TikTok / Instagram / Facebook copies: post the challenge as the first comment after each goes live and pin it; St. Martin Shorts add the "full story" line (FB: link youtu.be/7-uszA4Qpuw; TikTok: "Search Oddly Matt on YouTube"; IG: "link in bio"). Can't be scheduled. Next: S1 copies Thu Nov 12, 18:00 ET (17:00 AB).
+- [x] **Social plan v1** approved by the user 2026-11-11 (all 5 decisions). Change tracking: plan/change-log.csv (§10).
+- [x] End screen HC001-L: Best for viewer + Most recent upload set by the user 2026-11-11 (change C000).
+- [ ] **HCS08 Snow + HCS09 Semmelweis publish.md updated per platform** (2026-11-11: captions, first comments, playlists): user reviews, then uploads + schedules. NOTE: publish_hcs08.py / publish_hcs09.py still write one caption for all; don't re-run them without carrying the per-platform blocks over.
+- [ ] Facebook playlists per Short: one only (Facebook's limit as seen in Business Suite); use the family playlist. Playlist covers are YouTube only. Day 1 for "Food on a String": TikTok 387 · Instagram 302 · Facebook 235 (avg 10 s) · YouTube Short 16.
+- [x] Instagram handle is **@oddly.matt** (not @oddlymatt.tv): YouTube links checked by the user 2026-11-11. Was: check the Instagram link on the YouTube channel and fix it if it says oddlymatt.tv (Studio → Customization → Links).
+- [ ] Instagram + Facebook are scheduled in Meta Business Suite → Planner: the "post Instagram by hand at 17:00" reminders below are retired.
+- [x] 2-step verification on Google, TikTok, Instagram, Facebook: done by the user 2026-11-11.
+- [x] claude.ai Project "Oddly Matt" set up (instructions + knowledge from claude-project/, re-uploaded 2026-11-11); Metricool (all 4 platforms) and vidIQ (YouTube) connected. TikTok: stays a personal account; verification badge later, once there is press coverage.
 
 ## Decisions waiting for the user
 - [x] editing-v2 approved (2026-10-19); the original structure is kept (see section 0).
@@ -15,28 +27,32 @@ Updated 2026-11-03.
       production starts now in parallel, fal balance top-up ($22.24 left).
 - [x] HCS01 rough cut v5 approved by the user (2026-11-05). Next: final package (sting, cover, publish.md), live Sun Nov 15. Was: rough cut v5 (new "his new boss in Berlin fired him" line, longer pauses, music stretched 0.889): user listens.
 
-- [ ] **HCS01 package ready** (projects/hcs01-forssmann/renders/deliverables/): user reviews cover + publish.md, then uploads
+- [x] **HCS01 package ready** (uploaded + scheduled by the user, 2026-11-09) (projects/hcs01-forssmann/renders/deliverables/): user reviews cover + publish.md, then uploads
       and schedules Sun Nov 15, 15:00 ET (14:00 AB); TikTok/FB Mon Nov 16 18:00 ET; IG by hand. Related video = HC001-L (public from Nov 8).
 - [ ] **Playlist covers** (projects/_playlists/renders/, 1280x720): Season Zero, Season Zero · Alexis St. Martin, new playlist
       "Crazy Science (true stories)". User uploads on YouTube (Studio → Content → Playlists → Edit → thumbnail) and Facebook.
       Crazy Science cover re-made with Marshall in front (Nov 8); Impossible Survival cover made (Nov 8): upload both.
 - [x] **Script batch 1 approved** (2026-11-06): Marshall, Bågenholm ("you're not dead until you're warm and dead"),
       golden eye, al-Razi (moved to Dec 7; born in Rey, not Shiraz; "discovered alcohol" disputed, kept out), Onesimus
-      ("grenade", not "bomb"), Finlay. Still to verify before each storybook: Bågenholm "held on to her skis", eye in the
-      left socket, Onesimus "two hundred years", Finlay's Dec 3 birthday / Medicine Day.
+      ("grenade", not "bomb"), Finlay. Still to verify before each storybook: Bågenholm "held on to her skis" (done), eye in the
+      left socket (VERIFIED Nov 8), Onesimus "two hundred years" (unsourced → "for centuries" proposed), Finlay's Dec 3 birthday / Medicine Day.
 - [x] **Script batch 2 approved** (2026-11-06): HCS08 John Snow (Wed Nov 25), HCS09 Semmelweis (Fri Nov 27) (research.md, script v1).
+- [x] **HCS08 Snow + HCS09 Semmelweis PACKAGES READY** (2026-11-10): user approved both rough cuts ("not so bad"; the detached handle on Snow s8 still looks a little off, accepted). renders/deliverables/ in each project (short.mp4, cover.jpg, captions.srt, publish.md, CREDITS.txt). Totals Snow $2.15, Semmelweis $1.55. USER uploads: Snow Wed Nov 25 15:00 ET (Crazy Science), Semmelweis Fri Nov 27 15:00 ET (History Got It Wrong); socials next day 18:00 ET. HC002 Gage long video parked by the user.
       Mix rule: max one non-Western story a week (upload-schedule.md).
 - [x] Storyboards HCS02 + HCS03 approved (2026-11-06); images, narration, music done ($2.58 for both).
 - [x] Rough cut 2: **HCS02 Marshall approved** (2026-11-06, "no issues"; loop kept). HCS03 Bågenholm rough cut 3 after the
       user's notes (frozen heart opening, clock hands end on the cut, 1.5 s hold after "doctor"): user checks it.
 - [x] HCS03 rough cut 3 approved (2026-11-07).
 - [x] FX v3 approved (2026-11-07): both Shorts final.
-- [ ] **HCS02 + HCS03 packages ready** (projects/hcs02-marshall + hcs03-bagenholm/renders/deliverables/): user reviews
+- [x] **HCS02 + HCS03 packages ready** (uploaded + scheduled by the user, 2026-11-09) (projects/hcs02-marshall + hcs03-bagenholm/renders/deliverables/): user reviews
       cover + publish.md, then uploads: Marshall Tue Nov 17, Bågenholm Thu Nov 19, both 15:00 ET (14:00 AB); TikTok/FB
       next day 18:00 ET; IG by hand. Related video = HC001-L. Playlists: Marshall → Crazy Science; Bågenholm → **new
       "Impossible Survival"** (create it on upload; cover ready in projects/_playlists/renders/).
 - [ ] **Promotion research done** (2026-11-08, plan/promotion-research.md): no automated posting (spam policy). User, free: Reddit account warm-up, check Posts tab eligibility, first poll. Nov 15 review decides: comment inbox (YouTube API + Meta) and opportunity finder (drafts only, user posts).
-- [ ] Storyboards golden eye + Onesimus with L28 + L29 (Matt cameo).
+- [x] **Storyboards v1 approved (2026-11-09, script v2 for Onesimus); prompts written + lint clean (build_hcs04.py, build_hcs06.py); FINAL APPROVED 2026-11-09 + PACKAGES READY: projects/hcs04-burnt-city-eye/renders/deliverables/ and projects/hcs06-onesimus/renders/deliverables/ (short.mp4, cover.jpg, publish.md, captions.srt, CREDITS). User reviews publish.md + covers, then uploads: HCS04 Sat Nov 21 + HCS06 Mon Nov 23, both 15:00 ET (14:00 AB); TikTok/FB next day 18:00 ET; IG by hand. Related video = HC001-L. NEW playlists on upload: Weirdest Moments (HCS04) + History Got It Wrong (HCS06), covers in projects/_playlists/renders/. Spent $2.64 + $1.88. Fonts settled: Montserrat; Lalezar for Persia only.** Was: HCS04 golden eye (editorial/episodes/HCS04-burnt-city-eye/storyboard-v1.md, 11 shots, ≈48.5 s, ≈$1.00)
+      and HCS06 Onesimus (HCS06-onesimus/storyboard-v1.md, 14 shots, ≈49.8 s, ≈$1.35). Onesimus needs a **script v2 OK**
+      (v1 ≈ 54.8 s: two trims + "for centuries" in place of the unsourced "two hundred years"). Golden eye left socket VERIFIED.
+      Ready-by: HCS04 Tue Nov 17, HCS06 Thu Nov 19.
 - [ ] **Remind at step 3 (Gage long images): fal balance** ($22.24 on Nov 5) — top up before.
 
 ## From 2026-10-26
@@ -64,10 +80,7 @@ Updated 2026-11-03.
       17:00 MT, Related Video = HC001-L. Ready by Wed Nov 4. S2 (59.6 s) and S3 (57.3 s) run over the 35-55 s target.
 - [x] The old "Hired as a Human Test Tube" Short (Oct 17) is NOT published: superseded by HC001-S3, flagged REWRITE
       in master instructions v3, and titled "Part 2" (trailer-style). Kept as an art source only.
-- [ ] **End screen HC001-L** (editable any time, no re-upload): Nov 8 = Subscribe + Season Zero playlist (set by the user; Subscribe alone is refused).
-      **Remind Mon Nov 9** after the first Short is live: add Video "Most recent upload" (top right) + "Best for viewer"
-      (bottom right) in place of the playlist; if a Short can't be picked, keep the playlist. **Remind Sun Nov 22**: top box =
-      HC002-L (specific video).
+- [x] **End screen HC001-L**: done 2026-11-11 (see Social media). **Remind Sun Nov 22**: top box = HC002-L only if it is made (Gage parked).
 - [ ] **Instagram Reels by hand** (no schedule option found): **Remind** Tue Nov 10, Thu Nov 12, Sat Nov 14 at 17:00 Alberta: post S2 / S1 / S3 as a Reel (settings in each Short's publish.md). Try Meta Business Suite → Planner for scheduling next time.
 - [x] Clean narration (no warble): blind A/B 2026-11-04, user picked #3 = v3 speed 1.0, stability 0.5 + atempo 1.14 (#6, same at stability 0.4, second). Now the default in episode.py VOICE.
 
@@ -90,7 +103,7 @@ Updated 2026-11-03.
 - [x] Period map component (map_prep.py + MapScene.tsx): Natural Earth, national border through the lakes, period labels, cities, river / arc routes, travelling canoe, follow-cam, counter, legend, adaptive scale bar, compass, title scroll.
 - [ ] Map rule: pins and paths only where the sources give them (a dotted arc = route not recorded).
 - [ ] Beat sheet HC001 (P1), then cast (P2), then prompts / images / clips (P3–P5), narration (P6), music (P7), cut (P9).
-- [ ] Fix the caption merge "BELIEVEDSTRONG" (3:40 in the preview).
+- [x] Fix the caption merge "BELIEVEDSTRONG" (3:40 in the preview). Fixed 2026-11-09 in StorybookShort (word gap 46 -> 72 px; seen again as "COTTONMATHER" in HCS06). Check StorybookLong if it shares the caption style.
 - [ ] The book page (I11) still has lorem ipsum: re-draw it with WAVY_WRITING + blur.
 - [ ] The fort at 2:20 looks like a stone castle: period fix (L10).
 - [ ] End card 20 s → 12 s; the intro sting gets a music dip.
@@ -98,6 +111,7 @@ Updated 2026-11-03.
 
 ## Channel / accounts (the user's side)
 - [ ] Facebook Page unlock (video submitted). Check the status.
+- [ ] Facebook "Published by Narges Ahmadi" (2026-11-10): that label is shown only to people who manage the Page. Check in a private window. If wanted: add the user's own profile with full control, then remove Narges's access (or keep her as a backup admin).
 - [ ] Google Cloud billing: confirm the balance in Cloud Console.
 - [ ] Delete `projects/kit-route-test` (my rm was blocked).
 - [ ] YouTube upload: tick the "altered or synthetic content" box only if a scene looks realistic. Our painted style

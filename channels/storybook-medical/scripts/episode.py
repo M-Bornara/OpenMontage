@@ -181,7 +181,8 @@ def gen_images(pid: str, section: str, out_dir: str, only: list[str]):
     use_batch = "--batch" in only
     missing = "--missing" in only          # only items that have no image yet
     lint_ok = "--lint-ok" in only          # proceed despite prompt-lint findings (after reading them)
-    only = [n for n in only if n not in ("--batch", "--missing", "--lint-ok")]
+    legacy = "--legacy" in only            # episodes made before the 2026-11-09 pre-viz rule (no previz_approved)
+    only = [n for n in only if n not in ("--batch", "--missing", "--lint-ok", "--legacy")]
     ep = load_ep(pid)
     items = ep.get(section, {})
     out = proj(pid) / "assets/images" / out_dir
@@ -260,12 +261,20 @@ def gen_images(pid: str, section: str, out_dir: str, only: list[str]):
 
     # dependency waves: an item waits for any kf:/ref: it references that is still being generated
     # pre-flight: known prompt mistakes (plan/prompt-lessons.md) stop the run before any money is spent
-    found = prompt_kit.lint_all({x: items[x] for x in names})
+    # L29 (Matt cameo) is a whole-video rule: when only some shots are regenerated, judge it on all keyframes
+    has_matt = any("cameo of matt" in s.get("prompt", "").lower() for s in ep.get("keyframes", {}).values())
+    found = prompt_kit.lint_all({x: items[x] for x in names}, require_matt=not has_matt)
     for x, problems in found.items():
         for pr in problems:
             print(f"LINT {x}: {pr}")
     if found and not lint_ok:
         raise SystemExit(f"prompt lint: {len(found)} item(s) need a fix (see plan/prompt-lessons.md), or re-run with --lint-ok")
+    # PREVIZ GATE (user, 2026-11-09): no keyframe is paid for until the free pre-viz (scripts/previz.py: set map with
+    # every camera + blocking frames) has been shown and the user said OK; record it as "previz_approved" in episode.json
+    if section == "keyframes" and names and not ep.get("previz_approved") and not legacy:
+        raise SystemExit("PREVIZ GATE: show the free pre-viz (scripts/previz.py) and get the user's OK first, then set "
+                         '"previz_approved": "<date>: <what was approved>" in episode.json (--legacy only for episodes '
+                         'made before 2026-11-09)')
     if names:
         specs = [main_spec(x) for x in names] * (2 if dual else 1)
         res = sorted({x["resolution"] for x in specs})
@@ -679,8 +688,23 @@ def step_build(pid, *_):
         props = {"totalSeconds": total, "shots": shots, "overlays": ep["overlays"], "words": words,
                  "wordsPerPage": 4, "captionY": 900, "captions": ep.get("captions", True)}
     else:
+        # stamps and name tags belong to their shot: they end at its cut (user, HCS04: "LEGEND" stayed into the next
+        # shot). Clocks and other frame-space overlays keep their own end.
+        for o in ep["overlays"]:
+            if o["kind"] in ("stamp", "nameTag"):
+                host = next((s for s in shots if s["start"] <= o["start"] < s["end"]), None)
+                if host and o["end"] > host["end"] - 0.1:
+                    o["end"] = round(host["end"] - 0.1, 2)
+        # platform safe zone (StorybookShort SAFE): text lives in y 288-1248 on 1080x1920; a caption page is ~210 px tall,
+        # a stamp ~230 px, a name tag ~120 px. Anything outside is covered by YouTube/TikTok/Reels UI.
+        bad = [f"shot {s['id']} captionY {s['captionY']}" for s in shots if not 288 <= s.get("captionY", 1030) <= 1038]
+        bad += [f"{o['kind']} '{o.get('text', '')}' y {o['y']}" for o in ep["overlays"] if "y" in o and o["kind"] != "clock"
+                and not 288 <= o["y"] <= (1128 if o["kind"] == "nameTag" else 1018)]
+        if bad:
+            raise SystemExit("SAFE ZONE: text under the platform UI (keep y 288-1248):\n  " + "\n  ".join(bad))
         props = {"totalSeconds": total, "shots": shots, "overlays": ep["overlays"], "words": words,
-                 "wordsPerPage": 3, "captionY": 1180, "loopSeconds": loop_len(ep)}
+                 "wordsPerPage": 3, "captionY": 1030, "loopSeconds": loop_len(ep),
+                 "captionFont": ep.get("theme", {}).get("font", "montserrat")}   # per-culture caption font
     json.dump(props, open(rem / "props.json", "w", encoding="utf-8"), indent=1)
     gaps = [(a["id"], b["id"]) for a, b in zip(shots, shots[1:])
             if abs(a["end"] - b["start"]) > 0.02 and b["transitionIn"] != "dissolve"]
