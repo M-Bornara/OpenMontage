@@ -60,7 +60,7 @@ padding).
 **Same video file everywhere** (the watermark-free `short.mp4`). Never re-upload a file downloaded from another app.
 
 **Timing (unchanged for now):** YouTube first, the others the next day at 18:00 ET (17:00 Alberta in winter).
-**Test from cluster 3:** post TikTok on the same day as YouTube for 4 Shorts and compare the 48-h views with the
+**Test after C001's 4 posts** (HCS02–HCS09 TikToks are already scheduled next day, 2026-11-11): post TikTok on the same day as YouTube for 4 Shorts and compare the 48-h views with the
 next-day posts. Same-day wins → it becomes the rule.
 
 **Scheduling:**
