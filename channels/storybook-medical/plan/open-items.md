@@ -8,6 +8,9 @@ Updated 2026-11-11.
 - [x] **Social plan v1** approved by the user 2026-11-11 (all 5 decisions). Change tracking: plan/change-log.csv (§10).
 - [x] End screen HC001-L: Best for viewer + Most recent upload set by the user 2026-11-11 (change C000).
 - [ ] **HCS08 + HCS09: YouTube + TikTok scheduled by the user (2026-11-11). Instagram + Facebook NOT yet**: Meta Business Suite failed to upload short.mp4. Try `short-meta.mp4` (same picture, 9 Mbps, standard colour range; made 2026-11-11). Snow IG/FB Thu Nov 26, Semmelweis Sat Nov 28, 18:00 ET = 17:00 AB. Was: **HCS08 Snow + HCS09 Semmelweis publish.md updated per platform** (2026-11-11: captions, first comments, playlists): user reviews, then uploads + schedules. NOTE: publish_hcs08.py / publish_hcs09.py still write one caption for all; don't re-run them without carrying the per-platform blocks over.
+- [ ] **Link page oddlymatt.com** (repo E:\Projects\Bornara\oddlymatt-site, 2026-11-11): user runs docs/claude-design-prompt.md in Claude Design → approve look → build (static, Cloudflare Pages, Kit form, Web Analytics, /ig /fb /tt) → point the domain → bio links (needs the user's yes). Kit bio text: docs/kit-newsletter.md. Change C005.
+- [x] 2026-11-12 (browser, user's yes): Semmelweis YouTube title closing quote fixed; YouTube "Website" link -> oddlymatt.com/yt; Instagram + TikTok bios: stethoscope emoji removed, TikTok grammar fixed. S1 Related video confirmed = HC001-L.
+- [x] Instagram website link -> oddlymatt.com/ig and Facebook Page website oddlymatt.com/fb: done by the user 2026-11-12. (Was: Facebook Page had no website; add oddlymatt.com/fb (switch into the Page first: Edit details -> Contact info). Note: TikTok can't pin own comments yet; comment counts so far are mostly the user's own.
 - [ ] Facebook playlists per Short: one only (Facebook's limit as seen in Business Suite); use the family playlist. Playlist covers are YouTube only. Day 1 for "Food on a String": TikTok 387 · Instagram 302 · Facebook 235 (avg 10 s) · YouTube Short 16.
 - [x] Instagram handle is **@oddly.matt** (not @oddlymatt.tv): YouTube links checked by the user 2026-11-11. Was: check the Instagram link on the YouTube channel and fix it if it says oddlymatt.tv (Studio → Customization → Links).
 - [ ] Instagram + Facebook are scheduled in Meta Business Suite → Planner: the "post Instagram by hand at 17:00" reminders below are retired.
@@ -17,6 +20,9 @@ Updated 2026-11-11.
 - [x] **Publish times per platform** added to every unreleased package (2026-11-11): a "Publish times" table at the top of each publish.md (S1 socials, S3, HCS01-04, HCS06, HCS08, HCS09) + `publish_at` in publish.json. Captions of the older packages left as one shared caption on purpose: they are the C001 baseline.
 - [ ] **Commit regularly** (2026-11-11): Claude Code, the claude.ai Project and the daily comment agent all edit this folder. Commit at the end of every working session and after every approved package. publish.md/publish.json are tracked now (force-added; projects/ is gitignored): a new package needs `git add -f`.
 - [ ] **Comment agent check**: editorial/comments-log.csv doesn't exist yet: confirm the daily run reaches the repo + the Oddly Matt Chrome profile. Skill fix (claude.ai): Shorts have no claims.csv; facts are in the claims table in research.md.
+
+- [ ] **Storyboards v1: HCS07 Finlay (Thu Dec 3, 16 shots, ≈43 s, ≈$1.60) + HCS05 al-Razi (Mon Dec 7, 12 shots, ≈40 s, ≈$1.30)** (2026-11-12, editorial/episodes/HCS07-finlay + HCS05-al-razi/storyboard-v1.md): user approves, incl. the new caribbean-colonial music theme for Finlay. Then free pre-viz, then prompts. Ready-by: Finlay Sun Nov 29, al-Razi Thu Dec 3. Finlay Dec 3 birthday VERIFIED.
+- [ ] **Dec 1 + Dec 5 slots** (were the Gage Shorts; Gage long parked): user decides: Gage Shorts as standalone, or two other stories.
 
 ## Decisions waiting for the user
 - [x] editing-v2 approved (2026-10-19); the original structure is kept (see section 0).

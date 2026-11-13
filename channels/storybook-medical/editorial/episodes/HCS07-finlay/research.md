@@ -20,7 +20,7 @@ the Reed Commission, Reed's own credit).
 | 1900: the US Army commission led by Walter Reed tested it in Cuba, with mosquitoes from Finlay's eggs | VERIFIED (S1) |
 | Jesse Lazear, a member, died of yellow fever after a mosquito bite | VERIFIED (S1, P2) |
 | Reed credited Finlay; history books often credited Reed | VERIFIED (S1) |
-| Born 3 Dec 1833; Latin America marks 3 Dec as Medicine Day in his honour | **TO VERIFY**. If true: publish on Thu Dec 3 and say it in the description |
+| Born 3 Dec 1833; Latin America marks 3 Dec as Medicine Day in his honour | VERIFIED 2026-11-12 (S1; Cuban health ministry pages, e.g. temas.sld.cu 2019/2020; PAHO recognises it). The founding year varies (1933 Dallas congress vs 1953 PAHO): don't state a year. Publish Thu Dec 3 and say it in the description |
 
 ## Script v1 (~45 s) · approved 2026-11-06
 ```
