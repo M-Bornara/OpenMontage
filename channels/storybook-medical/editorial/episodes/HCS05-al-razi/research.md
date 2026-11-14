@@ -19,6 +19,8 @@
 | He bled one group and "intentionally" left another group unbled, to reach a conclusion | VERIFIED (P1) |
 | The bled group was "saved" | VERIFIED as his claim (P1) |
 | The only passage in the Hawi comparing two groups of patients | VERIFIED (S1) |
+| The Hawi was compiled after his death from his notebooks by his students | VERIFIED 2026-11-14 (NLM Islamic Medical Manuscripts; Encyclopedia.com). "His giant medical encyclopedia" is fair shorthand; the image shows his notebooks |
+| He wrote on paper (Baghdad paper from the late 700s), sitting with the sheet on his knee, reed pen | period practice (user note + standard codicology); no wooden stand, no desk |
 | Bloodletting doesn't help meningitis | VERIFIED (S1) |
 | "The first clinical trial ever" | OVERSTATEMENT (S1): the myth line |
 

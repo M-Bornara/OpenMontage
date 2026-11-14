@@ -19,6 +19,8 @@ the Reed Commission, Reed's own credit).
 | He kept experimenting for years | VERIFIED (S1) |
 | 1900: the US Army commission led by Walter Reed tested it in Cuba, with mosquitoes from Finlay's eggs | VERIFIED (S1) |
 | Jesse Lazear, a member, died of yellow fever after a mosquito bite | VERIFIED (S1, P2) |
+| How Lazear was bitten | DISPUTED (2026-11-14): he said a stray mosquito bit him by accident at Las Animas hospital while he fed lab mosquitoes on patients; a notebook entry suggests he infected himself on purpose (PBS American Experience; the Board's report called the evidence unsatisfactory). The script says only "was bitten"; the image follows his own account |
+| The Academy (Real Academia de Ciencias Médicas, Físicas y Naturales de La Habana) sat in the old San Agustín convent from 1868 | VERIFIED (revistaccuba.sld.cu). That the 1881 session was in that room: likely, not confirmed |
 | Reed credited Finlay; history books often credited Reed | VERIFIED (S1) |
 | Born 3 Dec 1833; Latin America marks 3 Dec as Medicine Day in his honour | VERIFIED 2026-11-12 (S1; Cuban health ministry pages, e.g. temas.sld.cu 2019/2020; PAHO recognises it). The founding year varies (1933 Dallas congress vs 1953 PAHO): don't state a year. Publish Thu Dec 3 and say it in the description |
 

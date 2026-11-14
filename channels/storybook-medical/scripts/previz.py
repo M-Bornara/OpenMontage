@@ -167,6 +167,35 @@ def draw_frame(shapes: list, W: int = 360, H: int = 640) -> Image.Image:
     return im
 
 
+ZONES = {"TOP": 300 / 1920, "MID": 660 / 1920, "LOW": 1030 / 1920}  # Shorts text zones (safe zone y 288-1248)
+
+
+def render_frames(out_dir: Path, shots: list[dict], W: int = 360, H: int = 640) -> list[Path]:
+    """One PNG per shot (for the storyboard page): the blocking frame plus the Shorts safe zone (dotted) and the
+    shot's text zone as a labelled band. shot: {"name", "shapes", "zone": "TOP"|"MID"|"LOW"|None, "text": str}."""
+    out_dir.mkdir(parents=True, exist_ok=True)
+    paths = []
+    for s in shots:
+        im = draw_frame(s["shapes"], W, H).convert("RGBA")
+        ov = Image.new("RGBA", im.size, (0, 0, 0, 0))
+        d = ImageDraw.Draw(ov)
+        y0, y1, x0, x1 = 288 / 1920 * H, 1248 / 1920 * H, 65 / 1080 * W, 888 / 1080 * W
+        for x in range(int(x0), int(x1), 8):
+            d.line([(x, y0), (x + 4, y0)], fill=(255, 255, 255, 150), width=1)
+            d.line([(x, y1), (x + 4, y1)], fill=(255, 255, 255, 150), width=1)
+        z = s.get("zone")
+        if z:
+            cy = ZONES[z] * H
+            d.rectangle([x0, cy - 22, x1, cy + 22], fill=(232, 163, 61, 120), outline=(232, 163, 61, 255), width=2)
+            d.text(((x0 + x1) / 2, cy), s.get("text", z), fill=(255, 255, 255, 255), font=_font(16), anchor="mm",
+                   stroke_width=2, stroke_fill=INK)
+        im = Image.alpha_composite(im, ov).convert("RGB")
+        p = out_dir / f"{s['name']}.png"
+        im.save(p)
+        paths.append(p)
+    return paths
+
+
 def render(out: Path, map_spec: dict | None, shots: list[dict], keyframes_dir: Path | None = None):
     """shots: [{"name", "camera": text, "shapes": [...], "now": bool}] -> one review PNG."""
     W, H, pad = 360, 640, 24
