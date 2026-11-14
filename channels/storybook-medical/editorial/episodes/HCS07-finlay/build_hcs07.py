@@ -121,10 +121,10 @@ CROWD_BACKS = ("CROWD: about twelve academics in black frock coats on the benche
 
 KEYFRAMES = {
     "s1a": dict(aspect="9:16", refs=["kf:s4a"], roles=HALL_LOOK,
-        prompt=f"{ACADEMY} {HALL_MAP} {framing('CU', 'eye level', '85 mm, shallow focus', 'the doubters: arms crossed against a new idea', 'stubborn, closed')} "
+        prompt=f"{ACADEMY} {HALL_MAP} {framing('MCU', 'slightly low angle', '50 mm', 'the doubters: arms crossed against a new idea', 'stubborn, closed, one eyebrow raised')} "
                f"{camera('in the front bench row, close, looking along it', 'west, along the row', 'the next seated men in the row, out of focus, and a stone arch')} "
-               "Three seated academics side by side, seen ONLY from chest to waist: three pairs of arms firmly crossed "
-               "over black frock coats, one gold watch chain; their faces are above the frame. "
+               "Three seated bearded academics side by side, chest up, each with his WHOLE head and face in the frame: "
+               "stern faces, arms firmly crossed over black frock coats, one gold watch chain. Every person has a head. "
                f"{SAFE_FRAMING} {PERIOD} {NO_TEXT}"),
     "s1b": dict(aspect="9:16", resolution="4K", refs=["ref:plate-academy", F],
         roles=STYLE_ONLY.format(n="Academy") + "Reference 2 is CARLOS FINLAY (same face, whiskers, clear eyeglasses). ",
@@ -163,7 +163,7 @@ KEYFRAMES = {
         roles=HALL_LOOK + "Reference 2 is MATT: copy his face, amber round spectacles, teal scarf and amber notebook only; "
               "his clothes are described below. ",
         prompt=f"{ACADEMY} {HALL_MAP} {framing('MS', 'eye level, the reverse angle from the lectern', '35 mm', 'the Academy does not believe him', 'disbelief: crossed arms, one raised eyebrow, a bored hand fan')} "
-               f"{camera('at the lectern, where Finlay stands', 'south, at the audience', 'rows of seated academics in black frock coats, the stone back wall and an arch behind them')} "
+               f"{camera('at the lectern, where Finlay stands', 'south, at the audience', 'the seated audience FACING the camera, and behind them the hall\'s south wall: plain whitewashed stone with one tall arched wooden door; NO windows and NO lectern anywhere in view')} "
                f"{CROSSED} One raises an eyebrow; one fans himself slowly with a paper hand fan. "
                f"{matt_beat('a cream linen jacket and a straw boater of 1881', 'at the right end of the front bench, the only one leaning forward, eagerly writing in his notebook')} "
                f"{SAFE_FRAMING} {PERIOD} {NO_TEXT}"),
@@ -173,13 +173,13 @@ KEYFRAMES = {
         prompt=f"{LAB} {framing('MS', 'eye level', '35 mm', 'nineteen years of breeding mosquitoes and testing', 'patient, stubborn devotion')} "
                f"{camera('beside the shelves', 'the window', 'the shelves of jars on the left and the bright tall window on the right')} "
                "Finlay's hands (black sleeves, white cuffs) lift one gauze-topped jar of larvae toward the window light; "
-               f"his face is out of frame. {glasses_gag('folded on the shelf beside the larvae jars')} "
+               f"only his hands and cuffs are in the picture, no person. {glasses_gag('folded on the shelf beside the larvae jars')} "
                f"{WAVY_WRITING} {SAFE_FRAMING} {PERIOD} {NO_TEXT}"),
     "s6a": dict(aspect="9:16", refs=["ref:plate-street", R],
         roles=STYLE_ONLY.format(n="Havana street") + "Reference 2 is WALTER REED (same face, moustache, uniform). ",
         prompt=f"{CAMP} {framing('ELS', 'low angle', '24 mm', 'the US Army commission arrives to test the idea', 'purposeful, official')} "
                f"{camera('low on the camp path', 'down the path between the tents', 'rows of white tents, royal palms, the flagpole')} "
-               f"{cast(REED + ', in front, walking toward the camera', 'an army officer in the same uniform', 'an army doctor in a white jacket', 'an army doctor in shirtsleeves')} "
+               f"{cast(REED + ', in front, walking toward the camera', 'an older army officer, clean-shaven, grey-haired, in the same uniform without shoulder cords', 'an army doctor in a white jacket', 'an army doctor in shirtsleeves')} "
                f"{SAFE_FRAMING} {PERIOD} {NO_TEXT}"),
     "s6b": dict(aspect="9:16", refs=["ref:plate-street", F, R],
         roles=STYLE_ONLY.format(n="Havana street") + "Reference 2 is CARLOS FINLAY in 1900 (his hand and cuff). "
@@ -193,7 +193,7 @@ KEYFRAMES = {
         roles=STYLE_ONLY.format(n="Havana street") + "Reference 2 is JESSE LAZEAR (same face, full beard). ",
         prompt=f"{WARD} {framing('MCU', 'eye level', '50 mm', 'at work feeding a lab mosquito, Lazear is bitten by a stray one', 'absorbed in his work, unaware')} "
                f"{camera('beside the bed', 'Lazear across the bed', 'the whitewashed ward wall and a tall shuttered window behind him')} "
-               f"{cast(LAZEAR + ', holding a small glass test tube mouth-down against a patient’s forearm on the white sheet', 'the patient, seen ONLY as one bare forearm resting on the sheet')} "
+               f"{cast(LAZEAR + ', bending over the bed, both hands low: he presses the open mouth of a small upside-down glass test tube flat against the patient’s bare forearm on the sheet, a lab mosquito inside the tube; his eyes are on the tube', 'the patient, seen ONLY as one bare forearm resting on the white sheet')} "
                "A second mosquito, a small dark silhouette, has landed on the back of Lazear's own hand; he has not "
                f"noticed. No blood, no sick face. {SAFE_FRAMING} {PERIOD} {NO_TEXT}"),
     "s7b": dict(aspect="9:16", refs=["ref:plate-street"], roles=STYLE_ONLY.format(n="Havana street"),
@@ -217,14 +217,16 @@ KEYFRAMES = {
         roles=STYLE_ONLY.format(n="Havana street") + "Reference 2 is WALTER REED. ",
         prompt=f"{STAGE} {framing('MS', 'low angle', '35 mm', 'Reed is celebrated', 'applause, bright flashes')} "
                f"{camera('below the stage among the audience', 'up at Reed', 'the bunting and the gas lamps of the hall')} "
-               f"{cast(REED + ', on the stage, accepting applause with a modest nod', 'a photographer in a dark suit at the left with a box camera on a tripod, a flash pan raised and flashing')} "
+               f"{cast(REED + ', on the stage, accepting applause with a modest nod', 'a young clean-shaven photographer in a bowler hat at the left, with a box camera on a tripod and a flash pan raised and flashing')} "
                f"{SAFE_FRAMING} {PERIOD} {NO_TEXT}"),
     "s9b": dict(aspect="9:16", refs=["ref:plate-street", R],
         roles=STYLE_ONLY.format(n="Havana street") + "Reference 2 is WALTER REED (his uniform sleeve and hand only). ",
         prompt=f"{REED_DESK} {framing('INSERT', 'top-down over the desk', '50 mm', 'Reed gives the credit to Finlay', 'fairness, a quiet correction')} "
                f"{camera('above the desk', 'straight down', 'the report on the desk top')} "
                "A handwritten report on cream paper fills the frame. Reed's hand in a dark-blue sleeve underlines one "
-               f"name with a pen. {real_writing('Dr. Carlos J. Finlay', 'in the middle of the page, underlined')} "
+               f"name with a pen. {real_writing('Dr. Carlos J. Finlay', 'in the middle of the page, underlined')} The rest of the "
+               "page is nearly blank: only four soft wavy grey lines with NO letters above and below the name, no heading, "
+               "no signature, no other words. "
                f"{FULL_BLEED} {SAFE_FRAMING} {PERIOD}"),
 }
 
@@ -244,13 +246,13 @@ REFS = {"F81": F81, "F00": F00, "R": R, "L": L, "MATT": "kit:matt-sheet.jpg", "G
 HARBOUR_PHOTO = ("Reference 2 is a period photograph used ONLY for the shape of Morro Castle, its lighthouse and the "
                  "harbour mouth; paint it, never copy the photo. ")
 V2 = {  # shot: (set, leading refs with their roles, sheet keys)
-    "s1a": ("academy", [("kf:s4a", HALL_LOOK)], []),
+    "s1a": ("academy", [("ref:plate-academy", STYLE_ONLY.format(n="Academy"))], []),
     "s1b": ("study", [], ["F81"]),
     "s2a": ("harbour", [(STYLE_PLATE, OUTSIDE), ("proj:refs/havana_harbor_1860.jpg", HARBOUR_PHOTO)], []),
     "s2b": ("street", [("ref:plate-street", STYLE_ONLY.format(n="Havana street"))], []),
     "s3": ("study", [], ["F81"]),
     "s4a": ("academy", [("ref:plate-academy", "Reference 1 is the empty Academy hall: this is that hall, seen from the back. ")], ["F81"]),
-    "s4b": ("academy", [("kf:s4a", HALL_LOOK)], ["MATT"]),
+    "s4b": ("academy", [(STYLE_PLATE, OUTSIDE)], ["MATT"]),  # v3: kf:s4a made it a copy of s4a
     "s5": ("lab", [], ["F81", "GL"]),
     "s6a": ("camp", [], ["R"]),
     "s6b": ("table", [], ["F00", "R"]),

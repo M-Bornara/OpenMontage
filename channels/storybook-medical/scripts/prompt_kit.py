@@ -62,7 +62,8 @@ RED_RULE = ("Only the story's motif may be saturated red (e.g. Alexis's tuque); 
 # L38 · a model sheet shows several views of one person; the shot must show each person once (user, 2026-11-14).
 ONE_EACH = ("Each named person appears ONCE in this image, never twice and never as a second smaller copy: the "
             "character references show several views of ONE person, so take only the face, hair and clothes from them, not "
-            "their extra poses or layout.")
+            "their extra poses or layout. Everyone else in the image has a clearly different face, hair and age from "
+            "the named people (no look-alikes, no twins).")
 # L10 · period accuracy slips (castle-like forts, modern maps).
 PERIOD = "Period-accurate only: nothing modern, no modern maps or borders, no anachronistic objects."
 # L11 · Matt's glasses: hide them as a small visual joke (brand-signature.md).
@@ -220,6 +221,16 @@ def lint(name: str, spec: dict) -> list[str]:
         issues.append(f"L39: plate reference {plates} on a shot whose set is {spec.get('set')!r}: a plate is a reference "
                       "only for shots on its own set (declare \"set\"; elsewhere use the character sheets or a style-only "
                       "plate from outside this film)")
+    # L40 (HCS07 s4b v1, 2026-11-14): an earlier keyframe of the SAME set as reference for a different camera came back
+    # as a copy of that keyframe (same view, Matt added). kf: references copy the camera; use them only for a closer
+    # shot of the same view (e.g. CU after MS), never for a reverse or another angle.
+    if "shot:" in p and any(r.startswith("kf:") for r in refs) and spec.get("set") and spec.get("kf_same_view") is not True:
+        issues.append("L40: an earlier keyframe as reference (it copies its camera): allowed only for a closer shot of "
+                      "the same view, marked \"kf_same_view\": true; otherwise use the set plate or an outside style plate")
+    # L41 (HCS07 s1a v1): "faces above the frame" came back as headless bodies inside the frame.
+    if re.search(r"(faces?|heads?) (are |is )?(above|out of|outside|cropped (off|by))( the)? frame", p):
+        issues.append("L41: faces/heads 'out of frame' wording: the model paints headless bodies; frame the shot so heads "
+                      "are in it, or describe only hands/objects with no people")
     if "spectacles" in p and "amber" not in p and "no spectacles" not in p:
         issues.append("L11: spectacles that aren't Matt's (confuses the spot-the-glasses game)")
     return issues

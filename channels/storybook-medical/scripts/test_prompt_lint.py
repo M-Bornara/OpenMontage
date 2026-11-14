@@ -105,5 +105,17 @@ status = "PASS" if all(any("L39" in m for m in l39.get(n, [])) for n in ("s6a", 
     and not any("L39" in m for v in l39ok.values() for m in v) else "FAIL"
 print(f"{status} L39 set plate used on another set caught")
 ok = ok and status == "PASS"
+# L40 (HCS07 s4b v1): a keyframe of the same set as reference for another camera = a copy of that keyframe
+l40 = prompt_kit.lint_all({"s4b": {"refs": ["kf:s4a"], "set": "academy", "prompt": shot}})
+l40ok = prompt_kit.lint_all({"s1b": {"refs": ["kf:s1a"], "set": "ward", "kf_same_view": True, "prompt": shot}})
+status = "PASS" if any("L40" in m for m in l40.get("s4b", [])) and not any("L40" in m for v in l40ok.values() for m in v) else "FAIL"
+print(f"{status} L40 earlier keyframe as reference for another camera caught")
+ok = ok and status == "PASS"
+# L41 (HCS07 s1a v1): "faces are above the frame" -> headless bodies
+l41 = prompt_kit.lint_all({"s1a": {"prompt": shot + " Three pairs of crossed arms; their faces are above the frame."}})
+l41ok = prompt_kit.lint_all({"s1a": {"prompt": shot + " Three men, whole heads in frame, arms crossed."}})
+status = "PASS" if any("L41" in m for m in l41.get("s1a", [])) and not any("L41" in m for v in l41ok.values() for m in v) else "FAIL"
+print(f"{status} L41 'faces above the frame' (headless) caught")
+ok = ok and status == "PASS"
 sys.exit(0 if ok else 1)
 

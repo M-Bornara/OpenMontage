@@ -182,7 +182,7 @@ def gen_images(pid: str, section: str, out_dir: str, only: list[str]):
     missing = "--missing" in only          # only items that have no image yet
     lint_ok = "--lint-ok" in only          # proceed despite prompt-lint findings (after reading them)
     legacy = "--legacy" in only            # episodes made before the 2026-11-09 pre-viz rule (no previz_approved)
-    only = [n for n in only if n not in ("--batch", "--missing", "--lint-ok", "--legacy")]
+    only = [n for n in only if n not in ("--batch", "--missing", "--lint-ok", "--legacy", "--resume")]
     ep = load_ep(pid)
     items = ep.get(section, {})
     out = proj(pid) / "assets/images" / out_dir
@@ -275,6 +275,16 @@ def gen_images(pid: str, section: str, out_dir: str, only: list[str]):
         raise SystemExit("PREVIZ GATE: show the free pre-viz (scripts/previz.py) and get the user's OK first, then set "
                          '"previz_approved": "<date>: <what was approved>" in episode.json (--legacy only for episodes '
                          'made before 2026-11-09)')
+    # --resume: collect the batch already submitted (artifacts/batch_jobs.json) before spending on anything new
+    if "--resume" in sys.argv and use_batch:
+        state = proj(pid) / "artifacts/batch_jobs.json"
+        got = gimg.resume(state, {x: main_spec(x) for x in items})
+        for x, (ok, err) in got.items():
+            if ok:
+                log(main_spec(x), True)
+            print((x, ok, err))
+        state.unlink(missing_ok=True)
+        names = [n for n in names if not (out / f"{n}.png").exists()]
     if names:
         specs = [main_spec(x) for x in names] * (2 if dual else 1)
         res = sorted({x["resolution"] for x in specs})

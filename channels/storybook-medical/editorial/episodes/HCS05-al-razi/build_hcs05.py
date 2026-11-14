@@ -183,6 +183,8 @@ V2 = {
 }
 for name, (set_id, firsts, sheets) in V2.items():
     k = KEYFRAMES[name]
+    if name == "s1b":  # a close-up of s1a's own view (L40 exception)
+        k["kf_same_view"] = True
     k.update(refs=[r for r, _ in firsts] + [REFS[x] for x in sheets], set=set_id,
              roles="".join(role for _, role in firsts)
              + "".join(f"Reference {len(firsts) + j + 1} is {SHEETS[x]}. " for j, x in enumerate(sheets)))

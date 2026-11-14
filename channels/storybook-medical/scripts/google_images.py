@@ -65,6 +65,41 @@ def _client():
     return get_genai_client()
 
 
+def resume(state_file: Path, specs: dict[str, dict], poll: int = 30) -> dict[str, tuple[bool, str]]:
+    """Collect a batch already submitted (its job names are in state_file) instead of paying for it again: a lost
+    connection while polling (HCS05, 2026-11-14) left a running job behind. specs: name -> spec with "out"."""
+    results: dict[str, tuple[bool, str]] = {}
+    if not state_file.exists():
+        return results
+    client = _client()
+    for entry in json.loads(state_file.read_text()):
+        name, names = entry["job"], entry["names"]
+        while True:
+            job = client.batches.get(name=name)
+            state = str(job.state)
+            if any(x in state for x in ("SUCCEEDED", "FAILED", "CANCELLED", "EXPIRED")):
+                break
+            print(time.strftime("%H:%M:%S"), name.split("/")[-1], state.split(".")[-1], flush=True)
+            time.sleep(poll)
+        if "SUCCEEDED" not in state:
+            for n in names:
+                results[n] = (False, f"batch {state}")
+            continue
+        for n, resp in zip(names, job.dest.inlined_responses):
+            if n not in specs:
+                continue
+            if resp.error:
+                results[n] = (False, str(resp.error)[:200]); continue
+            data = next((p.inline_data.data for p in (resp.response.candidates[0].content.parts or [])
+                         if getattr(p, "inline_data", None) and p.inline_data.data), None)
+            if not data:
+                results[n] = (False, "no image returned"); continue
+            Path(specs[n]["out"]).parent.mkdir(parents=True, exist_ok=True)
+            Path(specs[n]["out"]).write_bytes(data)
+            results[n] = (True, "")
+    return results
+
+
 def batch(specs: list[dict], label: str, poll: int = 30, state_file: Path | None = None) -> dict[str, tuple[bool, str]]:
     """Run specs through the Batch API. One job per model, split so each job stays under the inline cap."""
     results: dict[str, tuple[bool, str]] = {}

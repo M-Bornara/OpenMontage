@@ -94,3 +94,9 @@ Every generation round teaches us something. A lesson only counts once it's **en
 - **L38:** a model sheet shows several views of ONE person; a shot that takes a sheet carries `ONE_EACH` (each person appears once, take only face/hair/clothes). One sheet per age: a sheet with Finlay 1881 + 1900 could put both in a shot.
 - **L39:** a set plate is a reference only for shots on its own set: story shots that use `ref:plate-<set>` declare `"set": "<set>"`. Other sets take the character sheets, or a style-only plate from outside the film.
 - Found while writing them: wording that contains "model sheet" makes the lint treat a shot as a sheet and skip its shot checks; `ONE_EACH` says "character references" instead.
+
+## L40 · L41 + look-alikes (HCS07 Finlay first images, 2026-11-14)
+- **L40:** s4b (reverse angle) took s4a as a reference and came back as s4a again with Matt added. An earlier keyframe copies its camera: use one only for a closer shot of the same view (`"kf_same_view": true`); otherwise the set plate or an outside style plate.
+- **L41:** s1a "their faces are above the frame" came back as three headless bodies. Never write faces/heads out of frame; put heads in, or show only hands/objects.
+- **Look-alikes:** s6a's second officer and s9a's photographer got Reed's face (same uniform / same era, moustache). `ONE_EACH` now adds "everyone else has a clearly different face, hair and age"; give extras a distinguishing trait (clean-shaven, grey-haired, bowler hat).
+- **Batch resume:** a lost connection while polling left a paid batch running (HCS05). `episode.py ... --batch --resume` collects it from artifacts/batch_jobs.json instead of paying twice.
