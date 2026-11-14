@@ -24,7 +24,7 @@ EP = REPO / "channels/storybook-medical/editorial/episodes"
 EPISODES = {
     "hcs07": {
         "anchor": "finlay", "short": "Finlay", "slot": "Thu Dec 3 · 15:00 ET = 14:00 Alberta",
-        "storyboard": EP / "HCS07-finlay/storyboard-v1.md",
+        "storyboard": EP / "HCS07-finlay/storyboard-v1.md", "project": REPO / "projects/hcs07-finlay",
         "previz": REPO / "projects/hcs07-finlay/review/previz", "maps": ["map-academy.png"],
         "refs_dir": REPO / "projects/hcs07-finlay/refs",
         "refs": [
@@ -38,7 +38,7 @@ EPISODES = {
     },
     "hcs05": {
         "anchor": "al-razi", "short": "al-Razi", "slot": "Mon Dec 7 · 15:00 ET = 14:00 Alberta",
-        "storyboard": EP / "HCS05-al-razi/storyboard-v1.md",
+        "storyboard": EP / "HCS05-al-razi/storyboard-v1.md", "project": REPO / "projects/hcs05-al-razi",
         "previz": REPO / "projects/hcs05-al-razi/review/previz", "maps": ["map-ward.png"],
         "refs_dir": REPO / "projects/hcs05-al-razi/refs",
         "refs": [
@@ -104,6 +104,44 @@ def parse(md_path: Path) -> dict:
             "cost": cost.group(1) if cost else "", "secs": secs}
 
 
+PROMPT_KEYS = r"(SET:|GEOGRAPHY:|SHOT:|CAMERA:|BACKGROUND \(exactly this, nothing else\):|CAST:|CROWD:|FRAMING:|Hidden detail|Small background cameo of MATT)"
+
+
+def prompt_html(spec: dict) -> str:
+    """One image spec -> readable blocks: which references go in, then the prompt split at its labelled parts."""
+    parts = re.split(PROMPT_KEYS, spec.get("prompt", ""))
+    out, cur = [], parts[0].strip()
+    if cur:
+        out.append(cur)
+    for i in range(1, len(parts), 2):
+        out.append(parts[i] + parts[i + 1])
+    refs = ", ".join(r.split(":", 1)[-1].split("/")[-1] for r in spec.get("refs", []))
+    meta = f"{spec.get('aspect', '9:16')} · {spec.get('resolution', '2K')} · references: {refs or 'none'}"
+    roles = f'<p class="roles">{inline(spec["roles"])}</p>' if spec.get("roles") else ""
+    return (f'<details class="prompt"><summary>Image prompt</summary><p class="pmeta">{html.escape(meta)}</p>{roles}'
+            + "".join(f"<p>{inline(x)}</p>" for x in out) + "</details>")
+
+
+def episode_json(e: dict) -> dict:
+    import json
+    f = e.get("project") and e["project"] / "episode.json"
+    return json.load(open(f, encoding="utf-8")) if f and f.exists() else {}
+
+
+def image_cost(ep: dict) -> tuple[int, float]:
+    try:
+        sys.path.insert(0, str(Path(__file__).parent))
+        import google_images as g
+    except Exception:
+        return 0, 0.0
+    n, tot = 0, 0.0
+    for sec in ("references", "keyframes"):
+        for spec in ep.get(sec, {}).values():
+            n += 1
+            tot += g.price(spec.get("model", "gemini-3-pro-image"), spec.get("resolution", ep.get("image_resolution", "2K")), True)
+    return n, tot
+
+
 def shrink(src: Path, dst: Path, edge: int = 900):
     im = Image.open(src).convert("RGB")
     im.thumbnail((edge, edge))
@@ -160,6 +198,14 @@ figcaption b{font-family:var(--display);font-size:14px}
 .legend span{display:inline-block;width:26px;height:10px;background:var(--amber-soft);border:1px solid var(--amber);vertical-align:middle;margin-right:6px;border-radius:2px}
 .ask{margin-top:48px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px;display:grid;gap:6px}
 .ask p{margin:0}
+details.prompt{border-top:1px dashed var(--line);padding-top:8px;font-size:13px}
+details.prompt summary{cursor:pointer;font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--teal)}
+details.prompt p{margin:6px 0 0;overflow-wrap:anywhere}.pmeta{font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+.roles{color:var(--muted);font-style:italic}
+.pics{display:grid;gap:6px;justify-items:start}.pics small{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.refgen{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:14px}
+.refgen article{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:grid;gap:6px;min-width:0}
+.refgen b{font-family:var(--display)}
 #lb{position:fixed;inset:0;background:rgba(10,12,14,.88);display:flex;align-items:center;justify-content:center;padding:24px;z-index:20;cursor:zoom-out}
 #lb img{max-width:100%;max-height:100%;border-radius:6px}
 @media (max-width:560px){.shot{grid-template-columns:110px 1fr}.shot img{width:110px}.shot dl{grid-template-columns:1fr}.shot dt{padding-top:6px}}
@@ -173,7 +219,25 @@ def build(out: Path, keys: list[str]) -> Path:
     eps = [(k, EPISODES[k], parse(EPISODES[k]["storyboard"])) for k in keys]
     nav = "".join(f'<a href="#{e["anchor"]}">{html.escape(p["title"].split(" — ")[0])} · {e["short"]}</a>' for k, e, p in eps)
     body = []
+    stages = []
     for k, e, p in eps:
+        ep = episode_json(e)
+        kf_dir = e.get("project", Path("-")) / "assets/images/keyframes"
+        ref_dir = e.get("project", Path("-")) / "assets/images/refs"
+        has_imgs = any((kf_dir / f"{n}.png").exists() for n in ep.get("keyframes", {}))
+        stage = ("images · waiting for your OK" if has_imgs else
+                 "image prompts · waiting for your OK" if ep.get("previz_approved") and ep.get("keyframes") else
+                 "storyboard + pre-viz · waiting for your OK")
+        stages.append(stage)
+        n_img, img_usd = image_cost(ep)
+        # reference images to make (cast sheets, set plates) with their prompts
+        refgen = []
+        for rn, spec in ep.get("references", {}).items():
+            done = ref_dir / f"{rn}.png"
+            pic = ""
+            if done.exists():
+                pic = f'<img src="img/{shrink(done, img / f"{k}-gen-{rn}", 1100)}" alt="{html.escape(rn)}" loading="lazy">'
+            refgen.append(f'<article><b>{html.escape(rn)}</b>{pic}{prompt_html(spec).replace("<details", "<details open", 0)}</article>')
         # script
         sc = []
         for ln in p["script"]:
@@ -202,28 +266,36 @@ def build(out: Path, keys: list[str]) -> Path:
                 continue
             n, s, line, size, see, fx, txt, sfx = r[:8]
             fr = e["previz"] / f"{n}.png"
-            pic = ""
+            pics = []
             if fr.exists():
                 shutil.copy(fr, img / f"{k}-{n}.png")
-                pic = f'<img src="img/{k}-{n}.png" alt="Pre-viz sketch, shot {html.escape(n)}" loading="lazy">'
+                pics.append(f'<img src="img/{k}-{n}.png" alt="Pre-viz sketch, shot {html.escape(n)}" loading="lazy"><small>sketch</small>')
+            kf = kf_dir / f"s{n}.png"
+            if kf.exists():
+                pics.append(f'<img src="img/{shrink(kf, img / f"{k}-kf-{n}", 900)}" alt="Image, shot {html.escape(n)}" loading="lazy"><small>image</small>')
+            pic = f'<div class="pics">{"".join(pics)}</div>'
+            spec = ep.get("keyframes", {}).get(f"s{n}")
+            ptxt = prompt_html(spec) if spec else ""
             cards.append(
                 f'<article class="shot">{pic}<div class="info"><div class="head"><span class="num">{html.escape(n)}</span>'
                 f'<span class="chip">{html.escape(s)} s</span><span class="size">{inline(size)}</span></div>'
                 f'<p class="line">“{inline(line)}”</p><dl><dt>We see</dt><dd>{inline(see)}</dd>'
                 f'<dt>Motion</dt><dd>{inline(fx)}</dd><dt>Text</dt><dd>{inline(txt)}</dd>'
-                f'<dt>Sound</dt><dd>{inline(sfx)}</dd></dl></div></article>')
+                f'<dt>Sound</dt><dd>{inline(sfx)}</dd></dl>{ptxt}</div></article>')
         notes = "".join(f"<p>{inline(n)}</p>" for n in p["notes"])
         body.append(f"""
 <section class="ep" id="{e['anchor']}">
   <div class="kicker">{html.escape(k.upper())} · {html.escape(e['slot'])}</div>
   <h2>{html.escape(p['title'].split(' — ', 1)[-1])}</h2>
   <div class="meta"><span><b>{len(cards)}</b> shots</span><span>≈ <b>{p['secs']:.0f} s</b> of pictures</span>
-  <span>estimate <b>{html.escape(p['cost'])}</b></span><span>status <b>storyboard v1.1 · waiting for your OK</b></span></div>
+  <span>{f"images <b>{n_img}</b> · <b>${img_usd:.2f}</b> (Gemini Batch) + narration and music ≈ <b>$0.13</b>" if n_img else f"estimate <b>{html.escape(p['cost'])}</b>"}</span>
+  <span>status <b>{html.escape(stage)}</b></span></div>
   <div class="block"><h3>Notes and period rules</h3><div class="notes">{notes}</div></div>
   <div class="block"><h3>Script (approved)</h3><div class="script">{''.join(sc)}</div></div>
   <div class="block"><h3>People and places: the real pictures we follow</h3><div class="refs">{''.join(figs)}</div></div>
   <div class="block"><h3>Cast and sets</h3><div class="cast"><table><tr><th>Who / where</th><th>Look</th><th>Shots</th></tr>{cast}</table></div></div>
   <div class="block"><h3>Set map (where each camera stands)</h3><div class="maps">{''.join(maps)}</div></div>
+  {f'<div class="block"><h3>Reference images made first (cast sheets and empty sets)</h3><div class="refgen">{"".join(refgen)}</div></div>' if refgen else ''}
   <div class="block"><h3>Shots</h3><p class="legend"><span></span>orange band = where the on-screen text sits · dotted lines = the Shorts safe zone</p>
   <div class="shots">{''.join(cards)}</div></div>
 </section>""")
@@ -233,12 +305,12 @@ def build(out: Path, keys: list[str]) -> Path:
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400&family=Montserrat:wght@700;800&display=swap">
 <style>{CSS}</style>
 <div class="wrap">
-  <div class="kicker">Oddly Matt · free pre-viz · nothing generated yet</div>
+  <div class="kicker">Oddly Matt · approval page · {html.escape(stages[0] if len(set(stages)) == 1 else ", ".join(stages))}</div>
   <h1>Next two Shorts, shot by shot</h1>
   <p class="lede">Each shot shows a rough sketch of the framing (people as silhouettes, where the text goes), the narration line it covers, and what the painting will show. The real portraits and period pictures set how people and places look. Tap any picture to enlarge it.</p>
   <nav>{nav}</nav>
   {''.join(body)}
-  <div class="ask"><h3>What I need from you</h3><p>Reply in chat with the shot numbers you want changed (for example "al-Razi 6: Matt holds the lamp higher"), or say both are OK. Next comes the image prompts; images are only made after you approve them.</p></div>
+  <div class="ask"><h3>What I need from you</h3><p>Reply in chat with the shot numbers you want changed (for example "al-Razi 6: Matt holds the lamp higher"), or say both are OK. The order is always: storyboard and sketches, then the image prompts (open "Image prompt" under any shot), then the images. Nothing is paid for until you approve the step before it.</p></div>
 </div>
 <div id="lb" hidden><img alt=""></div>
 <script>

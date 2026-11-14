@@ -51,6 +51,15 @@ Every shot in the storyboard names its motion method, cheapest and most controll
 HC001's animatic was text cards over simple shapes, so it didn't show what the video would be. Images are cheap
 ($0.15) and only clips are expensive, so the new order makes the storyboard almost the final film:
 
+0. **Period research (free; user, 2026-11-14).** Before the storyboard: real portraits of every main character and
+   period images of each set, costume, prop and script (Wikimedia Commons, Wellcome, museums; licence noted), saved to
+   `projects/<id>/refs/` and listed in `editorial/episodes/<ID>/references.md`. No portrait from the lifetime: follow the
+   image the audience's culture knows. Check every set for anachronisms; show disputed events in a way that fits every
+   account. The real photos become the likeness references for the cast sheets.
+0b. **Approval page (user, 2026-11-14: "keep this setting to get the approval before generation").** Every episode has
+   one claude.ai Artifact page, built by `scripts/storyboard_page.py`: per shot the pre-viz sketch, narration line and
+   shot design; the real references beside the cast; later the image prompts and the images. The user approves each
+   gate on it (storyboard + pre-viz → prompts → images) by shot number. Nothing is generated between gates.
 1. **Storyboard sheet (free).** Decoupage first (L28, user review 2026-11-06): every shot is a designed shot with
    its **size** (ELS/LS/MS/MCU/CU/ECU/insert/OTS), **angle**, **lens**, the **action of its own line** and the
    **emotion on the faces**. One image per idea in the narration. A set that comes back changes size and angle
