@@ -100,3 +100,14 @@ Every generation round teaches us something. A lesson only counts once it's **en
 - **L41:** s1a "their faces are above the frame" came back as three headless bodies. Never write faces/heads out of frame; put heads in, or show only hands/objects.
 - **Look-alikes:** s6a's second officer and s9a's photographer got Reed's face (same uniform / same era, moustache). `ONE_EACH` now adds "everyone else has a clearly different face, hair and age"; give extras a distinguishing trait (clean-shaven, grey-haired, bowler hat).
 - **Batch resume:** a lost connection while polling left a paid batch running (HCS05). `episode.py ... --batch --resume` collects it from artifacts/batch_jobs.json instead of paying twice.
+
+## Round 2 (HCS05 / HCS07 images, 2026-11-14)
+- **Extras duplicated without any sheet:** HCS05 s3 `cast(PATIENT, MOTHER)` ("exactly 2 people") came back with two
+  mothers. A count alone isn't enough when the set has room for more: say WHERE each person is and "nobody behind / no
+  second woman".
+- **Period lamps:** the model's default oil lamp has a glass chimney (1800s). Ancient and medieval sets name the lamp:
+  "a small open clay dish lamp with a spout and a bare flame, NO glass chimney" (HCS05 `NOT_LATER`).
+- **Unbound notebooks:** "paper notebooks" came back as leather-bound books; write "unbound stacks of folded sheets,
+  no covers, tied with cord".
+- **A pose that won't change:** Lazear (HCS07 s7a) held the tube at his face twice. Fix the geometry, not the verb:
+  "standing upright, the tube at arm's length, far below his face, at mattress height".
