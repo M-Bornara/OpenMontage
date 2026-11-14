@@ -142,6 +142,19 @@ def image_cost(ep: dict) -> tuple[int, float]:
     return n, tot
 
 
+def web_preview(render: Path, dst: Path) -> bool:
+    """A light 540x960 copy of the rough cut for the page (an Artifact file must stay under 15 MB)."""
+    import subprocess
+    if not render.exists():
+        return False
+    if not dst.exists() or dst.stat().st_mtime < render.stat().st_mtime:
+        dst.parent.mkdir(parents=True, exist_ok=True)
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(render), "-vf", "scale=540:960", "-c:v", "libx264",
+                        "-preset", "slow", "-crf", "26", "-maxrate", "1500k", "-bufsize", "3000k", "-pix_fmt", "yuv420p",
+                        "-c:a", "aac", "-b:a", "96k", "-movflags", "+faststart", str(dst)], check=True)
+    return True
+
+
 def shrink(src: Path, dst: Path, edge: int = 900):
     im = Image.open(src).convert("RGB")
     im.thumbnail((edge, edge))
@@ -206,6 +219,7 @@ details.prompt p{margin:6px 0 0;overflow-wrap:anywhere}.pmeta{font-family:var(--
 .refgen{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:14px}
 .refgen article{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:grid;gap:6px;min-width:0}
 .refgen b{font-family:var(--display)}
+video.cut{width:min(360px,100%);aspect-ratio:9/16;border-radius:12px;background:#000;display:block}
 #lb{position:fixed;inset:0;background:rgba(10,12,14,.88);display:flex;align-items:center;justify-content:center;padding:24px;z-index:20;cursor:zoom-out}
 #lb img{max-width:100%;max-height:100%;border-radius:6px}
 @media (max-width:560px){.shot{grid-template-columns:110px 1fr}.shot img{width:110px}.shot dl{grid-template-columns:1fr}.shot dt{padding-top:6px}}
@@ -230,6 +244,12 @@ def build(out: Path, keys: list[str]) -> Path:
                  "storyboard + pre-viz · waiting for your OK")
         stages.append(stage)
         n_img, img_usd = image_cost(ep)
+        vid = ""
+        if e.get("project") and web_preview(e["project"] / "renders/final.mp4", out / "video" / f"{e['project'].name}.mp4"):
+            vid = (f'<div class="block"><h3>Rough cut (watch with sound)</h3><video class="cut" controls playsinline '
+                   f'preload="metadata" src="video/{e["project"].name}.mp4"></video></div>')
+            stage = "rough cut · waiting for your OK"
+            stages[-1] = stage
         # reference images to make (cast sheets, set plates) with their prompts
         refgen = []
         for rn, spec in ep.get("references", {}).items():
@@ -290,6 +310,7 @@ def build(out: Path, keys: list[str]) -> Path:
   <div class="meta"><span><b>{len(cards)}</b> shots</span><span>≈ <b>{p['secs']:.0f} s</b> of pictures</span>
   <span>{f"images <b>{n_img}</b> · <b>${img_usd:.2f}</b> (Gemini Batch) + narration and music ≈ <b>$0.13</b>" if n_img else f"estimate <b>{html.escape(p['cost'])}</b>"}</span>
   <span>status <b>{html.escape(stage)}</b></span></div>
+  {vid}
   <div class="block"><h3>Notes and period rules</h3><div class="notes">{notes}</div></div>
   <div class="block"><h3>Script (approved)</h3><div class="script">{''.join(sc)}</div></div>
   <div class="block"><h3>People and places: the real pictures we follow</h3><div class="refs">{''.join(figs)}</div></div>

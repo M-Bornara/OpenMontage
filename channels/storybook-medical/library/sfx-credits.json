@@ -628,5 +628,32 @@
   "license": "https://creativecommons.org/licenses/by/4.0/",
   "duration": 2.05184,
   "url": "https://freesound.org/s/670243/"
+ },
+ "horse-carriage": {
+  "file": "horse-carriage.mp3",
+  "freesound_id": 479797,
+  "title": "R23-54-Horse Carriage in Distance.wav",
+  "author": "craigsmith",
+  "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+  "duration": 19.2612,
+  "url": "https://freesound.org/s/479797/"
+ },
+ "mosquito-buzz": {
+  "file": "mosquito-buzz.mp3",
+  "freesound_id": 320723,
+  "title": "mosquito sound.wav",
+  "author": "djfroyd",
+  "license": "http://creativecommons.org/licenses/by/3.0/",
+  "duration": 13.125,
+  "url": "https://freesound.org/s/320723/"
+ },
+ "crickets-field": {
+  "file": "crickets-field.mp3",
+  "freesound_id": 825281,
+  "title": "calm forest 0853 am 240320_0695",
+  "author": "klankbeeld",
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "duration": 47.2792,
+  "url": "https://freesound.org/s/825281/"
  }
 }
