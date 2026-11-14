@@ -11,7 +11,7 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[5]
 sys.path.insert(0, str(REPO / "channels/storybook-medical/scripts"))
-from prompt_kit import (FULL_BLEED, NO_PEOPLE, NO_TEXT, PERIOD, SAFE_FRAMING, camera, cast, framing,  # noqa: E402
+from prompt_kit import (FULL_BLEED, NO_PEOPLE, NO_TEXT, ONE_EACH, PERIOD, SAFE_FRAMING, camera, cast, framing,  # noqa: E402
                         glasses_gag, lint_all, matt_beat, real_writing, set_block)
 
 PID = "hcs05-al-razi"
@@ -62,7 +62,7 @@ REFERENCES = {
     "sheet-razi": dict(aspect="16:9", refs=[SHEET_LAYOUT, "proj:refs/razi_1956.jpg"],
         roles="Reference 1 shows our character model-sheet layout and painting style only (not this person). Reference 2 "
               "is the well-known Iranian portrait of al-Razi: paint THIS face, turban, beard and clothes in our storybook "
-              "style (ignore the writing on it). ",
+              "style (ignore the writing on it; do not put the portrait itself on the sheet). ",
         prompt=f"Clean character model sheet on plain bone-white paper: {RAZI}. Front view, three-quarter view, profile "
                "view, back view, a seated cross-legged view, plus three head close-ups (doubtful, frowning; calm, a "
                "knowing half-smile; watchful). Same scale in every view. No text, labels or watermark."),
@@ -85,7 +85,7 @@ WARD_MAP = ("GEOGRAPHY: two rows of four beds run north-south; group A on the we
 KEYFRAMES = {
     "s1a": dict(aspect="9:16", refs=["ref:plate-ward", Z], roles=WARD_LOOK + RAZI_ROLE,
         prompt=f"{WARD} {WARD_MAP} {framing('MS', 'eye level', '35 mm', 'al-Razi stops his assistant from treating a patient, on purpose', 'calm authority, the assistant puzzled')} "
-               f"{camera('in the aisle by the curtain, mid-ward', 'north, up the aisle', 'the far end of the ward: brick arches, lamps in niches, the curtain on the right')} "
+               f"{camera('in the aisle by the curtain, mid-ward', 'south, toward the entrance', 'the arched entrance at the south end with pale daylight in the doorway, the curtain on the left')} "
                f"{cast(RAZI + ', standing between two beds, his open palm raised to stop', ASSISTANT + ', carrying a small brass bowl toward a bed, stopped mid-step')} "
                f"Patients lie under blankets in the beds, faces turned away. {NOT_LATER} {SAFE_FRAMING} {PERIOD} {NO_TEXT}"),
     "s1b": dict(aspect="9:16", resolution="4K", refs=["kf:s1a", Z],
@@ -155,6 +155,39 @@ KEYFRAMES = {
                "of beds; each bottle has a plain white label with no lettering (the A and B are added in the edit). "
                f"{NO_PEOPLE} {SAFE_FRAMING}"),
 }
+
+
+# -- v2 references (user, 2026-11-14: "make sure duplications are not happening"): L38 + L39 --------------------------
+# The ward plate goes only to ward shots (L39); his room, Rey, the shelf, the museum and the lab take the al-Razi sheet
+# or the HC001 study plate as STYLE only. s1a now faces south (entrance) so it can't repeat s6 (north, up the aisle).
+OUTSIDE = "Reference 1 is a people-free room from another film, for the painting style ONLY: never paint its room. "
+SHEETS = {"Z": "AL-RAZI (same face, turban, beard and robe)",
+          "MATT": "MATT: copy his face, amber round spectacles, teal scarf and amber notebook only; his clothes are "
+                  "described below",
+          "GL": "Matt's amber spectacles (the hidden gag)"}
+REFS = {"Z": Z, "MATT": "kit:matt-sheet.jpg", "GL": "kit:glasses-sheet.jpg"}
+KF_LOOK = "Reference 1 is an earlier shot of this film, for the painting style and lamplight ONLY. "
+V2 = {
+    "s1a": ("ward", [("ref:plate-ward", WARD_LOOK)], ["Z"]),
+    "s1b": ("ward", [("kf:s1a", KF_LOOK)], ["Z"]),
+    "s2": ("rey", [(STYLE_PLATE, OUTSIDE)], []),
+    "s3": ("ward", [("ref:plate-ward", WARD_LOOK)], []),
+    "s4": ("room", [], ["Z"]),
+    "s5": ("ward", [("ref:plate-ward", WARD_LOOK)], []),
+    "s6": ("ward", [("ref:plate-ward", WARD_LOOK)], ["Z", "MATT"]),
+    "s7a": ("room", [], ["Z", "GL"]),
+    "s7b": ("ward", [("ref:plate-ward", WARD_LOOK)], []),
+    "s8": ("shelf", [(STYLE_PLATE, OUTSIDE)], []),
+    "s9a": ("museum", [(STYLE_PLATE, OUTSIDE)], []),
+    "s9b": ("lab", [(STYLE_PLATE, OUTSIDE)], []),
+}
+for name, (set_id, firsts, sheets) in V2.items():
+    k = KEYFRAMES[name]
+    k.update(refs=[r for r, _ in firsts] + [REFS[x] for x in sheets], set=set_id,
+             roles="".join(role for _, role in firsts)
+             + "".join(f"Reference {len(firsts) + j + 1} is {SHEETS[x]}. " for j, x in enumerate(sheets)))
+    if sheets:
+        k["prompt"] += " " + ONE_EACH
 
 
 def main():

@@ -101,7 +101,7 @@ WARD = {
                (670, 520, 870, 620, "bed B3", (150, 110, 80)), (670, 720, 870, 820, "bed B4", (150, 110, 80)),
                (480, 80, 520, 900, "", (180, 60, 50))],
     "landmarks": [(500, 940, "end of ward: al-Razi + Matt (shot 6)")],
-    "cameras": [("1a", 500, 650, 0, 50, "MS between the rows"), ("3", 420, 560, 270, 50, "MS at bed A3"),
+    "cameras": [("1a", 500, 650, 180, 50, "MS, facing the entrance"), ("3", 420, 560, 270, 50, "MS at bed A3"),
                 ("5", 500, 480, 0, 20, "top-down over the curtain"), ("6", 500, 990, 0, 60, "low, from the end"),
                 ("7b", 620, 330, 90, 40, "CU at a B bed")],
 }

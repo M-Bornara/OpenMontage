@@ -59,6 +59,10 @@ def set_block(name: str, year: str, look: str) -> str:
 # L9 · red rule and string/vial colours drift.
 RED_RULE = ("Only the story's motif may be saturated red (e.g. Alexis's tuque); everything else avoids pure red. Strings "
             "are cream-white; glass vials hold amber liquid.")
+# L38 · a model sheet shows several views of one person; the shot must show each person once (user, 2026-11-14).
+ONE_EACH = ("Each named person appears ONCE in this image, never twice and never as a second smaller copy: the "
+            "character references show several views of ONE person, so take only the face, hair and clothes from them, not "
+            "their extra poses or layout.")
 # L10 · period accuracy slips (castle-like forts, modern maps).
 PERIOD = "Period-accurate only: nothing modern, no modern maps or borders, no anachronistic objects."
 # L11 · Matt's glasses: hide them as a small visual joke (brand-signature.md).
@@ -203,6 +207,19 @@ def lint(name: str, spec: dict) -> list[str]:
     if "shot:" in p and "camera: standing" not in p:
         issues.append("L37: story shot without a camera() line (position, facing, exact background): every shot is "
                       "mapped, then drawn in the free pre-viz before generation")
+    # L38 (user, 2026-11-14, HCS07/HCS05: "since you are using a reference image make sure duplications are not
+    # happening"): a model sheet shows several views of ONE person, and a sheet holding two ages of one man can put both
+    # in a shot. Every story shot that takes a sheet says each person appears once (ONE_EACH).
+    if "shot:" in p and any("sheet" in r for r in refs) and "appears once" not in p:
+        issues.append("L38: a character sheet as reference without ONE_EACH (the model may paint the person twice, "
+                      "or copy the sheet's extra poses)")
+    # L39 (same note): a set plate passed to a shot on ANOTHER set leaks its room into it (HCS08: the street everywhere).
+    # Story shots that use a plate declare "set": the plate must be that set's own (ref:plate-<set>).
+    plates = [r.split("plate-", 1)[1] for r in refs if r.startswith("ref:plate-")]
+    if "shot:" in p and plates and (not spec.get("set") or any(pl != spec["set"] for pl in plates)):
+        issues.append(f"L39: plate reference {plates} on a shot whose set is {spec.get('set')!r}: a plate is a reference "
+                      "only for shots on its own set (declare \"set\"; elsewhere use the character sheets or a style-only "
+                      "plate from outside this film)")
     if "spectacles" in p and "amber" not in p and "no spectacles" not in p:
         issues.append("L11: spectacles that aren't Matt's (confuses the spot-the-glasses game)")
     return issues

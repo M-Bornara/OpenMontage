@@ -11,7 +11,7 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[5]
 sys.path.insert(0, str(REPO / "channels/storybook-medical/scripts"))
-from prompt_kit import (FULL_BLEED, NO_PEOPLE, NO_TEXT, PERIOD, SAFE_FRAMING, WAVY_WRITING, camera, cast,  # noqa: E402
+from prompt_kit import (FULL_BLEED, NO_PEOPLE, NO_TEXT, ONE_EACH, PERIOD, SAFE_FRAMING, WAVY_WRITING, camera, cast,  # noqa: E402
                         framing, glasses_gag, lint_all, matt_beat, real_writing, set_block)
 
 PID = "hcs07-finlay"
@@ -73,7 +73,7 @@ STYLE_PLATE = f"{HC1}/plate-study.png"            # HC001 people-free plate: pai
 SHEET_LAYOUT = f"{HC1}/sheet-osler.png"           # HC001 model sheet: layout + style only
 SHEET = "Reference 1 shows our character model-sheet layout and painting style only (not this person). "
 PHOTO = ("Reference 2 is a period photograph of the real person: paint THIS face (likeness: head shape, hair, whiskers, "
-         "eyes, nose) in our storybook style, not as a photo. ")
+         "eyes, nose) in our storybook style, not as a photo; do not put the photograph itself on the sheet. ")
 
 
 def sheet(person: str, extra: str) -> str:
@@ -82,9 +82,12 @@ def sheet(person: str, extra: str) -> str:
 
 
 REFERENCES = {
-    "sheet-finlay": dict(aspect="16:9", refs=[SHEET_LAYOUT, "proj:refs/finlay.jpg"], roles=SHEET + PHOTO,
-        prompt=sheet(f"{FINLAY81}; and, at the right side of the sheet, the same man in 1900: {FINLAY00}",
-                     "1881: intent, studying something closely; 1881: patient, a little hurt; 1900: a small quiet smile")),
+    # two sheets, one age each (L38: one sheet with both ages could put two Finlays in a shot)
+    "sheet-finlay-1881": dict(aspect="16:9", refs=[SHEET_LAYOUT, "proj:refs/finlay.jpg"],
+        roles=SHEET + PHOTO + "The photo shows him older (about 1900): paint him at 47, hair and whiskers dark grey. ",
+        prompt=sheet(FINLAY81, "intent, studying something closely; patient, a little hurt; quietly certain")),
+    "sheet-finlay-1900": dict(aspect="16:9", refs=[SHEET_LAYOUT, "proj:refs/finlay.jpg"], roles=SHEET + PHOTO,
+        prompt=sheet(FINLAY00, "a small quiet smile; reading; kind")),
     "sheet-reed": dict(aspect="16:9", refs=[SHEET_LAYOUT, "proj:refs/reed.jpg"], roles=SHEET + PHOTO,
         prompt=sheet(REED, "serious, listening; determined; a modest half smile")),
     "sheet-lazear": dict(aspect="16:9", refs=[SHEET_LAYOUT, "proj:refs/lazear.jpg"], roles=SHEET + PHOTO,
@@ -101,7 +104,8 @@ REFERENCES = {
                f"location plate: no people. {PERIOD} {NO_TEXT}"),
 }
 
-F, R, L = "ref:sheet-finlay", "ref:sheet-reed", "ref:sheet-lazear"
+F = F81 = "ref:sheet-finlay-1881"
+F00, R, L = "ref:sheet-finlay-1900", "ref:sheet-reed", "ref:sheet-lazear"
 STYLE_ONLY = ("Reference 1 is the {n} plate, for the painting style and palette ONLY: do NOT copy its composition or "
               "camera angle. ")
 HALL_LOOK = ("Reference 1 is an earlier shot of this hall, for the painting style, stone, light and benches ONLY: do NOT "
@@ -223,6 +227,47 @@ KEYFRAMES = {
                f"name with a pen. {real_writing('Dr. Carlos J. Finlay', 'in the middle of the page, underlined')} "
                f"{FULL_BLEED} {SAFE_FRAMING} {PERIOD}"),
 }
+
+
+# -- v2 references (user, 2026-11-14: "make sure duplications are not happening"): L38 + L39 --------------------------
+# A set plate goes only to shots on its own set (L39); shots elsewhere take the character sheets (painted in our style)
+# or the HC001 study plate as STYLE only (not from this film, so its room can't be mistaken for one of ours). Each shot
+# with a sheet says every person appears once (L38). Finlay has one sheet per age.
+OUTSIDE = "Reference 1 is a people-free room from another film, for the painting style ONLY: never paint its room. "
+SHEETS = {"F81": "CARLOS FINLAY in 1881 (dark-grey whiskers, clear eyeglasses)",
+          "F00": "CARLOS FINLAY in 1900 (white whiskers, clear eyeglasses, linen suit)",
+          "R": "WALTER REED", "L": "JESSE LAZEAR",
+          "MATT": "MATT: copy his face, amber round spectacles, teal scarf and amber notebook only; his clothes are "
+                  "described below",
+          "GL": "Matt's amber spectacles (the hidden gag)"}
+REFS = {"F81": F81, "F00": F00, "R": R, "L": L, "MATT": "kit:matt-sheet.jpg", "GL": "kit:glasses-sheet.jpg"}
+HARBOUR_PHOTO = ("Reference 2 is a period photograph used ONLY for the shape of Morro Castle, its lighthouse and the "
+                 "harbour mouth; paint it, never copy the photo. ")
+V2 = {  # shot: (set, leading refs with their roles, sheet keys)
+    "s1a": ("academy", [("kf:s4a", HALL_LOOK)], []),
+    "s1b": ("study", [], ["F81"]),
+    "s2a": ("harbour", [(STYLE_PLATE, OUTSIDE), ("proj:refs/havana_harbor_1860.jpg", HARBOUR_PHOTO)], []),
+    "s2b": ("street", [("ref:plate-street", STYLE_ONLY.format(n="Havana street"))], []),
+    "s3": ("study", [], ["F81"]),
+    "s4a": ("academy", [("ref:plate-academy", "Reference 1 is the empty Academy hall: this is that hall, seen from the back. ")], ["F81"]),
+    "s4b": ("academy", [("kf:s4a", HALL_LOOK)], ["MATT"]),
+    "s5": ("lab", [], ["F81", "GL"]),
+    "s6a": ("camp", [], ["R"]),
+    "s6b": ("table", [], ["F00", "R"]),
+    "s7a": ("ward", [], ["L"]),
+    "s7b": ("tent", [(STYLE_PLATE, OUTSIDE)], []),
+    "s8a": ("macro", [(STYLE_PLATE, OUTSIDE)], []),
+    "s8b": ("study", [], ["F00"]),
+    "s9a": ("stage", [], ["R"]),
+    "s9b": ("desk", [], ["R"]),
+}
+for name, (set_id, firsts, sheets) in V2.items():
+    k = KEYFRAMES[name]
+    k.update(refs=[r for r, _ in firsts] + [REFS[x] for x in sheets], set=set_id,
+             roles="".join(role for _, role in firsts)
+             + "".join(f"Reference {len(firsts) + j + 1} is {SHEETS[x]}. " for j, x in enumerate(sheets)))
+    if sheets:
+        k["prompt"] += " " + ONE_EACH
 
 
 def main():

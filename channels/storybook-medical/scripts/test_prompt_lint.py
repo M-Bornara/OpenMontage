@@ -90,5 +90,20 @@ l37ok = prompt_kit.lint_all({"s1": {"prompt": "SHOT: close-up, low. " + prompt_k
 status = "PASS" if any("L37" in m for m in l37.get("s1", [])) and not any("L37" in m for v in l37ok.values() for m in v) else "FAIL"
 print(f"{status} L37 story shot without a camera() line caught")
 ok = ok and status == "PASS"
+# L38 (user 2026-11-14): a character sheet as reference without the appear-once line
+shot = "SHOT: medium shot, x. " + prompt_kit.camera("here", "north", "a wall") + mb
+l38 = prompt_kit.lint_all({"s1": {"refs": ["ref:sheet-finlay"], "prompt": shot}})
+l38ok = prompt_kit.lint_all({"s1": {"refs": ["ref:sheet-finlay"], "prompt": shot + prompt_kit.ONE_EACH}})
+status = "PASS" if any("L38" in m for m in l38.get("s1", [])) and not any("L38" in m for v in l38ok.values() for m in v) else "FAIL"
+print(f"{status} L38 sheet reference without ONE_EACH caught")
+ok = ok and status == "PASS"
+# L39 (user 2026-11-14): a set plate leaking into another set (HCS07 v1 draft: the street plate on the camp and tent shots)
+l39 = prompt_kit.lint_all({"s6a": {"refs": ["ref:plate-street"], "set": "camp", "prompt": shot},
+                           "s7b": {"refs": ["ref:plate-street"], "prompt": shot}})
+l39ok = prompt_kit.lint_all({"s2b": {"refs": ["ref:plate-street"], "set": "street", "prompt": shot}})
+status = "PASS" if all(any("L39" in m for m in l39.get(n, [])) for n in ("s6a", "s7b")) \
+    and not any("L39" in m for v in l39ok.values() for m in v) else "FAIL"
+print(f"{status} L39 set plate used on another set caught")
+ok = ok and status == "PASS"
 sys.exit(0 if ok else 1)
 

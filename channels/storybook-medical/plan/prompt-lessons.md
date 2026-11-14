@@ -89,3 +89,8 @@ Every generation round teaches us something. A lesson only counts once it's **en
 - An extra person in a scene that has a valid cast (HC001 M25), or people added around a grave (M34).
 - Mirror-fixes when the side is wrong.
 | L29 | 2026-11-07 | HCS02/HCS03: no Matt in any Short (user: "I thought we included him") | One Matt cameo in a new shot of every video, Shorts included: `matt_beat()`; lint L29 flags a video without one (`require_matt=False` only for images made before the rule) | test_prompt_lint.py L29 |
+
+## L38 · L39 (user, 2026-11-14, HCS07 Finlay / HCS05 al-Razi, before generation): "since you are using a reference image make sure duplications are not happening"
+- **L38:** a model sheet shows several views of ONE person; a shot that takes a sheet carries `ONE_EACH` (each person appears once, take only face/hair/clothes). One sheet per age: a sheet with Finlay 1881 + 1900 could put both in a shot.
+- **L39:** a set plate is a reference only for shots on its own set: story shots that use `ref:plate-<set>` declare `"set": "<set>"`. Other sets take the character sheets, or a style-only plate from outside the film.
+- Found while writing them: wording that contains "model sheet" makes the lint treat a shot as a sheet and skip its shot checks; `ONE_EACH` says "character references" instead.
