@@ -38,7 +38,8 @@ MOTHER = "his mother (40s, a dark headscarf, worried, sitting on the floor cushi
 
 # ── sets (period references: references.md) ─────────────────────────────────────────────────────────────────────
 NOT_LATER = ("No blue or turquoise tiles, no glass windows, no chairs, no desks, no printed or bound modern books, no "
-             "metal lanterns: this is about 900 AD.")
+             "metal lanterns, NO glass-chimney oil lamps (those are 1800s): every lamp is a small open clay dish lamp "
+             "with a spout and a bare flame. This is about 900 AD.")
 WARD = set_block("The hospital ward (bimaristan) in Rey", "about 900 AD",
                  "a long hall of warm baked brick laid in woven geometric patterns, round brick arches, carved plaster "
                  "panels, wooden lattice windows, small clay oil lamps in wall niches, low wooden beds with woven wool "
@@ -48,7 +49,8 @@ REY = set_block("The city of Rey, near today's Tehran", "about 900 AD, at dusk",
                 "rocky hill, poplar trees, and far behind, the white snow cone of Mount Damavand in the Alborz mountains")
 ROOM = set_block("Al-Razi's room at night", "about 900 AD",
                  "a carpet and cushions on the floor, a clay oil lamp, a brass inkwell and reed pens, piles of loose "
-                 "paper notebooks tied with cord; plain plastered walls")
+                 "paper notebooks (unbound stacks of folded sheets, no leather covers) tied with cord; plain plastered "
+                 "walls")
 MUSEUM = set_block("A museum gallery today", "present day",
                    "dim gallery, white walls, one glass display case lit from above")
 LAB = set_block("A modern laboratory today", "present day", "a clean white lab bench, soft daylight")
@@ -102,7 +104,8 @@ KEYFRAMES = {
     "s3": dict(aspect="9:16", refs=["ref:plate-ward"], roles=WARD_LOOK,
         prompt=f"{WARD} {WARD_MAP} {framing('MS', 'eye level, beside the bed', '35 mm', 'the first signs of meningitis, and the usual treatment waiting', 'worry, fever')} "
                f"{camera('in the aisle beside bed A3', 'west, at the bed', 'the brick wall with a lattice window and a lamp niche')} "
-               f"{cast(PATIENT, MOTHER)} On a low wooden side table: a small brass bowl and a slim lancet laid on a "
+               f"{cast(PATIENT, MOTHER)} ONLY these two people: one young man in the bed and ONE woman, his mother, sitting on "
+               f"a cushion on the near side of the bed; nobody behind the bed, no second woman. On a low wooden side table: a small brass bowl and a slim lancet laid on a "
                f"folded white cloth. No cut, no blood. {NOT_LATER} {SAFE_FRAMING} {PERIOD} {NO_TEXT}"),
     "s4": dict(aspect="9:16", refs=["ref:plate-ward", Z], roles=WARD_LOOK + RAZI_ROLE,
         prompt=f"{ROOM} {framing('MCU', 'eye level, low', '50 mm', 'al-Razi doubts the treatment', 'frowning, the pen paused')} "
@@ -129,7 +132,7 @@ KEYFRAMES = {
         prompt=f"{ROOM} {framing('INSERT', 'top-down over the carpet', '50 mm', 'he writes down his result in his notes', 'focus, conviction')} "
                f"{camera('above his knee', 'straight down', 'the carpet and the notebooks')} "
                "His hand (sand sleeve, blue cuff) writes with a reed pen on a paper notebook; around it, tall piles of "
-               f"his paper notebooks tied with cord. {SCRIPT} {glasses_gag('folded on top of one pile of notebooks')} "
+               f"his paper notebooks: unbound stacks of folded sheets with no covers, tied with cord. {SCRIPT} {glasses_gag('folded on top of one pile of notebooks')} "
                f"{FULL_BLEED} {NOT_LATER} {SAFE_FRAMING} {PERIOD}"),
     "s7b": dict(aspect="9:16", refs=["ref:plate-ward"], roles=WARD_LOOK,
         prompt=f"{WARD} {WARD_MAP} {framing('CU', 'eye level', '50 mm', 'he keeps the treatment', 'calm, routine, a dawn light')} "

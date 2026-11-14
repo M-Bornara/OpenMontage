@@ -193,7 +193,7 @@ KEYFRAMES = {
         roles=STYLE_ONLY.format(n="Havana street") + "Reference 2 is JESSE LAZEAR (same face, full beard). ",
         prompt=f"{WARD} {framing('MCU', 'eye level', '50 mm', 'at work feeding a lab mosquito, Lazear is bitten by a stray one', 'absorbed in his work, unaware')} "
                f"{camera('beside the bed', 'Lazear across the bed', 'the whitewashed ward wall and a tall shuttered window behind him')} "
-               f"{cast(LAZEAR + ', bending over the bed, both hands low: he presses the open mouth of a small upside-down glass test tube flat against the patient’s bare forearm on the sheet, a lab mosquito inside the tube; his eyes are on the tube', 'the patient, seen ONLY as one bare forearm resting on the white sheet')} "
+               f"{cast(LAZEAR + ', standing UPRIGHT beside the bed, his head and shoulders high in the frame; at arm\'s length, far below his face at mattress height, one hand holds a small upside-down glass test tube pressed flat on the patient’s bare forearm; the tube never comes near his face', 'the patient, seen ONLY as one bare forearm resting on the white sheet')} "
                "A second mosquito, a small dark silhouette, has landed on the back of Lazear's own hand; he has not "
                f"noticed. No blood, no sick face. {SAFE_FRAMING} {PERIOD} {NO_TEXT}"),
     "s7b": dict(aspect="9:16", refs=["ref:plate-street"], roles=STYLE_ONLY.format(n="Havana street"),
