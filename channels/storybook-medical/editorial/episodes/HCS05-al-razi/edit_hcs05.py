@@ -92,13 +92,16 @@ c.shot(t, KF + "s3b.png", push(BLADE_S3B[0], BLADE_S3B[1], 1.18), cap=TOP,
        fx=[{"kind": "glint", "x": BLADE_S3B[0], "y": BLADE_S3B[1], "at": rel(vein, t), "size": 30}])
 c.s("glass-clink", vein)
 # B3 THE CHOICE: his doubt
+# rough cut 2 review (user): "the climax is too rushed": 7a moved here (his pen writing -> the pen stops in s4), so the
+# twist after the climax has two calm shots instead of four short ones
 t = c.at("but alrazi")
-dbt = c.at("doubt")
-c.shot(t, KF + "s4.png", push(0.6, 0.3, 1.16), cap=LOW)
-c.o("nameTag", t + 0.1, dbt + 0.3, text="al-Razi", sub="physician of Rey", y=MID)
+had = c.at("had a doubt")
+c.shot(t, KF + "s7a.png", push(GLASSES_S7A[0], 0.4, 1.1), cap=LOW,
+       fx=[{"kind": "glint", "x": GLASSES_S7A[0], "y": GLASSES_S7A[1], "at": 0.9, "size": 24}])
 c.s("quill-writing", t)
-wi = c.at("what if")
-c.shot(wi, KF + "s3b.png", {"type": "pull", "from": 1.2, "to": 1.06}, cap=TOP)   # the cure again: does it do anything?
+c.shot(had, KF + "s4.png", push(0.6, 0.3, 1.16), cap=LOW)
+c.o("nameTag", had + 0.05, had + 1.8, text="al-Razi", sub="physician of Rey", y=MID)
+wi = c.at("what if")   # s4 holds through the question (rough cut 2: fewer, longer shots)
 c.s("hit-suspense", wi)
 # B4 ESCALATION: he splits the ward (whip in), then the two groups down the hall
 t = c.at("so he split")
@@ -120,10 +123,6 @@ c.s("fire-crackle", wait, gain=-18)
 bled = t = c.at("the bled group")
 c.shot(t, KF + "s6b.png", push(0.45, 0.55, 1.1), cap=TOP)
 c.s("crickets-field", t)   # klankbeeld 'calm forest morning' (CC-BY): birds at dawn only (user: no birds at night)
-t = c.at("he wrote")
-c.shot(t, KF + "s7a.png", push(GLASSES_S7A[0], 0.4, 1.12), cap=LOW,
-       fx=[{"kind": "glint", "x": GLASSES_S7A[0], "y": GLASSES_S7A[1], "at": 0.25, "size": 24}])
-c.s("quill-writing", t)
 t = c.at("so he kept")
 c.shot(t, KF + "s7b.png", {"type": "snap", "from": 1.03, "to": 1.18, "at": 0.0, "frames": 5}, cap=TOP)
 c.s("metal-clank", t + 0.2, query="small metal bowl set down")
@@ -141,8 +140,9 @@ c.shot(meth - 0.3, KF + "s9b.png", {"type": "pull", "from": 1.14, "to": 1.03}, c
 c.o("stamp", meth + 0.6, meth + 4.0, text="A", y=780, x=378)
 c.o("stamp", meth + 0.9, meth + 4.0, text="B", y=780, x=724)
 c.s("glass-clink", meth + 0.6)
-MUSIC_GAPS = [{"from": round(wait - 0.1, 2), "to": round(bled - 0.05, 2), "fade_out": 0.5, "fade_in": 0.6},
-              {"from": round(wrong + 0.28, 2), "to": round(ans - 0.1, 2), "fade_out": 0.06, "fade_in": 0.8}]
+# rough cut 2 review: no hard stop. The music fades slowly into the waiting and comes back slowly with the dawn;
+# it keeps playing under "He was wrong" (the stamp and the buzzer carry that beat).
+MUSIC_GAPS = [{"from": round(wait - 0.1, 2), "to": round(bled - 0.2, 2), "fade_out": 1.2, "fade_in": 2.0}]
 
 HITS = {"stamp-thud", "glass-clink", "hit-suspense", "quill-writing", "metal-clank", "buzzer-wrong", "whoosh"}
 for cue in c.fx:

@@ -252,6 +252,8 @@ def main():
     ep["previz_approved"] = ("2026-11-15: v2 sketches + prompts approved by the user on the storyboard page (version 6, "
                              "claude.ai/artifact/Dy34MeUVzxbLtEMi4ujsJC): 'ok'")
     ep["narration"]["v3_text"] = NARRATION
+    # rough cut 2 review ("the climax is too rushed"): longer pauses in the waiting (scripts/pad_narration.py)
+    ep["narration"]["pads"] = [{"after": "waited", "seconds": 0.7}, {"after": "watched both", "seconds": 1.0}]
     json.dump(ep, open(p, "w", encoding="utf-8"), indent=2, ensure_ascii=False)
     issues = lint_all({**REFERENCES, **KEYFRAMES})
     for n, v in issues.items():
