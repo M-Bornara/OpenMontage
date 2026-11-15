@@ -24,7 +24,7 @@ EP = REPO / "channels/storybook-medical/editorial/episodes"
 EPISODES = {
     "hcs07": {
         "anchor": "finlay", "short": "Finlay", "slot": "Thu Dec 3 · 15:00 ET = 14:00 Alberta",
-        "storyboard": EP / "HCS07-finlay/storyboard-v1.md", "project": REPO / "projects/hcs07-finlay",
+        "storyboard": EP / "HCS07-finlay/storyboard-v1.md", "story": EP / "HCS07-finlay/story-v2.md", "project": REPO / "projects/hcs07-finlay",
         "previz": REPO / "projects/hcs07-finlay/review/previz", "maps": ["map-academy.png"],
         "refs_dir": REPO / "projects/hcs07-finlay/refs",
         "refs": [
@@ -38,7 +38,7 @@ EPISODES = {
     },
     "hcs05": {
         "anchor": "al-razi", "short": "al-Razi", "slot": "Mon Dec 7 · 15:00 ET = 14:00 Alberta",
-        "storyboard": EP / "HCS05-al-razi/storyboard-v1.md", "project": REPO / "projects/hcs05-al-razi",
+        "storyboard": EP / "HCS05-al-razi/storyboard-v1.md", "story": EP / "HCS05-al-razi/story-v2.md", "project": REPO / "projects/hcs05-al-razi",
         "previz": REPO / "projects/hcs05-al-razi/review/previz", "maps": ["map-ward.png"],
         "refs_dir": REPO / "projects/hcs05-al-razi/refs",
         "refs": [
@@ -104,6 +104,97 @@ def parse(md_path: Path) -> dict:
             "cost": cost.group(1) if cost else "", "secs": secs}
 
 
+def tension_svg(beats: list[tuple[str, int, int]]) -> str:
+    """v1 vs v2 tension per beat (editorial rating 0-10). Two series: legend + direct labels; native hover titles."""
+    W, H, L, R, T, B = 640, 250, 34, 44, 14, 46
+    n = len(beats)
+    x = lambda i: L + (W - L - R) * (i / max(1, n - 1))  # noqa: E731
+    y = lambda v: T + (H - T - B) * (1 - v / 10)  # noqa: E731
+    grid = "".join(f'<line x1="{L}" x2="{W - R}" y1="{y(v):.1f}" y2="{y(v):.1f}" class="g"/>'
+                   f'<text x="{L - 8}" y="{y(v) + 4:.1f}" class="ax" text-anchor="end">{v}</text>' for v in (0, 5, 10))
+    ticks = "".join(f'<text x="{x(i):.1f}" y="{H - B + 18}" class="ax" text-anchor="middle">{html.escape(b[0])}</text>'
+                    for i, b in enumerate(beats))
+    out = []
+    for key, idx, label in (("v1", 1, "v1 (rough cut 1)"), ("v2", 2, "v2 (proposed)")):
+        pts = " ".join(f"{x(i):.1f},{y(b[idx]):.1f}" for i, b in enumerate(beats))
+        dots = "".join(f'<circle cx="{x(i):.1f}" cy="{y(b[idx]):.1f}" r="4.5" class="d {key}"><title>{label} · {html.escape(b[0])}: '
+                       f'{b[idx]}/10</title></circle>' for i, b in enumerate(beats))
+        last = beats[-1][idx]
+        out.append(f'<polyline points="{pts}" class="l {key}"/>{dots}'
+                   f'<text x="{x(n - 1) + 8:.1f}" y="{y(last) + 4:.1f}" class="lab">{key}</text>')
+    return (f'<svg viewBox="0 0 {W} {H}" class="tension" role="img" aria-label="Tension per beat, v1 versus v2">{grid}{ticks}'
+            f'{"".join(out)}</svg>')
+
+
+def story_block(k: str, e: dict, img: Path) -> str:
+    """Round 2 (user 2026-11-15, 'the rhythm is flat'): story-v2.md from the story-doctor skill, for approval."""
+    f = e.get("story")
+    if not f or not f.exists():
+        return ""
+    lines = f.read_text(encoding="utf-8").splitlines()
+    def para(prefix: str) -> str:  # a paragraph that wraps over several md lines
+        out = None
+        for ln in lines:
+            if out is None and ln.startswith(prefix):
+                out = ln
+            elif out is not None:
+                if not ln.strip() or ln.startswith(("|", "#", "- ")):
+                    break
+                out += " " + ln.strip()
+        return out or ""
+    why = para("Why:")
+    spine = [ln[2:] for ln in lines if ln.startswith("- **")]
+    beats = table(lines, r"^\| Beat \| Line")
+    shots = table(lines, r"^\| # \| Beat")
+    rhythm = table(lines, r"^\| Beat \| Cuts")
+    score = table(lines, r"^\| \| Hook")
+    cost = next((ln for ln in lines if "**≈ $" in ln), "")
+    changed = para("**Changed from v1")
+    kf_dir = e["project"] / "assets/images/keyframes"
+    pts, rows = [], []
+    for b in beats:
+        m = re.match(r"(\d+)\s*→\s*(\d+)", b[3])
+        name = b[0].split()[0]
+        if m:
+            pts.append((name, int(m.group(1)), int(m.group(2))))
+        tags = re.match(r"^((?:\[[^\]]+\]\s*)*)(.*)$", b[1])
+        tg = "".join(f'<span class="tag">{html.escape(t)}</span>' for t in re.findall(r"\[[^\]]+\]", tags.group(1)))
+        body = re.sub(r"\[(pause|beat)\]", r'<span class="tag">[\1]</span>', inline(tags.group(2)))
+        rows.append(f'<tr><td><span class="beat">{html.escape(b[0])}</span></td><td>{tg}{body}</td>'
+                    f'<td class="tn">{html.escape(b[3])}</td></tr>')
+    # merge repeated beat names so the chart has one point per beat (the highest v2 inside it)
+    merged: dict[str, tuple[str, int, int]] = {}
+    for nme, a, b2 in pts:
+        merged[nme] = (nme, max(a, merged.get(nme, (0, 0, 0))[1]), max(b2, merged.get(nme, (0, 0, 0))[2]))
+    cards = []
+    for r in shots:
+        n, beat, act, status = (r + [""] * 4)[:4]
+        sid = n.split(",")[0].strip().strip("~")  # "9a, 9b" / "~~5~~, ~~9a~~": the first shot's picture
+        st = re.search(r"\*\*(KEEP|REDO|NEW|DROP)\*\*|^(KEEP|DROP)", status)
+        kind = (st.group(1) or st.group(2)) if st else "KEEP"
+        kf = kf_dir / f"s{sid}.png"
+        pic = (f'<img src="img/{shrink(kf, img / f"{k}-v2-{sid}", 600)}" alt="Current image, shot {html.escape(sid)}" loading="lazy">'
+               if kf.exists() and not sid.startswith("N") else '<div class="newpic">new image</div>')
+        cards.append(f'<article class="v2 {kind.lower()}">{pic}<div><div class="head"><span class="num">{html.escape(n.replace("~", ""))}</span>'
+                     f'<span class="st {kind.lower()}">{kind}</span><span class="size">{inline(beat)}</span></div>'
+                     f'<p>{inline(act)}</p><p class="muted">{inline(status)}</p></div></article>')
+    rh = "".join("<tr>" + "".join(f"<td>{inline(c)}</td>" for c in r) + "</tr>" for r in rhythm)
+    sc = "".join("<tr>" + "".join(f"<td>{inline(c)}</td>" for c in r) + "</tr>" for r in score)
+    return f"""
+  <div class="block story"><div class="kicker">Round 2 · story v2 · waiting for your OK</div>
+  <p class="lede">{inline(why.removeprefix('Why: '))}</p>
+  <h3>The tension curve (editorial rating per beat)</h3>
+  <div class="chart"><div class="key"><span><i class="sw v1"></i>v1, rough cut 1</span><span><i class="sw v2"></i>v2, proposed</span></div>
+  {tension_svg(list(merged.values()))}</div>
+  <h3>Spine</h3><ul class="spine">{''.join(f'<li>{inline(s)}</li>' for s in spine)}</ul>
+  <h3>Script v2, beat by beat</h3><div class="cast"><table><tr><th>Beat</th><th>Line (Liam)</th><th>Tension v1 → v2</th></tr>{''.join(rows)}</table></div>
+  <div class="notes"><p>{inline(changed)}</p></div>
+  <h3>Shots: keep, fix, redo, new (every shot has an action)</h3><div class="v2grid">{''.join(cards)}</div>
+  <h3>Rhythm map (the edit plan)</h3><div class="cast"><table><tr><th>Beat</th><th>Cuts</th><th>Camera</th><th>Music</th><th>Hero sound</th></tr>{rh}</table></div>
+  <h3>Score</h3><div class="cast"><table><tr><th></th><th>Hook</th><th>Stakes</th><th>Turns</th><th>Climax</th><th>Payoff</th><th>Action</th><th>Rhythm</th><th>Avg</th></tr>{sc}</table></div>
+  <p class="meta">{inline(cost)}</p></div>"""
+
+
 PROMPT_KEYS = r"(SET:|GEOGRAPHY:|SHOT:|CAMERA:|BACKGROUND \(exactly this, nothing else\):|CAST:|CROWD:|FRAMING:|Hidden detail|Small background cameo of MATT)"
 
 
@@ -163,10 +254,10 @@ def shrink(src: Path, dst: Path, edge: int = 900):
 
 
 CSS = """
-:root{--bg:#f3eee3;--surface:#fbf8f1;--ink:#22262a;--muted:#5d625f;--line:#d9cfbd;--amber:#b8740f;--amber-soft:#f4dfb6;--teal:#1f4e5a;--teal-soft:#d5e4e4;
+:root{--bg:#f3eee3;--surface:#fbf8f1;--ink:#22262a;--muted:#5d625f;--line:#d9cfbd;--amber:#b8740f;--amber-soft:#f4dfb6;--teal:#1f4e5a;--teal-soft:#d5e4e4;--s1:#2f6fc0;--s2:#c07a12;
 --display:'Montserrat',system-ui,sans-serif;--body:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono',ui-monospace,monospace}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1a1d20;--surface:#23282c;--ink:#efe6d2;--muted:#a9a99f;--line:#3a4044;--amber:#e8a33d;--amber-soft:#4a3a1e;--teal:#8cc0c4;--teal-soft:#1f3a40;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#1a1d20;--surface:#23282c;--ink:#efe6d2;--muted:#a9a99f;--line:#3a4044;--amber:#e8a33d;--amber-soft:#4a3a1e;--teal:#8cc0c4;--teal-soft:#1f3a40;color-scheme:dark}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1a1d20;--surface:#23282c;--ink:#efe6d2;--muted:#a9a99f;--line:#3a4044;--amber:#e8a33d;--amber-soft:#4a3a1e;--teal:#8cc0c4;--teal-soft:#1f3a40;--s1:#4a86d0;--s2:#b9781a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1a1d20;--surface:#23282c;--ink:#efe6d2;--muted:#a9a99f;--line:#3a4044;--amber:#e8a33d;--amber-soft:#4a3a1e;--teal:#8cc0c4;--teal-soft:#1f3a40;--s1:#4a86d0;--s2:#b9781a;color-scheme:dark}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.55}
 .wrap{max-width:1180px;margin:0 auto;padding-block:28px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 h1,h2,h3{font-family:var(--display);font-weight:800;letter-spacing:-.01em;text-wrap:balance;margin:0}
@@ -179,7 +270,7 @@ nav a:hover,nav a:focus-visible{border-color:var(--amber);outline:none}
 section.ep{margin-top:44px;padding-top:12px;border-top:3px solid var(--ink)}
 .meta{display:flex;flex-wrap:wrap;gap:6px 18px;margin:10px 0 0;color:var(--muted);font-size:14px;font-variant-numeric:tabular-nums}
 .meta b{color:var(--ink)}
-.block{margin-top:28px;display:grid;gap:12px}
+.block{margin-top:28px;display:grid;gap:12px;grid-template-columns:minmax(0,1fr)}
 .notes{background:var(--teal-soft);border-radius:10px;padding:14px 18px;display:grid;gap:8px;font-size:14px}
 .notes p{margin:0}
 .script{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px;display:grid;gap:6px;font-size:15px}
@@ -220,7 +311,28 @@ details.prompt p{margin:6px 0 0;overflow-wrap:anywhere}.pmeta{font-family:var(--
 .refgen article{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:grid;gap:6px;min-width:0}
 .refgen b{font-family:var(--display)}
 video.cut{width:min(360px,100%);aspect-ratio:9/16;border-radius:12px;background:#000;display:block}
+.story{background:var(--surface);border:2px solid var(--amber);border-radius:14px;padding:18px 20px}
+.story h3{margin-top:10px}
+.chart{display:grid;gap:6px}.key{display:flex;gap:16px;font-size:13px;color:var(--muted)}
+.sw{display:inline-block;width:18px;height:3px;border-radius:2px;vertical-align:middle;margin-right:6px}
+.sw.v1{background:var(--s1)}.sw.v2{background:var(--s2)}
+svg.tension{width:100%;max-width:680px;height:auto}
+svg.tension .g{stroke:var(--line);stroke-width:1}svg.tension .ax{fill:var(--muted);font:11px var(--mono)}
+svg.tension .l{fill:none;stroke-width:2;stroke-linejoin:round}svg.tension .l.v1{stroke:var(--s1)}svg.tension .l.v2{stroke:var(--s2)}
+svg.tension .d{stroke:var(--surface);stroke-width:2}svg.tension .d.v1{fill:var(--s1)}svg.tension .d.v2{fill:var(--s2)}
+svg.tension .lab{fill:var(--ink);font:700 12px var(--display)}
+.spine{margin:0;padding-left:18px;display:grid;gap:3px;font-size:14px}
+.beat{font-family:var(--mono);font-size:12px;white-space:nowrap}.tn{font-family:var(--mono);white-space:nowrap}
+.v2grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,330px),1fr));gap:12px}
+.v2grid article{display:grid;grid-template-columns:84px 1fr;gap:12px;border:1px solid var(--line);border-radius:10px;padding:10px;background:var(--bg);font-size:13.5px}
+.v2grid article p{margin:4px 0 0}.v2grid .muted{color:var(--muted);font-size:12.5px}
+.v2grid img,.newpic{width:84px;aspect-ratio:9/16;border-radius:6px;object-fit:cover;cursor:zoom-in}
+.newpic{display:grid;place-items:center;border:2px dashed var(--amber);color:var(--amber);font:700 11px var(--display);text-align:center}
+.v2grid article.drop{opacity:.55}
+.st{font:700 11px var(--display);letter-spacing:.06em;padding:2px 8px;border-radius:999px;background:var(--line)}
+.st.redo,.st.new{background:var(--amber-soft);color:var(--ink)}
 #lb{position:fixed;inset:0;background:rgba(10,12,14,.88);display:flex;align-items:center;justify-content:center;padding:24px;z-index:20;cursor:zoom-out}
+#lb[hidden]{display:none}
 #lb img{max-width:100%;max-height:100%;border-radius:6px}
 @media (max-width:560px){.shot{grid-template-columns:110px 1fr}.shot img{width:110px}.shot dl{grid-template-columns:1fr}.shot dt{padding-top:6px}}
 @media (prefers-reduced-motion:no-preference){nav a{transition:border-color .15s}}
@@ -250,6 +362,9 @@ def build(out: Path, keys: list[str]) -> Path:
                    f'preload="metadata" src="video/{e["project"].name}.mp4"></video></div>')
             stage = "rough cut · waiting for your OK"
             stages[-1] = stage
+        story = story_block(k, e, img)
+        if story:
+            stage = stages[-1] = "story v2 · waiting for your OK"
         # reference images to make (cast sheets, set plates) with their prompts
         refgen = []
         for rn, spec in ep.get("references", {}).items():
@@ -310,6 +425,7 @@ def build(out: Path, keys: list[str]) -> Path:
   <div class="meta"><span><b>{len(cards)}</b> shots</span><span>≈ <b>{p['secs']:.0f} s</b> of pictures</span>
   <span>{f"images <b>{n_img}</b> · <b>${img_usd:.2f}</b> (Gemini Batch) + narration and music ≈ <b>$0.13</b>" if n_img else f"estimate <b>{html.escape(p['cost'])}</b>"}</span>
   <span>status <b>{html.escape(stage)}</b></span></div>
+  {story}
   {vid}
   <div class="block"><h3>Notes and period rules</h3><div class="notes">{notes}</div></div>
   <div class="block"><h3>Script (approved)</h3><div class="script">{''.join(sc)}</div></div>
@@ -327,16 +443,16 @@ def build(out: Path, keys: list[str]) -> Path:
 <style>{CSS}</style>
 <div class="wrap">
   <div class="kicker">Oddly Matt · approval page · {html.escape(stages[0] if len(set(stages)) == 1 else ", ".join(stages))}</div>
-  <h1>Next two Shorts, shot by shot</h1>
-  <p class="lede">Each shot shows a rough sketch of the framing (people as silhouettes, where the text goes), the narration line it covers, and what the painting will show. The real portraits and period pictures set how people and places look. Tap any picture to enlarge it.</p>
+  <h1>Next two Shorts: story v2</h1>
+  <p class="lede">Round 2 (after your rough-cut review): each Short now starts with the proposed story v2, its tension curve against rough cut 1, and which shots stay, get fixed, are redone or are new. Below it: rough cut 1 and the approved v1 storyboard for reference. Each shot shows a rough sketch of the framing (people as silhouettes, where the text goes), the narration line it covers, and what the painting will show. The real portraits and period pictures set how people and places look. Tap any picture to enlarge it.</p>
   <nav>{nav}</nav>
   {''.join(body)}
-  <div class="ask"><h3>What I need from you</h3><p>Reply in chat with the shot numbers you want changed (for example "al-Razi 6: Matt holds the lamp higher"), or say both are OK. The order is always: storyboard and sketches, then the image prompts (open "Image prompt" under any shot), then the images. Nothing is paid for until you approve the step before it.</p></div>
+  <div class="ask"><h3>What I need from you</h3><p>First: is story v2 OK for both (the script lines and the keep/redo/new list)? After that I draw the sketches and prompts for the new shots here, then generate. Reply in chat with the shot numbers you want changed (for example "al-Razi 6: Matt holds the lamp higher"), or say both are OK. The order is always: storyboard and sketches, then the image prompts (open "Image prompt" under any shot), then the images. Nothing is paid for until you approve the step before it.</p></div>
 </div>
 <div id="lb" hidden><img alt=""></div>
 <script>
 const lb=document.getElementById('lb'),lbi=lb.querySelector('img');
-document.addEventListener('click',e=>{{const t=e.target;if(t.tagName==='IMG'&&t.closest('figure,.shot,.maps')){{lbi.src=t.src;lbi.alt=t.alt;lb.hidden=false}}else if(t.closest('#lb')){{lb.hidden=true}}}});
+document.addEventListener('click',e=>{{const t=e.target;if(t.tagName==='IMG'&&t.closest('figure,.shot,.maps,.v2grid')){{lbi.src=t.src;lbi.alt=t.alt;lb.hidden=false}}else if(t.closest('#lb')){{lb.hidden=true}}}});
 document.addEventListener('keydown',e=>{{if(e.key==='Escape')lb.hidden=true}});
 </script>
 """

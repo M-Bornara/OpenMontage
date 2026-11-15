@@ -61,6 +61,8 @@ inspiring, mysterious, shocking, clever and beautiful, with the occasional trage
    Never promote a story to long-form just because the topic is interesting; it needs enough turns.
 
 ## Shorts (35–55 s, never forced)
+**Before any script is approved, run the story-doctor skill** (`.claude/skills/story-doctor/SKILL.md`, added 2026-11-15 after the HCS05/HCS07 rough cuts felt flat): spine (stakes + the choice), beats with a tension curve that rises, peaks and turns, action in every shot, a rhythm map with a silent climax. Output `story-v2.md`, approved on the page.
+
 | Time | Job | Example (St. Martin, "food on a string") |
 |---|---|---|
 | 0–1.5 s | Impossible premise. No intro, no logo, no "did you know" | "A doctor once lowered food directly into a living man's stomach." |

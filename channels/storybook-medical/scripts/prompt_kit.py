@@ -64,6 +64,16 @@ ONE_EACH = ("Each named person appears ONCE in this image, never twice and never
             "character references show several views of ONE person, so take only the face, hair and clothes from them, not "
             "their extra poses or layout. Everyone else in the image has a clearly different face, hair and age from "
             "the named people (no look-alikes, no twins).")
+# L42 · one shared crowd description ("about twelve bearded academics in black frock coats", HCS07 s1a/s4b/s6a) came back
+# as ONE face cloned on every body (user, 2026-11-15). A crowd is at most five visible faces, each its own casting card
+# (age, build, hair, facial hair, expression all different); everyone else is seen from behind or in shadow.
+def crowd(where: str, faces: list[str], rest: str = "") -> str:
+    if not 1 <= len(faces) <= 5:
+        raise ValueError("crowd(): give 1-5 visible faces; the rest are backs or shadow")
+    cards = " ".join(f"({i}) {f}." for i, f in enumerate(faces, 1))
+    return (f"CROWD: {where}. Only {len(faces)} faces are visible, and each is a different person: {cards} No two of "
+            f"them share the same age, build, hair, beard or expression; they are not relatives and not look-alikes. "
+            f"{rest or 'Everyone else is seen only from behind or in shadow, with no other visible faces.'}")
 # L10 · period accuracy slips (castle-like forts, modern maps).
 PERIOD = "Period-accurate only: nothing modern, no modern maps or borders, no anachronistic objects."
 # L11 · Matt's glasses: hide them as a small visual joke (brand-signature.md).
@@ -231,6 +241,10 @@ def lint(name: str, spec: dict) -> list[str]:
     if re.search(r"(faces?|heads?) (are |is )?(above|out of|outside|cropped (off|by))( the)? frame", p):
         issues.append("L41: faces/heads 'out of frame' wording: the model paints headless bodies; frame the shot so heads "
                       "are in it, or describe only hands/objects with no people")
+    # L42 (HCS07 rough cut 1): a CROWD line with faces must be crowd() casting cards, or backs only.
+    if "shot:" in p and "crowd:" in p and "faces are visible" not in p and "seen only from behind" not in p:
+        issues.append("L42: CROWD line without casting cards: one shared description clones one face on every body; "
+                      "use crowd(where, [up to 5 distinct faces]) or show the crowd only from behind")
     if "spectacles" in p and "amber" not in p and "no spectacles" not in p:
         issues.append("L11: spectacles that aren't Matt's (confuses the spot-the-glasses game)")
     return issues

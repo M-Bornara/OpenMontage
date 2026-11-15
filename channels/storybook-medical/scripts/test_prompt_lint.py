@@ -117,5 +117,13 @@ l41ok = prompt_kit.lint_all({"s1a": {"prompt": shot + " Three men, whole heads i
 status = "PASS" if any("L41" in m for m in l41.get("s1a", [])) and not any("L41" in m for v in l41ok.values() for m in v) else "FAIL"
 print(f"{status} L41 'faces above the frame' (headless) caught")
 ok = ok and status == "PASS"
+# L42 (HCS07 s4b v1, user 2026-11-15): one shared crowd description -> one bearded face cloned on every body
+l42 = prompt_kit.lint_all({"s4b": {"prompt": shot + " CROWD: about twelve bearded Spanish-Cuban academics in black "
+                                   "frock coats on the benches, most with their arms crossed, sceptical."}})
+l42ok = prompt_kit.lint_all({"s4b": {"prompt": shot + " " + prompt_kit.crowd("academics on the benches", [
+    "an old bald man with white side-whiskers, shaking his head", "a thin clean-shaven young man hiding a smirk"])}})
+status = "PASS" if any("L42" in m for m in l42.get("s4b", [])) and not any("L42" in m for v in l42ok.values() for m in v) else "FAIL"
+print(f"{status} L42 crowd without casting cards (cloned faces) caught")
+ok = ok and status == "PASS"
 sys.exit(0 if ok else 1)
 

@@ -111,3 +111,20 @@ Every generation round teaches us something. A lesson only counts once it's **en
   no covers, tied with cord".
 - **A pose that won't change:** Lazear (HCS07 s7a) held the tube at his face twice. Fix the geometry, not the verb:
   "standing upright, the tube at arm's length, far below his face, at mattress height".
+
+## L42 + rough cut 1 review (user, 2026-11-15)
+- **Cloned crowds (HCS07 s1a, s4b, s6a):** "all doctors look the same, soldiers look the same". The CROWD line was one
+  shared description ("about twelve bearded academics in black frock coats"), so the model drew one face twelve
+  times. Fix: `prompt_kit.crowd(where, [≤5 casting cards])`, each card different in age, build, hair, beard and
+  expression; everyone else from behind or in shadow. Lint **L42** flags a CROWD line without cards. Test added.
+- **Top-down rooms break (HCS05 s5):** the floor was seen from above but the walls, lattice windows, wall niches and
+  curtain were painted as front elevations, so the room looks folded open. Use eye-level one-point perspective
+  for rooms full of furniture; keep top-down for tabletop inserts.
+- **Impossible geometry (HCS05 s7b):** a bed ran through a wall and walls stacked inside each other. Close-ups
+  with a plain, soft background are safer than a detailed room behind a prop.
+- **FX measured off-target (HCS05 s3 lancet, s7a glasses):** the effects layer shares the camera transform (correct);
+  the error was the measurement (glasses at y 0.235, glint placed at 0.20). Measure on a crop with a fine grid and
+  check the rendered frame at the effect's exact time.
+- **Story, not just images:** the cut felt flat because the scripts were lists of facts and the shots were poses.
+  New step before every script approval: `.claude/skills/story-doctor/SKILL.md` (spine, beats, tension curve,
+  action shots, rhythm map, score) → `story-v2.md` → approval page.
