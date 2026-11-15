@@ -67,11 +67,14 @@ The curve must **rise, peak, turn**. A curve that stays between 4 and 6 is the "
 | B2 | 2–3 s | pull / pan | pulse enters | location ambience |
 | B3 | 2.5–3.5 s | slow push to the eyes | drops to a drone | a small stop sound (pen stops) |
 | B4 | 1.0–1.8 s | alternate push / pan / whip | builds | hits on each turn |
-| B5 | 3–4 s HOLD | almost still | **SILENT** (music gap) | breath, wind, one buzz |
-| B6 | 1.5–2.5 s | snap / shake on the reveal | hits back in | stamp / record stop |
+| B5 | 5+ s HOLD | almost still | **SILENT**, faded out slowly (≥ 1 s) | breath, wind, one buzz |
+| B6 | 2–4 s, at most 2 shots | one snap or shake on the reveal | fades back in (≥ 1.5 s) | stamp / buzzer |
 | B7 | 3+ s | slow pull out | resolves | soft tail into the loop |
 
-No two adjacent shots use the same camera move. The music must change state at least three times.
+No two adjacent shots use the same camera move. The music changes state at least three times, but **never with a
+hard stop**, and the climax and the shots after it **breathe**: user, HCS05 rough cut 2, "the climax is too rushed,
+very short cuts and sudden music cut". If the take has no room, lengthen the pause with `scripts/pad_narration.py`
+(adds silence inside an existing pause; never cuts).
 
 ## 6 · Score (show v1 vs v2 on the approval page)
 Hook · Stakes · Turns · Climax · Payoff · Action · Rhythm, each 1–5. Approve at an average of 4.0 or more.
