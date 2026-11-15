@@ -249,7 +249,8 @@ def main():
               theme={"culture": "persia", "font": "lalezar"},
               previz_v1="2026-11-14: storyboard v1.1 + pre-viz approved (claude.ai/artifact/Dy34MeUVzxbLtEMi4ujsJC)",
               story_v2="2026-11-15: story-v2.md approved: 'new scripts looks much better go for it'")
-    ep.pop("previz_approved", None)  # gate closed until the v2 sketches + prompts are OK'd on the page
+    ep["previz_approved"] = ("2026-11-15: v2 sketches + prompts approved by the user on the storyboard page (version 6, "
+                             "claude.ai/artifact/Dy34MeUVzxbLtEMi4ujsJC): 'ok'")
     ep["narration"]["v3_text"] = NARRATION
     json.dump(ep, open(p, "w", encoding="utf-8"), indent=2, ensure_ascii=False)
     issues = lint_all({**REFERENCES, **KEYFRAMES})
