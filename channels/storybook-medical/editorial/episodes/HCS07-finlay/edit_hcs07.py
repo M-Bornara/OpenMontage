@@ -93,7 +93,7 @@ t = c.at("almost nobody")
 c.shot(t, KF + "s4b.png", push(0.5, 0.6, 1.1), cap=TOP, transition="whip")
 c.s("whoosh", t - 0.05); c.s("crowd-murmur", t + 0.1)
 t = c.at("so he kept going")
-c.shot(t, KF + "s5b.png", {"type": "snap", "from": 1.03, "to": 1.16, "at": 0.0, "frames": 5}, cap=LOW)
+c.shot(t, KF + "s5b.png", {"type": "snap", "from": 1.03, "to": 1.16, "at": 0.0, "frames": 5}, cap=TOP)  # LOW crossed the pitcher
 c.s("water-drip", t + 0.2)
 t = c.at("testing")
 c.shot(t, KF + "s1b.png", {"type": "snap", "from": 1.05, "to": 1.22, "at": 0.0, "frames": 5, "x": 3, "y": 3}, cap=LOW)

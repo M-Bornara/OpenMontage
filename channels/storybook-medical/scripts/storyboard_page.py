@@ -365,7 +365,8 @@ def build(out: Path, keys: list[str]) -> Path:
                 stages[-1] = stage
         story = story_block(k, e, img)
         if story:
-            stage = stages[-1] = "v2 sketches + prompts · waiting for your OK"
+            stage = stages[-1] = ("rough cut 2 · waiting for your OK" if all((kf_dir / f"{n}.png").exists() for n in ep.get("keyframes", {}))
+                                  else "v2 sketches + prompts · waiting for your OK")
         # reference images to make (cast sheets, set plates) with their prompts
         refgen = []
         for rn, spec in ep.get("references", {}).items():
@@ -448,11 +449,11 @@ def build(out: Path, keys: list[str]) -> Path:
 <style>{CSS}</style>
 <div class="wrap">
   <div class="kicker">Oddly Matt · approval page · {html.escape(stages[0] if len(set(stages)) == 1 else ", ".join(stages))}</div>
-  <h1>Next two Shorts: v2 shots for your OK</h1>
+  <h1>Next two Shorts: rough cut 2</h1>
   <p class="lede">Round 2 (after your rough-cut review): each Short now starts with the proposed story v2, its tension curve against rough cut 1, and which shots stay, get fixed, are redone or are new. Below it: rough cut 1 and the approved v1 storyboard for reference. Each shot shows a rough sketch of the framing (people as silhouettes, where the text goes), the narration line it covers, and what the painting will show. The real portraits and period pictures set how people and places look. Tap any picture to enlarge it.</p>
   <nav>{nav}</nav>
   {''.join(body)}
-  <div class="ask"><h3>What I need from you</h3><p>Story v2 is approved and recorded. Now: are the sketches and image prompts of the NEW and REDO shots OK (al-Razi 3b, 5a, 5b, 6, 6b, 7b; Finlay 1c, 2c, 4b, 5b, 6a)? On your OK I generate those 11 images (≈ $0.85), then cut v2. Reply in chat with the shot numbers you want changed (for example "al-Razi 6: Matt holds the lamp higher"), or say both are OK. The order is always: storyboard and sketches, then the image prompts (open "Image prompt" under any shot), then the images. Nothing is paid for until you approve the step before it.</p></div>
+  <div class="ask"><h3>What I need from you</h3><p>Rough cut 2 is at the top of each Short (watch with sound): story v2, the 11 new images, the silent climaxes. Tell me by time or shot number what to change, or say it is ready for covers and publish packages. Reply in chat with the shot numbers you want changed (for example "al-Razi 6: Matt holds the lamp higher"), or say both are OK. The order is always: storyboard and sketches, then the image prompts (open "Image prompt" under any shot), then the images. Nothing is paid for until you approve the step before it.</p></div>
 </div>
 <div id="lb" hidden><img alt=""></div>
 <script>
