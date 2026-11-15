@@ -66,9 +66,9 @@ c.shot(0.0, KF + "s1c.png", {"type": "snap", "from": 1.03, "to": 1.3, "at": roun
        "x": round(-(MOSQ_S1C[0] - 0.5) * 30, 2), "y": round(-(MOSQ_S1C[1] - 0.5) * 30, 2)}, cap=TOP)
 c.s("mosquito-buzz", 0.0, query="mosquito buzzing"); c.s("hit-suspense", yf)
 t = c.at("then spent")
-c.shot(t, KF + "s5.png", push(0.5, 0.42, 1.12), cap=TOP,
+c.shot(t, KF + "s5.png", push(0.5, 0.42, 1.12), cap=870,   # text check: TOP/MID covered the jar, LOW the glasses gag: the strip between
        fx=[{"kind": "glint", "x": 0.41, "y": 0.58, "at": 1.6, "size": 26}])
-c.o("stamp", c.at("19 years"), t + 3.2, text="19 YEARS", y=980)
+# (no "19 YEARS" stamp: it covered the glasses gag, and Liam says it)
 c.s("watch-ticking", t)
 # B2 STAKES: Havana 1881, then the epidemic at a door
 t = c.at("havana")
@@ -96,17 +96,16 @@ t = c.at("so he kept going")
 c.shot(t, KF + "s5b.png", {"type": "snap", "from": 1.03, "to": 1.16, "at": 0.0, "frames": 5}, cap=TOP)  # LOW crossed the pitcher
 c.s("water-drip", t + 0.2)
 t = c.at("testing")
-c.shot(t, KF + "s1b.png", {"type": "snap", "from": 1.05, "to": 1.22, "at": 0.0, "frames": 5, "x": 3, "y": 3}, cap=LOW)
-for k, yr in enumerate(("1885", "1890", "1895")):
-    c.o("stamp", t + 0.15 + k * 0.8, t + 0.15 + (k + 1) * 0.8, text=yr, y=MID)
-    c.s("stamp-thud", t + 0.15 + k * 0.8)
+c.shot(t, KF + "s1b.png", {"type": "snap", "from": 1.05, "to": 1.22, "at": 0.0, "frames": 5, "x": 3, "y": 3}, cap=TOP)
+# (no 1885/1890/1895 stamps: they sat on the jar in front of his face; LOW crossed his moustache. Text check 2026-11-15)
+c.s("watch-ticking", t)
 t = c.at("then in 1900")
 reed = c.at("walter reed")
 c.shot(t, KF + "s6a.png", {"type": "slide", "from": -3, "to": 3, "scale": 1.12}, cap=LOW)
 c.o("stamp", t + 0.1, reed - 0.15, text="1900", y=TOP)
-c.o("nameTag", reed, reed + 2.0, text="Walter Reed", sub="US Army doctor", y=TOP)
 c.s("bugle-call", t); c.s("gulls-water", t + 0.2)
 t = c.at("finally tested")
+c.o("nameTag", reed, min(reed + 2.0, t - 0.15), text="Walter Reed", sub="US Army doctor", y=TOP)  # ends with its shot
 mosq = c.at("finlays own mosquitoes")
 c.shot(t, KF + "s6b.png", push(0.53, 0.49, 1.18), cap=TOP,
        fx=[{"kind": "glint", "x": 0.53, "y": 0.49, "at": rel(mosq, t), "size": 30}])

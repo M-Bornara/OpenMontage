@@ -788,11 +788,14 @@ def step_mix(pid, *_):
     i, _ = loudness(tmp / "m.wav")
     ff("-i", str(tmp / "m.wav"), "-af", f"volume={ep['music'].get('lufs', -22) - i:.2f}dB", str(tmp / "bed.wav"))
     # music gaps (story-doctor rhythm map, 2026-11-15): the music goes SILENT at the climax and comes back on the turn.
-    # "music": {"gaps": [{"from": 33.6, "to": 39.0, "fade_out": 0.4, "fade_in": 0.15}]}  (seconds on the final timeline)
+    # "music": {"gaps": [{"from": 33.6, "to": 39.0, "fade_out": 0.4, "fade_in": 0.15, "level": 0.25}]}  (seconds on the
+    # final timeline). "level" = how much music stays inside the gap (0 = silent; user, HCS05: "making it silent is also
+    # making it too silent" -> a low bed, e.g. 0.25 ≈ -12 dB).
     gaps = ep["music"].get("gaps", [])
     if gaps:
-        env = "*".join(f"(1-clip((t-{g['from'] - g.get('fade_out', 0.4):.3f})/{g.get('fade_out', 0.4):.3f},0,1)"
-                       f"+clip((t-{g['to']:.3f})/{max(0.01, g.get('fade_in', 0.15)):.3f},0,1))" for g in gaps)
+        env = "*".join(f"({g.get('level', 0):.3f}+{1 - g.get('level', 0):.3f}*"
+                       f"(1-clip((t-{g['from'] - g.get('fade_out', 0.4):.3f})/{g.get('fade_out', 0.4):.3f},0,1)"
+                       f"+clip((t-{g['to']:.3f})/{max(0.01, g.get('fade_in', 0.15)):.3f},0,1)))" for g in gaps)
         ff("-i", str(tmp / "bed.wav"), "-af", f"volume='min(1,{env})':eval=frame", str(tmp / "bed_g.wav"))
         shutil.move(tmp / "bed_g.wav", tmp / "bed.wav")
     inputs = ["-i", str(narr), "-i", str(tmp / "bed.wav")]
@@ -857,6 +860,10 @@ def step_render(pid, *flags):
     if r.success:
         li, lp = loudness(out)
         print(f"{out}  {duration(out):.2f}s  {li} LUFS  peak {lp} dBFS")
+        if ep.get("format") == "short":
+            # user 2026-11-15: "re-evaluate the text placements after each change": collisions + review/text_sheet.jpg
+            import text_check
+            text_check.check(pid)
 
 
 def step_credits(pid, *_):

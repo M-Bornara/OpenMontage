@@ -69,8 +69,8 @@ BLADE_S3B = (0.34, 0.60)        # s3b blade (measured on the grid; the painted s
 ROW_A, ROW_B = (0.25, 0.68), (0.75, 0.68)   # s5b bed rows left/right of the curtain (measured)
 # B1 HOOK: he stops the assistant; snap zoom onto the raised palm on "refused"
 ref = c.at("refused")
-c.shot(0.0, KF + "s1a.png", {"type": "snap", "from": 1.03, "to": 1.28, "at": round(ref - 0.05, 2), "x": -4, "y": 4}, cap=LOW)
-c.o("stamp", 0.2, 2.4, text="c. 900 AD", y=TOP)
+c.shot(0.0, KF + "s1a.png", {"type": "snap", "from": 1.03, "to": 1.28, "at": round(ref - 0.05, 2), "x": -4, "y": 4}, cap=TOP)   # text check: LOW sat on his raised palm
+# (no "c. 900 AD" stamp: under a TOP caption it sat on his raised palm, and Liam says "1100 years ago")
 c.s("fire-crackle", 0.0); c.s("metal-clank", ref, query="small metal bowl set down")
 t = c.at("on purpose")
 c.shot(t, KF + "s1b.png", {"type": "static"}, cap=TOP)
@@ -83,7 +83,7 @@ NECK_S3 = (0.62, 0.53)   # his hand at his stiff neck (measured on the s3 grid)
 c.shot(t, KF + "s3.png", {"type": "snap", "from": 1.04, "to": 1.22, "at": rel(stiff, t), "frames": 6,
        "x": round(-(NECK_S3[0] - 0.5) * 22, 2), "y": round(-(NECK_S3[1] - 0.5) * 22, 2)}, cap=TOP,
        fx=[{"kind": "glint", "x": LANCET_S3[0], "y": LANCET_S3[1], "at": rel(men, t), "size": 24}])
-c.o("location", t + 0.1, t + 1.9, text="PERSIA", sub="Rey, c. 900", y=TOP)
+# (no PERSIA card: it collided with the caption, and Liam says it; text check 2026-11-15)
 c.s("water-drip", t)
 # the standard cure: the lancet lifted (glint runs along the blade on "vein")
 t = c.at("the standard cure")
@@ -96,7 +96,7 @@ c.s("glass-clink", vein)
 # twist after the climax has two calm shots instead of four short ones
 t = c.at("but alrazi")
 had = c.at("had a doubt")
-c.shot(t, KF + "s7a.png", push(GLASSES_S7A[0], 0.4, 1.1), cap=LOW,
+c.shot(t, KF + "s7a.png", push(GLASSES_S7A[0], 0.4, 1.1), cap=MID,   # LOW covered the writing hand; TOP = the glasses
        fx=[{"kind": "glint", "x": GLASSES_S7A[0], "y": GLASSES_S7A[1], "at": 0.9, "size": 24}])
 c.s("quill-writing", t)
 c.shot(had, KF + "s4.png", push(0.6, 0.3, 1.16), cap=LOW)
@@ -105,7 +105,7 @@ wi = c.at("what if")   # s4 holds through the question (rough cut 2: fewer, long
 c.s("hit-suspense", wi)
 # B4 ESCALATION: he splits the ward (whip in), then the two groups down the hall
 t = c.at("so he split")
-c.shot(t, KF + "s5a.png", push(0.45, 0.45, 1.1), cap=LOW, transition="whip")
+c.shot(t, KF + "s5a.png", push(0.45, 0.45, 1.1), cap=TOP, transition="whip")   # LOW sat on his turban
 c.s("whoosh", t - 0.05); c.s("cloth-rustle", t + 0.1)
 t = c.at("one group he bled")
 oth = c.at("the other")
@@ -117,8 +117,8 @@ c.o("stamp", oth, oth + 1.8, text="B", y=MID, x=int(ROW_B[0] * 1080))
 c.s("stamp-thud", t + 0.1); c.s("stamp-thud", oth)
 # B5 CLIMAX: he waits and watches, in silence (music gap)
 wait = c.at("then he waited")
-c.shot(wait, KF + "s6.png", {"type": "push", "from": 1.04, "to": 1.08, "x": 0, "y": 0}, cap=LOW, darken=0.3)  # night
-c.s("fire-crackle", wait, gain=-18)
+c.shot(wait, KF + "s6.png", {"type": "push", "from": 1.04, "to": 1.08, "x": 0, "y": 0}, cap=TOP, darken=0.3)  # LOW: "BOTH" on his turban  # night
+# (no fire-crackle here: with the music down its crackle read as noise, user 2026-11-15)
 # B6 TWIST: dawn, a bled patient sits up; he writes; he keeps the cure; he was wrong
 bled = t = c.at("the bled group")
 c.shot(t, KF + "s6b.png", push(0.45, 0.55, 1.1), cap=TOP)
@@ -142,7 +142,7 @@ c.o("stamp", meth + 0.9, meth + 4.0, text="B", y=780, x=724)
 c.s("glass-clink", meth + 0.6)
 # rough cut 2 review: no hard stop. The music fades slowly into the waiting and comes back slowly with the dawn;
 # it keeps playing under "He was wrong" (the stamp and the buzzer carry that beat).
-MUSIC_GAPS = [{"from": round(wait - 0.1, 2), "to": round(bled - 0.2, 2), "fade_out": 1.2, "fade_in": 2.0}]
+MUSIC_GAPS = [{"from": round(wait - 0.1, 2), "to": round(bled - 0.2, 2), "fade_out": 1.2, "fade_in": 2.0, "level": 0.25}]
 
 HITS = {"stamp-thud", "glass-clink", "hit-suspense", "quill-writing", "metal-clank", "buzzer-wrong", "whoosh"}
 for cue in c.fx:

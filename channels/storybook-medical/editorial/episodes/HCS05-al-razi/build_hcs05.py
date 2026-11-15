@@ -253,7 +253,7 @@ def main():
                              "claude.ai/artifact/Dy34MeUVzxbLtEMi4ujsJC): 'ok'")
     ep["narration"]["v3_text"] = NARRATION
     # rough cut 2 review ("the climax is too rushed"): longer pauses in the waiting (scripts/pad_narration.py)
-    ep["narration"]["pads"] = [{"after": "waited", "seconds": 0.7}, {"after": "watched both", "seconds": 1.0}]
+    ep["narration"]["pads"] = []   # user 2026-11-15: the +0.7/+1.0 s pads were too long; the take's own pauses are right
     json.dump(ep, open(p, "w", encoding="utf-8"), indent=2, ensure_ascii=False)
     issues = lint_all({**REFERENCES, **KEYFRAMES})
     for n, v in issues.items():
