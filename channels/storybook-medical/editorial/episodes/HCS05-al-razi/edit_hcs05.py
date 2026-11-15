@@ -109,7 +109,10 @@ c.shot(t, KF + "s5a.png", push(0.45, 0.45, 1.1), cap=TOP, transition="whip")   #
 c.s("whoosh", t - 0.05); c.s("cloth-rustle", t + 0.1)
 t = c.at("one group he bled")
 oth = c.at("the other")
-c.shot(t, KF + "s5b.png", push(0.5, 0.5, 1.12), cap=TOP,
+# s5b and s6 share one camera (curtain at x 0.5, same arches): s5b ENDS on the zoom s6 STARTS with, and s6 dissolves in,
+# so al-Razi and Matt fade in on the spot (user: "the cut is a jump ... same zoom on the cut and apply a fade")
+MATCH_ZOOM = 1.08
+c.shot(t, KF + "s5b.png", {"type": "push", "from": 1.02, "to": MATCH_ZOOM, "x": 2, "y": 0}, cap=TOP,   # x 2: curtain 0.49 -> s6's 0.51
        fx=[{"kind": "spot", "cx": ROW_A[0], "cy": ROW_A[1], "rx": 0.2, "ry": 0.3, "at": 0.05, "dur": rel(oth, t) - 0.1, "dim": 0.5},
            {"kind": "spot", "cx": ROW_B[0], "cy": ROW_B[1], "rx": 0.2, "ry": 0.3, "at": rel(oth, t), "dur": 1.8, "dim": 0.5}])
 c.o("stamp", t + 0.1, oth - 0.05, text="A", y=MID, x=int(ROW_A[0] * 1080))
@@ -117,7 +120,8 @@ c.o("stamp", oth, oth + 1.8, text="B", y=MID, x=int(ROW_B[0] * 1080))
 c.s("stamp-thud", t + 0.1); c.s("stamp-thud", oth)
 # B5 CLIMAX: he waits and watches, in silence (music gap)
 wait = c.at("then he waited")
-c.shot(wait, KF + "s6.png", {"type": "push", "from": 1.04, "to": 1.08, "x": 0, "y": 0}, cap=TOP, darken=0.3)  # LOW: "BOTH" on his turban  # night
+c.shot(wait, KF + "s6.png", {"type": "push", "from": MATCH_ZOOM, "to": 1.12, "x": 0, "y": 0}, cap=TOP, darken=0.3,
+       transition="dissolve")  # LOW: "BOTH" on his turban  # night
 # (no fire-crackle here: with the music down its crackle read as noise, user 2026-11-15)
 # B6 TWIST: dawn, a bled patient sits up; he writes; he keeps the cure; he was wrong
 bled = t = c.at("the bled group")

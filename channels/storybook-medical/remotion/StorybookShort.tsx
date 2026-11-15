@@ -491,11 +491,19 @@ export const StorybookShort: React.FC<StorybookShortProps> = ({ totalSeconds, sh
   return (
     <ThemeFont.Provider value={THEME_FONTS[captionFont ?? "montserrat"] ?? THEME_FONTS.montserrat}>
     <AbsoluteFill style={{ backgroundColor: CHARCOAL }}>
-      {shots.map((s) => (
-        <Sequence key={s.id} from={Math.round(s.start * FPS)} durationInFrames={Math.max(1, Math.round((s.end - s.start) * FPS))}>
-          <ShotLayer shot={s} />
-        </Sequence>
-      ))}
+      {shots.map((s, i) => {
+        // frame-exact: each shot ends on the frame the next one starts (rounding start and length separately left a
+        // one-frame black hole at some cuts, user HCS05 0:07). Before a "dissolve" the outgoing shot keeps playing
+        // under the incoming one for the 15 fade frames, so it fades from the picture, not from black.
+        const a = Math.round(s.start * FPS);
+        const next = shots[i + 1];
+        const b = next ? Math.round(next.start * FPS) + (next.transitionIn === "dissolve" ? 15 : 0) : Math.round(s.end * FPS);
+        return (
+          <Sequence key={s.id} from={a} durationInFrames={Math.max(1, b - a)}>
+            <ShotLayer shot={s} />
+          </Sequence>
+        );
+      })}
       {/* Loop seam: the opening frame fades in over the tail, so frame N-1 ≈ frame 0. */}
       {loopIn > 0 && shots.length ? (
         <AbsoluteFill style={{ opacity: loopIn }}>
