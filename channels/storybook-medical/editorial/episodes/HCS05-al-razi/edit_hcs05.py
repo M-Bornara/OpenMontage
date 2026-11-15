@@ -112,7 +112,7 @@ oth = c.at("the other")
 # s5b and s6 share one camera (curtain at x 0.5, same arches): s5b ENDS on the zoom s6 STARTS with, and s6 dissolves in,
 # so al-Razi and Matt fade in on the spot (user: "the cut is a jump ... same zoom on the cut and apply a fade")
 MATCH_ZOOM = 1.08
-c.shot(t, KF + "s5b.png", {"type": "push", "from": 1.02, "to": MATCH_ZOOM, "x": 2, "y": 0}, cap=TOP,   # x 2: curtain 0.49 -> s6's 0.51
+c.shot(t, KF + "s5b.png", {"type": "push", "from": 1.02, "to": MATCH_ZOOM, "x": 0, "y": 0}, cap=TOP,   # walls/ceiling align at x 0 (ECC, < 1 px); the curtain differs
        fx=[{"kind": "spot", "cx": ROW_A[0], "cy": ROW_A[1], "rx": 0.2, "ry": 0.3, "at": 0.05, "dur": rel(oth, t) - 0.1, "dim": 0.5},
            {"kind": "spot", "cx": ROW_B[0], "cy": ROW_B[1], "rx": 0.2, "ry": 0.3, "at": rel(oth, t), "dur": 1.8, "dim": 0.5}])
 c.o("stamp", t + 0.1, oth - 0.05, text="A", y=MID, x=int(ROW_A[0] * 1080))
