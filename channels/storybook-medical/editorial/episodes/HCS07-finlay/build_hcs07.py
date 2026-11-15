@@ -319,7 +319,7 @@ for name, (set_id, firsts, sheets) in V2.items():
 def main():
     p = REPO / "projects" / PID / "episode.json"
     ep = json.load(open(p, encoding="utf-8"))
-    ep.update(title="Nobody Believed Him About the Mosquito", format="short", dual_format=False,
+    ep.update(title="He Was Right About the Mosquito. It Took 19 Years.", format="short", dual_format=False,
               image_resolution="2K", loop=True, tail_seconds=1.0, references=REFERENCES, keyframes=KEYFRAMES,
               glasses="s5: Matt's spectacles on the shelf beside the larvae jars",
               theme={"culture": "caribbean-colonial", "font": "montserrat"},

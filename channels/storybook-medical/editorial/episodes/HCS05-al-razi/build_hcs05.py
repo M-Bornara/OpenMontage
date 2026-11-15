@@ -243,7 +243,7 @@ for name, (set_id, firsts, sheets) in V2.items():
 def main():
     p = REPO / "projects" / PID / "episode.json"
     ep = json.load(open(p, encoding="utf-8"))
-    ep.update(title="The Doctor Who Refused to Treat Half His Patients", format="short", dual_format=False,
+    ep.update(title="1,100 Years Ago, a Doctor Refused to Treat Patients on Purpose", format="short", dual_format=False,
               image_resolution="2K", loop=True, tail_seconds=1.0, references=REFERENCES, keyframes=KEYFRAMES,
               glasses="s7a: Matt's spectacles on a pile of al-Razi's notebooks",
               theme={"culture": "persia", "font": "lalezar"},

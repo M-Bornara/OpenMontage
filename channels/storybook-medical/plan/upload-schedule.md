@@ -44,9 +44,9 @@ to Sunday every 14 days).
 | 11 | Fri Nov 27 | **HCS09** The doctor they hated for saying "wash your hands" (Semmelweis, 1847) | HC001-L | Sat Nov 28 | Mon Nov 23 | package ready (2026-11-10) |
 | 12 | **Sun Nov 29** · L | **HC002-L** Phineas Gage: The Story Everyone Gets Wrong | – | (FB: optional, Mon Nov 30) | **Wed Nov 25** | script v2 |
 | 13 | Tue Dec 1 | HC002-S1 An Iron Rod Went Through His Skull | HC002-L | Wed Dec 2 | Fri Nov 27 | script v2 |
-| 14 | Thu Dec 3 | **HCS07** Nobody believed him about the mosquito (Finlay; Dec 3 is his birthday, to verify) | HC002-L | Fri Dec 4 | Sun Nov 29 | script approved |
+| 14 | Thu Dec 3 | **HCS07** He Was Right About the Mosquito. It Took 19 Years. (Finlay; Dec 3 = his birthday, verified) | HC001-L (HC002-L once live) | Fri Dec 4 | Sun Nov 29 | package ready (2026-11-15) |
 | 15 | Sat Dec 5 | HC002-S2 Did Phineas Gage Really Become a Different Person? | HC002-L | Sun Dec 6 | Tue Dec 1 | script v2 |
-| 16 | Mon Dec 7 | **HCS05** The doctor who refused to treat half his patients (al-Razi) | HC002-L | Tue Dec 8 | Thu Dec 3 | script approved |
+| 16 | Mon Dec 7 | **HCS05** 1,100 Years Ago, a Doctor Refused to Treat Patients on Purpose (al-Razi) | HC001-L (HC002-L once live) | Tue Dec 8 | Thu Dec 3 | package ready (2026-11-15) |
 | – | Dec 9 / Dec 11 | two standalone Shorts | | | | |
 | – | **Sun Dec 13** · L | **HC003-L** The Dancing Plague of 1518, then HC003-S1, S2 | | | | script v2 |
 
