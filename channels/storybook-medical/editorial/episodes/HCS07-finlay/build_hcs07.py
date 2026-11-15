@@ -11,21 +11,21 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[5]
 sys.path.insert(0, str(REPO / "channels/storybook-medical/scripts"))
-from prompt_kit import (FULL_BLEED, NO_PEOPLE, NO_TEXT, ONE_EACH, PERIOD, SAFE_FRAMING, WAVY_WRITING, camera, cast,  # noqa: E402
+from prompt_kit import (crowd, FULL_BLEED, NO_PEOPLE, NO_TEXT, ONE_EACH, PERIOD, SAFE_FRAMING, WAVY_WRITING, camera, cast,  # noqa: E402
                         framing, glasses_gag, lint_all, matt_beat, real_writing, set_block)
 
 PID = "hcs07-finlay"
 HC1 = "projects/hc001-window-into-his-stomach/assets/images/refs"
 
-NARRATION = """[curious] For nineteen years, almost nobody believed the man who solved yellow fever.
-Havana, 1881. Yellow fever was killing thousands, and nobody knew how it spread.
-Doctor Carlos Finlay had an idea… a mosquito.
-He told the Academy of Sciences. The reaction: disbelief.
-For nineteen years he kept breeding mosquitoes and testing his idea.
-In 1900, a US Army team led by Walter Reed came to Cuba… and finally tested it. With Finlay's mosquitoes.
-[serious] One of the team, Jesse Lazear, was bitten… and died of yellow fever.
-The mosquito was the carrier. Finlay had been right all along.
-[curious] Reed got most of the fame. But Reed himself gave the credit… to Finlay."""
+NARRATION = """[curious] He found what spreads yellow fever. Then spent nineteen years trying to make anyone believe him.
+[serious] Havana, 1881. Yellow fever was killing thousands, and nobody knew how it spread.
+[curious] Doctor Carlos Finlay named a tiny suspect… the mosquito.
+He told the Academy of Sciences. [pause] Almost nobody believed him.
+So he kept going. Breeding mosquitoes. Testing. Year after year.
+Then, in 1900, a US Army team led by Walter Reed finally tested his idea… with Finlay's own mosquitoes.
+[serious] One of them, Jesse Lazear, was bitten… [pause] and died of yellow fever.
+The mosquito was the killer. Finlay had been right all along.
+[curious] Reed got most of the fame. But Reed himself gave the credit… to Finlay."""  # story v2, approved 2026-11-15
 
 # ── people (from the real photos in projects/hcs07-finlay/refs, references.md) ───────────────────────────────────
 EYEGLASSES = "small oval wire-rimmed eyeglasses with CLEAR glass (clear, NOT amber, not tinted)"
@@ -231,6 +231,49 @@ KEYFRAMES = {
 }
 
 
+# -- story v2 (story-doctor, approved by the user 2026-11-15: "new scripts looks much better go for it") ----------------
+# New: s1c (hook: a mosquito lands on an arm), s2c (the epidemic: a coffin carried out), s5b (he keeps going: pouring the
+# larvae jars). Redo: s4b and s6a (v1 cloned one face on every body: L42 casting cards). Dropped: s1a, s2b (files kept).
+QUAY = set_block("The stone quay of Havana harbour", "June 1900",
+                 "a worn stone quay with iron bollards and coiled ropes, a small steam launch tied alongside, wooden "
+                 "crates and a hand cart, lime-washed harbour buildings with arcades behind, bright tropical sun")
+KEYFRAMES.update({
+    "s1c": dict(aspect="9:16", resolution="4K", refs=[STYLE_PLATE], roles="",
+        prompt=f"{STUDY} {framing('ECU', 'eye level, macro', '100 mm macro, very shallow focus', 'the thing that spreads yellow fever', 'menace, held breath')} "
+               f"{camera('a hand-span from a forearm resting on the desk', 'the mosquito', 'the warm glow of the oil lamp behind, a soft golden blur')} "
+               "A single striped mosquito (Aedes aegypti: black with white lyre-shaped markings on its back and white "
+               "bands on its legs) has just landed on a man's bare forearm, its thin legs bending, wings still open, "
+               "backlit so the wings and legs glow against the lamp. The forearm fills the lower third. No blood. "
+               f"{FULL_BLEED} {NO_PEOPLE} {SAFE_FRAMING} {PERIOD} {NO_TEXT}"),
+    "s2c": dict(aspect="9:16", refs=["ref:plate-street"], roles=STYLE_ONLY.format(n="Havana street"),
+        prompt=f"{STREET} {framing('MS', 'eye level', '35 mm', 'yellow fever is killing thousands', 'grief, hushed, the heat of the street')} "
+               f"{camera('across the narrow street, in the shade', 'the open door of a house', 'the house front: a tall wooden door with a black mourning bow, an iron window grille, faded ochre plaster')} "
+               f"{cast('a broad, bald, dark-skinned man of about 50 in a sweat-darkened white shirt, carrying the front of a plain wooden coffin on his shoulder, stepping down from the doorway', 'a lanky young man of about 20, pale, clean-shaven, in a straw hat, carrying the back end of the coffin, his face turned away', 'a woman of about 35 in a black dress standing in the doorway, one hand pressed to her mouth', 'an old cart driver with a white beard and a wide hat sitting on a two-wheeled cart waiting at the kerb')} "
+               f"No two of them look alike. The coffin is closed, plain and unpainted. No bodies. {SAFE_FRAMING} {PERIOD} {NO_TEXT}"),
+    "s5b": dict(aspect="9:16", refs=[F], roles="",
+        prompt=f"{LAB} {framing('MLS', 'eye level, from the side', '35 mm', 'so he kept going, breeding mosquitoes and testing', 'stubborn, patient work')} "
+               f"{camera('at the end of the shelves', 'along the shelves toward the window', 'a long row of gauze-topped glass jars on the shelves running to the bright tall window')} "
+               f"{cast(FINLAY81 + ', his coat off, in a waistcoat with the shirt sleeves rolled to the elbow, pouring water from an earthenware pitcher into one jar of a long row of glass jars, concentrating')} "
+               f"Each jar holds water with tiny dark wriggling larvae under a gauze cover tied with string. {WAVY_WRITING} {SAFE_FRAMING} {PERIOD} {NO_TEXT}"),
+})
+KEYFRAMES["s4b"] = dict(aspect="9:16", refs=[STYLE_PLATE, "kit:matt-sheet.jpg"], roles="",
+    prompt=f"{ACADEMY} {HALL_MAP} {framing('MS', 'eye level, the reverse angle from the lectern', '35 mm', 'almost nobody believed him', 'disbelief: three different reactions')} "
+           f"{camera('at the lectern, where Finlay stands', 'south, at the audience', 'the seated audience FACING the camera, and behind them the hall south wall: plain whitewashed stone with one tall arched wooden door; NO windows and NO lectern anywhere in view')} "
+           + crowd("academics on the front bench of the Academy, in black frock coats", [
+               "an old man of about 75, bald and bony, with white mutton-chop side-whiskers and no moustache, shaking his head slowly",
+               "a thin young man of about 28, clean-shaven, with slicked black hair, hiding a smirk behind his hand",
+               "a heavy, red-faced man of about 55 with a huge grey walrus moustache and no beard, turning his shoulder away, arms folded"],
+               "The rows behind them are dim and out of focus: dark coats and blurred shapes with no readable faces.")
+           + f" {matt_beat('a cream linen jacket and a straw boater of 1881', 'at the right end of the front bench, the only one leaning forward, eagerly writing in his notebook')} "
+           f"{SAFE_FRAMING} {PERIOD} {NO_TEXT}")
+KEYFRAMES["s6a"] = dict(aspect="9:16", refs=[STYLE_PLATE, R], roles="",
+    prompt=f"{QUAY} {framing('MS', 'low angle', '28 mm', 'a US Army team led by Walter Reed arrives to test the idea', 'purposeful, a new chapter, motion')} "
+           f"{camera('low on the quay, beside a bollard', 'the launch and the men coming ashore', 'the harbour water, the launch and its funnel, the arcaded buildings across the quay')} "
+           f"{cast(REED + ', stepping off the launch onto the quay first, one hand on his cap', 'a stocky man of about 46, bald with a heavy grey walrus moustache, in a rumpled khaki army field uniform, carrying a doctor bag', 'a slim young Cuban man of about 30, clean-shaven, black wavy hair, in a white linen suit and a straw boater, pointing the way', 'a tall muscular Black dockworker of about 25 in a sleeveless shirt, carrying a wooden crate on his shoulder')} "
+           f"No two of them look alike: different ages, builds, faces and hair. {SAFE_FRAMING} {PERIOD} {NO_TEXT}")
+ORDER = ["s1c", "s5", "s2a", "s2c", "s3", "s4a", "s4b", "s5b", "s1b", "s6a", "s6b", "s7a", "s7b", "s8a", "s8b", "s9a", "s9b"]
+KEYFRAMES = {k: KEYFRAMES[k] for k in ORDER}
+
 # -- v2 references (user, 2026-11-14: "make sure duplications are not happening"): L38 + L39 --------------------------
 # A set plate goes only to shots on its own set (L39); shots elsewhere take the character sheets (painted in our style)
 # or the HC001 study plate as STYLE only (not from this film, so its room can't be mistaken for one of ours). Each shot
@@ -246,15 +289,16 @@ REFS = {"F81": F81, "F00": F00, "R": R, "L": L, "MATT": "kit:matt-sheet.jpg", "G
 HARBOUR_PHOTO = ("Reference 2 is a period photograph used ONLY for the shape of Morro Castle, its lighthouse and the "
                  "harbour mouth; paint it, never copy the photo. ")
 V2 = {  # shot: (set, leading refs with their roles, sheet keys)
-    "s1a": ("academy", [("ref:plate-academy", STYLE_ONLY.format(n="Academy"))], []),
+    "s1c": ("study", [(STYLE_PLATE, OUTSIDE)], []),
     "s1b": ("study", [], ["F81"]),
     "s2a": ("harbour", [(STYLE_PLATE, OUTSIDE), ("proj:refs/havana_harbor_1860.jpg", HARBOUR_PHOTO)], []),
-    "s2b": ("street", [("ref:plate-street", STYLE_ONLY.format(n="Havana street"))], []),
+    "s2c": ("street", [("ref:plate-street", STYLE_ONLY.format(n="Havana street"))], []),
     "s3": ("study", [], ["F81"]),
     "s4a": ("academy", [("ref:plate-academy", "Reference 1 is the empty Academy hall: this is that hall, seen from the back. ")], ["F81"]),
     "s4b": ("academy", [(STYLE_PLATE, OUTSIDE)], ["MATT"]),  # v3: kf:s4a made it a copy of s4a
+    "s5b": ("lab", [], ["F81"]),
     "s5": ("lab", [], ["F81", "GL"]),
-    "s6a": ("camp", [], ["R"]),
+    "s6a": ("quay", [(STYLE_PLATE, OUTSIDE)], ["R"]),
     "s6b": ("table", [], ["F00", "R"]),
     "s7a": ("ward", [], ["L"]),
     "s7b": ("tent", [(STYLE_PLATE, OUTSIDE)], []),
@@ -279,8 +323,9 @@ def main():
               image_resolution="2K", loop=True, tail_seconds=1.0, references=REFERENCES, keyframes=KEYFRAMES,
               glasses="s5: Matt's spectacles on the shelf beside the larvae jars",
               theme={"culture": "caribbean-colonial", "font": "montserrat"},
-              previz_approved="2026-11-14: storyboard v1.1 + pre-viz approved by the user on the storyboard page "
-                              "(claude.ai/artifact/Dy34MeUVzxbLtEMi4ujsJC): 'now i can say we go for next'")
+              previz_v1="2026-11-14: storyboard v1.1 + pre-viz approved (claude.ai/artifact/Dy34MeUVzxbLtEMi4ujsJC)",
+              story_v2="2026-11-15: story-v2.md approved: 'new scripts looks much better go for it'")
+    ep.pop("previz_approved", None)  # gate closed until the v2 sketches + prompts are OK'd on the page
     ep["narration"]["v3_text"] = NARRATION
     json.dump(ep, open(p, "w", encoding="utf-8"), indent=2, ensure_ascii=False)
     issues = lint_all({**REFERENCES, **KEYFRAMES})

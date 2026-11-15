@@ -128,6 +128,46 @@ ACADEMY = {
                 ("4b", 500, 300, 180, 60, "reverse from the lectern")],
 }
 
+
+# -- story v2 (approved 2026-11-15): new + redone shots; the redo names replace their v1 sketches ----------------------
+V2_SHOTS = [
+    {"name": "1c", "zone": "TOP", "text": "caption (above the mosquito)", "shapes": [
+        ("grad", (90, 60, 30), (240, 170, 70)), ("ellipse", .55, .1, .95, .45, (255, 210, 120)), ("text", .75, .5, "lamp glow, blurred"),
+        ("poly", [(0, .72), (1, .62), (1, .9), (0, 1)], (200, 150, 110)), ("text", .5, .88, "forearm"),
+        ("ellipse", .4, .48, .6, .58, INK), ("line", .42, .56, .32, .66, INK, 2), ("line", .58, .56, .68, .64, INK, 2),
+        ("line", .45, .5, .3, .4, (240, 240, 240), 2), ("line", .55, .5, .7, .4, (240, 240, 240), 2),
+        ("text", .5, .45, "mosquito lands, backlit")]},
+    {"name": "2c", "zone": "TOP", "text": "caption (on the wall, above the door)", "shapes": [
+        ("rect", 0, 0, 1, 1, OCHRE), ("rect", .3, .25, .7, .8, WOOD, "door"), ("ellipse", .45, .2, .55, .27, INK),
+        ("text", .5, .17, "black bow"), ("fig", .5, .8, .45, {"col": INK}, "woman, hand to mouth"),
+        ("poly", [(.05, .62), (.65, .55), (.67, .62), (.07, .7)], (150, 110, 70)), ("text", .35, .53, "plain coffin"),
+        ("fig", .62, 1.0, .5, {"col": (90, 60, 40)}, "big bald man, front"), ("fig", .1, 1.0, .5, {"col": (220, 210, 180)}, "young man, back"),
+        ("rect", .78, .7, 1, .9, WOOD, "cart"), ("fig", .9, .72, .28, {"col": (200, 200, 190), "sitting": True}, "old driver")]},
+    {"name": "4b", "zone": "TOP", "text": "caption (on the wall, above the faces)", "shapes": [
+        ("rect", 0, 0, 1, 1, LIME), ("rect", .35, .1, .65, .45, WOOD, "arched door (south wall)"),
+        ("rect", 0, .5, 1, .62, (60, 58, 62), "back rows: dim, out of focus"),
+        ("fig", .18, 1.0, .5, {"col": COAT, "sitting": True}, "1 old bald, shakes head"),
+        ("fig", .4, 1.0, .5, {"col": COAT, "sitting": True}, "2 young, smirk"),
+        ("fig", .62, 1.0, .52, {"col": COAT, "sitting": True}, "3 heavy, turns away"),
+        ("fig", .85, 1.0, .5, {"col": (226, 210, 170), "sitting": True}, "MATT, writing")]},
+    {"name": "5b", "zone": "LOW", "text": "caption (on the jars)", "shapes": [
+        ("rect", 0, 0, 1, 1, (140, 110, 80)), ("rect", .75, .05, .98, .55, (250, 240, 210), "window"),
+        ("rect", 0, .55, 1, .6, WOOD), ("rect", 0, .75, 1, .8, WOOD),
+        ("rect", .05, .45, .13, .55, GLASS), ("rect", .2, .45, .28, .55, GLASS), ("rect", .35, .45, .43, .55, GLASS),
+        ("rect", .5, .45, .58, .55, GLASS), ("rect", .65, .45, .73, .55, GLASS), ("text", .4, .42, "row of larvae jars"),
+        ("fig", .32, .98, .7, {"col": (60, 58, 62)}, "Finlay 1881, sleeves rolled"), ("ellipse", .4, .34, .5, .42, (170, 100, 60)),
+        ("text", .55, .3, "pitcher pours")]},
+    {"name": "6a", "zone": "LOW", "text": "caption (on the quay stones)", "shapes": [
+        ("rect", 0, 0, 1, .45, SKY), ("rect", 0, .35, 1, .5, SEA), ("rect", 0, .5, 1, 1, STONE),
+        ("rect", .55, .25, .95, .45, (60, 60, 60), "steam launch"), ("rect", .8, .1, .84, .25, (40, 40, 40)),
+        ("fig", .3, .95, .7, {"col": (40, 50, 90)}, "REED steps ashore"), ("fig", .52, .95, .62, {"col": (150, 130, 90)}, "stocky bald, khaki"),
+        ("fig", .7, .95, .6, {"col": (240, 236, 220)}, "young Cuban, white suit"), ("fig", .9, .95, .66, {"col": (80, 60, 50)}, "dockworker + crate"),
+        ("rect", .84, .3, .98, .38, WOOD)]},
+]
+SHOTS = [s for s in SHOTS if s["name"] not in {x["name"] for x in V2_SHOTS} | {"1a", "2b"}] + V2_SHOTS
+ACADEMY["cameras"] = [c for c in ACADEMY["cameras"] if c[0] != "1a"]
+
+
 if __name__ == "__main__":
     OUT.mkdir(parents=True, exist_ok=True)
     render_frames(OUT, SHOTS)

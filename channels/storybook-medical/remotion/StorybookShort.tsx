@@ -52,6 +52,8 @@ type Motion =
   | { type: "tilt"; from?: number; to?: number; scale?: number }
   | { type: "slide"; from?: number; to?: number; scale?: number }
   | { type: "shake"; scale?: number; seconds?: number }
+  // snap: a hard zoom in at `at` seconds into the shot (over `frames`), toward x/y (% translate like push), then a slow drift
+  | { type: "snap"; from?: number; to?: number; at?: number; frames?: number; x?: number; y?: number }
   // pan: slide the visible window across a wider master (objectPosition %, 0 = left edge, 100 = right edge)
   | { type: "pan"; from?: number; to?: number; scale?: number };
 
@@ -70,6 +72,8 @@ export interface Shot {
   /** Lines that draw themselves ON the picture (they move with the camera): points in 0..1 of the 9:16 frame, drawn
    *  between from..to seconds after the shot starts (HCS01: the catheter up the vein, the line on the X-ray). */
   draw?: { points: [number, number][]; from: number; to: number; color?: string; width?: number; glow?: boolean }[];
+  /** A short jolt on a key word (story-doctor rhythm map): seconds after the shot starts, on top of any motion. */
+  hit?: { at: number; strength?: number; seconds?: number };
   /** Colour drains to grey between from..to seconds after the shot starts. */
   grey?: { from: number; to: number };
   /** Masked effects on measured objects (ShortFx.tsx), under the same camera transform as the picture. */
@@ -134,12 +138,28 @@ export const ShotLayer: React.FC<{ shot: Shot }> = ({ shot }) => {
     tx = (m.from ?? 5) + ((m.to ?? -5) - (m.from ?? 5)) * t;
   } else if (m.type === "pan") {
     scale = m.scale ?? 1.04;
+  } else if (m.type === "snap") {
+    const at = (m.at ?? 0) * FPS;
+    const k = interpolate(frame, [at, at + (m.frames ?? 6)], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.out(Easing.cubic) });
+    const drift = interpolate(frame, [at, dur], [0, 0.03], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+    scale = (m.from ?? 1.03) + ((m.to ?? 1.3) - (m.from ?? 1.03)) * k + drift;
+    tx = (m.x ?? 0) * k;
+    ty = (m.y ?? 0) * k;
   } else if (m.type === "shake") {
     scale = m.scale ?? 1.1;
     const s = m.seconds ?? 0.4;
     const k = interpolate(frame, [0, s * FPS], [1, 0], { extrapolateRight: "clamp" });
     tx = Math.sin(frame * 2.7) * 2.2 * k;
     ty = Math.cos(frame * 3.3) * 2.2 * k;
+  }
+
+  if (shot.hit) {
+    const h0 = shot.hit.at * FPS;
+    const k = interpolate(frame, [h0, h0 + (shot.hit.seconds ?? 0.35) * FPS], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+    const on = frame >= h0 ? k : 0;
+    tx += Math.sin(frame * 2.9) * (shot.hit.strength ?? 2.4) * on;
+    ty += Math.cos(frame * 3.7) * (shot.hit.strength ?? 2.4) * on;
+    scale += 0.03 * on;
   }
 
   // Whip-in: fast horizontal slide with motion blur over the first 7 frames.

@@ -663,7 +663,7 @@ def step_build(pid, *_):
         shots.append({"id": s["id"], "src": rel, "kind": kind, "start": s["start"], "end": s["end"],
                       "inPoint": s.get("in", 0), "motion": s.get("motion", {"type": "push"}),
                       "transitionIn": s.get("transition", "cut"), "darken": s.get("darken", 0),
-                      **{k: s[k] for k in ("captionY", "draw", "grey") if k in s}})
+                      **{k: s[k] for k in ("captionY", "draw", "grey", "hit") if k in s}})
         if s.get("fx") and kind == "image":   # masks / plates go through the still's own crop, so they line up
             (pub / "fx").mkdir(exist_ok=True)
             fxs = []
@@ -787,6 +787,14 @@ def step_mix(pid, *_):
         ff("-i", str(src), "-af", f"atrim=0:{total},afade=t=in:d=0.4,afade=t=out:st={total - 1.6}:d=1.6", "-ar", "48000", "-ac", "2", str(tmp / "m.wav"))
     i, _ = loudness(tmp / "m.wav")
     ff("-i", str(tmp / "m.wav"), "-af", f"volume={ep['music'].get('lufs', -22) - i:.2f}dB", str(tmp / "bed.wav"))
+    # music gaps (story-doctor rhythm map, 2026-11-15): the music goes SILENT at the climax and comes back on the turn.
+    # "music": {"gaps": [{"from": 33.6, "to": 39.0, "fade_out": 0.4, "fade_in": 0.15}]}  (seconds on the final timeline)
+    gaps = ep["music"].get("gaps", [])
+    if gaps:
+        env = "*".join(f"(1-clip((t-{g['from'] - g.get('fade_out', 0.4):.3f})/{g.get('fade_out', 0.4):.3f},0,1)"
+                       f"+clip((t-{g['to']:.3f})/{max(0.01, g.get('fade_in', 0.15)):.3f},0,1))" for g in gaps)
+        ff("-i", str(tmp / "bed.wav"), "-af", f"volume='min(1,{env})':eval=frame", str(tmp / "bed_g.wav"))
+        shutil.move(tmp / "bed_g.wav", tmp / "bed.wav")
     inputs = ["-i", str(narr), "-i", str(tmp / "bed.wav")]
     parts = [f"[0:a]aformat=sample_rates=48000:channel_layouts=stereo,apad=whole_dur={total},asplit=2[narr][key]",
              "[1:a][key]sidechaincompress=threshold=0.03:ratio=5:attack=40:release=450:makeup=1[music]"]

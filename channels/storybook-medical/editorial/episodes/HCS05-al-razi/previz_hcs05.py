@@ -106,6 +106,51 @@ WARD = {
                 ("7b", 620, 330, 90, 40, "CU at a B bed")],
 }
 
+
+# -- story v2 (approved 2026-11-15): new + redone shots; the redo names replace their v1 sketches ----------------------
+V2_SHOTS = [
+    {"name": "3b", "zone": "TOP", "text": "caption (above the blade)", "shapes": [
+        ("grad", (150, 110, 80), (90, 66, 50)), ("text", .5, .2, "lamplit brick, out of focus"),
+        ("rect", 0, .62, 1, 1, CLOTH), ("ellipse", .12, .5, .45, .66, BRASS), ("text", .28, .7, "brass bowl"),
+        ("line", .45, .6, .85, .48, (225, 225, 230), 5), ("ellipse", .78, .42, .98, .54, (110, 80, 60)),
+        ("text", .7, .38, "hand lifts the lancet"), ("text", .62, .56, "glint on the blade")]},
+    {"name": "5a", "zone": "LOW", "text": "caption (on the curtain, below his face)", "shapes": [
+        ("rect", 0, 0, 1, 1, (150, 118, 86)), ("line", 0, .16, 1, .16, (90, 70, 50), 3), ("text", .5, .12, "rope down the hall"),
+        ("poly", [(.05, .16), (.55, .16), (.5, 1), (0, 1)], (226, 218, 200)), ("text", .25, .4, "curtain billows"),
+        ("rect", .58, .62, 1, .74, BED, "beds of group A beyond"),
+        ("fig", .58, .98, .78, RAZI, "al-Razi, pulling, mid-stride"), ("line", .52, .32, .3, .18, INK, 6)]},
+    {"name": "5b", "zone": "TOP", "text": "caption · stamps GROUP A / GROUP B (MID)", "shapes": [
+        ("rect", 0, 0, 1, 1, (160, 128, 92)), ("poly", [(0, 0), (.45, .38), (.45, .5), (0, 1)], BRICK_D),
+        ("poly", [(1, 0), (.55, .38), (.55, .5), (1, 1)], BRICK_D), ("rect", .45, .36, .55, .5, (240, 230, 200), "entrance"),
+        ("poly", [(.48, .3), (.52, .3), (.56, 1), (.44, 1)], (226, 218, 200)), ("text", .5, .26, "curtain = centre line, vanishing point"),
+        ("poly", [(.06, .9), (.4, .9), (.43, .82), (.15, .82)], BED), ("poly", [(.2, .74), (.42, .74), (.44, .68), (.27, .68)], BED),
+        ("poly", [(.6, .9), (.94, .9), (.85, .82), (.57, .82)], BED), ("poly", [(.58, .74), (.8, .74), (.73, .68), (.56, .68)], BED),
+        ("ellipse", .02, .9, .1, .94, BRASS), ("ellipse", .17, .74, .23, .77, BRASS),
+        ("text", .22, .97, "A: bowls + bandages"), ("text", .78, .97, "B: nothing")]},
+    {"name": "6", "zone": "LOW", "text": "caption", "shapes": [
+        ("rect", 0, 0, 1, 1, NIGHT), ("poly", [(.5, .3), (0, .6), (0, .72)], (110, 84, 60)),
+        ("poly", [(.5, .3), (1, .6), (1, .72)], (110, 84, 60)), ("text", .5, .26, "two rows, a patient in EVERY bed"),
+        ("ellipse", .05, .6, .2, .66, (180, 150, 120)), ("ellipse", .8, .6, .95, .66, (180, 150, 120)),
+        ("fig", .4, .98, .55, {"col": (150, 132, 100), "sitting": True}, "al-Razi on a cushion"),
+        ("fig", .72, 1.0, .62, {"col": (90, 60, 110)}, "MATT: student + lamp"),
+        ("ellipse", .76, .42, .84, .48, LAMP)]},
+    {"name": "6b", "zone": "TOP", "text": "caption (on the dawn window, above his head)", "shapes": [
+        ("grad", (240, 190, 170), (190, 140, 100)), ("rect", .45, .05, .95, .4, (250, 220, 170), "lattice: dawn"),
+        ("rect", 0, .78, 1, 1, BED), ("ellipse", .3, .38, .6, .6, (200, 160, 120)), ("text", .45, .35, "young patient, eyes closed"),
+        ("rect", .22, .6, .72, .9, (226, 218, 200)), ("ellipse", .4, .57, .54, .66, (190, 140, 100)), ("text", .47, .69, "clay cup"),
+        ("rect", .6, .7, .74, .76, CLOTH), ("text", .8, .8, "bandaged forearm")]},
+    {"name": "7b", "zone": "TOP", "text": "caption", "shapes": [
+        ("grad", (240, 210, 160), (210, 170, 120)), ("text", .5, .25, "plain wall, dawn, all soft: no room"),
+        ("rect", 0, .62, 1, 1, (120, 84, 54)), ("rect", .1, .55, .9, .7, CLOTH),
+        ("ellipse", .25, .45, .65, .62, BRASS), ("line", .62, .64, .9, .62, (200, 200, 200), 4),
+        ("ellipse", .55, .32, .75, .44, (110, 80, 60)), ("text", .66, .3, "hand sets it down")]},
+]
+SHOTS = [s for s in SHOTS if s["name"] not in {x["name"] for x in V2_SHOTS} | {"2", "5", "9a"}] + V2_SHOTS
+WARD["cameras"] = [c for c in WARD["cameras"] if c[0] != "5"] + [
+    ("3b", 360, 600, 270, 15, "insert at the A3 table"), ("5a", 620, 470, 270, 50, "MS, he draws the curtain"),
+    ("5b", 500, 40, 180, 70, "ELS eye level, down the hall"), ("6b", 420, 370, 270, 40, "MCU at bed A2, dawn")]
+
+
 if __name__ == "__main__":
     OUT.mkdir(parents=True, exist_ok=True)
     render_frames(OUT, SHOTS)

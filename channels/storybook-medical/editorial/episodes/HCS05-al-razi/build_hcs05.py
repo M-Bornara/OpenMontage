@@ -18,14 +18,14 @@ PID = "hcs05-al-razi"
 HC1 = "projects/hc001-window-into-his-stomach/assets/images/refs"
 
 NARRATION = """[curious] Eleven hundred years ago, a doctor refused to treat some of his patients. On purpose.
-Al-Razi was a Persian physician from Rey, near today's Tehran.
-For the first signs of meningitis, the treatment was bloodletting.
-Al-Razi wasn't sure it worked.
-So he bled one group of patients… and deliberately left another group alone.
-Then he watched what happened to both.
-The bled group did better, he wrote, in his giant medical encyclopedia. So he kept the treatment.
-[mischievously] He was wrong. Bloodletting doesn't help meningitis.
-[curious] Some call it the first clinical trial. Not quite. But comparing two groups is how we test every medicine today."""
+[serious] Persia. Fever. Stiff necks. The first signs of meningitis.
+The standard cure: open a vein, and let the blood out.
+[curious] But al-Razi, a physician from Rey, had a doubt. [pause] What if the cure does nothing?
+So he split his patients in two. One group, he bled. The other… he left alone.
+[whispers] Then he waited… [pause] and watched both.
+[curious] The bled group did better, he wrote. So he kept the cure.
+[pause] [mischievously] He was wrong. Bloodletting doesn't help meningitis.
+[curious] His answer was wrong. But his method, two groups side by side, is how we test every medicine today."""  # story v2, approved 2026-11-15
 
 # ── people: the look Iranians know (1956 portrait, Wellcome S0001954, CC BY 4.0: credit in CREDITS) ─────────────────
 RAZI = ("AL-RAZI (about 50; a white turban wrapped high and full, a full thick black beard, thick dark eyebrows, calm "
@@ -160,6 +160,50 @@ KEYFRAMES = {
 }
 
 
+# -- story v2 (story-doctor, approved by the user 2026-11-15: "new scripts looks much better go for it") ----------------
+# New: s3b (the cure: the lancet lifted), s5a (he draws the curtain), s5b (the two groups, EYE LEVEL: the top-down s5 painted
+# the walls upright on a floor seen from above), s6b (dawn: a bled patient sits up). Redo: s6 (patients in every bed),
+# s7b (a plain soft background: v1 ran a bed through the wall). Dropped from the cut: s2, s5, s9a (files kept).
+PATIENTS_AWAY = ("Every patient lies under a woven wool blanket with the face turned away from the camera or hidden by "
+                 "the blanket, so no patient's face is visible.")
+KEYFRAMES.update({
+    "s3b": dict(aspect="9:16", refs=["ref:plate-ward"], roles=WARD_LOOK,
+        prompt=f"{WARD} {framing('INSERT', 'eye level, very close', '85 mm macro, shallow focus', 'the standard cure: open a vein and let the blood out', 'cold, clinical, a held breath')} "
+               f"{camera('at the side table beside bed A3', 'the table top', 'warm lamplit brick, completely out of focus')} "
+               "Only a young man's hand in a plain brown sleeve, lifting a slim steel lancet off a folded white cloth; "
+               "beside it a small polished brass bowl. A bright lamp glint runs along the thin blade. No arm of a "
+               f"patient, no skin being cut, no blood. {NOT_LATER} {FULL_BLEED} {SAFE_FRAMING} {PERIOD} {NO_TEXT}"),
+    "s5a": dict(aspect="9:16", refs=["ref:plate-ward", Z], roles=WARD_LOOK,
+        prompt=f"{WARD} {WARD_MAP} {framing('MS', 'eye level', '35 mm', 'he splits his patients in two', 'decisive, a bold act, motion')} "
+               f"{camera('in the aisle on the east side, mid-ward', 'west, across the aisle', 'the long cloth curtain being drawn, and beyond it the beds of group A against the brick wall')} "
+               f"{cast(RAZI + ', walking fast and pulling a long plain linen curtain along a rope strung down the middle of the hall, his arm stretched out, the cloth billowing behind him')} "
+               f"Wooden rings slide along the rope. Beds on both sides with patients under blankets. {PATIENTS_AWAY} "
+               f"{NOT_LATER} {SAFE_FRAMING} {PERIOD} {NO_TEXT}"),
+    "s5b": dict(aspect="9:16", resolution="4K", refs=["ref:plate-ward"], roles=WARD_LOOK,
+        prompt=f"{WARD} {WARD_MAP} {framing('ELS', 'EYE LEVEL, one-point perspective', '24 mm', 'two groups: one bled, one left alone', 'a clear, deliberate pattern')} "
+               f"{camera('standing at the north end of the hall, exactly in line with the curtain', 'south, straight down the hall', 'the arched entrance at the far south end with pale daylight; the brick walls, the lattice windows high on both walls and the lamp niches all recede in straight lines to one vanishing point at the entrance')} "
+               "The curtain hangs straight down from its rope in the centre of the frame and runs away from us to the "
+               "entrance, dividing the hall. LEFT of the curtain (group A): four low beds in a row, each with a small "
+               "brass bowl on the floor beside it and the patient's forearm wrapped in a white bandage on top of the "
+               "blanket. RIGHT of the curtain (group B): four identical beds with nothing beside them. Walls stand "
+               "upright, the floor recedes; a normal room seen standing in it. "
+               f"{PATIENTS_AWAY} No blood. {NOT_LATER} {SAFE_FRAMING} {PERIOD} {NO_TEXT}"),
+    "s6b": dict(aspect="9:16", refs=["ref:plate-ward"], roles=WARD_LOOK,
+        prompt=f"{WARD} {WARD_MAP} {framing('MCU', 'eye level', '50 mm', 'the bled group did better, he wrote', 'relief, first light, quiet')} "
+               f"{camera('in the aisle beside bed A2', 'west, at the bed', 'the brick wall with a lattice window full of pink-gold dawn light, the curtain edge on the left')} "
+               f"{cast('a thin young man of about 25 with short curly black hair and a sparse beard, sitting up in his bed under a wool blanket, a white bandage on his left forearm, drinking water from a small unglazed clay cup held in both hands, eyes closed with relief; his head in the lower middle of the frame, the dawn window filling the space above him')} "
+               f"{NOT_LATER} {SAFE_FRAMING} {PERIOD} {NO_TEXT}"),
+})
+KEYFRAMES["s6"]["prompt"] = KEYFRAMES["s6"]["prompt"].replace(
+    f"{SCRIPT} {NOT_LATER}", f"A patient in EVERY bed on both sides of the curtain. {PATIENTS_AWAY} {SCRIPT} {NOT_LATER}")
+KEYFRAMES["s7b"] = dict(aspect="9:16", refs=["ref:plate-ward"], roles=WARD_LOOK,
+    prompt=f"{WARD} {framing('CU', 'eye level, low and close', '85 mm, very shallow focus', 'he keeps the treatment', 'calm routine, dawn light')} "
+           f"{camera('at a low wooden stool beside a bed', 'the stool top', 'a plain plastered wall bathed in warm dawn light, completely soft and out of focus: no furniture, no beds, no windows readable behind')} "
+           "Only a hand in a brown sleeve setting a small brass bowl down on a folded white cloth on the stool; a slim "
+           f"lancet already lies on the cloth. No cut, no blood. {NOT_LATER} {FULL_BLEED} {SAFE_FRAMING} {PERIOD} {NO_TEXT}")
+ORDER = ["s1a", "s1b", "s3", "s3b", "s4", "s5a", "s5b", "s6", "s6b", "s7a", "s7b", "s8", "s9b"]
+KEYFRAMES = {k: KEYFRAMES[k] for k in ORDER}
+
 # -- v2 references (user, 2026-11-14: "make sure duplications are not happening"): L38 + L39 --------------------------
 # The ward plate goes only to ward shots (L39); his room, Rey, the shelf, the museum and the lab take the al-Razi sheet
 # or the HC001 study plate as STYLE only. s1a now faces south (entrance) so it can't repeat s6 (north, up the aisle).
@@ -173,15 +217,16 @@ KF_LOOK = "Reference 1 is an earlier shot of this film, for the painting style a
 V2 = {
     "s1a": ("ward", [("ref:plate-ward", WARD_LOOK)], ["Z"]),
     "s1b": ("ward", [("kf:s1a", KF_LOOK)], ["Z"]),
-    "s2": ("rey", [(STYLE_PLATE, OUTSIDE)], []),
     "s3": ("ward", [("ref:plate-ward", WARD_LOOK)], []),
     "s4": ("room", [], ["Z"]),
-    "s5": ("ward", [("ref:plate-ward", WARD_LOOK)], []),
+    "s3b": ("ward", [("ref:plate-ward", WARD_LOOK)], []),
+    "s5a": ("ward", [("ref:plate-ward", WARD_LOOK)], ["Z"]),
+    "s5b": ("ward", [("ref:plate-ward", WARD_LOOK)], []),
+    "s6b": ("ward", [("ref:plate-ward", WARD_LOOK)], []),
     "s6": ("ward", [("ref:plate-ward", WARD_LOOK)], ["Z", "MATT"]),
     "s7a": ("room", [], ["Z", "GL"]),
     "s7b": ("ward", [("ref:plate-ward", WARD_LOOK)], []),
     "s8": ("shelf", [(STYLE_PLATE, OUTSIDE)], []),
-    "s9a": ("museum", [(STYLE_PLATE, OUTSIDE)], []),
     "s9b": ("lab", [(STYLE_PLATE, OUTSIDE)], []),
 }
 for name, (set_id, firsts, sheets) in V2.items():
@@ -202,8 +247,9 @@ def main():
               image_resolution="2K", loop=True, tail_seconds=1.0, references=REFERENCES, keyframes=KEYFRAMES,
               glasses="s7a: Matt's spectacles on a pile of al-Razi's notebooks",
               theme={"culture": "persia", "font": "lalezar"},
-              previz_approved="2026-11-14: storyboard v1.1 + pre-viz approved by the user on the storyboard page "
-                              "(claude.ai/artifact/Dy34MeUVzxbLtEMi4ujsJC): 'now i can say we go for next'")
+              previz_v1="2026-11-14: storyboard v1.1 + pre-viz approved (claude.ai/artifact/Dy34MeUVzxbLtEMi4ujsJC)",
+              story_v2="2026-11-15: story-v2.md approved: 'new scripts looks much better go for it'")
+    ep.pop("previz_approved", None)  # gate closed until the v2 sketches + prompts are OK'd on the page
     ep["narration"]["v3_text"] = NARRATION
     json.dump(ep, open(p, "w", encoding="utf-8"), indent=2, ensure_ascii=False)
     issues = lint_all({**REFERENCES, **KEYFRAMES})

@@ -24,7 +24,7 @@ EP = REPO / "channels/storybook-medical/editorial/episodes"
 EPISODES = {
     "hcs07": {
         "anchor": "finlay", "short": "Finlay", "slot": "Thu Dec 3 · 15:00 ET = 14:00 Alberta",
-        "storyboard": EP / "HCS07-finlay/storyboard-v1.md", "story": EP / "HCS07-finlay/story-v2.md", "project": REPO / "projects/hcs07-finlay",
+        "storyboard": EP / "HCS07-finlay/storyboard-v2.md", "story": EP / "HCS07-finlay/story-v2.md", "project": REPO / "projects/hcs07-finlay",
         "previz": REPO / "projects/hcs07-finlay/review/previz", "maps": ["map-academy.png"],
         "refs_dir": REPO / "projects/hcs07-finlay/refs",
         "refs": [
@@ -38,7 +38,7 @@ EPISODES = {
     },
     "hcs05": {
         "anchor": "al-razi", "short": "al-Razi", "slot": "Mon Dec 7 · 15:00 ET = 14:00 Alberta",
-        "storyboard": EP / "HCS05-al-razi/storyboard-v1.md", "story": EP / "HCS05-al-razi/story-v2.md", "project": REPO / "projects/hcs05-al-razi",
+        "storyboard": EP / "HCS05-al-razi/storyboard-v2.md", "story": EP / "HCS05-al-razi/story-v2.md", "project": REPO / "projects/hcs05-al-razi",
         "previz": REPO / "projects/hcs05-al-razi/review/previz", "maps": ["map-ward.png"],
         "refs_dir": REPO / "projects/hcs05-al-razi/refs",
         "refs": [
@@ -181,7 +181,7 @@ def story_block(k: str, e: dict, img: Path) -> str:
     rh = "".join("<tr>" + "".join(f"<td>{inline(c)}</td>" for c in r) + "</tr>" for r in rhythm)
     sc = "".join("<tr>" + "".join(f"<td>{inline(c)}</td>" for c in r) + "</tr>" for r in score)
     return f"""
-  <div class="block story"><div class="kicker">Round 2 · story v2 · waiting for your OK</div>
+  <div class="block story"><div class="kicker">Round 2 · story v2 · approved 2026-11-15</div>
   <p class="lede">{inline(why.removeprefix('Why: '))}</p>
   <h3>The tension curve (editorial rating per beat)</h3>
   <div class="chart"><div class="key"><span><i class="sw v1"></i>v1, rough cut 1</span><span><i class="sw v2"></i>v2, proposed</span></div>
@@ -360,11 +360,12 @@ def build(out: Path, keys: list[str]) -> Path:
         if e.get("project") and web_preview(e["project"] / "renders/final.mp4", out / "video" / f"{e['project'].name}.mp4"):
             vid = (f'<div class="block"><h3>Rough cut (watch with sound)</h3><video class="cut" controls playsinline '
                    f'preload="metadata" src="video/{e["project"].name}.mp4"></video></div>')
-            stage = "rough cut · waiting for your OK"
-            stages[-1] = stage
+            if not e.get("story"):
+                stage = "rough cut · waiting for your OK"
+                stages[-1] = stage
         story = story_block(k, e, img)
         if story:
-            stage = stages[-1] = "story v2 · waiting for your OK"
+            stage = stages[-1] = "v2 sketches + prompts · waiting for your OK"
         # reference images to make (cast sheets, set plates) with their prompts
         refgen = []
         for rn, spec in ep.get("references", {}).items():
@@ -406,8 +407,12 @@ def build(out: Path, keys: list[str]) -> Path:
                 shutil.copy(fr, img / f"{k}-{n}.png")
                 pics.append(f'<img src="img/{k}-{n}.png" alt="Pre-viz sketch, shot {html.escape(n)}" loading="lazy"><small>sketch</small>')
             kf = kf_dir / f"s{n}.png"
+            redo = "**REDO**" in see
             if kf.exists():
-                pics.append(f'<img src="img/{shrink(kf, img / f"{k}-kf-{n}", 900)}" alt="Image, shot {html.escape(n)}" loading="lazy"><small>image</small>')
+                pics.append(f'<img src="img/{shrink(kf, img / f"{k}-kf-{n}", 900)}" alt="Image, shot {html.escape(n)}" loading="lazy">'
+                            f'<small>{"rough cut 1 image: being REDONE" if redo else "image"}</small>')
+            elif "**NEW**" in see:
+                pics.append('<small>new image: after your OK</small>')
             pic = f'<div class="pics">{"".join(pics)}</div>'
             spec = ep.get("keyframes", {}).get(f"s{n}")
             ptxt = prompt_html(spec) if spec else ""
@@ -428,7 +433,7 @@ def build(out: Path, keys: list[str]) -> Path:
   {story}
   {vid}
   <div class="block"><h3>Notes and period rules</h3><div class="notes">{notes}</div></div>
-  <div class="block"><h3>Script (approved)</h3><div class="script">{''.join(sc)}</div></div>
+  <div class="block"><h3>Script v2 (approved, recorded)</h3><div class="script">{''.join(sc)}</div></div>
   <div class="block"><h3>People and places: the real pictures we follow</h3><div class="refs">{''.join(figs)}</div></div>
   <div class="block"><h3>Cast and sets</h3><div class="cast"><table><tr><th>Who / where</th><th>Look</th><th>Shots</th></tr>{cast}</table></div></div>
   <div class="block"><h3>Set map (where each camera stands)</h3><div class="maps">{''.join(maps)}</div></div>
@@ -443,11 +448,11 @@ def build(out: Path, keys: list[str]) -> Path:
 <style>{CSS}</style>
 <div class="wrap">
   <div class="kicker">Oddly Matt · approval page · {html.escape(stages[0] if len(set(stages)) == 1 else ", ".join(stages))}</div>
-  <h1>Next two Shorts: story v2</h1>
+  <h1>Next two Shorts: v2 shots for your OK</h1>
   <p class="lede">Round 2 (after your rough-cut review): each Short now starts with the proposed story v2, its tension curve against rough cut 1, and which shots stay, get fixed, are redone or are new. Below it: rough cut 1 and the approved v1 storyboard for reference. Each shot shows a rough sketch of the framing (people as silhouettes, where the text goes), the narration line it covers, and what the painting will show. The real portraits and period pictures set how people and places look. Tap any picture to enlarge it.</p>
   <nav>{nav}</nav>
   {''.join(body)}
-  <div class="ask"><h3>What I need from you</h3><p>First: is story v2 OK for both (the script lines and the keep/redo/new list)? After that I draw the sketches and prompts for the new shots here, then generate. Reply in chat with the shot numbers you want changed (for example "al-Razi 6: Matt holds the lamp higher"), or say both are OK. The order is always: storyboard and sketches, then the image prompts (open "Image prompt" under any shot), then the images. Nothing is paid for until you approve the step before it.</p></div>
+  <div class="ask"><h3>What I need from you</h3><p>Story v2 is approved and recorded. Now: are the sketches and image prompts of the NEW and REDO shots OK (al-Razi 3b, 5a, 5b, 6, 6b, 7b; Finlay 1c, 2c, 4b, 5b, 6a)? On your OK I generate those 11 images (≈ $0.85), then cut v2. Reply in chat with the shot numbers you want changed (for example "al-Razi 6: Matt holds the lamp higher"), or say both are OK. The order is always: storyboard and sketches, then the image prompts (open "Image prompt" under any shot), then the images. Nothing is paid for until you approve the step before it.</p></div>
 </div>
 <div id="lb" hidden><img alt=""></div>
 <script>
