@@ -12,7 +12,7 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[5]
 sys.path.insert(0, str(REPO / "channels/storybook-medical/scripts"))
 from prompt_kit import (crowd, FULL_BLEED, NO_PEOPLE, NO_TEXT, ONE_EACH, PERIOD, SAFE_FRAMING, WAVY_WRITING, camera, cast,  # noqa: E402
-                        framing, glasses_gag, lint_all, matt_beat, real_writing, set_block)
+                        empty_plate, framing, glasses_gag, lint_all, matt_beat, real_writing, set_block, sprite_sheet)
 
 PID = "hcs07-finlay"
 HC1 = "projects/hc001-window-into-his-stomach/assets/images/refs"
@@ -314,6 +314,34 @@ for name, (set_id, firsts, sheets) in V2.items():
              + "".join(f"Reference {len(firsts) + j + 1} is {SHEETS[x]}. " for j, x in enumerate(sheets)))
     if sheets:
         k["prompt"] += " " + ONE_EACH
+
+
+# ── layered pilot, shot s3 (user 2026-11-16, plan/layered-animation.md; motion in edit_hcs07.py, free stand-ins in
+# layers_s3.py). Two pieces, Gemini Batch 2K, ~$0.07 each: NOT generated until the user approves these prompts.
+#   episode.py refs hcs07-finlay plate-s3-empty sprite-mosquito --batch
+#   then: fx_prep.py sheet refs/sprite-mosquito.png fly-0 fly-1 land-0 rest-0 --out assets/images/sprites/mosquito
+#         and fx_prep.cut(plate, "hand", ...) for the shadow mask; point PLATE / SPRITES in edit_hcs07.py at them.
+REFERENCES.update({
+    "plate-s3-empty": dict(aspect="9:16", refs=["kf:s3"], roles="",
+        prompt=empty_plate("Finlay at his desk at night, his right fist raised, studying the back of his own hand by the "
+                           "light of the oil lamp",
+                           "the small dark mosquito on the back of his raised hand",
+                           "the clean skin of the back of his hand, with its painted shading, and the ink outline of the "
+                           "hand unbroken")),
+    "sprite-mosquito": dict(aspect="16:9", refs=["kf:s3"],
+        roles=("Reference 1 is the shot this mosquito will be animated into: copy ONLY the mosquito's design, our painting "
+               "style and the lamp light; do NOT paint the room, the man or his hand. "),
+        prompt=sprite_sheet(
+            "mosquito (Aedes aegypti: a black body with white lyre-shaped markings on the thorax, white bands on the "
+            "abdomen and legs, smoky see-through wings)",
+            ["flying, wings spread wide and lowered", "flying, wings raised high (shorter, foreshortened)",
+             "about to land, legs reaching forward and wide, wings half open",
+             "standing still, legs splayed on a flat surface, wings folded back flat over its body"],
+            "s3: a raised hand lit by an oil lamp at night",
+            "warm oil-lamp light from the RIGHT: the right side of the body catches a warm rim, the left side is in shade",
+            "straight from above (top-down), the head pointing RIGHT in every drawing, the body level",
+            "Each mosquito is about one fifth of the picture's width, its legs and wings fully inside its own space.")),
+})
 
 
 def main():

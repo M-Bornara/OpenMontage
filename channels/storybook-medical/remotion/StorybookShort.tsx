@@ -17,6 +17,7 @@ import { loadFont as loadLalezar } from "@remotion/google-fonts/Lalezar";
 import { loadFont as loadFell } from "@remotion/google-fonts/IMFellEnglish";
 import { Clock } from "./Clock";
 import { ShotFx, ShotFxLayer } from "./ShortFx";
+import { LayerSpec, LayerStack } from "./Stage";
 
 const { fontFamily } = loadFont("normal", { weights: ["600", "700", "800", "900"] });
 
@@ -78,6 +79,9 @@ export interface Shot {
   grey?: { from: number; to: number };
   /** Masked effects on measured objects (ShortFx.tsx), under the same camera transform as the picture. */
   fx?: ShotFx[];
+  /** Layered animation (Stage.tsx LayerStack, plan/layered-animation.md): `src` is then the CLEAN plate and the actors
+   *  (sprites, characters, 3D) move on top, each under the camera move (times relative to the shot). */
+  layers?: LayerSpec;
 }
 
 export type Overlay =
@@ -202,6 +206,9 @@ export const ShotLayer: React.FC<{ shot: Shot }> = ({ shot }) => {
       ) : (
         <Img src={staticFile(shot.src)} style={style} />
       )}
+      {shot.layers && shot.kind === "image" ? (
+        <LayerStack layers={shot.layers} plate={shot.src} cam={{ scale, tx: tx + whipX, ty }} filter={filters || undefined} />
+      ) : null}
       {lines.length ? (
         <svg viewBox="0 0 1080 1920" style={{ ...style, objectFit: undefined, objectPosition: undefined, filter: undefined }}>{lines}</svg>
       ) : null}

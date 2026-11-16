@@ -8,10 +8,14 @@ here, and episode.py build crops the mask / plate exactly like the still (fit_fr
                                                   the moving copy so a wag / shake never reveals a ghost
 
     python channels/storybook-medical/scripts/fx_prep.py <image> <name> <x0> <y0> <x1> <y1> [--how color] [--check]
+
+    sheet(image, names) -> sprite / pose sheet cut into aligned RGBA frames + sprites.json + check.png (magenta)
+    python channels/storybook-medical/scripts/fx_prep.py sheet <sheet.png> fly-0 fly-1 land-0 rest-0 [--out DIR]
 """
 from __future__ import annotations
 
 import argparse
+import json
 from pathlib import Path
 
 import numpy as np
@@ -96,7 +100,146 @@ def cut(image: str, name: str, box, how: str = "rembg", grow: int = 3, focus: fl
     return mp, cp
 
 
+# ── sprite / pose sheets → aligned cut-outs (plan/layered-animation.md §2; user 2026-11-16) ────────────────────────────
+def _key_alpha(rgb: np.ndarray, key: np.ndarray, lo: float = 38, hi: float = 110) -> tuple[np.ndarray, np.ndarray]:
+    """Soft chroma key against a flat background colour, with the background UNMIXED from semi-transparent pixels
+    (observed = a*fg + (1-a)*key  ->  fg = (observed - (1-a)*key) / a): a mosquito's smoky wings keep their own grey,
+    not a green tint."""
+    d = np.sqrt(((rgb.astype(np.float32) - key) ** 2).sum(axis=2))
+    a = np.clip((d - lo) / (hi - lo), 0, 1)
+    fg = (rgb.astype(np.float32) - (1 - a[..., None]) * key) / np.maximum(a[..., None], 1e-3)
+    return np.clip(fg, 0, 255).astype(np.uint8), a
+
+
+def sheet(image: str, names: list[str], out_dir: str | None = None, how: str = "key", align: str = "phase",
+          pad: int = 24, anchor=(0.5, 0.5), min_area: float = 0.002) -> Path:
+    """Cut a sprite sheet (one object, its states side by side on a flat background) or a pose sheet into frames.
+
+    names: one per figure in reading order (rows top to bottom, left to right), "<state>-<n>", e.g.
+           ["fly-0", "fly-1", "land-0", "rest-0"]. Writes <out>/<name>.png (RGBA, all on ONE canvas size so the actor's
+           width means the same thing in every state), <out>/sprites.json for layers.py, and <out>/check.png: every
+           frame over magenta (holes and halos show at once) plus the sheet's alpha.
+    how:   "key"   = flat-colour key, the colour measured on the sheet's border (prompt_kit KEY_BG asks for green);
+           "rembg" = the background model, for sheets that came back on a busy background.
+    align: "phase" = every frame's alpha aligned to the sheet's FIRST frame by phase correlation (the solid body
+           dominates, so wings / legs changing don't make it jump between states); "center" = bounding-box centres;
+           "bottom" = bounding-box feet (characters standing).
+    anchor: (ax, ay) fractions of the canvas, or "solid" = the centroid of the first frame's fully opaque core (an
+           insect's body, not its legs or wings): the point that rides the actor's path and that it turns around."""
+    import cv2
+    src = Path(image)
+    im = np.array(Image.open(src).convert("RGB"))
+    H, W = im.shape[:2]
+    border = np.concatenate([im[:8].reshape(-1, 3), im[-8:].reshape(-1, 3), im[:, :8].reshape(-1, 3), im[:, -8:].reshape(-1, 3)])
+    key = np.median(border, axis=0).astype(np.float32)
+    if how == "rembg":
+        from masks import _session
+        from rembg import remove
+        a = np.array(remove(Image.fromarray(im), session=_session()).getchannel("A")).astype(np.float32) / 255
+        fg = im
+    else:
+        fg, a = _key_alpha(im, key)
+    # find the figures: the alpha, closed hard enough that thin legs and wings join their body
+    solid = (a > 0.25).astype(np.uint8)
+    joined = cv2.dilate(solid, np.ones((max(9, W // 90),) * 2, np.uint8))
+    n, lab, stats, _ = cv2.connectedComponentsWithStats(joined)
+    blobs = [i for i in range(1, n) if stats[i, cv2.CC_STAT_AREA] > min_area * W * H]
+    if len(blobs) != len(names):
+        raise SystemExit(f"{src.name}: found {len(blobs)} figures, expected {len(names)} ({names}); check the sheet "
+                         f"(figures touching? a busy background? try how='rembg')")
+    # reading order: figures whose vertical spans overlap share a row (long legs move a figure's top edge, so rounding
+    # the top put figures of one row into different rows); rows top to bottom, then left to right
+    rows: list[list[int]] = []
+    for i in sorted(blobs, key=lambda i: stats[i, cv2.CC_STAT_TOP]):
+        top, bot = stats[i, cv2.CC_STAT_TOP], stats[i, cv2.CC_STAT_TOP] + stats[i, cv2.CC_STAT_HEIGHT]
+        if rows and top < max(stats[j, cv2.CC_STAT_TOP] + stats[j, cv2.CC_STAT_HEIGHT] for j in rows[-1]) \
+                and bot > min(stats[j, cv2.CC_STAT_TOP] for j in rows[-1]):
+            rows[-1].append(i)
+        else:
+            rows.append([i])
+    blobs = [i for r in rows for i in sorted(r, key=lambda i: stats[i, cv2.CC_STAT_LEFT])]
+    cuts = []
+    for i in blobs:
+        x, y, w, h = stats[i, :4]
+        keep = (lab[y:y + h, x:x + w] == i)
+        alpha = (a[y:y + h, x:x + w] * keep * 255).astype(np.uint8)
+        ys, xs = np.nonzero(alpha > 8)
+        y0, y1, x0, x1 = ys.min(), ys.max() + 1, xs.min(), xs.max() + 1
+        rgba = np.dstack([fg[y:y + h, x:x + w][y0:y1, x0:x1], alpha[y0:y1, x0:x1]])
+        cuts.append(rgba)
+    cw = max(c.shape[1] for c in cuts) + 2 * pad
+    ch = max(c.shape[0] for c in cuts) + 2 * pad
+    out = Path(out_dir) if out_dir else src.parent / src.stem
+    out.mkdir(parents=True, exist_ok=True)
+    frames: dict[str, list[str]] = {}
+    ref = None
+    placed = []
+    for name, c in zip(names, cuts):
+        canvas = np.zeros((ch, cw, 4), np.uint8)
+        h, w = c.shape[:2]
+        ox, oy = (cw - w) // 2, (ch - h) // 2 if align != "bottom" else ch - pad - h
+        canvas[oy:oy + h, ox:ox + w] = c
+        state = name.rsplit("-", 1)[0]
+        if align == "phase":
+            core = cv2.erode((canvas[..., 3] > 240).astype(np.float32), np.ones((3, 3), np.uint8))   # the solid body
+            if ref is None:
+                ref = core
+            else:
+                (dx, dy), _ = cv2.phaseCorrelate(ref, core)
+                M = np.float32([[1, 0, -dx], [0, 1, -dy]])
+                canvas = cv2.warpAffine(canvas, M, (cw, ch), flags=cv2.INTER_LINEAR, borderValue=(0, 0, 0, 0))
+        Image.fromarray(canvas, "RGBA").save(out / f"{name}.png")
+        frames.setdefault(state, []).append(f"{name}.png")
+        placed.append(canvas)
+    if anchor == "solid":
+        core = cv2.erode((placed[0][..., 3] > 240).astype(np.uint8), np.ones((5, 5), np.uint8))
+        ys, xs = np.nonzero(core)
+        anchor = (round(xs.mean() / cw, 4), round(ys.mean() / ch, 4))
+    meta = {"source": src.name, "canvas": [cw, ch], "anchor": list(anchor), "key": [int(v) for v in key], "frames": frames}
+    json.dump(meta, open(out / "sprites.json", "w"), indent=1)
+    # the check image: each frame over magenta, labelled; below, the sheet's alpha at the same width
+    # last tile = ONION SKIN: every frame at 1/n over each other, with the anchor cross: a body that jumps between
+    # states shows as a double outline here
+    tile = 260
+    row = Image.new("RGB", (tile * (len(placed) + 1), tile + 26), (255, 0, 255))
+    d = ImageDraw.Draw(row)
+    for j, (name, c) in enumerate(zip(names, placed)):
+        im_c = Image.fromarray(c, "RGBA")
+        im_c.thumbnail((tile - 10, tile - 10))
+        row.paste(im_c, (j * tile + (tile - im_c.width) // 2, 26 + (tile - im_c.height) // 2), im_c)
+        d.text((j * tile + 8, 6), name, fill=(255, 255, 255))
+    onion = Image.new("RGBA", (cw, ch), (0, 0, 0, 0))
+    for c in placed:
+        layer = Image.fromarray(c, "RGBA")
+        layer.putalpha(Image.fromarray((c[..., 3] / len(placed) * 1.6).clip(0, 255).astype(np.uint8)))
+        onion.alpha_composite(layer)
+    od = ImageDraw.Draw(onion)
+    axp, ayp = anchor[0] * cw, anchor[1] * ch
+    od.line([(axp - 14, ayp), (axp + 14, ayp)], fill=(255, 255, 0, 255), width=2)
+    od.line([(axp, ayp - 14), (axp, ayp + 14)], fill=(255, 255, 0, 255), width=2)
+    onion.thumbnail((tile - 10, tile - 10))
+    j = len(placed)
+    row.paste(onion, (j * tile + (tile - onion.width) // 2, 26 + (tile - onion.height) // 2), onion)
+    d.text((j * tile + 8, 6), "onion skin + anchor", fill=(255, 255, 255))
+    am = Image.fromarray((a * 255).astype(np.uint8)).convert("RGB")
+    am = am.resize((row.width, round(am.height * row.width / am.width)))
+    check = Image.new("RGB", (row.width, row.height + am.height), (0, 0, 0))
+    check.paste(row, (0, 0)); check.paste(am, (0, row.height))
+    check.save(out / "check.png")
+    print(f"{src.name}: {len(names)} frames {sorted(frames)} on a {cw}x{ch} canvas -> {out} (look at check.png)")
+    return out / "sprites.json"
+
+
 if __name__ == "__main__":
+    import sys
+    if len(sys.argv) > 1 and sys.argv[1] == "sheet":
+        sp = argparse.ArgumentParser()
+        sp.add_argument("cmd"); sp.add_argument("image"); sp.add_argument("names", nargs="+")
+        sp.add_argument("--out"); sp.add_argument("--how", default="key", choices=("key", "rembg"))
+        sp.add_argument("--align", default="phase", choices=("phase", "center", "bottom"))
+        s = sp.parse_args()
+        sheet(s.image, s.names, s.out, s.how, s.align)
+        raise SystemExit
     ap = argparse.ArgumentParser()
     ap.add_argument("image"); ap.add_argument("name")
     ap.add_argument("box", nargs=4, type=float)

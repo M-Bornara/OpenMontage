@@ -154,6 +154,47 @@ def lint_sequence(keyframes: dict[str, dict]) -> list[str]:
 CLIP_HOLD = "ONE single action only; once it is done, everything holds completely still until the end of the clip."
 
 
+# ── layered shots: the PIECES (plan/layered-animation.md §2; user 2026-11-16) ─────────────────────────────────────────
+# AI paints stills; we animate them (Stage.tsx <Actor>). A thing that moves is never painted into the plate.
+# Sheets come back on a flat chroma-key green so fx_prep.sheet() cuts them cleanly (the green is unmixed from smoky,
+# semi-transparent parts such as insect wings); their light and angle are the plate's, or they never sit in it.
+KEY_BG = ("BACKGROUND: one flat, solid, evenly lit chroma-key green (#00B140) from edge to edge: no shadow on it, no "
+          "floor line, no gradient, no texture, no vignette, nothing else on it.")
+
+
+def sprite_sheet(obj: str, states: list[str], plate: str, light: str, angle: str, scale: str = "") -> str:
+    """One object (an insect, a letter, a cup, a needle) in every state the shot needs, side by side.
+    states: what each drawing shows, in order (["flying, wings raised", "flying, wings lowered", ...]).
+    plate: the shot it goes into; light: where the light comes from there; angle: the camera's view of the object."""
+    cells = " ".join(f"({i}) {s}." for i, s in enumerate(states, 1))
+    return (f"SPRITE SHEET for cut-out animation: {len(states)} drawings of the SAME {obj}, in ONE row from left to "
+            f"right, evenly spaced, each drawing whole and separate with wide empty space around it (nothing touches, "
+            f"overlaps or leaves the picture): {cells} Every drawing is the identical design, the identical size and "
+            f"scale, seen from the same angle: {angle}. LIGHT: as in the shot it will be animated into ({plate}): "
+            f"{light}. {scale + ' ' if scale else ''}Ink outline, colours and brushwork of our film's painting style. "
+            f"Only the {obj}: no people, no hands, no props, no ground under it. {KEY_BG} {FULL_BLEED} {NO_TEXT}")
+
+
+def pose_sheet(person: str, poses: list[str], plate: str, light: str, angle: str, crop: str = "the whole figure") -> str:
+    """The same character in the 2-4 poses of ONE shot (reach, flinch, look up), for pose swaps + ACT on the plate.
+    crop: how much of the person the shot shows (e.g. "head and shoulders", "from the waist up")."""
+    cells = " ".join(f"({i}) {s}." for i, s in enumerate(poses, 1))
+    return (f"POSE SHEET for cut-out animation: the SAME person, {person}, drawn {len(poses)} times in ONE row from "
+            f"left to right, each drawing separate with wide empty space around it: {cells} Each drawing shows "
+            f"{crop}, the identical size, costume, face and proportions, seen from the same camera: {angle}. LIGHT: as "
+            f"in the shot ({plate}): {light}. The person appears only in these {len(poses)} poses; no other people, no "
+            f"furniture, no ground. Ink outline and painting style of our film. {KEY_BG} {FULL_BLEED} {NO_TEXT}")
+
+
+def empty_plate(frame: str, remove: str, behind: str) -> str:
+    """The approved frame without the thing that will move (the actor is animated onto it).
+    frame: what reference 1 is; remove: the thing to take out; behind: what is naturally under / behind it."""
+    return (f"EMPTY PLATE for cut-out animation. Reference 1 is the approved frame: {frame}. Repaint EXACTLY the same "
+            f"picture: the same camera, composition, people, faces, hands, light, colours, ink lines and brush texture, "
+            f"with ONE change only: {remove} is GONE. Where it was, paint what is naturally there: {behind}. Nothing "
+            f"else changes and nothing is added. {FULL_BLEED} {NO_TEXT}")
+
+
 # ── pre-flight lint ─────────────────────────────────────────────────────────
 
 def lint(name: str, spec: dict) -> list[str]:
@@ -162,7 +203,9 @@ def lint(name: str, spec: dict) -> list[str]:
     refs = spec.get("refs", [])
     issues = []
     people_free = "no people" in p or "empty location plate" in p
-    model_sheet = "model sheet" in p  # sheets have no story framing and no set
+    # sheets (cast model sheets, layered-shot sprite / pose sheets) and empty plates of an approved frame have no story
+    # framing and no set of their own
+    model_sheet = any(s in p for s in ("model sheet", "sprite sheet", "pose sheet", "empty plate for cut-out"))
     hero_in_shot = any("sheet-alexis" in r or "sheet-young-family" in r for r in refs)
     if STYLE_ANCHOR in refs and (people_free or not hero_in_shot):
         issues.append("L1: the style anchor (it shows the red-tuque voyageur) on a shot without that character: "
@@ -245,6 +288,14 @@ def lint(name: str, spec: dict) -> list[str]:
     if "shot:" in p and "crowd:" in p and "faces are visible" not in p and "seen only from behind" not in p:
         issues.append("L42: CROWD line without casting cards: one shared description clones one face on every body; "
                       "use crowd(where, [up to 5 distinct faces]) or show the crowd only from behind")
+    # L43 (layered shots, user 2026-11-16): a sprite / pose sheet must come back on the flat key colour, lit like the
+    # plate it goes into; an empty plate must repaint the approved frame unchanged except for the removed thing.
+    if ("sprite sheet" in p or "pose sheet" in p) and ("chroma-key green" not in p or "light:" not in p):
+        issues.append("L43: sprite/pose sheet without KEY_BG and a LIGHT line matching its plate (use sprite_sheet() / "
+                      "pose_sheet()): a busy or shaded background doesn't cut cleanly; a sprite lit from another side "
+                      "never sits in the plate")
+    if "empty plate" in p and "exactly the same picture" not in p:
+        issues.append("L43: empty plate without empty_plate() (the model recomposes the frame: the actor's landing spot moves)")
     if "spectacles" in p and "amber" not in p and "no spectacles" not in p:
         issues.append("L11: spectacles that aren't Matt's (confuses the spot-the-glasses game)")
     return issues

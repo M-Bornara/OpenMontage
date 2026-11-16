@@ -1,12 +1,15 @@
 // Stage: a painted plate + cut-out puppets + props, with the planned camera move and living layers.
 // Used by the Animatic for every beat that has a `stage` (editorial/.../stage_<ep>.py, merged by scripts/beats.py).
+// Since 2026-11-16 also the LAYERED SHOT engine (plan/layered-animation.md): <Actor> + <LayerStack>, used by the
+// Shorts' ShotLayer when a shot has `layers` (edit_<ep>.py -> episode.json -> episode.py build -> props.json).
 import React from "react";
-import { AbsoluteFill, Img, interpolate, staticFile, useCurrentFrame } from "remotion";
+import { AbsoluteFill, Easing, Img, interpolate, staticFile, useCurrentFrame } from "remotion";
 import { loadFont as loadHand } from "@remotion/google-fonts/Caveat";
 import { loadFont as loadSerif } from "@remotion/google-fonts/LibreBaskerville";
-import { Actor, ActorEl } from "./Puppet";
+import { Actor as PuppetActor, ActorEl } from "./Puppet";
 import { Cam, camTransform, Motes } from "./Fx";
 import { Fog, Glow, Leaves, Rain, Rays } from "./Life";
+import { LAYER_SCENES } from "./Three3D";
 
 const { fontFamily: hand } = loadHand("normal", { weights: ["700"] });
 const { fontFamily: serif } = loadSerif("normal", { weights: ["400"] });
@@ -15,7 +18,7 @@ const SKIN = "#E8C39A";
 const FPS = 30;
 
 export type PropSpec = { p: string; x: number; y: number; h: number; rot?: number; move?: [number, number]; flip?: boolean; text?: string };
-export type StageSpec = { bg: string; actors?: Actor[]; props?: PropSpec[]; dark?: number; blur?: number; tint?: string; silhouette?: boolean };
+export type StageSpec = { bg: string; actors?: PuppetActor[]; props?: PropSpec[]; dark?: number; blur?: number; tint?: string; silhouette?: boolean };
 
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 
@@ -185,6 +188,306 @@ export const StageScene: React.FC<{ s: StageSpec; cam: Cam; dur: number; spanOff
         </AbsoluteFill>
         {lifeLayers(life, s.bg)}
       </AbsoluteFill>
+    </AbsoluteFill>
+  );
+};
+
+// ══ Layered shots: the <Actor> layer (plan/layered-animation.md §3; user 2026-11-16) ══════════════════════════════════
+// A shot is data: a clean plate (nothing that moves is painted into it) + actors (sprite cut-outs or 3D scenes) moved by
+// keyframes. Everything is a pure function of the frame (deterministic, no per-frame randomness: Life.tsx rule).
+// Units: x, y = fractions of the FRAME (the same numbers measured on the gridded contact sheets, like ShortFx);
+// t = seconds after the shot starts; w = the actor's width as a fraction of the frame width at depth z = 1.
+// Sound is NOT played here: keyframe `sfx` is read by scripts/layers.py into the ffmpeg mix (one source of truth).
+export type EaseName = "linear" | "in" | "out" | "inOut" | "sine" | "outBack";
+const EASES: Record<EaseName, (u: number) => number> = {
+  linear: (u) => u, in: Easing.in(Easing.cubic), out: Easing.out(Easing.cubic), inOut: Easing.inOut(Easing.cubic),
+  sine: Easing.inOut(Easing.sin), outBack: Easing.out(Easing.back(1.4)),
+};
+export type Contact = { squash?: number; bounce?: number; lift?: number; hz?: number; decay?: number };
+export type Key = {
+  t: number; x: number; y: number; z?: number;
+  state?: string;                 // the sprite state that starts at this key (fly / land / rest; a character's pose)
+  ease?: EaseName;                // timing of the segment ARRIVING at this key (default linear = smooth C1 motion)
+  out?: [number, number];         // bezier handle leaving this key (frame fractions); default: automatic (Catmull-Rom)
+  in?: [number, number];          // bezier handle arriving at this key
+  stop?: boolean;                 // zero velocity here (a hover point)
+  contact?: boolean | Contact;    // touches a surface here: stops, squash + settle (+ a small bounce / lift)
+  rot?: number;                   // heading (deg) from here on when the actor's face is "keys"
+  sfx?: unknown;                  // read by scripts/layers.py only
+};
+export type SpriteState = { frames: string[]; fps?: number; loop?: boolean; then?: string };
+export type ActorSpec = {
+  id: string;
+  kind?: "sprite" | "3d";
+  states?: Record<string, SpriteState>;       // sprite: frames (public paths, cut-outs from fx_prep.sheet)
+  scene?: string; sceneProps?: Record<string, unknown>;   // 3d: a scene from Three3D.tsx LAYER_SCENES
+  w: number; aspect?: number;                 // width (fraction of frame width) at z = 1; sprite height / width
+  anchor?: [number, number];                  // the sprite point that rides the path (fractions of the sprite)
+  keys: Key[];
+  face?: "path" | "keys" | "fixed";           // heading follows the path's direction, the keys' rot, or stays rotOffset
+  rotOffset?: number; maxRot?: number; flip?: "auto" | boolean;
+  wobble?: { amp?: number; hz?: number; rot?: number; states?: string[] };   // flight noise (fades out before a contact)
+  bob?: { amp?: number; hz?: number; states?: string[] };
+  breath?: { amp?: number; period?: number; states?: string[] };             // characters: chest rise (scale y at anchor)
+  flap?: { hz?: number; amount?: number; states?: string[] };                // one-frame wings: a scale-y beat
+  xfade?: number;                              // seconds of cross-dissolve between states (pose swaps)
+  shadow?: { light?: [number, number]; opacity?: number; blur?: number; fade?: number; surfaceZ?: number; clip?: string };
+  depth?: { focus?: number; blur?: number };   // px of blur per unit of |z - focus|
+  behind?: string | { mask: string; from?: number; to?: number };            // occluded by a named plate mask
+  motionBlur?: false | { samples?: number; shutter?: number };
+  parallax?: number;                           // 1 = moves with the plate (default); >1 foreground, <1 far
+  opacity?: number; from?: number; to?: number;
+};
+export type LayerSpec = {
+  masks?: Record<string, string>;              // name -> public mask png (fx_prep cut, fitted like the still)
+  glows?: { x: number; y: number; r?: number; strength?: number; speed?: number }[];   // Life.Glow on the plate's lights
+  mg?: ActorSpec[]; actors?: ActorSpec[]; three?: ActorSpec[]; fg?: ActorSpec[];
+};
+export type LayerCam = { scale: number; tx: number; ty: number };
+
+const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
+const hashId = (s: string) => { let h = 7; for (const c of s) h = (h * 31 + c.charCodeAt(0)) % 9973; return h; };
+const isContact = (k: Key) => !!k.contact;
+const contactOf = (k: Key): Required<Contact> => ({ squash: 0.1, bounce: 0, lift: 0.05, hz: 4.5, decay: 8,
+  ...(typeof k.contact === "object" ? k.contact : {}) });
+
+// Bezier path through the keys: automatic Catmull-Rom tangents in TIME (smooth velocity through every key), zero at
+// stop / contact keys; explicit `out` / `in` handles override. Returns x, y, z at time t.
+const pathAt = (keys: Key[], t: number) => {
+  const n = keys.length;
+  if (t <= keys[0].t || n === 1) return { x: keys[0].x, y: keys[0].y, z: keys[0].z ?? 1 };
+  if (t >= keys[n - 1].t) return { x: keys[n - 1].x, y: keys[n - 1].y, z: keys[n - 1].z ?? 1 };
+  let i = 0;
+  while (i < n - 2 && t >= keys[i + 1].t) i++;
+  const a = keys[i], b = keys[i + 1], h = b.t - a.t;
+  const tan = (j: number, get: (k: Key) => number) => {
+    const k = keys[j];
+    if (k.stop || isContact(k)) return 0;
+    const p = keys[Math.max(0, j - 1)], q = keys[Math.min(n - 1, j + 1)];
+    return p === q ? 0 : (get(q) - get(p)) / (q.t - p.t);
+  };
+  const gx = (k: Key) => k.x, gy = (k: Key) => k.y, gz = (k: Key) => k.z ?? 1;
+  const u = (EASES[b.ease ?? "linear"] ?? EASES.linear)((t - a.t) / h);
+  const bez = (p0: number, c1: number, c2: number, p1: number) =>
+    (1 - u) ** 3 * p0 + 3 * (1 - u) ** 2 * u * c1 + 3 * (1 - u) * u * u * c2 + u ** 3 * p1;
+  const ax = a.out ? a.x + a.out[0] : a.x + (tan(i, gx) * h) / 3;
+  const ay = a.out ? a.y + a.out[1] : a.y + (tan(i, gy) * h) / 3;
+  const bx = b.in ? b.x + b.in[0] : b.x - (tan(i + 1, gx) * h) / 3;
+  const by = b.in ? b.y + b.in[1] : b.y - (tan(i + 1, gy) * h) / 3;
+  return {
+    x: bez(a.x, ax, bx, b.x), y: bez(a.y, ay, by, b.y),
+    z: bez(gz(a), gz(a) + (tan(i, gz) * h) / 3, gz(b) - (tan(i + 1, gz) * h) / 3, gz(b)),
+  };
+};
+
+// the state machine: the last key with a state starts it; a one-shot state (loop:false) hands over to `then`
+const stateAt = (a: ActorSpec, t: number) => {
+  const sts = a.states ?? {};
+  const ks = a.keys.filter((k) => k.state && k.t <= t);
+  let name = ks.length ? ks[ks.length - 1].state! : (a.keys.find((k) => k.state)?.state ?? Object.keys(sts)[0] ?? "");
+  let start = ks.length ? ks[ks.length - 1].t : 0;
+  let prev: { name: string; at: number; from: number } | null =
+    ks.length > 1 ? { name: ks[ks.length - 2].state!, at: start, from: ks[ks.length - 2].t } : null;
+  for (let guard = 0; guard < 8; guard++) {
+    const st = sts[name];
+    if (!st || st.loop !== false || !st.then) break;
+    const len = st.frames.length / (st.fps ?? 12);
+    if (t - start < len) break;
+    prev = { name, at: start + len, from: start };
+    start += len;
+    name = st.then;
+  }
+  return { name, start, prev };
+};
+const frameOf = (st: SpriteState | undefined, dt: number) => {
+  if (!st || !st.frames.length) return "";
+  const n = st.frames.length;
+  const i = Math.floor(Math.max(0, dt) * (st.fps ?? 12) + 1e-6);
+  return st.frames[st.loop === false ? Math.min(n - 1, i) : ((i % n) + n) % n];
+};
+
+const inStates = (spec: { states?: string[] } | undefined, name: string, dflt: string[]) =>
+  !!spec && (spec.states ?? dflt).includes(name);
+
+// everything about the actor at time t (pure): position, depth, heading, scale, sprite frame(s)
+export const actorPose = (a: ActorSpec, t: number, size: [number, number] = [1080, 1920]) => {
+  const [W, H] = size;
+  const p = pathAt(a.keys, t);
+  const e = 1 / 60;
+  const p0 = pathAt(a.keys, t - e), p1 = pathAt(a.keys, t + e);
+  const vx = ((p1.x - p0.x) * W) / (2 * e), vy = ((p1.y - p0.y) * H) / (2 * e);   // px per second
+  const speed = Math.hypot(vx, vy);
+  const st = stateAt(a, t);
+  // flight noise: off in other states, and fading out over the 0.4 s before the next contact (no jump on landing)
+  const nextC = a.keys.find((k) => isContact(k) && k.t > t);
+  const lastC = [...a.keys].reverse().find((k) => isContact(k) && k.t <= t);
+  const envC = nextC ? clamp01((nextC.t - t) / 0.4) : lastC ? 0 : 1;
+  const s0 = hashId(a.id);
+  const noise = (hz: number, k: number) =>
+    0.6 * Math.sin(2 * Math.PI * hz * t + s0 + k) + 0.3 * Math.sin(2 * Math.PI * hz * 1.73 * t + s0 * 0.7 + k * 2.1)
+    + 0.1 * Math.sin(2 * Math.PI * hz * 2.41 * t + s0 * 0.3 + k * 4.2);
+  let x = p.x, y = p.y, z = p.z, rotJ = 0, sx = 1, sy = 1;
+  if (inStates(a.wobble, st.name, ["fly"])) {
+    const w = a.wobble!, amp = (w.amp ?? 0.004) * envC, hz = w.hz ?? 2.2;
+    x += amp * noise(hz, 0);
+    y += amp * (W / H) * noise(hz, 1.3);
+    rotJ += (w.rot ?? 6) * envC * noise(hz * 0.8, 2.6);
+  }
+  if (inStates(a.bob, st.name, ["fly", "idle"])) y += (a.bob!.amp ?? 0.003) * Math.sin(2 * Math.PI * (a.bob!.hz ?? 0.8) * t + s0);
+  if (inStates(a.breath, st.name, ["idle", "rest"])) sy *= 1 + (a.breath!.amp ?? 0.006) * Math.sin((2 * Math.PI * t) / (a.breath!.period ?? 4.2));
+  if (inStates(a.flap, st.name, ["fly"])) sy *= 1 + (a.flap!.amount ?? 0.25) * Math.sin(2 * Math.PI * (a.flap!.hz ?? 8) * t);
+  // contact: squash and settle, a small bounce in the picture (bounce, in actor heights) and toward the camera (lift, z)
+  let liftY = 0;
+  if (lastC) {
+    const c = contactOf(lastC), dt = t - lastC.t;
+    if (dt < 1.5) {
+      const env = Math.exp(-c.decay * dt), wave = Math.sin(2 * Math.PI * c.hz * dt);
+      sy *= 1 - c.squash * env * wave;
+      sx *= 1 + 0.5 * c.squash * env * wave;
+      liftY = c.bounce * env * Math.abs(wave);
+      z += c.lift * env * Math.abs(wave);
+    }
+  }
+  // heading
+  let rot = a.rotOffset ?? 0;
+  let flipX = a.flip === true ? -1 : 1;
+  if (a.face === "path") {
+    // heading = the velocity averaged over the last 0.3 s (weights fall off with age), so the body turns smoothly through
+    // a hover point instead of snapping; when it is (nearly) still, the window reaches back up to 2 s: it keeps facing
+    // the way it came in (landed, hovering)
+    let hx = 0, hy = 0;
+    for (let i = 0; i < 60 && (i < 9 || Math.hypot(hx, hy) < 60 * 4); i++) {
+      const tb = t - i / 30, wgt = i < 9 ? (9 - i) / 9 : 0.15;
+      const q0 = pathAt(a.keys, tb - e), q1 = pathAt(a.keys, tb + e);
+      hx += (((q1.x - q0.x) * W) / (2 * e)) * wgt; hy += (((q1.y - q0.y) * H) / (2 * e)) * wgt;
+    }
+    if (Math.hypot(hx, hy) >= 60) {
+      if (a.flip === "auto") {
+        flipX = hx < 0 ? -1 : 1;
+        rot += ((Math.atan2(hy, Math.abs(hx)) * 180) / Math.PI) * flipX;
+      } else rot += (Math.atan2(hy, hx) * 180) / Math.PI;
+    }
+    if (a.maxRot !== undefined) rot = Math.max(-a.maxRot, Math.min(a.maxRot, rot));
+  } else if (a.face === "keys") {
+    const rk = a.keys.filter((k) => k.rot !== undefined);
+    if (rk.length === 1) rot += rk[0].rot!;
+    else if (rk.length) rot += interpolate(t, rk.map((k) => k.t), rk.map((k) => k.rot!), { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  }
+  rot += rotJ;
+  // sprite frames (+ the previous state's last frame while a cross-dissolve runs)
+  const sts = a.states ?? {};
+  const frame = frameOf(sts[st.name], t - st.start);
+  let prevFrame = "", prevK = 0;
+  if (a.xfade && st.prev && t - st.prev.at < a.xfade) {
+    prevFrame = frameOf(sts[st.prev.name], st.prev.at - st.prev.from - 1e-3);
+    prevK = 1 - (t - st.prev.at) / a.xfade;
+  }
+  return { x, y, z, vx, vy, speed, rot, sx, sy, flipX, liftY, state: st.name, frame, prevFrame, prevK };
+};
+type Pose = ReturnType<typeof actorPose>;
+
+const imgSrc = (s: string) => (s.startsWith("http") ? s : staticFile(s));
+const maskStyle = (m: string): React.CSSProperties => ({ WebkitMaskImage: `url(${staticFile(m)})`, maskImage: `url(${staticFile(m)})`,
+  WebkitMaskSize: "100% 100%", maskSize: "100% 100%" });
+
+// one rendering of the sprite at one pose (used for the actor, its motion-blur samples and its shadow)
+const SpriteAt: React.FC<{ a: ActorSpec; p: Pose; size: [number, number]; src: string; opacity?: number;
+  blend?: React.CSSProperties["mixBlendMode"]; filter?: string; dx?: number; dy?: number }> = ({
+  a, p, size, src, opacity = 1, blend, filter, dx = 0, dy = 0 }) => {
+  if (!src) return null;
+  const [ax, ay] = a.anchor ?? [0.5, 0.5];
+  const w = a.w * size[0] * p.z;
+  const h = w * (a.aspect ?? 1);
+  return (
+    <Img src={imgSrc(src)} style={{
+      position: "absolute", left: `${(p.x + dx) * 100}%`, top: `${(p.y + dy) * 100}%`, width: w, height: h, maxWidth: "none",
+      transform: `translate(${-ax * 100}%, ${-ay * 100 - p.liftY * 100}%) rotate(${p.rot}deg) scale(${p.sx * p.flipX}, ${p.sy})`,
+      transformOrigin: `${ax * 100}% ${ay * 100}%`, opacity, mixBlendMode: blend, filter }} />
+  );
+};
+
+const visible = (a: ActorSpec, t: number) => t >= (a.from ?? -1e9) && t <= (a.to ?? 1e9);
+
+// the contact shadow on the plate: the sprite's silhouette, offset along the light by the actor's height above the
+// surface (z - surfaceZ): faint, soft and offset when high; dark, sharp and under it as it lands; clipped to the
+// surface's mask (a shadow never falls into the air beside the hand)
+export const ActorShadow: React.FC<{ a: ActorSpec; size: [number, number]; masks?: Record<string, string> }> = ({ a, size, masks }) => {
+  const t = useCurrentFrame() / FPS;
+  if (!a.shadow || !visible(a, t) || a.kind === "3d") return null;
+  const s = a.shadow;
+  const p = actorPose(a, t, size);
+  const surf = s.surfaceZ ?? (a.keys.find(isContact)?.z ?? 1);
+  const hgt = Math.max(0, p.z - surf);
+  const fade = s.fade ?? 0.8;
+  if (hgt >= fade) return null;
+  const k = 1 - hgt / fade;
+  const [lx, ly] = s.light ?? [-0.06, 0.03];
+  const clip = s.clip ? masks?.[s.clip] : undefined;
+  const ground: Pose = { ...p, z: surf * (1 + hgt * 0.15), liftY: 0 };
+  return (
+    <AbsoluteFill style={clip ? maskStyle(clip) : undefined}>
+      <SpriteAt a={a} p={ground} size={size} src={p.frame} dx={lx * hgt} dy={ly * hgt}
+        opacity={(s.opacity ?? 0.45) * k * k} filter={`brightness(0) blur(${((s.blur ?? 2) + hgt * 14).toFixed(2)}px)`} />
+    </AbsoluteFill>
+  );
+};
+
+// the actor: depth blur, motion blur (sub-frame samples averaged with plus-lighter), cross-dissolved pose swaps,
+// then its occluder (the plate cut through a named mask) on top while it passes behind something
+export const Actor: React.FC<{ a: ActorSpec; size?: [number, number]; plate?: string; masks?: Record<string, string> }> = ({
+  a, size = [1080, 1920], plate, masks }) => {
+  const t = useCurrentFrame() / FPS;
+  if (!visible(a, t)) return null;
+  const p = actorPose(a, t, size);
+  const focus = a.depth?.focus ?? (a.keys.find(isContact)?.z ?? 1);
+  const dblur = Math.abs(p.z - focus) * (a.depth?.blur ?? 5);
+  const fil = dblur > 0.3 ? `blur(${dblur.toFixed(2)}px)` : undefined;
+  const op = a.opacity ?? 1;
+  let body: React.ReactNode;
+  if (a.kind === "3d") {
+    const Scene = LAYER_SCENES[a.scene ?? ""];
+    const w = a.w * size[0] * p.z, h = w * (a.aspect ?? 1);
+    const [ax, ay] = a.anchor ?? [0.5, 0.5];
+    body = Scene ? (
+      <div style={{ position: "absolute", left: `${p.x * 100}%`, top: `${p.y * 100}%`, width: w, height: h, opacity: op, filter: fil,
+                    transform: `translate(${-ax * 100}%, ${-ay * 100}%) rotate(${p.rot}deg) scale(${p.sx}, ${p.sy})`,
+                    transformOrigin: `${ax * 100}% ${ay * 100}%` }}>
+        <Scene width={Math.round(w)} height={Math.round(h)} t={t} {...(a.sceneProps ?? {})} />
+      </div>) : null;
+  } else {
+    const mb = a.motionBlur === false ? null : { samples: 5, shutter: 0.5, ...(a.motionBlur ?? {}) };
+    const streak = mb ? (p.speed * mb.shutter) / FPS : 0;          // px travelled while the shutter is open
+    const n = mb && streak > 2 ? Math.max(2, Math.min(mb.samples, Math.ceil(streak / 3) + 1)) : 1;
+    const out: React.ReactNode[] = [];
+    for (let i = 0; i < n; i++) {
+      const q = n === 1 ? p : actorPose(a, t - ((mb!.shutter / FPS) * i) / (n - 1), size);
+      const blend = n > 1 || q.prevFrame ? "plus-lighter" : undefined;
+      out.push(<SpriteAt key={`s${i}`} a={a} p={q} size={size} src={q.frame} opacity={(q.prevFrame ? 1 - q.prevK : 1) / n} blend={blend} filter={fil} />);
+      if (q.prevFrame) out.push(<SpriteAt key={`p${i}`} a={a} p={q} size={size} src={q.prevFrame} opacity={q.prevK / n} blend={blend} filter={fil} />);
+    }
+    body = <AbsoluteFill style={{ isolation: "isolate", opacity: op }}>{out}</AbsoluteFill>;
+  }
+  const beh = typeof a.behind === "string" ? { mask: a.behind } : a.behind;
+  const occl = beh && plate && masks?.[beh.mask] && t >= (beh.from ?? -1e9) && t <= (beh.to ?? 1e9) ? (
+    <Img src={staticFile(plate)} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover",
+                                         ...maskStyle(masks[beh.mask]) }} />) : null;
+  return <AbsoluteFill>{body}{occl}</AbsoluteFill>;
+};
+
+// every layer above the plate, each under its own share of the camera move (parallax 1 = glued to the plate)
+export const LayerStack: React.FC<{ layers: LayerSpec; plate: string; cam: LayerCam; size?: [number, number]; filter?: string }> = ({
+  layers, plate, cam, size = [1080, 1920], filter }) => {
+  const under = (par: number, key: string, node: React.ReactNode) => (
+    <AbsoluteFill key={key} style={{ transform: `translate(${cam.tx * par}%, ${cam.ty * par}%) scale(${1 + (cam.scale - 1) * par})`, filter }}>
+      {node}
+    </AbsoluteFill>);
+  const all = [...(layers.mg ?? []), ...(layers.actors ?? []), ...(layers.three ?? [])];
+  return (
+    <AbsoluteFill style={{ pointerEvents: "none" }}>
+      {(layers.glows ?? []).map((g, i) => under(1, `g${i}`, <Glow x={g.x * 100} y={g.y * 100} r={g.r ?? 160} strength={g.strength ?? 0.25} speed={g.speed ?? 1} />))}
+      {all.filter((a) => a.shadow).map((a) => under(a.parallax ?? 1, `sh-${a.id}`, <ActorShadow a={a} size={size} masks={layers.masks} />))}
+      {all.map((a) => under(a.parallax ?? 1, `a-${a.id}`, <Actor a={a} size={size} plate={plate} masks={layers.masks} />))}
+      {(layers.fg ?? []).map((a) => under(a.parallax ?? 1.25, `fg-${a.id}`, <Actor a={a} size={size} plate={plate} masks={layers.masks} />))}
     </AbsoluteFill>
   );
 };

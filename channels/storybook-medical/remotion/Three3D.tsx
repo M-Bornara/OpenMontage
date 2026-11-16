@@ -156,9 +156,12 @@ const medalFace = (): THREE.CanvasTexture => {
 };
 
 // face = a painted medal (public path, square, the medal filling ~90%); without it a drawn placeholder face
-export const Medal: React.FC<{ face?: string }> = ({ face: src }) => {
+// bare + width/height: the medal as a LAYER of a layered shot (transparent, no backdrop, no grain): see LAYER_SCENES
+export const Medal: React.FC<{ face?: string; bare?: boolean; width?: number; height?: number }> = ({ face: src, bare, ...box }) => {
   const f = useCurrentFrame();
-  const { width, height, fps } = useVideoConfig();
+  const vc = useVideoConfig();
+  const { fps } = vc;
+  const width = box.width ?? vc.width, height = box.height ?? vc.height;
   // the frame is held until the loaded face is in the material and drawn (two animation frames), so no frame is
   // captured with an empty (black) face
   const [handle] = React.useState(() => (src ? delayRender("medal face") : null));
@@ -181,8 +184,8 @@ export const Medal: React.FC<{ face?: string }> = ({ face: src }) => {
   const turn = interpolate(f, [0, 1.6 * fps], [Math.PI * 0.46, 0], { extrapolateRight: "clamp", easing: Easing.out(Easing.back(1.4)) });
   const glint = interpolate(f, [1.6 * fps, 2.4 * fps], [-2.5, 2.5], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   return (
-    <AbsoluteFill style={{ background: "radial-gradient(circle at 50% 45%, #5A2A22 0%, #2A1210 70%)" }}>
-      <ThreeCanvas width={width} height={height} camera={{ fov: 35, position: [0, 0, 9] }}>
+    <AbsoluteFill style={{ background: bare ? "transparent" : "radial-gradient(circle at 50% 45%, #5A2A22 0%, #2A1210 70%)" }}>
+      <ThreeCanvas width={width} height={height} camera={{ fov: 35, position: [0, 0, 9] }} gl={{ alpha: true }}>
         <ambientLight intensity={0.55} />
         <directionalLight position={[2, 3, 5]} intensity={2.2} color="#FFE2B0" />
         <pointLight position={[glint, 1.5, 3]} intensity={8} color="#FFF4D8" distance={8} />
@@ -194,7 +197,15 @@ export const Medal: React.FC<{ face?: string }> = ({ face: src }) => {
           </mesh>}
         </group>
       </ThreeCanvas>
-      <Grain />
+      {bare ? null : <Grain />}
     </AbsoluteFill>
   );
+};
+
+// ── 3D scenes as layers of a layered shot (Stage.tsx <Actor kind="3d" scene="...">): the actor gives the box size
+// (its w and aspect at its depth) and moves it on its keyframed path; the scene animates itself inside the box with
+// the shot's frame. Light it to match the plate (prompt_kit sprite rules: same light direction as the plate).
+export type LayerSceneProps = { width: number; height: number; t: number; [k: string]: unknown };
+export const LAYER_SCENES: Record<string, React.FC<LayerSceneProps>> = {
+  medal: ({ width, height, face }) => <Medal bare width={width} height={height} face={face as string | undefined} />,
 };

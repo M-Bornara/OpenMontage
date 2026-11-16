@@ -32,6 +32,7 @@ Every shot in the storyboard names its motion method, cheapest and most controll
 |---|---|---|---|
 | **CAM** | Camera move on the still (push, pan, tilt, rack to the subject) | free | full |
 | **FX** | Our effects on measured masks: highlight one person, depth blur, a cut-out part that swings or slides (keys, a letter, a hand), glow, stamp, line drawing itself, colour fade | free | full |
+| **ACT** | Layered animation (plan/layered-animation.md, user 2026-11-16): character and prop animation on the still: cut-out layers of the figure and props, animated in Remotion — breathing, trembling hands, a blink, a head turn, a shudder, sweat running; flame flicker, liquid slosh, a swinging door, a needle sliding. The face/body of the still already shows the exact feeling; ACT makes it live. **Every shot goes through the `layered-shot` skill** (`.claude/skills/layered-shot/SKILL.md`): layer plan → sheet / plate prompts (approval) → cut-outs → keyframes → 3 s preview → approval. `episode.py build` fails a CAM-only story shot unless it is marked `breath` | free (pieces ~$0.07 each) | full |
 | **2.5D** | Depth parallax: a depth map of the painting turns it into layers, so a camera move shows real depth (foreground slides past the background) | free (local depth model) | full |
 | **3D** | Three.js inside the same Remotion render (diagrams, a rotating object, a route through a body) | free | full |
 | **CLIP** | AI video clip (Kling, image-to-video, start frame + end frame) | $0.28–0.49 each try | partial |
@@ -62,7 +63,10 @@ HC001's animatic was text cards over simple shapes, so it didn't show what the v
    gate on it (storyboard + pre-viz → prompts → images) by shot number. Nothing is generated between gates.
 1. **Storyboard sheet (free).** Decoupage first (L28, user review 2026-11-06): every shot is a designed shot with
    its **size** (ELS/LS/MS/MCU/CU/ECU/insert/OTS), **angle**, **lens**, the **action of its own line** and the
-   **emotion on the faces**. One image per idea in the narration. A set that comes back changes size and angle
+   **emotion on the faces**. Since 2026-11-16 (story-craft.md Rule 0): every shot is written as a director's
+   breakdown: the moment, the action in progress (a verb), the feeling and how face and body show it, the camera
+   move that delivers it, the ACT animation of character and props, the sound. A shot whose only motion is CAM
+   (zoom/pan) is refused by review unless it is a deliberate breath between beats. One image per idea in the narration. A set that comes back changes size and angle
    (long → medium → close, reverse angle), or the line gets its own place and light. The prompts then use
    `framing()`, and the lint stops a SHOT-less frame or the same set at the same size twice in a row. Every shot: the narration line and its key word, what we see (composition, who
    is where, what the eye should land on), the motion code and exactly what moves, on-screen text and *where*

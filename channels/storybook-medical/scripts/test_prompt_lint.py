@@ -125,5 +125,17 @@ l42ok = prompt_kit.lint_all({"s4b": {"prompt": shot + " " + prompt_kit.crowd("ac
 status = "PASS" if any("L42" in m for m in l42.get("s4b", [])) and not any("L42" in m for v in l42ok.values() for m in v) else "FAIL"
 print(f"{status} L42 crowd without casting cards (cloned faces) caught")
 ok = ok and status == "PASS"
+# L43 (layered shots, user 2026-11-16): a sprite sheet on a busy background / unlit to the plate; an empty plate that
+# doesn't hold the frame. The kit's templates pass, and pass the sheet rules (no SHOT / SET / framing demands).
+bad = {"sprite-x": {"aspect": "16:9", "prompt": "Sprite sheet of a mosquito in four states on a wooden desk."},
+       "plate-x": {"aspect": "9:16", "refs": ["kf:s3"], "prompt": "Empty plate: the same hand without the mosquito."}}
+good = {"sprite-x": {"aspect": "16:9", "prompt": prompt_kit.sprite_sheet(
+            "mosquito", ["flying, wings up", "landed"], "s3", "warm lamp light from the right", "from above")},
+        "plate-x": {"aspect": "9:16", "refs": ["kf:s3"], "prompt": prompt_kit.empty_plate(
+            "Finlay at his desk", "the mosquito on his hand", "the clean skin of the back of his hand")}}
+l43, l43ok = prompt_kit.lint_all(bad, require_matt=False), prompt_kit.lint_all(good, require_matt=False)
+status = "PASS" if all(any("L43" in m for m in l43.get(n, [])) for n in bad) and not l43ok else "FAIL"
+print(f"{status} L43 sprite sheet / empty plate without the layered-shot templates caught{'' if not l43ok else f' (template findings: {l43ok})'}")
+ok = ok and status == "PASS"
 sys.exit(0 if ok else 1)
 

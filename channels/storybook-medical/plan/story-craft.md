@@ -1,4 +1,4 @@
-# Oddly Matt — story craft (v3.2, 2026-10-18)
+# Oddly Matt — story craft (v3.3, 2026-11-16: Rule 0 added)
 
 How we pick and write stories. It sits on top of the master instructions; the fact rules there still apply
 to every line.
@@ -12,12 +12,41 @@ medicine, science and survival.
 - Shorts are complete 35–55 s mini-stories built on one angle.
 - Long videos are complete ~5–10 min narratives with more character, context, conflict and aftermath.
 - Both come from one research universe, and each has its own reason to exist.
-- Never pad, never invent, never fake a cliffhanger, never trade entertainment for sounding educational.
+- Never pad, never fake a cliffhanger, never trade entertainment for sounding educational. Never invent an event, a number, a name, an outcome or a quote; DO dramatize how the moment looked and felt (Rule 0).
 
 **Promise:** stories too strange to sound true — except they actually happened.
 **Real subject:** humans in extraordinary situations. Medicine, history, science and survival are lenses.
 **Brand test:** "Is this oddly human?" Does it make people say "wait… that actually happened?", and can our
 research answer "yes, and here's what the evidence says"?
+
+## Rule 0: a story, not an information clip (user, 2026-11-16; applies to EVERY new script and storyboard)
+Every Short is told as a persuasive story that pulls the viewer from moment to moment, never as a list of facts.
+The documented facts are the spine; the art is how we stage them.
+
+**What we may add (the dramatized layer):**
+- what a person felt and how it showed (fear, pride, pain, doubt, a held breath), when the situation makes it
+  plain (a man about to push a tube into his own heart is afraid, even if no source says "afraid");
+- sensory detail of the place and moment (cold, smoke, the lamp, the sound of the street) true to the period;
+- staging: who stands where, what the hands do, the look between two people, the pause before the act;
+- time compression and the order of telling (start at the most dramatic moment, then go back);
+- tension in the narration ("He had one try."), rhetorical questions, the open loop.
+
+**What we never add (keeps the trust):**
+- events that didn't happen, invented outcomes, numbers, dates, names, places or direct quotes;
+- motives or thoughts presented as fact when sources disagree (then say "maybe", or keep the dispute);
+- anything that changes what the claims log says. Disputed stays disputed; legend stays labelled.
+Test for every added line: "If a historian watched this, would they say the scene is plausible and nothing
+in it is false?" If not, cut it.
+
+**Script = a director's breakdown.** Each narration beat is written as a cinematic scene before any image:
+1. the moment (what is happening right now, in one line);
+2. the action on screen (a verb: lifts, swallows, pushes, falls, slams), already in progress in frame 1 of the Short;
+3. the feeling, and exactly how the face and body show it (clenched jaw, trembling hand, wide eyes, sweat);
+4. the camera (size, angle, and how it moves to deliver the feeling: push in on the hand, whip to the door);
+5. what is animated besides the camera: the character (breath, tremble, blink, a hand that shakes, a head that
+   turns) and the props (flame flicker, liquid sloshing, a door swinging, a needle sliding) — see production-v3 §2 ACT;
+6. the sound tied to the action.
+Zoom and pan alone are never enough for a story beat: every shot carries an action and a feeling.
 
 ## The emotional engine
 **WHAT?!** (impossible premise) → **HOW?!** (needs explaining) → **WAIT…** (it gets complicated) → **WOW.**

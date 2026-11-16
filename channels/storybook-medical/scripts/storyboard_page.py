@@ -246,6 +246,75 @@ def web_preview(render: Path, dst: Path) -> bool:
     return True
 
 
+def layered_block(k: str, e: dict, ep: dict, out: Path, img: Path) -> str:
+    """Layered shots (user 2026-11-16, .claude/skills/layered-shot): per shot the 3 s preview with sound, the contact
+    sheet, the layer plan, the free stand-in pieces and the prompts of the paid pieces (waiting for the user's OK)."""
+    sys.path.insert(0, str(Path(__file__).parent))
+    import layers
+    p = e.get("project")
+    if not p:
+        return ""
+    arts = []
+    for s in ep.get("shots", []):
+        if not s.get("layers"):
+            continue
+        sid = s["id"]
+        rev = p / "review/layers"
+        vid = ""
+        if web_preview(rev / f"{sid}-preview.mp4", out / "video" / f"{p.name}-{sid}-layers.mp4"):
+            vid = (f'<video class="cut" controls playsinline loop preload="metadata" '
+                   f'src="video/{p.name}-{sid}-layers.mp4"></video>')
+        sheet = ""
+        if (rev / f"{sid}-sheet.jpg").exists():
+            sheet = (f'<img class="wide" src="img/{shrink(rev / f"{sid}-sheet.jpg", img / f"{k}-{sid}-layersheet", 1500)}" '
+                     f'alt="Start, middle and end frames of the layered shot" loading="lazy">')
+        plan = "".join(f"<tr><td>{html.escape(a)}</td><td>{html.escape(b)}</td><td>{html.escape(c)}</td></tr>"
+                       for a, b, c in layers.layer_plan(s))
+        stand = []
+        bg = (s["layers"].get("bg") or "")
+        if bg:
+            f = Path(p / bg.split(":", 1)[-1]) if bg.startswith("proj:") else Path(bg)
+            if f.exists():
+                stand.append(f'<figure><img src="img/{shrink(f, img / f"{k}-{sid}-plate", 900)}" alt="Stand-in plate" loading="lazy">'
+                             f'<figcaption><b>Plate (free stand-in)</b><span>{html.escape(f.name)}: the mosquito painted out '
+                             f'locally. The paid plate repaints it cleanly.</span></figcaption></figure>')
+        for a in s["layers"].get("actors", []):
+            sp = a.get("sprites", "")
+            f = (p / sp.split(":", 1)[-1]).parent / "check.png" if sp.startswith("proj:") else None
+            if f and f.exists():
+                stand.append(f'<figure><img src="img/{shrink(f, img / f"{k}-{sid}-{a["id"]}-check", 1300)}" alt="Cut-outs over magenta" loading="lazy">'
+                             f'<figcaption><b>{html.escape(a["id"])}: cut-outs (free stand-in)</b><span>Every state over '
+                             f'magenta, and the onion skin: one body outline means it doesn’t jump when the wings fold.</span>'
+                             f'</figcaption></figure>')
+        arts.append(f'<article class="layered"><div class="head"><span class="num">{html.escape(Path(str(s["source"])).stem)}</span>'
+                    f'<span class="chip">{s["end"] - s["start"]:.1f} s</span><span class="size">{html.escape(sid)} · layered</span></div>'
+                    f'<div class="lgrid">{vid}<div class="cast"><table><tr><th>Layer</th><th>What</th><th>Motion</th></tr>{plan}</table></div></div>'
+                    f'{sheet}<div class="refs">{"".join(stand)}</div></article>')
+    if not arts:
+        return ""
+    pieces = []
+    tot = 0.0
+    try:
+        import google_images as g
+    except Exception:
+        g = None
+    for rn, spec in ep.get("references", {}).items():
+        if "for cut-out animation" not in spec.get("prompt", "").lower():
+            continue
+        made = (p / "assets/images/refs" / f"{rn}.png").exists()
+        usd = g.price(spec.get("model", "gemini-3-pro-image"), spec.get("resolution", ep.get("image_resolution", "2K")), True) if g else 0
+        tot += 0 if made else usd
+        pieces.append(f'<article><b>{html.escape(rn)}</b><span class="st {"" if made else "new"}">'
+                      f'{"made" if made else f"waiting for your OK · ${usd:.3f}"}</span>'
+                      f'{prompt_html(spec).replace("<details", "<details open", 1)}</article>')
+    return (f'<div class="block"><h3>Layered shots: our own animation (pilot)</h3>'
+            f'<p class="lede">The preview runs on free stand-ins: the plate with the mosquito painted out on this machine, '
+            f'and a drawn mosquito. It shows the MOTION: the path, the landing on “suspect”, the wings folding, the shadow on the skin, '
+            f'the buzz stopping. The paid pieces below replace the stand-ins (Gemini Batch, <b>${tot:.2f}</b> together).</p>'
+            f'{"".join(arts)}'
+            f'<h3>The two paid pieces (prompts)</h3><div class="refgen">{"".join(pieces)}</div></div>')
+
+
 def shrink(src: Path, dst: Path, edge: int = 900):
     im = Image.open(src).convert("RGB")
     im.thumbnail((edge, edge))
@@ -331,6 +400,14 @@ svg.tension .lab{fill:var(--ink);font:700 12px var(--display)}
 .v2grid article.drop{opacity:.55}
 .st{font:700 11px var(--display);letter-spacing:.06em;padding:2px 8px;border-radius:999px;background:var(--line)}
 .st.redo,.st.new{background:var(--amber-soft);color:var(--ink)}
+.layered{background:var(--surface);border:2px solid var(--teal);border-radius:14px;padding:14px;display:grid;gap:14px;margin-top:12px}
+.lgrid{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:16px;align-items:start}
+img.wide{width:100%;height:auto;border-radius:8px;border:1px solid var(--line);cursor:zoom-in}
+.layered figure img{aspect-ratio:auto;object-fit:contain;background:var(--bg)}
+.layered .refs{grid-template-columns:minmax(0,220px) minmax(0,1fr)}
+.refgen .st{justify-self:start}
+@media (max-width:640px){.layered .refs{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:640px){.lgrid{grid-template-columns:minmax(0,1fr)}}
 #lb{position:fixed;inset:0;background:rgba(10,12,14,.88);display:flex;align-items:center;justify-content:center;padding:24px;z-index:20;cursor:zoom-out}
 #lb[hidden]{display:none}
 #lb img{max-width:100%;max-height:100%;border-radius:6px}
@@ -346,6 +423,7 @@ def build(out: Path, keys: list[str]) -> Path:
     nav = "".join(f'<a href="#{e["anchor"]}">{html.escape(p["title"].split(" — ")[0])} · {e["short"]}</a>' for k, e, p in eps)
     body = []
     stages = []
+    pilots: list[str] = []
     for k, e, p in eps:
         ep = episode_json(e)
         kf_dir = e.get("project", Path("-")) / "assets/images/keyframes"
@@ -364,9 +442,14 @@ def build(out: Path, keys: list[str]) -> Path:
                 stage = "rough cut · waiting for your OK"
                 stages[-1] = stage
         story = story_block(k, e, img)
+        layered = layered_block(k, e, ep, out, img)
+        if layered:
+            pilots.append(e["short"])
         if story:
             stage = stages[-1] = ("rough cut 2 · waiting for your OK" if all((kf_dir / f"{n}.png").exists() for n in ep.get("keyframes", {}))
                                   else "v2 sketches + prompts · waiting for your OK")
+        if layered:
+            stage = stages[-1] = "layered pilot · waiting for your OK"
         # reference images to make (cast sheets, set plates) with their prompts
         refgen = []
         for rn, spec in ep.get("references", {}).items():
@@ -431,6 +514,7 @@ def build(out: Path, keys: list[str]) -> Path:
   <div class="meta"><span><b>{len(cards)}</b> shots</span><span>≈ <b>{p['secs']:.0f} s</b> of pictures</span>
   <span>{f"images <b>{n_img}</b> · <b>${img_usd:.2f}</b> (Gemini Batch) + narration and music ≈ <b>$0.13</b>" if n_img else f"estimate <b>{html.escape(p['cost'])}</b>"}</span>
   <span>status <b>{html.escape(stage)}</b></span></div>
+  {layered}
   {story}
   {vid}
   <div class="block"><h3>Notes and period rules</h3><div class="notes">{notes}</div></div>
@@ -442,23 +526,39 @@ def build(out: Path, keys: list[str]) -> Path:
   <div class="block"><h3>Shots</h3><p class="legend"><span></span>orange band = where the on-screen text sits · dotted lines = the Shorts safe zone</p>
   <div class="shots">{''.join(cards)}</div></div>
 </section>""")
+    if pilots:
+        h1 = "Layered animation pilot: Finlay’s mosquito"
+        lede = ("Our own animation instead of AI clips: the painting becomes layers (a clean plate, a mosquito cut out in four "
+                "states, a shadow, the lamp’s glow) and we move them with keyframes, like After Effects. Watch the 3 s preview "
+                "with sound at the top of Finlay. Both Shorts’ storyboards stay below for reference. Tap any picture to enlarge it.")
+        ask = ("<p><b>1. The motion</b> (the preview): the path in across the lamp, the hover, the landing on “suspect”, the "
+               "small bounce, the wings folding, the shadow, the buzz stopping, the beat of silence before “the mosquito”. "
+               "Tell me what to change (faster, another way in, a bigger shadow…).</p>"
+               "<p><b>2. The two paid pieces</b> (prompts under the preview, $0.13 with Gemini Batch): the plate without the "
+               "mosquito, and the mosquito sprite sheet. Nothing is generated until you say OK. If the free plate already looks "
+               "clean enough to you, I skip the paid plate and only the sheet is made ($0.07).</p>"
+               "<p>After your OK: generate, cut, swap the stand-ins, a new preview, then the full Finlay render.</p>")
+    else:
+        h1 = "Next two Shorts: rough cut 2"
+        lede = ("Round 2 (after your rough-cut review): each Short now starts with the proposed story v2, its tension curve against rough cut 1, and which shots stay, get fixed, are redone or are new. Below it: rough cut 1 and the approved v1 storyboard for reference. Each shot shows a rough sketch of the framing (people as silhouettes, where the text goes), the narration line it covers, and what the painting will show. The real portraits and period pictures set how people and places look. Tap any picture to enlarge it.")
+        ask = ("<p>Rough cut 2 is at the top of each Short (watch with sound): story v2, the 11 new images, the silent climaxes. Tell me by time or shot number what to change, or say it is ready for covers and publish packages. Reply in chat with the shot numbers you want changed (for example \"al-Razi 6: Matt holds the lamp higher\"), or say both are OK. The order is always: storyboard and sketches, then the image prompts (open \"Image prompt\" under any shot), then the images. Nothing is paid for until you approve the step before it.</p>")
     page = f"""<title>Finlay and al-Razi Storyboards</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400&family=Montserrat:wght@700;800&display=swap">
 <style>{CSS}</style>
 <div class="wrap">
-  <div class="kicker">Oddly Matt · approval page · {html.escape(stages[0] if len(set(stages)) == 1 else ", ".join(stages))}</div>
-  <h1>Next two Shorts: rough cut 2</h1>
-  <p class="lede">Round 2 (after your rough-cut review): each Short now starts with the proposed story v2, its tension curve against rough cut 1, and which shots stay, get fixed, are redone or are new. Below it: rough cut 1 and the approved v1 storyboard for reference. Each shot shows a rough sketch of the framing (people as silhouettes, where the text goes), the narration line it covers, and what the painting will show. The real portraits and period pictures set how people and places look. Tap any picture to enlarge it.</p>
+  <div class="kicker">Oddly Matt · approval page · {html.escape("layered pilot · waiting for your OK" if pilots else (stages[0] if len(set(stages)) == 1 else ", ".join(stages)))}</div>
+  <h1>{html.escape(h1)}</h1>
+  <p class="lede">{html.escape(lede)}</p>
   <nav>{nav}</nav>
   {''.join(body)}
-  <div class="ask"><h3>What I need from you</h3><p>Rough cut 2 is at the top of each Short (watch with sound): story v2, the 11 new images, the silent climaxes. Tell me by time or shot number what to change, or say it is ready for covers and publish packages. Reply in chat with the shot numbers you want changed (for example "al-Razi 6: Matt holds the lamp higher"), or say both are OK. The order is always: storyboard and sketches, then the image prompts (open "Image prompt" under any shot), then the images. Nothing is paid for until you approve the step before it.</p></div>
+  <div class="ask"><h3>What I need from you</h3>{ask}</div>
 </div>
 <div id="lb" hidden><img alt=""></div>
 <script>
 const lb=document.getElementById('lb'),lbi=lb.querySelector('img');
-document.addEventListener('click',e=>{{const t=e.target;if(t.tagName==='IMG'&&t.closest('figure,.shot,.maps,.v2grid')){{lbi.src=t.src;lbi.alt=t.alt;lb.hidden=false}}else if(t.closest('#lb')){{lb.hidden=true}}}});
+document.addEventListener('click',e=>{{const t=e.target;if(t.tagName==='IMG'&&t.closest('figure,.shot,.maps,.v2grid,.layered')){{lbi.src=t.src;lbi.alt=t.alt;lb.hidden=false}}else if(t.closest('#lb')){{lb.hidden=true}}}});
 document.addEventListener('keydown',e=>{{if(e.key==='Escape')lb.hidden=true}});
 </script>
 """

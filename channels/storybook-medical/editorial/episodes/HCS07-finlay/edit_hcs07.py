@@ -78,13 +78,42 @@ c.s("gulls-water", t); c.s("ship-bell", t + 0.3)
 t = c.at("yellow fever was killing")
 c.shot(t, KF + "s2c.png", {"type": "slide", "from": 3, "to": -3, "scale": 1.12}, cap=TOP)
 c.s("horse-carriage", t, query="horse carriage cobblestones")
-# B3: the suspect on his hand (mosquito measured at 0.66, 0.56); name tag below it
+# B3: the suspect on his hand. LAYERED PILOT (user 2026-11-16, plan/layered-animation.md; layers_s3.py makes the pieces):
+# the plate is s3 WITHOUT the mosquito; the mosquito flies in from the lamp side (low, under the name tag), wings
+# flapping, closer to the camera at first (bigger, out of focus), its shadow growing on the skin, hovers, lands on the
+# spot the painting had it (0.662, 0.553) at the end of "suspect", bounces, folds its wings; the buzz stops on landing,
+# a beat of silence, then Liam: "the mosquito" (spot + hit).
 t = c.at("dr")
+sus = c.at("suspect")
 mosq = c.at("the mosquito")
+LAND = round(next(w["end"] for w in c.words if round(w["start"], 2) == sus) - (t - 0.05) - 0.12, 2)   # rel. to the shot
+PLATE = "proj:assets/images/plates/s3-empty.free.png"          # -> plates/s3-empty.png once the paid plate is approved
+SPRITES = "proj:assets/images/sprites/mosquito-free/sprites.json"   # -> sprites/mosquito/ (the paid sheet)
+MOSQUITO = {
+    "id": "mosquito", "sprites": SPRITES, "w": 0.09, "face": "path", "xfade": 0.08,
+    "states": {"fly": {"fps": 50}, "land": {"fps": 6, "loop": False, "then": "rest"}, "rest": {}},
+    "wobble": {"amp": 0.006, "hz": 2.4, "rot": 12},
+    # the lamp is close on the right: the shadow falls well to the left of the mosquito while it is high and slides in
+    # under it as it lands (clipped to the hand: it appears only once it is over the skin)
+    "shadow": {"light": [-0.28, 0.07], "opacity": 0.6, "blur": 1.5, "fade": 0.6, "clip": "hand"},
+    "depth": {"focus": 1.0, "blur": 4},
+    # in across the bright lamp chimney (a dark speck reads there; over the brass base it vanished), over the fist,
+    # a hover, then down onto the back of the hand
+    "keys": [
+        {"t": 0.10, "x": 1.08, "y": 0.37, "z": 1.7, "state": "fly",
+         "sfx": {"name": "mosquito-buzz", "query": "mosquito buzzing", "until": "contact", "gain": -11, "fade_in": 0.3, "fade_out": 0.12}},
+        {"t": round(LAND * 0.33, 2), "x": 0.91, "y": 0.43, "z": 1.5},
+        {"t": round(LAND * 0.6, 2), "x": 0.76, "y": 0.44, "z": 1.25},
+        {"t": round(LAND * 0.81, 2), "x": 0.69, "y": 0.50, "z": 1.08, "stop": True},
+        {"t": LAND, "x": 0.662, "y": 0.553, "z": 1.0, "state": "land",
+         "contact": {"squash": 0.14, "lift": 0.07, "hz": 4.5, "decay": 7}},
+    ]}
 c.shot(t, KF + "s3.png", push(0.58, 0.47, 1.14), cap=TOP,
-       fx=[{"kind": "spot", "cx": 0.66, "cy": 0.56, "rx": 0.08, "ry": 0.05, "at": rel(mosq, t), "dur": 1.6, "dim": 0.5}])
+       fx=[{"kind": "spot", "cx": 0.66, "cy": 0.56, "rx": 0.08, "ry": 0.05, "at": rel(mosq, t), "dur": 1.6, "dim": 0.5}],
+       layers={"bg": PLATE, "masks": {"hand": "proj:assets/images/plates/fx/s3-empty.free-hand.mask.png"},
+               "glows": [{"x": 0.963, "y": 0.536, "r": 180, "strength": 0.18}], "actors": [MOSQUITO]})
 c.o("nameTag", t + 0.05, mosq - 0.2, text="Carlos Finlay", sub="doctor, Havana", y=1000)
-c.s("mosquito-buzz", t, query="mosquito buzzing"); c.s("hit-suspense", mosq)
+c.s("hit-suspense", mosq)                                      # (the buzz is fired by the mosquito's keyframes)
 # B4 ESCALATION: the Academy, the disbelief (whip), he keeps going (snaps), the years tick, Reed arrives
 t = c.at("he told the academy")
 c.shot(t, KF + "s4a.png", push(0.5, 0.5, 1.12), cap=TOP)
@@ -149,7 +178,8 @@ for i, x in enumerate(c.shots):
 
 ep = json.load(open(P / "episode.json", encoding="utf-8"))
 ep.update({"loop": True, "tail_seconds": TAIL, "shots": c.shots, "overlays": sorted(c.ov, key=lambda x: x["start"]),
-           "sfx": sorted(c.fx, key=lambda x: x["at"])})
+           "sfx": sorted(c.fx, key=lambda x: x["at"]),
+           "motion_lint": "warn"})   # cut 2026-11-15, before the layered-shot rule: only s3 is layered (the pilot)
 ep["music"] = {"lufs": -22, "selected": "m1", "gaps": MUSIC_GAPS, "prompts": {
     "m1": {"sections": 3, "prompt": "Instrumental, 1880s Havana, Cuba: a slow Cuban habanera in a minor key for a true story "
            "about a patient doctor nobody believed. Solo piano playing the habanera rhythm, a tres guitar melody, soft guiro "

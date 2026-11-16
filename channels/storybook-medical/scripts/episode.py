@@ -541,10 +541,12 @@ def step_sfx(pid, *_):
     env = {m.group(1): m.group(2).strip() for l in open(REPO / ".env", encoding="utf-8")
            if (m := re.match(r"\s*([A-Z_]+)\s*=\s*(.*?)\s*$", l)) and m.group(2)}
     ca = env.get("SSL_CERT_FILE") or True
-    for name in sorted({c["name"] for c in ep["sfx"]}):
+    import layers
+    cues = layers.all_sfx(ep)        # + sounds fired from layered-shot keyframes
+    for name in sorted({c["name"] for c in cues if not c.get("file")}):
         if (lib / f"{name}.mp3").exists():
             continue
-        q = next((c.get("query") for c in ep["sfx"] if c["name"] == name and c.get("query")), name.replace("-", " "))
+        q = next((c.get("query") for c in cues if c["name"] == name and c.get("query")), name.replace("-", " "))
         res = requests.get("https://freesound.org/apiv2/search/text/", verify=ca, timeout=30, params={
             "query": q, "filter": 'duration:[0.1 TO 60] license:("Creative Commons 0" OR "Attribution")',
             "fields": "id,name,duration,license,username,avg_rating,num_ratings,num_downloads,previews",
@@ -648,9 +650,18 @@ def step_build(pid, *_):
     total = round(duration(p / "assets/audio/narration.wav") + ep.get("tail_seconds", 0), 2)
     long = ep.get("format", "short") == "long"
     frame_size = (3840, 2160) if long else (1440, 2560)
+    import layers
+    # story-craft Rule 0 (2026-11-16): a story shot needs an action besides the camera, or "breath": True.
+    # Episodes cut before the rule carry "motion_lint": "warn".
+    motion = layers.lint_motion(ep["shots"])
+    if motion:
+        print("MOTION LINT:\n  " + "\n  ".join(motion))
+        if ep.get("motion_lint", "fail") != "warn":
+            raise SystemExit("motion lint failed (plan/layered-animation.md); fix the shots or mark breath=True")
     shots = []
     for s in ep["shots"]:
-        src = Path(resolve_ref(p.name, s["source"]))
+        # a layered shot shows its CLEAN plate (nothing that moves is painted into it); the still stays the reference
+        src = Path(resolve_ref(p.name, (s.get("layers") or {}).get("bg") or s["source"]))
         if src.suffix.lower() == ".mp4":
             dst = pub / "vid" / f"{s['id']}.mp4"
             shutil.copy(src, dst)
@@ -676,6 +687,8 @@ def step_build(pid, *_):
                         e[key] = f"fx/{out.name}"
                 fxs.append(e)
             shots[-1]["fx"] = fxs
+        if s.get("layers") and kind == "image":
+            shots[-1]["layers"] = layers.build_layers(s, p.name, pub, frame_size, fit_frame, resolve_ref)
     # a dissolve needs the previous shot underneath it: overlap by 0.5 s
     for a, b in zip(shots, shots[1:]):
         if b["transitionIn"] == "dissolve":
@@ -803,7 +816,9 @@ def step_mix(pid, *_):
              "[1:a][key]sidechaincompress=threshold=0.03:ratio=5:attack=40:release=450:makeup=1[music]"]
     labels = ["[narr]", "[music]"]
     lib = KIT / "library/sfx"
-    for n, c in enumerate(ep["sfx"]):
+    import layers
+    cues = layers.all_sfx(ep)        # + sounds fired from layered-shot keyframes (a buzz that stops on landing)
+    for n, c in enumerate(cues):
         # "file": any ref (e.g. "brand:sting.mp4" carries the sting's own sound); otherwise a library name
         f = Path(resolve_ref(pid, c["file"])) if c.get("file") else lib / f"{c['name']}.mp3"
         if not f.exists():
@@ -816,7 +831,9 @@ def step_mix(pid, *_):
         st = c.get("in", lead_silence(f))
         d = c.get("dur") or min(3.0, duration(f) - st)
         loop = ",aloop=loop=-1:size=2e9" if c.get("dur") and c["dur"] > duration(f) else ""
-        chain += f"{loop},atrim={st:.3f}:{st + d:.3f},asetpts=PTS-STARTPTS,afade=t=out:st={max(0, d - 0.2)}:d=0.2"
+        fo, fi = c.get("fade_out", 0.2), c.get("fade_in", 0)
+        chain += f"{loop},atrim={st:.3f}:{st + d:.3f},asetpts=PTS-STARTPTS,afade=t=out:st={max(0, d - fo):.3f}:d={fo}"
+        chain += f",afade=t=in:d={fi}" if fi else ""
         ms = int(round(c["at"] * 1000))
         chain += f",volume={gain:.2f}dB,adelay={ms}|{ms}[s{n}]"
         parts.append(chain)
@@ -828,7 +845,7 @@ def step_mix(pid, *_):
     ff("-i", str(tmp / "raw.wav"), "-af", f"volume={-14 - i:.2f}dB,alimiter=limit=0.84:attack=1:release=40:level=disabled:asc=1", str(out))
     shutil.rmtree(tmp)
     li, lp = loudness(out)
-    print(f"mix.wav {li} LUFS, peak {lp} dBFS, {len(ep['sfx'])} sfx cues")
+    print(f"mix.wav {li} LUFS, peak {lp} dBFS, {len(cues)} sfx cues")
 
 
 def step_render(pid, *flags):
@@ -870,7 +887,8 @@ def step_credits(pid, *_):
     """Write renders/CREDITS.txt (music + CC-BY sound effects + sources) for the video description."""
     ep, p = load_ep(pid), proj(pid)
     credits = json.load(open(KIT / "library/sfx-credits.json"))
-    used = sorted({c["name"] for c in ep["sfx"]})
+    import layers
+    used = sorted({c["name"] for c in layers.all_sfx(ep)})   # keyframe sounds of layered shots need credits too
     lines = ["CREDITS", ""]
     lines.append("Music: original, generated with MiniMax Music v2.")     # no internal track codes in public text
     lines.append("Narration: ElevenLabs v3 (voice: Liam). Illustrations/animation: AI-assisted, art-directed.")
