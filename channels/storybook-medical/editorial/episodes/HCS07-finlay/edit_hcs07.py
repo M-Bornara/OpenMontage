@@ -87,11 +87,12 @@ t = c.at("dr")
 sus = c.at("suspect")
 mosq = c.at("the mosquito")
 LAND = round(next(w["end"] for w in c.words if round(w["start"], 2) == sus) - (t - 0.05) - 0.12, 2)   # rel. to the shot
-PLATE = "proj:assets/images/plates/s3-empty.free.png"          # -> plates/s3-empty.png once the paid plate is approved
-SPRITES = "proj:assets/images/sprites/mosquito-free/sprites.json"   # -> sprites/mosquito/ (the paid sheet)
+PLATE = "proj:assets/images/plates/s3-empty.png"      # paid empty_plate (2026-11-16): s3 without the mosquito, within 1.5 px
+SPRITES = "proj:assets/images/sprites/mosquito/sprites.json"   # paid sheet, top-down frames + wing poses (layers_s3.pieces_paid)
 MOSQUITO = {
-    "id": "mosquito", "sprites": SPRITES, "w": 0.09, "face": "path", "xfade": 0.08,
-    "states": {"fly": {"fps": 50}, "land": {"fps": 6, "loop": False, "then": "rest"}, "rest": {}},
+    "id": "mosquito", "sprites": SPRITES, "w": 0.085, "face": "path", "xfade": 0.08,
+    "grade": "sepia(0.35) saturate(1.15) brightness(0.92)",   # the sheet is lit neutral; the hand is warm lamplight
+    "states": {"fly": {"fps": 50}, "land": {"fps": 8, "loop": False, "then": "rest"}, "rest": {}},
     "wobble": {"amp": 0.006, "hz": 2.4, "rot": 12},
     # the lamp is close on the right: the shadow falls well to the left of the mosquito while it is high and slides in
     # under it as it lands (clipped to the hand: it appears only once it is over the skin)
@@ -110,7 +111,7 @@ MOSQUITO = {
     ]}
 c.shot(t, KF + "s3.png", push(0.58, 0.47, 1.14), cap=TOP,
        fx=[{"kind": "spot", "cx": 0.66, "cy": 0.56, "rx": 0.08, "ry": 0.05, "at": rel(mosq, t), "dur": 1.6, "dim": 0.5}],
-       layers={"bg": PLATE, "masks": {"hand": "proj:assets/images/plates/fx/s3-empty.free-hand.mask.png"},
+       layers={"bg": PLATE, "masks": {"hand": "proj:assets/images/plates/fx/s3-empty-hand.mask.png"},
                "glows": [{"x": 0.963, "y": 0.536, "r": 180, "strength": 0.18}], "actors": [MOSQUITO]})
 c.o("nameTag", t + 0.05, mosq - 0.2, text="Carlos Finlay", sub="doctor, Havana", y=1000)
 c.s("hit-suspense", mosq)                                      # (the buzz is fired by the mosquito's keyframes)

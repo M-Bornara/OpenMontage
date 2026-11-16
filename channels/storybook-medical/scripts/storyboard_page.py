@@ -275,17 +275,25 @@ def layered_block(k: str, e: dict, ep: dict, out: Path, img: Path) -> str:
         if bg:
             f = Path(p / bg.split(":", 1)[-1]) if bg.startswith("proj:") else Path(bg)
             if f.exists():
-                stand.append(f'<figure><img src="img/{shrink(f, img / f"{k}-{sid}-plate", 900)}" alt="Stand-in plate" loading="lazy">'
-                             f'<figcaption><b>Plate (free stand-in)</b><span>{html.escape(f.name)}: the mosquito painted out '
-                             f'locally. The paid plate repaints it cleanly.</span></figcaption></figure>')
+                cap = ('<b>Plate (free stand-in)</b><span>' + html.escape(f.name) + ': the mosquito painted out locally. '
+                       'The paid plate repaints it cleanly.</span>') if ".free" in f.name else (
+                      '<b>Plate (real, $0.067)</b><span>The same painting repainted without the mosquito; it lines up with '
+                      'the still within 1.5 px, so the landing spot holds.</span>')
+                stand.append(f'<figure><img src="img/{shrink(f, img / f"{k}-{sid}-plate", 900)}" alt="Plate without the mosquito" loading="lazy">'
+                             f'<figcaption>{cap}</figcaption></figure>')
         for a in s["layers"].get("actors", []):
             sp = a.get("sprites", "")
             f = (p / sp.split(":", 1)[-1]).parent / "check.png" if sp.startswith("proj:") else None
             if f and f.exists():
                 stand.append(f'<figure><img src="img/{shrink(f, img / f"{k}-{sid}-{a["id"]}-check", 1300)}" alt="Cut-outs over magenta" loading="lazy">'
-                             f'<figcaption><b>{html.escape(a["id"])}: cut-outs (free stand-in)</b><span>Every state over '
-                             f'magenta, and the onion skin: one body outline means it doesn’t jump when the wings fold.</span>'
-                             f'</figcaption></figure>')
+                             + (f'<figcaption><b>{html.escape(a["id"])}: cut-outs (free stand-in)</b><span>Every state over '
+                                f'magenta, and the onion skin: one body outline means it doesn’t jump when the wings fold.</span>'
+                                if "free" in sp else
+                                f'<figcaption><b>{html.escape(a["id"])}: real cut-outs ($0.067 sheet)</b><span>Wing beat (2 frames), '
+                                f'the fold (2 frames), at rest. The sheet gave 2 top-down frames and 2 side views; the side views '
+                                f'don’t match a camera looking down at the hand, so the beat and the fold are made from the '
+                                f'top-down frame by turning each wing at its root.</span>')
+                             + '</figcaption></figure>')
         arts.append(f'<article class="layered"><div class="head"><span class="num">{html.escape(Path(str(s["source"])).stem)}</span>'
                     f'<span class="chip">{s["end"] - s["start"]:.1f} s</span><span class="size">{html.escape(sid)} · layered</span></div>'
                     f'<div class="lgrid">{vid}<div class="cast"><table><tr><th>Layer</th><th>What</th><th>Motion</th></tr>{plan}</table></div></div>'
@@ -307,6 +315,12 @@ def layered_block(k: str, e: dict, ep: dict, out: Path, img: Path) -> str:
         pieces.append(f'<article><b>{html.escape(rn)}</b><span class="st {"" if made else "new"}">'
                       f'{"made" if made else f"waiting for your OK · ${usd:.3f}"}</span>'
                       f'{prompt_html(spec).replace("<details", "<details open", 1)}</article>')
+    if tot == 0 and pieces:
+        return (f'<div class="block"><h3>Layered shots: our own animation (pilot)</h3>'
+                f'<p class="lede">The preview now runs on the <b>real pieces</b> (made 2026-11-16, $0.134): the plate without the '
+                f'mosquito and the cut-out mosquito, warmed to the lamp’s light. Same motion you approved.</p>'
+                f'{"".join(arts)}'
+                f'<details><summary>The two prompts</summary><div class="refgen">{"".join(pieces)}</div></details></div>')
     return (f'<div class="block"><h3>Layered shots: our own animation (pilot)</h3>'
             f'<p class="lede">The preview runs on free stand-ins: the plate with the mosquito painted out on this machine, '
             f'and a drawn mosquito. It shows the MOTION: the path, the landing on “suspect”, the wings folding, the shadow on the skin, '
@@ -449,7 +463,7 @@ def build(out: Path, keys: list[str]) -> Path:
             stage = stages[-1] = ("rough cut 2 · waiting for your OK" if all((kf_dir / f"{n}.png").exists() for n in ep.get("keyframes", {}))
                                   else "v2 sketches + prompts · waiting for your OK")
         if layered:
-            stage = stages[-1] = "layered pilot · waiting for your OK"
+            stage = stages[-1] = "layered pilot · real pieces · waiting for your OK"
         # reference images to make (cast sheets, set plates) with their prompts
         refgen = []
         for rn, spec in ep.get("references", {}).items():
@@ -531,13 +545,10 @@ def build(out: Path, keys: list[str]) -> Path:
         lede = ("Our own animation instead of AI clips: the painting becomes layers (a clean plate, a mosquito cut out in four "
                 "states, a shadow, the lamp’s glow) and we move them with keyframes, like After Effects. Watch the 3 s preview "
                 "with sound at the top of Finlay. Both Shorts’ storyboards stay below for reference. Tap any picture to enlarge it.")
-        ask = ("<p><b>1. The motion</b> (the preview): the path in across the lamp, the hover, the landing on “suspect”, the "
-               "small bounce, the wings folding, the shadow, the buzz stopping, the beat of silence before “the mosquito”. "
-               "Tell me what to change (faster, another way in, a bigger shadow…).</p>"
-               "<p><b>2. The two paid pieces</b> (prompts under the preview, $0.13 with Gemini Batch): the plate without the "
-               "mosquito, and the mosquito sprite sheet. Nothing is generated until you say OK. If the free plate already looks "
-               "clean enough to you, I skip the paid plate and only the sheet is made ($0.07).</p>"
-               "<p>After your OK: generate, cut, swap the stand-ins, a new preview, then the full Finlay render.</p>")
+        ask = ("<p><b>The real mosquito</b> (the preview at the top of Finlay): the same motion you approved, now with the "
+               "real plate and the real mosquito. Check the wing beat in flight, the landing on “suspect”, the wings folding "
+               "and that it sits on the skin, not on top of the picture.</p>"
+               "<p>After your OK: the full Finlay render, the text check, and a new short.mp4 in the package.</p>")
     else:
         h1 = "Next two Shorts: rough cut 2"
         lede = ("Round 2 (after your rough-cut review): each Short now starts with the proposed story v2, its tension curve against rough cut 1, and which shots stay, get fixed, are redone or are new. Below it: rough cut 1 and the approved v1 storyboard for reference. Each shot shows a rough sketch of the framing (people as silhouettes, where the text goes), the narration line it covers, and what the painting will show. The real portraits and period pictures set how people and places look. Tap any picture to enlarge it.")
@@ -548,7 +559,7 @@ def build(out: Path, keys: list[str]) -> Path:
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400&family=Montserrat:wght@700;800&display=swap">
 <style>{CSS}</style>
 <div class="wrap">
-  <div class="kicker">Oddly Matt · approval page · {html.escape("layered pilot · waiting for your OK" if pilots else (stages[0] if len(set(stages)) == 1 else ", ".join(stages)))}</div>
+  <div class="kicker">Oddly Matt · approval page · {html.escape("layered pilot · real pieces · waiting for your OK" if pilots else (stages[0] if len(set(stages)) == 1 else ", ".join(stages)))}</div>
   <h1>{html.escape(h1)}</h1>
   <p class="lede">{html.escape(lede)}</p>
   <nav>{nav}</nav>

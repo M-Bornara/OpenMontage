@@ -237,6 +237,7 @@ export type ActorSpec = {
   motionBlur?: false | { samples?: number; shutter?: number };
   parallax?: number;                           // 1 = moves with the plate (default); >1 foreground, <1 far
   opacity?: number; from?: number; to?: number;
+  grade?: string;                              // CSS filter on the actor only (match the plate's light), e.g. "sepia(0.3) brightness(0.9)"
 };
 export type LayerSpec = {
   masks?: Record<string, string>;              // name -> public mask png (fx_prep cut, fitted like the still)
@@ -441,7 +442,7 @@ export const Actor: React.FC<{ a: ActorSpec; size?: [number, number]; plate?: st
   const p = actorPose(a, t, size);
   const focus = a.depth?.focus ?? (a.keys.find(isContact)?.z ?? 1);
   const dblur = Math.abs(p.z - focus) * (a.depth?.blur ?? 5);
-  const fil = dblur > 0.3 ? `blur(${dblur.toFixed(2)}px)` : undefined;
+  const fil = [a.grade, dblur > 0.3 ? `blur(${dblur.toFixed(2)}px)` : ""].filter(Boolean).join(" ") || undefined;
   const op = a.opacity ?? 1;
   let body: React.ReactNode;
   if (a.kind === "3d") {

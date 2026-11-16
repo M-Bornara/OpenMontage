@@ -8,7 +8,7 @@ Pieces (plan/layered-animation.md §1):
   LIFE   the lamp flame breathes                    free: Life.Glow
 
     python channels/storybook-medical/editorial/episodes/HCS07-finlay/layers_s3.py [--free]
---free (the default until the paid pieces exist) builds the stand-ins: the preview shows the MOTION; the real pieces
+(default) builds the paid pieces into plates/s3-empty.png + sprites/mosquito/; --free builds the stand-ins: the preview shows the MOTION; the real pieces
 replace them after the prompts are approved (build_hcs07.py REFERENCES "plate-s3-empty", "sprite-mosquito").
 """
 from __future__ import annotations
@@ -178,9 +178,106 @@ def sheet_free() -> Path:
     return fx_prep.sheet(str(f), NAMES, str(out / "mosquito-free"), how="key", align="phase", anchor="solid")
 
 
-if __name__ == "__main__":
-    plate = plate_free()
+# ---- the paid pieces (generated 2026-11-16, $0.134) --------------------------------------------------------------
+# The sheet came back with 2 top-down frames (wings spread, wings folded) and 2 SIDE views, head pointing UP. The plate
+# looks straight down at the hand, so only the top-down frames are used; the wing beat and the fold are made from the
+# spread frame by turning each wing about its root (measured on the cut frame, 709x679 canvas).
+REF = P / "assets/images/refs"
+WING_L = [(322, 238), (285, 232), (250, 224), (200, 212), (150, 196), (30, 198), (14, 242), (50, 296), (150, 322), (250, 310), (322, 270)]   # top edge follows the wing: the front leg runs just above it
+WING_R = [(710 - x, y) for x, y in WING_L]                       # mirror (body axis x = 355)
+ROOT_L, ROOT_R = (318, 247), (392, 247)
+BODY_ANCHOR = (355, 330)          # thorax/abdomen centre on the cut frame: lands on the painted spot
+
+
+def _poly_mask(size, poly) -> Image.Image:
+    m = Image.new("L", size, 0)
+    ImageDraw.Draw(m).polygon(poly, fill=255)
+    return m
+
+
+def _turn(layer: Image.Image, pivot, deg: float, scale: float) -> Image.Image:
+    """Rotate (counter-clockwise on screen for deg > 0) and scale an RGBA layer about a pivot."""
+    import math
+    a = math.radians(deg)
+    c, s_ = math.cos(a) / scale, math.sin(a) / scale
+    px, py = pivot
+    # inverse map: source = R(-a)/scale * (dest - pivot) + pivot  (y down)
+    m = (c, -s_, px - c * px + s_ * py, s_, c, py - s_ * px - c * py)
+    return layer.transform(layer.size, Image.AFFINE, m, resample=Image.BICUBIC)
+
+
+def _swept(spread: Image.Image, deg: float, scale: float) -> Image.Image:
+    """The spread frame with both wings swept back toward the tail by deg."""
+    body = spread.copy()
+    out = Image.new("RGBA", spread.size, (0, 0, 0, 0))
+    wings = []
+    for poly, root, sign in ((WING_L, ROOT_L, 1), (WING_R, ROOT_R, -1)):
+        m = _poly_mask(spread.size, poly)
+        w = Image.new("RGBA", spread.size, (0, 0, 0, 0))
+        w.paste(spread, (0, 0), m)
+        a = np.array(body)
+        a[..., 3] = np.where(np.array(m) > 0, 0, a[..., 3])
+        body = Image.fromarray(a)
+        wings.append(_turn(w, root, sign * deg, scale))
+    for w in wings:                # wings under the body, like the folded frame
+        out.alpha_composite(w)
+    out.alpha_composite(body)
+    return out
+
+
+def pieces_paid() -> tuple[Path, Path, Path]:
+    """plates/s3-empty.png + its hand mask + sprites/mosquito/ (fly x2, land x2, rest; head pointing RIGHT)."""
+    plate = IMG / "plates/s3-empty.png"
+    shutil.copy(REF / "plate-s3-empty.png", plate)
     mask = hand_mask(plate)
-    sprites = sheet_free()
+    cut = IMG / "sprites/mosquito-cut"
+    fx_prep.sheet(str(REF / "sprite-mosquito.png"), ["top-spread", "side-a", "side-b", "top-folded"], str(cut),
+                  how="key", align="phase")
+    spread = Image.open(cut / "top-spread.png").convert("RGBA")
+    folded = Image.open(cut / "top-folded.png").convert("RGBA")
+    frames = {"fly": [spread, _swept(spread, 45, 0.9)],
+              "land": [_swept(spread, 20, 0.97), _swept(spread, 58, 0.88)],
+              "rest": [folded]}
+    out = IMG / "sprites/mosquito"
+    if out.exists():
+        shutil.rmtree(out)
+    out.mkdir(parents=True)
+    names = {}
+    for st, ims in frames.items():
+        names[st] = []
+        for j, im in enumerate(ims):
+            f = f"{st}-{j}.png"
+            im.rotate(-90, expand=True, resample=Image.BICUBIC).save(out / f)   # head up -> head right
+            names[st].append(f)
+    W, H = spread.size
+    ax, ay = BODY_ANCHOR[0] / W, BODY_ANCHOR[1] / H
+    meta = {"source": "sprite-mosquito.png (top-down frames; wing poses made by layers_s3.pieces_paid)",
+            "canvas": [H, W], "anchor": [round(1 - ay, 4), round(ax, 4)], "frames": names}
+    (out / "sprites.json").write_text(json.dumps(meta, indent=1))
+    # check: every frame over magenta + onion skin with the anchor
+    tiles = [Image.open(out / f) for st in names for f in names[st]]
+    tw, th = tiles[0].size
+    chk = Image.new("RGBA", (tw * (len(tiles) + 1), th), (255, 0, 255, 255))
+    for i, t in enumerate(tiles):
+        chk.alpha_composite(t, (i * tw, 0))
+        ImageDraw.Draw(chk).text((i * tw + 6, 4), [f for st in names for f in names[st]][i], fill="white")
+    on = Image.new("RGBA", (tw, th), (0, 0, 0, 0))
+    for t in tiles:
+        on = Image.blend(on, t, 0.5) if on.getbbox() else t.copy()
+    chk.alpha_composite(on, (len(tiles) * tw, 0))
+    cx, cy = len(tiles) * tw + meta["anchor"][0] * tw, meta["anchor"][1] * th
+    ImageDraw.Draw(chk).line([(cx - 12, cy), (cx + 12, cy)], fill="yellow", width=2)
+    ImageDraw.Draw(chk).line([(cx, cy - 12), (cx, cy + 12)], fill="yellow", width=2)
+    chk.convert("RGB").save(out / "check.png")
+    return plate, mask, out / "sprites.json"
+
+
+if __name__ == "__main__":
+    if "--free" in sys.argv:
+        plate = plate_free()
+        mask = hand_mask(plate)
+        sprites = sheet_free()
+    else:
+        plate, mask, sprites = pieces_paid()
     meta = json.load(open(sprites))
     print("plate", plate, "\nmask ", mask, "\nsprites", sprites, meta["canvas"], meta["frames"])
