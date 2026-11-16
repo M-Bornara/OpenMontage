@@ -66,7 +66,8 @@ HC001's animatic was text cards over simple shapes, so it didn't show what the v
    **emotion on the faces**. Since 2026-11-16 (story-craft.md Rule 0): every shot is written as a director's
    breakdown: the moment, the action in progress (a verb), the feeling and how face and body show it, the camera
    move that delivers it, the ACT animation of character and props, the sound. A shot whose only motion is CAM
-   (zoom/pan) is refused by review unless it is a deliberate breath between beats. One image per idea in the narration. A set that comes back changes size and angle
+   (zoom/pan) is refused by review unless it is a deliberate breath between beats. Every shot also names its **level**
+   (HERO / ALIVE / BREATH, plan/layered-animation.md §7) and its tricks; HERO shots get a free motion pre-viz on stand-ins. One image per idea in the narration. A set that comes back changes size and angle
    (long → medium → close, reverse angle), or the line gets its own place and light. The prompts then use
    `framing()`, and the lint stops a SHOT-less frame or the same set at the same size twice in a row. Every shot: the narration line and its key word, what we see (composition, who
    is where, what the eye should land on), the motion code and exactly what moves, on-screen text and *where*

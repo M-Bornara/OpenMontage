@@ -100,3 +100,37 @@ Puppet.tsx, Life.tsx, Fx.tsx and Three3D.tsx already do; reuse those, build the 
 ### Rule
 Every story beat uses at least one trick from 2–11 or 15–20 (an action), not only camera moves (12–13).
 The storyboard names the tricks per shot, e.g. `mosquito: path(2) + flap loop(7) + land squash(3) + shadow(19)`.
+
+## 7. How we use it: the plan (approved by the user 2026-11-16)
+
+### Scope
+| Video | Layered animation | Why |
+|---|---|---|
+| Packaging v2 re-renders (golden eye, Onesimus, Snow, Semmelweis) | none new; free Life tricks on the existing images only | due within days; only the opening changes |
+| HCS07 Finlay (Dec 3) | s3 mosquito with the real pieces (plate + sheet, $0.13) | the heart of the Short |
+| HCS05 al-Razi (Dec 7) | one free HERO: 7a, the reed pen moves and the writing draws itself on | no new image needed (draw-on + one cut-out) |
+| The Nov 29 Short and every later one, HC002 Gage when un-parked | fully layered, planned from the storyboard | the first Short designed this way from the start |
+
+### Three levels per shot (named in the storyboard)
+- **HERO** (2–3 per Short: hook, turn, climax): empty plate + sprite/pose/rig sheet, path, states, shadow, sound.
+  ≈$0.13 per shot (2 pieces, Batch).
+- **ALIVE** (most shots, free): something in the picture moves, made from the image itself: breath, blink, flicker,
+  smoke, sway, a cut-out hand that trembles (Life.tsx presets + free cut-outs).
+- **BREATH** (max 1–2 per Short): CAM only, a deliberate rest (`breath=True`; the build lint allows it).
+Each storyboard row names its level and its tricks, e.g. `HERO · mosquito: path + flap + land + shadow · buzz → silence`.
+
+### Steps per episode
+1. Story beats (story-doctor): mark the 2–3 HERO beats.
+2. Storyboard: level + tricks + layer plan per shot → user OK.
+3. **Motion pre-viz (free):** every HERO shot moves on stand-ins on the approval page; the user approves the motion
+   and the piece prompts together (this gate replaces the sketch pre-viz and the prompt gate for HERO shots).
+4. Images: stills + the empty plates and sheets for HERO shots.
+5. Rough cut with the real motion → user review.
+Cost: ≈+$0.30–0.40 per Short (3 HERO shots); images stay ≈$1–1.50.
+
+### Build next, only when a storyboard needs it (validate before automating)
+1. **Character rig**: rig sheet (head, torso, upper arm, forearm, hand on a flat background) → parts on pivots in
+   `<Actor>`: head turn, reach, flinch, blink. First user: al-Razi 1a (raised palm) style shots.
+2. **Free cut-out from an existing still**: one command (object out + plate inpaint), generalising `layers_s3.py`,
+   so ALIVE shots cost $0.
+3. **Draw-on writing / lines** (al-Razi 7a), then liquid fill, card flip, heat haze as stories call for them.

@@ -28,6 +28,14 @@ Pilot and worked example: HCS07 s3, the mosquito (`editorial/episodes/HCS07-finl
 
 ## 1. Layer plan (with the storyboard, before any prompt)
 
+**First pick the shot's level** (plan/layered-animation.md §7), and write it in the storyboard row with the tricks:
+- **HERO** (2–3 per Short: hook, turn, climax): new pieces (empty plate + sheet), path, states, shadow, sound; free
+  motion pre-viz on stand-ins before the pieces are paid. ≈$0.13.
+- **ALIVE** (most shots): free; moves made from the image itself (Life.tsx presets, a free cut-out). No new pieces.
+- **BREATH** (max 1–2 per Short): CAM only, `breath=True`.
+Re-renders of finished Shorts get no new HERO shots, only free ALIVE tricks.
+
+
 For each shot, one row per layer. Decide what stays painted and what moves:
 
 | Layer | What | Moves how | Piece |
