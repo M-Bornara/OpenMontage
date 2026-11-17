@@ -54,7 +54,8 @@ type Motion =
   | { type: "slide"; from?: number; to?: number; scale?: number }
   | { type: "shake"; scale?: number; seconds?: number }
   // snap: a hard zoom in at `at` seconds into the shot (over `frames`), toward x/y (% translate like push), then a slow drift
-  | { type: "snap"; from?: number; to?: number; at?: number; frames?: number; x?: number; y?: number }
+  // (x0/y0: the translate at the start, so frame 0 can already be framed off-centre; packaging v2 frame-1 moves)
+  | { type: "snap"; from?: number; to?: number; at?: number; frames?: number; x?: number; y?: number; x0?: number; y0?: number }
   // pan: slide the visible window across a wider master (objectPosition %, 0 = left edge, 100 = right edge)
   | { type: "pan"; from?: number; to?: number; scale?: number };
 
@@ -113,6 +114,13 @@ export interface StorybookShortProps {
   loopSeconds?: number;
   /** Theme font for captions and stamps: "montserrat" (default), "lalezar" (Persian), "im-fell" (17th-18th c. English). */
   captionFont?: string;
+  /** Packaging v2 (plan/packaging-v2-spec.md, C006): the whole spoken hook as ONE card from frame 0 until `until` s
+   *  (each word lights as it is spoken); the word-by-word captions start after it. `y` = the card's top. */
+  hook?: { until: number; y?: number; text?: string; anchor?: "top" | "bottom"; display?: string[]; size?: number };
+  /** Packaging v2: the corner chip "CASE 07" for the whole Short (top-left of the safe area). */
+  caseNo?: number;
+  /** Packaging v2: the end line on the final held frame (captions are done by then). */
+  endLine?: { text: string; from: number; y?: number };
 }
 
 const ease = Easing.bezier(0.33, 0, 0.2, 1);
@@ -147,8 +155,8 @@ export const ShotLayer: React.FC<{ shot: Shot }> = ({ shot }) => {
     const k = interpolate(frame, [at, at + (m.frames ?? 6)], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.out(Easing.cubic) });
     const drift = interpolate(frame, [at, dur], [0, 0.03], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
     scale = (m.from ?? 1.03) + ((m.to ?? 1.3) - (m.from ?? 1.03)) * k + drift;
-    tx = (m.x ?? 0) * k;
-    ty = (m.y ?? 0) * k;
+    tx = (m.x0 ?? 0) + ((m.x ?? 0) - (m.x0 ?? 0)) * k;
+    ty = (m.y0 ?? 0) + ((m.y ?? 0) - (m.y0 ?? 0)) * k;
   } else if (m.type === "shake") {
     scale = m.scale ?? 1.1;
     const s = m.seconds ?? 0.4;
@@ -421,11 +429,12 @@ function pages(words: Word[], per: number): Word[][] {
   return out;
 }
 
-const Captions: React.FC<{ words: Word[]; per: number; y: number; shots: Shot[] }> = ({ words, per, y, shots }) => {
+const Captions: React.FC<{ words: Word[]; per: number; y: number; shots: Shot[]; until?: number }> = ({ words, per, y, shots, until }) => {
   const theme = React.useContext(ThemeFont);
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const t = frame / fps;
+  if (!words.length || (until !== undefined && t >= until)) return null;
   const ps = pages(words, per);
   // a page also ends at a cut that comes after its last word, so finished words never leak onto the next shot
   // (user review HCS03: "beating again" flashed on the corridor shot for 2-3 frames before "Today")
@@ -486,9 +495,83 @@ const Captions: React.FC<{ words: Word[]; per: number; y: number; shots: Shot[] 
   );
 };
 
+// ── Packaging v2: hook card, case chip, end line ───────────────────────────
+
+// font size for the hook card from its length: the whole line must fit the safe width in <= 5 lines
+export const hookFontSize = (chars: number) => (chars <= 40 ? 84 : chars <= 64 ? 74 : chars <= 90 ? 64 : 56);
+
+const HookCard: React.FC<{ words: Word[]; display?: string[]; text?: string; dur: number; y: number; anchor?: "top" | "bottom"; size?: number }> = ({
+  words, display, text, dur, y, anchor, size }) => {
+  const theme = React.useContext(ThemeFont);
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const t = frame / fps;
+  // frame 0 is already fully readable (it is the frame people decide on); the card settles from 0.94 and leaves fast
+  const settle = spring({ frame, fps, config: { damping: 14, stiffness: 170, mass: 0.6 } });
+  const out = interpolate(frame, [dur - 5, dur], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  // `display`: the narration's own tokens with punctuation (the caption words have it stripped), same order and count
+  const items = text ? text.split(" ").map((w) => ({ word: w, start: -1, end: -1, punch: false }))
+    : words.map((w, i) => ({ ...w, word: display && display.length === words.length ? display[i] : w.word }));
+  const fs = (size ?? hookFontSize(items.map((w) => w.word).join(" ").length)) * theme.scale;
+  return (
+    <AbsoluteFill style={{ left: SAFE.left, width: SAFE.right - SAFE.left, opacity: out,
+      ...(anchor === "bottom" ? { top: "auto", bottom: 1920 - SAFE.bottom, justifyContent: "flex-end" } : { top: y, height: "auto" }) }}>
+      <div
+        style={{
+          background: "rgba(34,38,42,0.84)",
+          borderLeft: `14px solid ${AMBER}`,
+          borderRadius: 16,
+          padding: "22px 30px 26px 28px",
+          boxShadow: "0 10px 0 rgba(0,0,0,0.3)",
+          transform: `scale(${interpolate(settle, [0, 1], [0.94, 1]) * interpolate(out, [0, 1], [0.96, 1])})`,
+          transformOrigin: "50% 0%",
+          display: "flex",
+          flexWrap: "wrap",
+          gap: `0 ${Math.round(fs * 0.28)}px`,
+        }}
+      >
+        {items.map((w, i) => {
+          const active = w.start >= 0 && t >= w.start && t < w.end + 0.05;
+          return (
+            <span key={i} style={{ fontFamily: theme.family, fontWeight: theme.weight, fontSize: fs, lineHeight: 1.1,
+              textTransform: "uppercase", color: active ? (w.punch ? PUNCH : AMBER) : BONE, display: "inline-block" }}>
+              {w.word}
+            </span>
+          );
+        })}
+      </div>
+    </AbsoluteFill>
+  );
+};
+
+const CaseChip: React.FC<{ n: number }> = ({ n }) => (
+  <div style={{ position: "absolute", left: SAFE.left, top: SAFE.top, background: AMBER, color: CHARCOAL, fontFamily, fontWeight: 800,
+    fontSize: 34, letterSpacing: 4, padding: "6px 16px 7px", borderRadius: 10, boxShadow: "0 4px 0 rgba(0,0,0,0.3)" }}>
+    CASE {String(n).padStart(2, "0")}
+  </div>
+);
+
+const EndLine: React.FC<{ text: string; y: number }> = ({ text, y }) => {
+  const frame = useCurrentFrame();
+  const k = interpolate(frame, [0, 8], [0, 1], { extrapolateRight: "clamp", easing: Easing.out(Easing.cubic) });
+  const [a, b] = text.includes(":") ? [text.slice(0, text.indexOf(":") + 1), text.slice(text.indexOf(":") + 1).trim()] : [text, ""];
+  return (
+    <AbsoluteFill style={{ top: y, left: SAFE.left, width: SAFE.right - SAFE.left, height: 200, alignItems: "center",
+      opacity: k, transform: `translateY(${(1 - k) * 24}px)` }}>
+      {/* a dark backing so it reads on any picture (HCS08: white on the cream map paper) */}
+      <div style={{ background: "rgba(34,38,42,0.82)", borderRadius: 16, padding: "12px 34px 16px", display: "flex", flexDirection: "column",
+        alignItems: "center", boxShadow: "0 8px 0 rgba(0,0,0,0.3)" }}>
+        <div style={{ fontFamily, fontWeight: 800, fontSize: 46, color: BONE, letterSpacing: 2, textAlign: "center" }}>{a}</div>
+        {b ? <div style={{ fontFamily, fontWeight: 900, fontSize: 58, color: AMBER, letterSpacing: 3, textAlign: "center" }}>{b.toUpperCase()}</div> : null}
+      </div>
+    </AbsoluteFill>
+  );
+};
+
 // ── Composition ──────────────────────────────────────────────────────────
 
-export const StorybookShort: React.FC<StorybookShortProps> = ({ totalSeconds, shots, overlays, words, wordsPerPage, captionY, loopSeconds, captionFont }) => {
+export const StorybookShort: React.FC<StorybookShortProps> = ({ totalSeconds, shots, overlays, words, wordsPerPage, captionY, loopSeconds, captionFont,
+                                                                 hook, caseNo, endLine }) => {
   const frame = useCurrentFrame();
   const total = Math.round(totalSeconds * FPS);
   const loopFrames = Math.round((loopSeconds ?? 0) * FPS);
@@ -527,7 +610,21 @@ export const StorybookShort: React.FC<StorybookShortProps> = ({ totalSeconds, sh
             <OverlayLayer o={o} />
           </Sequence>
         ))}
-        <Captions words={words} per={wordsPerPage ?? 3} y={captionY ?? 1180} shots={shots} />
+        {/* v2: the hook's words live on the card, and the end line takes over from the captions */}
+        <Captions words={words.filter((w) => (!hook || w.start >= hook.until - 0.05) && (!endLine || w.start < endLine.from))}
+          per={wordsPerPage ?? 3} y={captionY ?? 1180} shots={shots} until={endLine?.from} />
+        {hook ? (
+          <Sequence from={0} durationInFrames={Math.max(1, Math.round(hook.until * FPS))}>
+            <HookCard words={words.filter((w) => w.start < hook.until - 0.05)} display={hook.display} text={hook.text} dur={Math.round(hook.until * FPS)}
+              y={hook.y ?? 360} anchor={hook.anchor} size={hook.size} />
+          </Sequence>
+        ) : null}
+        {caseNo ? <CaseChip n={caseNo} /> : null}
+        {endLine ? (
+          <Sequence from={Math.round(endLine.from * FPS)}>
+            <EndLine text={endLine.text} y={endLine.y ?? 1060} />
+          </Sequence>
+        ) : null}
       </AbsoluteFill>
     </AbsoluteFill>
     </ThemeFont.Provider>

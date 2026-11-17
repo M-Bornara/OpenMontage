@@ -152,5 +152,51 @@ ep["music"] = {"lufs": -22, "selected": "m2", "prompts": {
     "m2": {"sections": 3, "prompt": "Instrumental, Victorian London 1850s mystery score for a true detective story: solo cello and upright piano, "
           "a light pizzicato walking pulse like a detective's footsteps, a faint music-box motif, minor key and curious, "
           "a short playful lift near the end, then a warm resolving chord. No vocals, no modern drums."}}}
+# packaging v2 (plan/packaging-v2-spec.md, C006; built 2026-11-16): applied at build time by scripts/packaging_v2.py
+ep["packaging"] = {
+ "version": 2,
+ "case": 9,
+ "hook": {
+  "anchor": "top"
+ },
+ "open": {
+  "source": "projects/hcs08-john-snow/assets/images/keyframes/s8.png",
+  "until": 3.9,
+  "captionY": 1030,
+  "motion": {
+   "type": "snap",
+   "from": 1.08,
+   "to": 1.22,
+   "at": 0,
+   "frames": 45,
+   "x": -12,
+   "y": 0
+  },
+  "fx": [
+   {
+    "kind": "particles",
+    "style": "haze",
+    "x": 0.05,
+    "y": 0.5,
+    "tx": 0.95,
+    "ty": 0.44,
+    "spread": 0.05,
+    "every": 0.35,
+    "life": 3.2,
+    "size": 260,
+    "color": "205,198,185",
+    "opacity": 0.22
+   }
+  ]
+ },
+ "sfx": [
+  {
+   "name": "metal-clank",
+   "at": 0.2,
+   "gain_db": -10
+  }
+ ]
+}
+ep["motion_lint"] = "warn"   # cut before Rule 0; v2 changes only the opening
 json.dump(ep, open(P / "episode.json", "w", encoding="utf-8"), indent=2, ensure_ascii=False)
 print(f"{len(c.shots)} shots, {len(c.ov)} overlays, {len(c.fx)} sfx, {total} s")

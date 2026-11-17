@@ -138,5 +138,66 @@ ep["theme"] = {"culture": "colonial-english", "font": "montserrat"}
 ep["music"] = {"lufs": -22, "selected": "m1", "prompts": {
     "m1": "Instrumental, 18th-century chamber score for a serious true story: solo cello and harpsichord, a low tense "
           "pulse, a dark sudden sting in the middle, then a hopeful, dignified string swell rising at the end. No vocals."}}
+# packaging v2 (plan/packaging-v2-spec.md, C006; built 2026-11-16): applied at build time by scripts/packaging_v2.py
+ep["packaging"] = {
+ "version": 2,
+ "case": 8,
+ "hook": {
+  "until": 6.7,
+  "anchor": "bottom",
+  "size": 54
+ },
+ "open": {
+  "source": "projects/hcs06-onesimus/assets/images/keyframes/s7.png",
+  "until": 2.14,
+  "captionY": 1030,
+  "motion": {
+   "type": "snap",
+   "from": 1.12,
+   "to": 1.28,
+   "at": 0,
+   "frames": 50,
+   "x": -7.0,
+   "y": -4,
+   "y0": -4
+  },
+  "fx": [
+   {
+    "kind": "spark",
+    "x": 0.555,
+    "y": 0.305,
+    "r": 0.03
+   },
+   {
+    "kind": "particles",
+    "style": "steam",
+    "x": 0.56,
+    "y": 0.29,
+    "tx": 0.64,
+    "ty": 0.03,
+    "spread": 0.01,
+    "every": 0.22,
+    "life": 2.4,
+    "size": 100,
+    "color": "205,205,200",
+    "opacity": 0.4
+   }
+  ]
+ },
+ "sfx": [
+  {
+   "name": "paper-burn",
+   "at": 0.0,
+   "gain_db": -12,
+   "dur": 2.2,
+   "fade_out": 0.4
+  }
+ ],
+ "sfx_move": {
+  "gulls-water": 2.14,
+  "ship-bell": 2.2
+ }
+}
+ep["motion_lint"] = "warn"   # cut before Rule 0; v2 changes only the opening
 json.dump(ep, open(P / "episode.json", "w", encoding="utf-8"), indent=2, ensure_ascii=False)
 print(f"{len(c.shots)} shots, {len(c.ov)} overlays, {len(c.fx)} sfx, {total} s")

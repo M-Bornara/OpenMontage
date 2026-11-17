@@ -139,5 +139,50 @@ ep["music"] = {"lufs": -22, "selected": "m2", "prompts": {
           "frame drums, in the Persian dastgah Homayoun mode; mysterious and wondering at the start, a light rhythmic "
           "playful middle on the tombak, then a warm, golden, noble close. Authentic Iranian classical sound, no "
           "Western orchestra, no synth, no vocals."}}
+# packaging v2 (plan/packaging-v2-spec.md, C006; built 2026-11-16): applied at build time by scripts/packaging_v2.py
+ep["packaging"] = {
+ "version": 2,
+ "case": 7,
+ "hook": {
+  "anchor": "top"
+ },
+ "frame1": {
+  "motion": {
+   "type": "snap",
+   "from": 1.04,
+   "to": 1.2,
+   "at": 0,
+   "frames": 45,
+   "x": 10.0,
+   "y": 2.4
+  },
+  "fx": [
+   {
+    "kind": "particles",
+    "style": "haze",
+    "x": 0.66,
+    "y": 0.52,
+    "tx": 0.82,
+    "ty": 0.38,
+    "spread": 0.03,
+    "every": 0.12,
+    "life": 1.5,
+    "size": 90,
+    "color": "225,205,160",
+    "opacity": 0.5,
+    "from": 0,
+    "to": 4.5
+   },
+   {
+    "kind": "glint",
+    "x": 0.4,
+    "y": 0.47,
+    "at": 0.15,
+    "size": 46
+   }
+  ]
+ }
+}
+ep["motion_lint"] = "warn"   # cut before Rule 0; v2 changes only the opening
 json.dump(ep, open(P / "episode.json", "w", encoding="utf-8"), indent=2, ensure_ascii=False)
 print(f"{len(c.shots)} shots, {len(c.ov)} overlays, {len(c.fx)} sfx, {total} s")

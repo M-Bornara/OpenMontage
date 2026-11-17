@@ -646,6 +646,8 @@ def step_build(pid, *_):
     (pub / "img").mkdir(parents=True, exist_ok=True)
     (pub / "vid").mkdir(parents=True, exist_ok=True)
     words_raw = json.load(open(p / "artifacts/word_timestamps.json", encoding="utf-8"))
+    import packaging_v2 as packaging
+    ep = packaging.apply(ep, words_raw)   # packaging v2 (C006): cold open, frame-0 motion, hook card, chip, end line
     # "tail_seconds": the picture holds after the last word (user review HCS03: the video ended on "doctor")
     total = round(duration(p / "assets/audio/narration.wav") + ep.get("tail_seconds", 0), 2)
     long = ep.get("format", "short") == "long"
@@ -727,7 +729,8 @@ def step_build(pid, *_):
             raise SystemExit("SAFE ZONE: text under the platform UI (keep y 288-1248):\n  " + "\n  ".join(bad))
         props = {"totalSeconds": total, "shots": shots, "overlays": ep["overlays"], "words": words,
                  "wordsPerPage": 3, "captionY": 1030, "loopSeconds": loop_len(ep),
-                 "captionFont": ep.get("theme", {}).get("font", "montserrat")}   # per-culture caption font
+                 "captionFont": ep.get("theme", {}).get("font", "montserrat"),   # per-culture caption font
+                 **ep.get("_v2", {})}                                            # hook, caseNo, endLine
     json.dump(props, open(rem / "props.json", "w", encoding="utf-8"), indent=1)
     gaps = [(a["id"], b["id"]) for a, b in zip(shots, shots[1:])
             if abs(a["end"] - b["start"]) > 0.02 and b["transitionIn"] != "dissolve"]
@@ -758,6 +761,8 @@ def lead_silence(f: Path, db: float = -40) -> float:
 
 def step_mix(pid, *_):
     ep, p = load_ep(pid), proj(pid)
+    import packaging_v2 as packaging   # v2 adds frame-0 sounds and moves the replaced opening's sounds
+    ep = packaging.apply(ep, json.load(open(p / "artifacts/word_timestamps.json", encoding="utf-8")))
     narr = p / "assets/audio/narration.wav"
     total = round(duration(narr), 2)
     props_path = p / "remotion/props.json"

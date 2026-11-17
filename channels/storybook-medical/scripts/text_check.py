@@ -75,6 +75,9 @@ def sheet(pid: str, ep: dict, words: list[dict], per: int = 3) -> Path | None:
         moments.append((t, " ".join(w["word"] for w in page)))
     for o in ep.get("overlays", []):
         moments.append(((o["start"] + o["end"]) / 2, f"[{o['kind']}] {o.get('text', '')}"))
+    if ep.get("_v2"):   # frame 1 (what people decide on), the hook card mid-way, the end line
+        moments += [(0.0, "[v2] FRAME 1"), (ep["_v2"]["hook"]["until"] / 2, "[v2 hook card]"),
+                    (ep["_v2"]["endLine"]["from"] + 1.0, "[v2 end line]")]
     moments.sort()
     W, H = 216, 384
     tiles = []
@@ -104,11 +107,31 @@ def sheet(pid: str, ep: dict, words: list[dict], per: int = 3) -> Path | None:
     return dst
 
 
+def v2_collisions(ep: dict, words: list[dict]) -> list[str]:
+    """Packaging v2: the hook card, CASE chip and end line against the captions and every overlay."""
+    out = []
+    for kind, label, t0, t1, y0, y1, x0, x1 in ep.get("_v2_boxes", []):
+        for o in ep.get("overlays", []):
+            a, b = max(t0, o["start"]), min(t1, o["end"])
+            (oy0, oy1), (ox0, ox1) = _span(o), _x_span(o)
+            if a < b and y0 < oy1 and oy0 < y1 and x0 < ox1 and ox0 < x1:
+                out.append(f"{a:6.2f}s  {kind} '{label[:30]}' (y {y0:.0f}-{y1:.0f}) overlaps {o['kind']} '{o.get('text', '')}'")
+        for s in ep["shots"]:
+            a, b = max(t0, s["start"]), min(t1, s["end"])
+            c0 = s.get("captionY", 1180)
+            if a < b and any(w["start"] < b and w["end"] > a for w in words) and y0 < c0 + CAPTION_H and c0 < y1:
+                out.append(f"{a:6.2f}s  {kind} '{label[:30]}' (y {y0:.0f}-{y1:.0f}) overlaps the caption (y {c0}) on {s['id']}")
+    return out
+
+
 def check(pid: str) -> list[str]:
     p = REPO / "projects" / pid
     ep = json.load(open(p / "episode.json", encoding="utf-8"))
     words = json.load(open(p / "artifacts/word_timestamps.json", encoding="utf-8"))
-    issues = collisions(ep, words)
+    import packaging_v2 as packaging
+    ep = packaging.apply(ep, words)          # the same v2 timeline the build rendered
+    words = packaging.caption_words(ep, words)
+    issues = collisions(ep, words) + v2_collisions(ep, words)
     for m in issues:
         print("TEXT COLLISION", m)
     dst = sheet(pid, ep, words)

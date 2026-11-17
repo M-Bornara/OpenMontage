@@ -147,5 +147,52 @@ ep["music"] = {"lufs": -22, "selected": "m2", "prompts": {
     "m2": {"sections": 3, "prompt": "Purely instrumental, no voice, no choir, no singing. 1840s Vienna chamber score for a tragic true story: a string quartet in a minor key, "
           "Schubert-like, a slow grave pulse with a faint Hungarian cimbalom colour, building tension in the middle, "
           "a lonely solo violin near the end, then a quiet unresolved close. No modern drums."}}}
+# packaging v2 (plan/packaging-v2-spec.md, C006; built 2026-11-16): applied at build time by scripts/packaging_v2.py
+ep["packaging"] = {
+ "version": 2,
+ "case": 10,
+ "hook": {
+  "anchor": "bottom",
+  "size": 58
+ },
+ "frame1": {
+  "motion": {
+   "type": "snap",
+   "from": 1.1,
+   "to": 1.16,
+   "at": 0,
+   "frames": 40,
+   "x0": 4,
+   "y0": -10,
+   "x": 6,
+   "y": -10
+  },
+  "fx": [
+   {
+    "kind": "particles",
+    "style": "bubbles",
+    "x": 0.4,
+    "y": 0.525,
+    "tx": 0.41,
+    "ty": 0.575,
+    "spread": 0.03,
+    "every": 0.12,
+    "life": 0.5,
+    "size": 9,
+    "opacity": 0.85
+   }
+  ]
+ },
+ "sfx": [
+  {
+   "name": "hands-washing",
+   "at": 0.05,
+   "gain_db": -12,
+   "dur": 3.0,
+   "fade_out": 0.6
+  }
+ ]
+}
+ep["motion_lint"] = "warn"   # cut before Rule 0; v2 changes only the opening
 json.dump(ep, open(P / "episode.json", "w", encoding="utf-8"), indent=2, ensure_ascii=False)
 print(f"{len(c.shots)} shots, {len(c.ov)} overlays, {len(c.fx)} sfx, {total} s")

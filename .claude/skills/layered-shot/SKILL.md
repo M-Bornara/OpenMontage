@@ -35,6 +35,19 @@ Pilot and worked example: HCS07 s3, the mosquito (`editorial/episodes/HCS07-finl
 - **BREATH** (max 1–2 per Short): CAM only, `breath=True`.
 Re-renders of finished Shorts get no new HERO shots, only free ALIVE tricks.
 
+**Then write the shot's motion plan BEFORE any image prompt** (user, 2026-11-16: Finlay was painted before the
+animation existed, so he can't react to the mosquito). Per shot: start pose → end pose for every character and actor,
+what moves and when (on which word), the reaction (who looks, flinches, freezes), the sound. The images are then made
+FOR those poses: the plate empty of what moves, a pose sheet with exactly the start / end / reaction poses, a sprite
+sheet with exactly the states the keys need (each sheet with the character's or object's reference image, so the views
+stay consistent: the mosquito sheet drifted into side views without one). Never paint first and animate what the
+still allows.
+
+**Frame 1 rule (packaging v2, plan/packaging-v2-spec.md):** the Short's first shot shows the danger or the strange act
+ALREADY HAPPENING and something moves from frame 0 (an actor, a spark, dust, a fast camera start; never a slow
+push-in or an establishing shot). The hook card sits on it from frame 0, so its layout leaves the card's band free
+(top y 360+ or bottom up to 1248). Usually the hook shot is one of the 2–3 HERO shots.
+
 
 For each shot, one row per layer. Decide what stays painted and what moves:
 

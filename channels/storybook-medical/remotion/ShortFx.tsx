@@ -34,6 +34,9 @@ export type ShotFx =
   | { kind: "travel"; points: [number, number][]; at: number; dur: number; colors?: [string, string]; width?: number }
   /** a soft light blooms at a point and breathes */
   | { kind: "glow"; x: number; y: number; r: number; at: number; dur?: number; color?: string; strength?: number }
+  /** a burning point (a lit fuse, a wick): a flickering hot core + glow, and small sparks that arc out and fall.
+   *  Live from frame 0 unless `from` is given (packaging v2: something moves in frame 1). r = glow radius (of 1080). */
+  | { kind: "spark"; x: number; y: number; r?: number; from?: number; to?: number; every?: number; color?: string; sparks?: boolean }
   /** a heart monitor trace: a sweep writes left -> right and wraps; flat until beatAt, then a heartbeat every period */
   | { kind: "ecg"; x0: number; x1: number; y: number; amp: number; beatAt: number; period?: number; sweep?: number;
       color?: string; width?: number }
@@ -211,6 +214,39 @@ const Glow: React.FC<{ fx: Extract<ShotFx, { kind: "glow" }> }> = ({ fx }) => {
     background: `radial-gradient(circle, rgba(${c},${k}) 0%, rgba(${c},0) 70%)`, mixBlendMode: "screen" }} />;
 };
 
+const Spark: React.FC<{ fx: Extract<ShotFx, { kind: "spark" }>; id: string }> = ({ fx, id }) => {
+  const f = useCurrentFrame();
+  const s = f / FPS;
+  if (s < (fx.from ?? 0) || (fx.to !== undefined && s > fx.to)) return null;
+  // flicker = a sum of incommensurate sines: lively but smooth (no per-frame random jumps)
+  const fl = 0.78 + 0.12 * Math.sin(f * 1.7) + 0.07 * Math.sin(f * 3.1 + 1) + 0.05 * Math.sin(f * 0.53);
+  const c = fx.color ?? "255,170,70";
+  const r = (fx.r ?? 0.05) * 1080 * (0.9 + 0.15 * fl);
+  const X = fx.x * 1080, Y = fx.y * 1920;
+  const sparks: React.ReactNode[] = [];
+  if (fx.sparks !== false) {
+    const every = Math.max(1, Math.round((fx.every ?? 0.07) * FPS)), life = 14;
+    for (let b = Math.floor((f - life) / every); b <= Math.floor(f / every); b++) {
+      const age = f - b * every;
+      if (age < 0 || age > life) continue;
+      const a = random(`${id}a${b}`) * Math.PI * 2, v = 5 + 9 * random(`${id}v${b}`);
+      const x = X + Math.cos(a) * v * age, y = Y + Math.sin(a) * v * age * 0.7 + 0.45 * age * age;   // arc + gravity
+      const o = 1 - age / life;
+      sparks.push(<div key={b} style={{ position: "absolute", left: x - 3, top: y - 3, width: 6, height: 6, borderRadius: 3,
+        background: `rgba(255,236,170,${o})`, boxShadow: `0 0 8px rgba(${c},${o})` }} />);
+    }
+  }
+  return (
+    <AbsoluteFill style={{ mixBlendMode: "screen" }}>
+      <div style={{ position: "absolute", left: X - r * 3, top: Y - r * 3, width: r * 6, height: r * 6, borderRadius: "50%",
+        background: `radial-gradient(circle, rgba(${c},${0.55 * fl}) 0%, rgba(${c},0) 65%)` }} />
+      <div style={{ position: "absolute", left: X - r * 0.4, top: Y - r * 0.4, width: r * 0.8, height: r * 0.8, borderRadius: "50%",
+        background: `radial-gradient(circle, rgba(255,250,225,${fl}) 0%, rgba(${c},${0.8 * fl}) 45%, rgba(${c},0) 100%)` }} />
+      {sparks}
+    </AbsoluteFill>
+  );
+};
+
 // ── heart monitor ──────────────────────────────────────────────────────────────────────────────────────────
 const ECG_SHAPE: [number, number][] = [[0, 0], [0.05, 0.1], [0.09, 0], [0.12, -0.18], [0.155, 1], [0.19, -0.4], [0.22, 0],
   [0.36, 0], [0.43, 0.24], [0.5, 0], [1, 0]];
@@ -345,6 +381,7 @@ export const ShotFxLayer: React.FC<{ fx: ShotFx[]; src: string; shotId: string }
           case "tint": return <Tint key={id} fx={e} />;
           case "travel": return <Travel key={id} fx={e} />;
           case "glow": return <Glow key={id} fx={e} />;
+          case "spark": return <Spark key={id} fx={e} id={id} />;
           case "ecg": return <Ecg key={id} fx={e} />;
           case "glint": return <Glint key={id} fx={e} />;
           case "lcd": return <Lcd key={id} fx={e} />;
