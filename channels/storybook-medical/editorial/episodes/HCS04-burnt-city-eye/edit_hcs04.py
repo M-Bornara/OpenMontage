@@ -139,11 +139,14 @@ ep["music"] = {"lufs": -22, "selected": "m2", "prompts": {
           "frame drums, in the Persian dastgah Homayoun mode; mysterious and wondering at the start, a light rhythmic "
           "playful middle on the tombak, then a warm, golden, noble close. Authentic Iranian classical sound, no "
           "Western orchestra, no synth, no vocals."}}
-# packaging v2 (plan/packaging-v2-spec.md, C006; built 2026-11-16): applied at build time by scripts/packaging_v2.py
+# packaging v2 (plan/packaging-v2-spec.md, C006; built 2026-11-16): applied at build time by scripts/packaging_v2.py.
+# v2.1 card approved 2026-11-17 (plan/hook-cards-v2.1.md): no "golden eye" on the card (eye vs eyepatch is DISPUTED).
+# Same day: "in Iran" cut from spoken line 1 (no re-voice; country out of the hook, facts unchanged in the description).
 ep["packaging"] = {
  "version": 2,
  "case": 7,
  "hook": {
+  "card": "She wore *gold* / in her eye socket",
   "anchor": "top"
  },
  "frame1": {

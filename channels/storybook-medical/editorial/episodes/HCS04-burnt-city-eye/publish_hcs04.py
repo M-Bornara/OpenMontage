@@ -27,8 +27,10 @@ DESCRIPTION = (
     "an eyepatch, not an eye. Either way, 5,000 years ago, someone made her a golden eye.\n\n"
     "More true medical stories: \"The Man With a Window Into His Stomach\" (linked above).")
 
-CAPTION = ("5,000 years ago, a woman in Iran was buried wearing a golden eye. Archaeologists still argue about what it "
-           "was. #history #archaeology #truestory #oddlymatt")
+# user 2026-11-17: start with the eye, not the country (the description keeps Shahr-e Sukhteh, south-east Iran)
+CAPTION = ("A golden eye, worn in a woman's eye socket 5,000 years ago. Archaeologists still argue about what it was. "
+           "#history #archaeology #truestory #oddlymatt")
+HOOK_CARD = "She wore *gold* / in her eye socket"   # C006 v2.1, approved 2026-11-17 (plan/hook-cards-v2.1.md)
 
 
 def main():
@@ -37,8 +39,10 @@ def main():
     ep["publish"] = {
         # the approved 4K s5 frame (her face, the golden eye in her left socket). Title in the TOP band (v1 at 1450 was cut
         # by the 3:4 / 4:5 crops and sat under TikTok's UI); the picture moves down so her face is under the title
+        # kicker (user 2026-11-17): the place's own name, not the country; never "Persia" (anachronistic for 2900 BC)
         "cover": {"image": "proj:assets/images/keyframes/s5.png", "title": "Buried With a Golden Eye",
-                  "accent": ["GOLDEN", "EYE"], "kicker": "IRAN · 2900 BC", "textY": 300, "scale": 1.1, "x": 2, "y": 12},
+                  "accent": ["GOLDEN", "EYE"], "kicker": "BURNT CITY · 2900 BC", "textY": 300, "scale": 1.1, "x": 2, "y": 12},
+        "hook_card": HOOK_CARD,
         "youtube": {
             "title": "She Was Buried With a Golden Eye", "description": DESCRIPTION, "sources": SOURCES,
             "tags": ["Shahr-e Sukhteh", "Burnt City", "golden eye", "artificial eye", "ancient prosthetic",
@@ -52,6 +56,8 @@ def main():
         **{plat: {"caption": CAPTION} for plat in ("tiktok", "instagram", "facebook")},
     }
     json.dump(ep, open(p, "w", encoding="utf-8"), indent=2, ensure_ascii=False)
+    if "--texts-only" in sys.argv:   # episode.json only (then `episode.py cover`): short.mp4 stays until the render is approved
+        return
     subprocess.run([sys.executable, "episode.py", "publish", PID], cwd=SCRIPTS, check=True)
 
 

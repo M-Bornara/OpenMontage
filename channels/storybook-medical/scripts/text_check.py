@@ -12,6 +12,7 @@ the text placements after each change"). Runs automatically at the end of `episo
 from __future__ import annotations
 
 import json
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -124,15 +125,38 @@ def v2_collisions(ep: dict, words: list[dict]) -> list[str]:
     return out
 
 
+def hook_card_problems(ep: dict, p: Path) -> list[str]:
+    """Packaging v2.1 (C006 v2.1, 2026-11-17): the card is <= 8 words, <= 2 lines, its box <= 15% of the height, and
+    its text is exactly the approved `hook_card:` line in renders/deliverables/publish.md."""
+    import packaging_v2 as packaging
+    pk = packaging.config(ep)
+    if not pk:
+        return []
+    card = (pk.get("hook") or {}).get("card", "")
+    out = [f"hook card {card!r}: {m}" for m in packaging.card_problems(card)] if card else ["hook card: none in packaging"]
+    md = p / "renders/deliverables/publish.md"
+    m = re.search(r"^\**hook_card:\**\s*(.+)$", md.read_text(encoding="utf-8"), re.M) if md.exists() else None
+    if not m:
+        out.append(f"hook card: no `hook_card:` line in {md.relative_to(REPO)}")
+    elif packaging.card_plain(m.group(1).strip().strip("`\"'")) != packaging.card_plain(card):
+        out.append(f"hook card {card!r} is not the approved hook_card: {m.group(1).strip()!r}")
+    return out
+
+
 def check(pid: str) -> list[str]:
     p = REPO / "projects" / pid
     ep = json.load(open(p / "episode.json", encoding="utf-8"))
     words = json.load(open(p / "artifacts/word_timestamps.json", encoding="utf-8"))
     import packaging_v2 as packaging
+    card_issues = hook_card_problems(ep, p)  # before apply(), which stops on a bad card
+    for m in card_issues:
+        print("HOOK CARD FAIL", m)
+    if any("words" in m or "lines" in m or "box" in m or "none" in m for m in card_issues):
+        return card_issues
     ep = packaging.apply(ep, words)          # the same v2 timeline the build rendered
     words = packaging.caption_words(ep, words)
-    issues = collisions(ep, words) + v2_collisions(ep, words)
-    for m in issues:
+    issues = card_issues + collisions(ep, words) + v2_collisions(ep, words)
+    for m in issues[len(card_issues):]:
         print("TEXT COLLISION", m)
     dst = sheet(pid, ep, words)
     print(f"text check: {len(issues)} collision(s); review sheet -> {dst}" if dst else
@@ -141,4 +165,5 @@ def check(pid: str) -> list[str]:
 
 
 if __name__ == "__main__":
-    check(sys.argv[1])
+    found = check(sys.argv[1])
+    sys.exit(1 if any(m.startswith("hook card") for m in found) else 0)

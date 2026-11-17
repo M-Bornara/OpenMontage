@@ -18,6 +18,7 @@ Steps (in order):
     credits     renders/CREDITS.txt for the video description                            (free)
     publish     renders/deliverables/: looping short.mp4, cover.jpg + crop check, captions.srt,
                 per-platform titles/captions, upload checklist, credits                  (free)
+    cover       only cover.jpg + cover-crops.jpg (kicker/title change; short.mp4 untouched) (free)
     thumbs      long-video thumbnails A/B/C + phone-size check (plan/thumbnail-craft.md)  (~$0.07 each, batch)
     covers      Shorts cover poster art, 1 per Short                                      (~$0.07, batch)
     cost        print the paid-call ledger (episode, then the whole channel vs the budget gates)
@@ -885,7 +886,9 @@ def step_render(pid, *flags):
         if ep.get("format") == "short":
             # user 2026-11-15: "re-evaluate the text placements after each change": collisions + review/text_sheet.jpg
             import text_check
-            text_check.check(pid)
+            bad = [m for m in text_check.check(pid) if m.startswith("hook card")]
+            if bad:   # C006 v2.1: a card that isn't the approved hook_card (or breaks the size rules) fails the render
+                raise SystemExit("HOOK CARD FAIL: " + " | ".join(bad))
 
 
 def step_credits(pid, *_):
@@ -1051,9 +1054,18 @@ def step_publish(pid, *_):
     out = p / "renders/deliverables"
     out.mkdir(parents=True, exist_ok=True)
     shutil.copy(p / "renders/final.mp4", out / "short.mp4")
+    step_cover(pid)
+    _publish_texts(pid, ep, pub, out)
 
+
+def step_cover(pid, *_):
+    """Only the cover (cover.jpg + cover-crops.jpg) from episode.json publish.cover: a kicker or title change without
+    touching short.mp4 or a hand-edited publish.md."""
+    ep, p = load_ep(pid), proj(pid)
+    out = p / "renders/deliverables"
+    out.mkdir(parents=True, exist_ok=True)
     # cover via the Remotion StorybookCover still (same fonts/colours as the video)
-    c = pub["cover"]
+    c = ep["publish"]["cover"]
     rem = p / "remotion"
     for f in KIT_REMOTION:
         shutil.copy(KIT / "remotion" / f, rem / f)
@@ -1071,7 +1083,11 @@ def step_publish(pid, *_):
     Image.open(png).convert("RGB").save(out / "cover.jpg", "JPEG", quality=88, optimize=True)
     png.unlink()
     _cover_crops(out / "cover.jpg", out / "cover-crops.jpg")
+    print(f"cover -> {out / 'cover.jpg'} (+ cover-crops.jpg), kicker {c.get('kicker', '')!r}")
 
+
+def _publish_texts(pid, ep, pub, out):
+    p = proj(pid)
     _write_srt(json.load(open(p / "artifacts/word_timestamps.json", encoding="utf-8")), out / "captions.srt")
     step_credits(pid)
     shutil.copy(p / "renders/CREDITS.txt", out / "CREDITS.txt")
@@ -1080,8 +1096,10 @@ def step_publish(pid, *_):
     yt = pub["youtube"]
     desc = "\n\n".join(x for x in (yt["description"].strip(), yt.get("sources", "").strip(), credits.strip(), DISCLOSURE,
                                     " ".join(yt.get("hashtags", []))) if x)
-    md = [f"# {ep['title']}", "", f"Length {duration(out / 'short.mp4'):.1f}s · 1080×1920 · -14 LUFS" + (" · loops seamlessly" if loop_len(ep) else ""), "",
-          "## YouTube Shorts", f"**Title:** {yt['title']}", "", "**Description:**", "```", desc, "```",
+    md = [f"# {ep['title']}", "", f"Length {duration(out / 'short.mp4'):.1f}s · 1080×1920 · -14 LUFS" + (" · loops seamlessly" if loop_len(ep) else ""), ""]
+    if pub.get("hook_card"):   # C006 v2.1: the approved frame-1 card; text_check fails a render whose card differs
+        md += [f"hook_card: {pub['hook_card']}", ""]
+    md += ["## YouTube Shorts", f"**Title:** {yt['title']}", "", "**Description:**", "```", desc, "```",
           f"**Tags:** {', '.join(yt.get('tags', []))}", "", f"**Pinned comment:** {yt.get('pinned_comment', '')}", ""]
     md += studio_settings("short", yt.get("playlists", "the series playlist"), yt.get("related_video"), yt.get("schedule"))
     for plat in ("tiktok", "instagram", "facebook"):

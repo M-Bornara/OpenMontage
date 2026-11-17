@@ -1,6 +1,8 @@
 import React from "react";
 import {
   AbsoluteFill,
+  continueRender,
+  delayRender,
   Easing,
   Freeze,
   Img,
@@ -114,9 +116,10 @@ export interface StorybookShortProps {
   loopSeconds?: number;
   /** Theme font for captions and stamps: "montserrat" (default), "lalezar" (Persian), "im-fell" (17th-18th c. English). */
   captionFont?: string;
-  /** Packaging v2 (plan/packaging-v2-spec.md, C006): the whole spoken hook as ONE card from frame 0 until `until` s
-   *  (each word lights as it is spoken); the word-by-word captions start after it. `y` = the card's top. */
-  hook?: { until: number; y?: number; text?: string; anchor?: "top" | "bottom"; display?: string[]; size?: number };
+  /** Packaging v2.1 (plan/packaging-v2-spec.md §1, C006 v2.1): the approved teaser card, `lines` = max 2 lines, the
+   *  amber word marked *like this*. Words pop in, the card holds until `until` s (<= 2.5) and collapses into the CASE
+   *  chip; the word-by-word captions start after it. `y` = the card's top (anchor "top"); "bottom" sits on y 1248. */
+  hook?: { until: number; lines: string[]; y?: number; anchor?: "top" | "bottom"; maxSize?: number };
   /** Packaging v2: the corner chip "CASE 07" for the whole Short (top-left of the safe area). */
   caseNo?: number;
   /** Packaging v2: the end line on the final held frame (captions are done by then). */
@@ -497,50 +500,77 @@ const Captions: React.FC<{ words: Word[]; per: number; y: number; shots: Shot[];
 
 // ── Packaging v2: hook card, case chip, end line ───────────────────────────
 
-// font size for the hook card from its length: the whole line must fit the safe width in <= 5 lines
-export const hookFontSize = (chars: number) => (chars <= 40 ? 84 : chars <= 64 ? 74 : chars <= 90 ? 64 : 56);
+// v2.1 hook card (2026-11-17; v2.0's 5-line narration card spoiled endings). Box: padding 22 + 26, the 14 px amber
+// edge + 28 / 30 side padding; the font is fitted so the longest line fills the safe width, capped at maxSize (2 lines
+// at 100 px = 268 px <= 15% of 1920; scripts/packaging_v2.py checks the same bound).
+const HOOK_POP = 0.6;       // s: the words pop in over this
+const HOOK_COLLAPSE = 0.3;  // s: the card shrinks into the CASE chip over the last 0.3 s
+const CARD_PAD_Y = 48;
+const CARD_INNER = SAFE.right - SAFE.left - 14 - 28 - 30;
 
-const HookCard: React.FC<{ words: Word[]; display?: string[]; text?: string; dur: number; y: number; anchor?: "top" | "bottom"; size?: number }> = ({
-  words, display, text, dur, y, anchor, size }) => {
+type CardWord = { text: string; amber: boolean };
+const parseLine = (line: string): CardWord[] =>
+  line.trim().split(/\s+/).map((w) => ({ text: w.replace(/\*/g, "").toUpperCase(), amber: w.startsWith("*") }));
+
+// width of a line at 100 px, measured with the real font in the renderer's own canvas (no estimate)
+const lineWidth100 = (ws: CardWord[], family: string, weight: number) => {
+  const ctx = document.createElement("canvas").getContext("2d");
+  if (!ctx) return ws.map((w) => w.text).join(" ").length * 68;
+  ctx.font = `${weight} 100px "${family}"`;
+  return ws.reduce((s, w) => s + ctx.measureText(w.text).width, 0) + (ws.length - 1) * 28;
+};
+
+const HookCard: React.FC<{ lines: string[]; dur: number; y: number; anchor?: "top" | "bottom"; maxSize?: number }> = ({
+  lines, dur, y, anchor, maxSize }) => {
   const theme = React.useContext(ThemeFont);
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const t = frame / fps;
-  // frame 0 is already fully readable (it is the frame people decide on); the card settles from 0.94 and leaves fast
-  const settle = spring({ frame, fps, config: { damping: 14, stiffness: 170, mass: 0.6 } });
-  const out = interpolate(frame, [dur - 5, dur], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  // `display`: the narration's own tokens with punctuation (the caption words have it stripped), same order and count
-  const items = text ? text.split(" ").map((w) => ({ word: w, start: -1, end: -1, punch: false }))
-    : words.map((w, i) => ({ ...w, word: display && display.length === words.length ? display[i] : w.word }));
-  const fs = (size ?? hookFontSize(items.map((w) => w.word).join(" ").length)) * theme.scale;
+  // measure only once the font is really loaded (a fallback font would give the wrong size on frame 0)
+  const [handle] = React.useState(() => delayRender("hook card font"));
+  const [ready, setReady] = React.useState(false);
+  React.useEffect(() => {
+    document.fonts.load(`${theme.weight} 100px "${theme.family}"`).then(() => { setReady(true); continueRender(handle); },
+      () => { setReady(true); continueRender(handle); });
+  }, [handle, theme.family, theme.weight]);
+  const parsed = lines.map(parseLine);
+  const widest = ready ? Math.max(...parsed.map((ws) => lineWidth100(ws, theme.family, theme.weight))) : 1e9;
+  const fs = Math.floor(Math.min(maxSize ?? 100, (100 * CARD_INNER) / widest));
+  const h = parsed.length * fs * 1.1 + CARD_PAD_Y;
+  const top = anchor === "bottom" ? SAFE.bottom - h : y;
+  // pop: one word after the other over HOOK_POP s; the first word is already in on frame 0 (the frame people decide on)
+  const n = parsed.flat().length;
+  const step = n > 1 ? ((HOOK_POP - 0.15) * fps) / (n - 1) : 0;
+  const panel = spring({ frame: frame + 2, fps, config: { damping: 13, stiffness: 220, mass: 0.5 } });
+  // collapse: shrink toward the chip's corner (x 65, y 288) and fade into it
+  const c = interpolate(frame, [dur - HOOK_COLLAPSE * fps, dur], [0, 1],
+    { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.inOut(Easing.cubic) });
+  const shrink = 1 - c * 0.78;
+  let k = -1;
   return (
-    <AbsoluteFill style={{ left: SAFE.left, width: SAFE.right - SAFE.left, opacity: out,
-      ...(anchor === "bottom" ? { top: "auto", bottom: 1920 - SAFE.bottom, justifyContent: "flex-end" } : { top: y, height: "auto" }) }}>
-      <div
-        style={{
-          background: "rgba(34,38,42,0.84)",
-          borderLeft: `14px solid ${AMBER}`,
-          borderRadius: 16,
-          padding: "22px 30px 26px 28px",
-          boxShadow: "0 10px 0 rgba(0,0,0,0.3)",
-          transform: `scale(${interpolate(settle, [0, 1], [0.94, 1]) * interpolate(out, [0, 1], [0.96, 1])})`,
-          transformOrigin: "50% 0%",
-          display: "flex",
-          flexWrap: "wrap",
-          gap: `0 ${Math.round(fs * 0.28)}px`,
-        }}
-      >
-        {items.map((w, i) => {
-          const active = w.start >= 0 && t >= w.start && t < w.end + 0.05;
-          return (
-            <span key={i} style={{ fontFamily: theme.family, fontWeight: theme.weight, fontSize: fs, lineHeight: 1.1,
-              textTransform: "uppercase", color: active ? (w.punch ? PUNCH : AMBER) : BONE, display: "inline-block" }}>
-              {w.word}
-            </span>
-          );
-        })}
+    <div style={{ position: "absolute", left: SAFE.left, top, transformOrigin: "0 0",
+      transform: `translateY(${(SAFE.top - top) * c}px) scale(${interpolate(panel, [0, 1], [0.9, 1]) * shrink})`,
+      opacity: interpolate(c, [0.55, 1], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) }}>
+      <div style={{ background: "rgba(34,38,42,0.86)", borderLeft: `14px solid ${AMBER}`, borderRadius: 16,
+        padding: "22px 30px 26px 28px", boxShadow: "0 10px 0 rgba(0,0,0,0.3)", visibility: ready ? "visible" : "hidden" }}>
+        {parsed.map((ws, li) => (
+          <div key={li} style={{ whiteSpace: "nowrap", lineHeight: 1.1, height: fs * 1.1 }}>
+            {ws.map((w, wi) => {
+              k += 1;
+              const local = frame + 2 - k * step;
+              const pop = spring({ frame: local, fps, config: { damping: 11, stiffness: 260, mass: 0.45 } });
+              return (
+                <span key={wi} style={{ display: "inline-block", fontFamily: theme.family, fontWeight: theme.weight, fontSize: fs,
+                  color: w.amber ? AMBER : BONE, marginRight: wi < ws.length - 1 ? fs * 0.28 : 0, transformOrigin: "50% 80%",
+                  opacity: interpolate(local, [0, 2], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }),
+                  transform: `scale(${interpolate(pop, [0, 1], [0.45, 1])})` }}>
+                  {w.text}
+                </span>
+              );
+            })}
+          </div>
+        ))}
       </div>
-    </AbsoluteFill>
+    </div>
   );
 };
 
@@ -616,8 +646,7 @@ export const StorybookShort: React.FC<StorybookShortProps> = ({ totalSeconds, sh
           per={wordsPerPage ?? 3} y={captionY ?? 1180} shots={shots} until={endLine?.from} />
         {hook ? (
           <Sequence from={0} durationInFrames={Math.max(1, Math.round(hook.until * FPS))}>
-            <HookCard words={words.filter((w) => w.start < hook.until - 0.05)} display={hook.display} text={hook.text} dur={Math.round(hook.until * FPS)}
-              y={hook.y ?? 360} anchor={hook.anchor} size={hook.size} />
+            <HookCard lines={hook.lines} dur={Math.round(hook.until * FPS)} y={hook.y ?? 360} anchor={hook.anchor} maxSize={hook.maxSize} />
           </Sequence>
         ) : null}
         {caseNo ? <CaseChip n={caseNo} /> : null}

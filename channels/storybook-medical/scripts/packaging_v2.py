@@ -5,15 +5,18 @@ Applied at BUILD time from the episode's "packaging" block, so edit_<ep>.py stay
 
     "packaging": {
       "version": 2, "case": 7,
-      "hook": {"until": 4.9, "y": 360, "anchor": "top"},     # card from frame 0 to `until` s (default: the first sentence)
+      "hook": {"card": "She wore *gold* / in her eye socket", "anchor": "top"},   # v2.1 teaser card; `until` optional
       "open": {"source": "...s8.png", "until": 3.9, "motion": {...}, "fx": [...]},   # an existing action shot as frame 1
       "frame1": {"motion": {...}, "fx": [...]},              # motion from frame 0 on the (new) first shot
       "sfx": [{"name": "metal-clank", "at": 0.1, "gain_db": -8}], "sfx_move": {"gulls-water": 2.2},
       "keep_overlays": false                                   # overlays starting inside the hook window are dropped
     }
 
-The three changes: 1. the whole spoken hook as ONE card from frame 0 (each word lights as it is spoken), the word-by-word
-captions start after it; something moves in frame 0 and frame 0 shows the strange act already happening. 2. the CASE NN
+The three changes: 1. (v2.1, 2026-11-17) a short teaser card, 4-8 words on max 2 lines with one amber word, approved per
+episode and written in publish.md `hook_card:`; its words pop in, it holds to the end of the spoken hook (max 2.5 s) and
+collapses into the CASE chip, then the word-by-word captions start; something moves in frame 0 and frame 0 shows the
+danger or the strange act already happening. (v2.0 put the whole narration sentence on a 5-line card: spoiled endings,
+showed Snow's overstatement as fact.) 2. the CASE NN
 chip for the whole Short (top-left of the safe area; text tops above CHIP_BOTTOM move down). 3. the end line on the final
 held frame.
 """
@@ -21,6 +24,7 @@ from __future__ import annotations
 
 import copy
 import math
+import re
 
 END_LINE = "More strange cases: follow Oddly Matt"
 SAFE_TOP, SAFE_BOTTOM, SAFE_LEFT, SAFE_RIGHT = 288, 1248, 65, 888
@@ -29,7 +33,6 @@ CHIP_BOX = (SAFE_LEFT, SAFE_TOP, 275, 346)
 END_LINE_H = 150
 TAIL_ADD = 0.7             # extra held seconds so the end line is read (1.8 s after the last word -> 2.5 s)
 TIME_KEYS = ("at", "from", "to", "beatAt")
-FONT_SCALE = {"montserrat": 1.0, "lalezar": 1.08, "im-fell": 1.12}
 
 
 def config(ep: dict) -> dict | None:
@@ -37,27 +40,60 @@ def config(ep: dict) -> dict | None:
     return pk if pk.get("version") == 2 and ep.get("format", "short") == "short" else None
 
 
-def hook_font_size(chars: int) -> int:     # = StorybookShort hookFontSize
-    return 84 if chars <= 40 else 74 if chars <= 64 else 64 if chars <= 90 else 56
+# v2.1 hook card (2026-11-17): a short teaser, not the narration sentence. Written "She wore *gold* / in her eye socket":
+# "/" breaks the line, *word* is the one amber word. The same string is publish.md `hook_card:` (text_check compares).
+HOOK_MAX_S = 2.5           # the card collapses into the chip by then (or when the spoken hook ends, if sooner)
+HOOK_MAX_FS = 100          # px; StorybookShort fits each line to the width, never above this
+HOOK_PAD = 48              # card padding top + bottom (StorybookShort HookCard)
+HOOK_MAX_H = int(1920 * 0.15)
+HOOK_MAX_WORDS, HOOK_MAX_LINES = 8, 2
 
 
-def hook_words(words: list[dict], until: float) -> list[dict]:
-    return [w for w in words if w["start"] < until - 0.05]
+def card_lines(card: str) -> list[str]:
+    return [ln.strip() for ln in card.split("/") if ln.strip()]
 
 
-def hook_height(text: str, font: str = "montserrat", size: int | None = None) -> int:
-    """Estimated card height (px of 1920): Montserrat Black capitals average ~0.68 em with the word gap
-    (checked on the HCS09 render: estimate 456, real ~445)."""
-    fs = (size or hook_font_size(len(text))) * FONT_SCALE.get(font, 1.0)
-    inner = SAFE_RIGHT - SAFE_LEFT - 14 - 58
-    lines, cur = 1, 0.0
-    for w in text.upper().split():
-        ww = len(w) * fs * 0.68
-        if cur and cur + fs * 0.28 + ww > inner:
-            lines, cur = lines + 1, ww
-        else:
-            cur += (fs * 0.28 if cur else 0) + ww
-    return int(math.ceil(lines * fs * 1.1 + 48))
+def card_words(card: str) -> list[str]:
+    return [w for ln in card_lines(card) for w in ln.split() if re.sub(r"[^\w]", "", w)]
+
+
+def card_amber(card: str) -> list[str]:
+    return [w.strip("*.,!?:;") for w in card_words(card) if w.startswith("*")]
+
+
+def card_plain(card: str) -> str:
+    """For comparing: no marks, no line breaks, one space, lower case."""
+    return " ".join(card.replace("*", "").replace("/", " ").split()).lower()
+
+
+def card_height(card: str) -> int:
+    """Upper bound of the card box (the font never goes above HOOK_MAX_FS)."""
+    return int(math.ceil(len(card_lines(card)) * HOOK_MAX_FS * 1.1 + HOOK_PAD))
+
+
+def card_problems(card: str) -> list[str]:
+    out = []
+    n, ln, amb = len(card_words(card)), len(card_lines(card)), card_amber(card)
+    if not 4 <= n <= HOOK_MAX_WORDS:
+        out.append(f"{n} words (4-{HOOK_MAX_WORDS})")
+    if ln > HOOK_MAX_LINES:
+        out.append(f"{ln} lines (max {HOOK_MAX_LINES})")
+    if len(amb) > 1:
+        out.append(f"{len(amb)} amber words (max 1)")
+    if card_height(card) > HOOK_MAX_H:
+        out.append(f"box {card_height(card)} px > 15% ({HOOK_MAX_H})")
+    return out
+
+
+def hook_until(words: list[dict], cap: float = HOOK_MAX_S) -> float:
+    """The spoken hook's end if it is said within `cap`; otherwise the last phrase break (a word starting after a
+    gap of >= 0.1 s) at or before `cap`, so the captions take over on a clean word."""
+    end = first_sentence_end(words)
+    if end <= cap:
+        return end
+    starts = [(w["start"], w["start"] - (words[i - 1]["end"] if i else 0.0)) for i, w in enumerate(words) if w["start"] <= cap]
+    breaks = [s for s, gap in starts[1:] if gap >= 0.1]
+    return round((breaks or [s for s, _ in starts[1:]] or [cap])[-1], 2)
 
 
 def first_sentence_end(words: list[dict]) -> float:
@@ -117,15 +153,19 @@ def apply(ep: dict, words: list[dict]) -> dict:
             if k in f1:
                 s0[k] = f1[k]
 
-    # 1c. the hook card
+    # 1c. the hook card (v2.1: the approved teaser card, never the narration sentence)
     hk = pk.get("hook") or {}
-    until = hk.get("until") or first_sentence_end(words)
-    hw = hook_words(words, until)
-    text = hk.get("text") or " ".join(w["word"] for w in hw)
-    font = (ep.get("theme") or {}).get("font", "montserrat")
-    h = hook_height(text, font, hk.get("size"))
+    card = hk.get("card")
+    if not card:
+        raise SystemExit("packaging hook: no 'card' (v2.1: the approved hook_card text, plan/hook-cards-v2.1.md)")
+    bad = card_problems(card)
+    if bad:
+        raise SystemExit(f"packaging hook card {card!r}: " + "; ".join(bad))
+    until = min(hk.get("until") or hook_until(words), HOOK_MAX_S)
+    h = card_height(card)
     anchor = hk.get("anchor", "top")
     y = hk.get("y", CHIP_BOTTOM + 4) if anchor == "top" else SAFE_BOTTOM - h
+    text = card_plain(card).upper()
     if not pk.get("keep_overlays"):
         ep["overlays"] = [o for o in ep["overlays"] if o["start"] >= until - 0.05 or o["kind"] == "clock"]
 
@@ -151,9 +191,7 @@ def apply(ep: dict, words: list[dict]) -> dict:
     end_y = pk.get("end_y", shots[-1].get("captionY", 1030))
 
     ep["shots"] = shots
-    # the card is read as one sentence: it keeps the narration's punctuation ("5,000 years ago,"); captions strip it
-    ep["_v2"] = {"hook": {"until": until, "y": y, "anchor": anchor, "display": [w["word"] for w in hw],
-                          **{k: hk[k] for k in ("text", "size") if hk.get(k)}},
+    ep["_v2"] = {"hook": {"until": until, "y": y, "anchor": anchor, "lines": card_lines(card), "maxSize": HOOK_MAX_FS},
                  "caseNo": pk["case"], "endLine": {"text": END_LINE, "from": end_from, "y": end_y}}
     ep["_v2_boxes"] = [   # for text_check: (kind, label, t0, t1, y0, y1, x0, x1)
         ("hook", text, 0.0, until, y, y + h, SAFE_LEFT, SAFE_RIGHT),
