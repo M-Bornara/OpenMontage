@@ -562,7 +562,8 @@ const EndLine: React.FC<{ text: string; y: number }> = ({ text, y }) => {
       <div style={{ background: "rgba(34,38,42,0.82)", borderRadius: 16, padding: "12px 34px 16px", display: "flex", flexDirection: "column",
         alignItems: "center", boxShadow: "0 8px 0 rgba(0,0,0,0.3)" }}>
         <div style={{ fontFamily, fontWeight: 800, fontSize: 46, color: BONE, letterSpacing: 2, textAlign: "center" }}>{a}</div>
-        {b ? <div style={{ fontFamily, fontWeight: 900, fontSize: 58, color: AMBER, letterSpacing: 3, textAlign: "center" }}>{b.toUpperCase()}</div> : null}
+        {b ? <div style={{ fontFamily, fontWeight: 900, fontSize: 54, color: AMBER, letterSpacing: 2, textAlign: "center",
+          whiteSpace: "nowrap" }}>{b.toUpperCase()}</div> : null}
       </div>
     </AbsoluteFill>
   );
