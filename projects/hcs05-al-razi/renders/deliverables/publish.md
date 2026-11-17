@@ -1,6 +1,6 @@
 # 1,100 Years Ago, a Doctor Refused to Treat Patients on Purpose
 
-Length 51.8s · 1080×1920 · -14 LUFS · loops seamlessly
+Length 52.5s · 1080×1920 · -14 LUFS · loops seamlessly
 
 hook_card: one group bled. / one left *alone*.
 

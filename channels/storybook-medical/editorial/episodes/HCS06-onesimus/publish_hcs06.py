@@ -34,6 +34,8 @@ DESCRIPTION = (
     "This is a history story, not medical advice.\n\n"
     "More true medical stories: \"The Man With a Window Into His Stomach\" (linked above).")
 
+# NOTE (2026-11-17): publish.md now has per-platform TikTok/IG/FB captions + first comments written by hand; running
+# episode.py publish (this script without --texts-only) would replace them with this single caption. Carry them over first.
 CAPTION = ("1721: smallpox hit Boston. The idea that saved lives came from an enslaved man named Onesimus. "
            "#history #blackhistory #medicalhistory #oddlymatt")
 HOOK_CARD = "A *grenade* through / the window. Why?"   # C006 v2.1, card A picked 2026-11-17 (plan/hook-cards-v2.1.md)

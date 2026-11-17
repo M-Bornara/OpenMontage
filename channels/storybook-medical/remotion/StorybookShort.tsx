@@ -508,6 +508,13 @@ const HOOK_COLLAPSE = 0.3;  // s: the card shrinks into the CASE chip over the l
 const CARD_PAD_Y = 48;
 const CARD_INNER = SAFE.right - SAFE.left - 14 - 28 - 30;
 
+// The words the captions show (= scripts/packaging_v2.py caption_words): none under the card; a word still being spoken
+// > 0.15 s after the card leaves is shown from that moment (Onesimus: "Boston." runs past the 2.5 s collapse); none
+// after the end line starts.
+const captionWords = <W extends { start: number; end: number }>(ws: W[], until?: number, endFrom?: number): W[] =>
+  ws.filter((w) => endFrom === undefined || w.start < endFrom).flatMap((w) =>
+    until === undefined || w.start >= until - 0.05 ? [w] : w.end > until + 0.15 ? [{ ...w, start: until }] : []);
+
 type CardWord = { text: string; amber: boolean };
 const parseLine = (line: string): CardWord[] =>
   line.trim().split(/\s+/).map((w) => ({ text: w.replace(/\*/g, "").toUpperCase(), amber: w.startsWith("*") }));
@@ -636,7 +643,7 @@ export const StorybookShort: React.FC<StorybookShortProps> = ({ totalSeconds, sh
           </Sequence>
         ))}
         {/* v2: the hook's words live on the card, and the end line takes over from the captions */}
-        <Captions words={words.filter((w) => (!hook || w.start >= hook.until - 0.05) && (!endLine || w.start < endLine.from))}
+        <Captions words={captionWords(words, hook?.until, endLine?.from)}
           per={wordsPerPage ?? 3} y={captionY ?? 1180} shots={shots} until={endLine?.from} />
         {hook ? (
           <Sequence from={0} durationInFrames={Math.max(1, Math.round(hook.until * FPS))}>

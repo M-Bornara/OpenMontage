@@ -28,6 +28,8 @@ DESCRIPTION = (
     "More true medical stories: \"The Man With a Window Into His Stomach\" (linked above).")
 
 # user 2026-11-17: start with the eye, not the country (the description keeps Shahr-e Sukhteh, south-east Iran)
+# NOTE (2026-11-17): publish.md now has per-platform TikTok/IG/FB captions + first comments written by hand; running
+# episode.py publish (this script without --texts-only) would replace them with this single caption. Carry them over first.
 CAPTION = ("A golden eye, worn in a woman's eye socket 5,000 years ago. Archaeologists still argue about what it was. "
            "#history #archaeology #truestory #oddlymatt")
 HOOK_CARD = "She wore *gold* / in her eye socket"   # C006 v2.1, approved 2026-11-17 (plan/hook-cards-v2.1.md)

@@ -1,6 +1,6 @@
 # The Doctor They Hated for Saying Wash Your Hands
 
-Length 46.9s · 1080×1920 · -14 LUFS · loops seamlessly
+Length 47.6s · 1080×1920 · -14 LUFS · loops seamlessly
 
 hook_card: doctors' *hands* / killing mothers?
 

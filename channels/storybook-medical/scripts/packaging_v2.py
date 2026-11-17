@@ -211,4 +211,13 @@ def caption_words(ep: dict, words: list[dict]) -> list[dict]:
     v2 = ep.get("_v2")
     if not v2:
         return words
-    return [w for w in words if w["start"] >= v2["hook"]["until"] - 0.05 and w["start"] < v2["endLine"]["from"]]
+    until, end_from = v2["hook"]["until"], v2["endLine"]["from"]
+    out = []
+    for w in words:
+        if w["start"] >= end_from:
+            continue
+        if w["start"] >= until - 0.05:
+            out.append(w)
+        elif w["end"] > until + 0.15:      # still being spoken after the card leaves (Onesimus "Boston."): show it from then
+            out.append({**w, "start": until})
+    return out
