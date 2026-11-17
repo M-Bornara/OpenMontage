@@ -35,6 +35,8 @@ DESCRIPTION = (
 CAPTION = ("1854: cholera in London. One doctor blamed the water and took the handle off a pump. But there's a twist. "
            "#history #medicalhistory #johnsnow #oddlymatt")
 
+HOOK_CARD = "500+ dead. / was it the *water*?"   # C006 v2.1, approved 2026-11-17 (plan/hook-cards-v2.1.md)
+
 
 def main():
     p = REPO / "projects" / PID / "episode.json"
@@ -43,6 +45,7 @@ def main():
         # the approved 4K s1b close-up of the pump in the fog; title in the TOP band, the pump below it
         "cover": {"image": "proj:assets/images/keyframes/s1b.png", "title": "He Broke the Pump", "accent": ["PUMP"],
                   "kicker": "LONDON · 1854", "textY": 300, "scale": 1.08, "x": 0, "y": 10},
+        "hook_card": HOOK_CARD,
         "youtube": {
             "title": "He Stopped a Plague by Breaking a Pump?", "description": DESCRIPTION, "sources": SOURCES,
             "tags": ["John Snow", "Broad Street pump", "cholera", "1854 cholera outbreak", "Soho", "epidemiology",
@@ -57,6 +60,8 @@ def main():
         **{plat: {"caption": CAPTION} for plat in ("tiktok", "instagram", "facebook")},
     }
     json.dump(ep, open(p, "w", encoding="utf-8"), indent=2, ensure_ascii=False)
+    if "--texts-only" in sys.argv:   # episode.json only: short.mp4 stays until the render is approved
+        return
     subprocess.run([sys.executable, "episode.py", "publish", PID], cwd=SCRIPTS, check=True)
 
 

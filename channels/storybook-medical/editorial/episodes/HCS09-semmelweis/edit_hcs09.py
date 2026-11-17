@@ -151,15 +151,17 @@ ep["music"] = {"lufs": -22, "selected": "m2", "prompts": {
 ep["packaging"] = {
  "version": 2,
  "case": 10,
- "hook": {
-  "anchor": "bottom",
-  "size": 58
- },
+ # v2.1 (C006 v2.1, approved 2026-11-17): card "doctors' HANDS / killing mothers?" (cadaverous particles on the doctors'
+ # hands, deaths fell after washing: VERIFIED S1; a question). Bottom: a top card would sit on the doctors' faces.
+ # No pause after 1.8 s: hold to "doctors" (captions "doctors to wash their hands", as approved), not the 2.5 s cap.
+ "hook": {"card": "doctors' *hands* / killing mothers?", "anchor": "bottom",
+          "until": next(round(w["start"], 2) for w in c.words if norm(w["word"]) == "doctors")},
  "frame1": {
   "motion": {
    "type": "snap",
-   "from": 1.1,
-   "to": 1.16,
+   # 1.22+: y -10 needs >= 10% spare per side; at 1.10 it showed a black band at the bottom (rule: no black frames)
+   "from": 1.22,
+   "to": 1.28,
    "at": 0,
    "frames": 40,
    "x0": 4,

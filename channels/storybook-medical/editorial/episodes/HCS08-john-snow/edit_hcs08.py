@@ -153,49 +153,28 @@ ep["music"] = {"lufs": -22, "selected": "m2", "prompts": {
           "a light pizzicato walking pulse like a detective's footsteps, a faint music-box motif, minor key and curious, "
           "a short playful lift near the end, then a warm resolving chord. No vocals, no modern drums."}}}
 # packaging v2 (plan/packaging-v2-spec.md, C006; built 2026-11-16): applied at build time by scripts/packaging_v2.py
+# v2.1 (C006 v2.1, approved 2026-11-17): card "500+ dead. / was it the WATER?" (P1 "upwards of five hundred fatal
+# attacks", Snow suspected the water: VERIFIED; a question, so the OVERSTATEMENT "stopped" is not on screen).
+# Frame 1 = s7b framed as a CU on the widow drinking (she is in danger and doesn't know it); the card at the BOTTOM
+# (y 980-1248 = her lap), the glass at ~y 760. Continuity fix: v2.0 opened on s8 (handle already off) and cut to s1b
+# (handle on); s8 now appears only at its own beat ("On the 8th..."). s7b returns at ~25 s at 1.0-1.15: not a repeat.
 ep["packaging"] = {
  "version": 2,
  "case": 9,
- "hook": {
-  "anchor": "top"
- },
+ "hook": {"card": "500+ dead. / was it the *water*?", "anchor": "bottom"},
  "open": {
-  "source": "projects/hcs08-john-snow/assets/images/keyframes/s8.png",
+  "source": "projects/hcs08-john-snow/assets/images/keyframes/s7b.png",
   "until": 3.9,
-  "captionY": 1030,
-  "motion": {
-   "type": "snap",
-   "from": 1.08,
-   "to": 1.22,
-   "at": 0,
-   "frames": 45,
-   "x": -12,
-   "y": 0
-  },
+  "captionY": 300,   # captions 2.5-3.9 s over the wallpaper, not on her (the chip pushes them to its bottom)
+  # measured on s7b: glass (0.60, 0.505), her face (0.66, 0.45), the man (0.18-0.28, out of this frame)
+  "motion": {"type": "snap", "from": 1.45, "to": 1.65, "at": 0, "frames": 45, "x0": -18, "x": -21.5, "y0": -5.5, "y": -7.5},
   "fx": [
-   {
-    "kind": "particles",
-    "style": "haze",
-    "x": 0.05,
-    "y": 0.5,
-    "tx": 0.95,
-    "ty": 0.44,
-    "spread": 0.05,
-    "every": 0.35,
-    "life": 3.2,
-    "size": 260,
-    "color": "205,198,185",
-    "opacity": 0.22
-   }
+   {"kind": "glint", "x": 0.6, "y": 0.49, "at": 0.15, "size": 34},
+   {"kind": "particles", "style": "haze", "x": 0.9, "y": 0.5, "tx": 0.72, "ty": 0.38, "spread": 0.04, "every": 0.3,
+    "life": 3.0, "size": 140, "color": "235,215,175", "opacity": 0.25}
   ]
  },
- "sfx": [
-  {
-   "name": "metal-clank",
-   "at": 0.2,
-   "gain_db": -10
-  }
- ]
+ "sfx": [{"name": "glass-clink", "at": 0.12, "gain_db": -12}]
 }
 ep["motion_lint"] = "warn"   # cut before Rule 0; v2 changes only the opening
 json.dump(ep, open(P / "episode.json", "w", encoding="utf-8"), indent=2, ensure_ascii=False)

@@ -64,6 +64,8 @@ More true stories on YouTube: oddlymatt.com
 
 #history #yellowfever"""
 
+HOOK_CARD = "a tiny suspect. / *19* years of doubt."   # C006 v2.1, approved 2026-11-17 (plan/hook-cards-v2.1.md)
+
 
 def main():
     p = REPO / "projects" / PID / "episode.json"
@@ -73,6 +75,7 @@ def main():
         # s3: Finlay with the mosquito on his hand; the title sits in the TOP band above his head
         "cover": {"image": "proj:assets/images/keyframes/s3.png", "title": "It Was the Mosquito", "accent": ["MOSQUITO"],
                   "kicker": "HAVANA · 1881", "textY": 300, "scale": 1.06, "x": 0, "y": 10},
+        "hook_card": HOOK_CARD,
         "youtube": {
             "title": "He Was Right About the Mosquito. It Took 19 Years.", "description": DESCRIPTION,
             "sources": SOURCES,
@@ -98,6 +101,8 @@ def main():
                      "publish_at": {"date": "2026-12-04", "et": "18:00", "alberta": "17:00"}},
     }
     json.dump(ep, open(p, "w", encoding="utf-8"), indent=2, ensure_ascii=False)
+    if "--texts-only" in sys.argv:   # episode.json only: short.mp4 stays until the render is approved
+        return
     subprocess.run([sys.executable, "episode.py", "publish", PID], cwd=SCRIPTS, check=True)
     publish_social.finish(PID)
 

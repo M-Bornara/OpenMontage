@@ -13,7 +13,7 @@ Applied at BUILD time from the episode's "packaging" block, so edit_<ep>.py stay
     }
 
 The three changes: 1. (v2.1, 2026-11-17) a short teaser card, 4-8 words on max 2 lines with one amber word, approved per
-episode and written in publish.md `hook_card:`; its words pop in, it holds to the end of the spoken hook (max 2.5 s) and
+episode and written in publish.md `hook_card:`; the whole card is on screen from frame 0 (the amber word brightens over 0.4 s), it holds to the end of the spoken hook (max 2.5 s) and
 collapses into the CASE chip, then the word-by-word captions start; something moves in frame 0 and frame 0 shows the
 danger or the strange act already happening. (v2.0 put the whole narration sentence on a 5-line card: spoiled endings,
 showed Snow's overstatement as fact.) 2. the CASE NN
@@ -43,6 +43,7 @@ def config(ep: dict) -> dict | None:
 # v2.1 hook card (2026-11-17): a short teaser, not the narration sentence. Written "She wore *gold* / in her eye socket":
 # "/" breaks the line, *word* is the one amber word. The same string is publish.md `hook_card:` (text_check compares).
 HOOK_MAX_S = 2.5           # the card collapses into the chip by then (or when the spoken hook ends, if sooner)
+HOOK_MIN_S = 1.8           # ignore phrase breaks before this (too soon to read the card); none after it -> hold HOOK_MAX_S
 HOOK_MAX_FS = 100          # px; StorybookShort fits each line to the width, never above this
 HOOK_PAD = 48              # card padding top + bottom (StorybookShort HookCard)
 HOOK_MAX_H = int(1920 * 0.15)
@@ -87,13 +88,15 @@ def card_problems(card: str) -> list[str]:
 
 def hook_until(words: list[dict], cap: float = HOOK_MAX_S) -> float:
     """The spoken hook's end if it is said within `cap`; otherwise the last phrase break (a word starting after a
-    gap of >= 0.1 s) at or before `cap`, so the captions take over on a clean word."""
+    gap of >= 0.1 s) at or before `cap`, so the captions take over on a clean word. No break in the first `cap` s
+    (one unbroken phrase, e.g. Onesimus "In 1721, smallpox hit Boston"): hold the full `cap`; the captions resume on
+    the first word that starts after it."""
     end = first_sentence_end(words)
     if end <= cap:
         return end
     starts = [(w["start"], w["start"] - (words[i - 1]["end"] if i else 0.0)) for i, w in enumerate(words) if w["start"] <= cap]
-    breaks = [s for s, gap in starts[1:] if gap >= 0.1]
-    return round((breaks or [s for s, _ in starts[1:]] or [cap])[-1], 2)
+    breaks = [s for s, gap in starts[1:] if gap >= 0.1 and s >= HOOK_MIN_S]   # an earlier break is too soon to read the card
+    return round((breaks or [cap])[-1], 2)
 
 
 def first_sentence_end(words: list[dict]) -> float:
@@ -138,6 +141,8 @@ def apply(ep: dict, words: list[dict]) -> dict:
                 d = until - s["start"]
                 if s.get("fx"):
                     s["fx"] = _shift_fx(s["fx"], d)
+                if s.get("motion", {}).get("at") is not None:   # a timed move (snap) is shot-relative too
+                    s["motion"] = {**s["motion"], "at": round(max(0.0, s["motion"]["at"] - d), 2)}
                 s["start"] = until
             keep.append(s)
         shots = [new] + keep

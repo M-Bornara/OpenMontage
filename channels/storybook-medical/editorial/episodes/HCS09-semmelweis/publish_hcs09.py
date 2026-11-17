@@ -37,6 +37,8 @@ DESCRIPTION = (
 CAPTION = ("1847: a doctor told other doctors to wash their hands. They hated him for it. "
            "#history #medicalhistory #semmelweis #oddlymatt")
 
+HOOK_CARD = "doctors' *hands* / killing mothers?"   # C006 v2.1, approved 2026-11-17 (plan/hook-cards-v2.1.md)
+
 
 def main():
     p = REPO / "projects" / PID / "episode.json"
@@ -45,6 +47,7 @@ def main():
         # the approved 4K s9 close-up of his face; title in the TOP band, his face below it
         "cover": {"image": "proj:assets/images/keyframes/s9.png", "title": "Wash Your Hands", "accent": ["WASH"],
                   "kicker": "VIENNA · 1847", "textY": 300, "scale": 1.08, "x": 0, "y": 14},
+        "hook_card": HOOK_CARD,
         "youtube": {
             "title": "They Hated Him for Saying \"Wash Your Hands\"", "description": DESCRIPTION, "sources": SOURCES,
             "tags": ["Ignaz Semmelweis", "Semmelweis reflex", "hand washing", "childbed fever", "puerperal fever",
@@ -58,6 +61,8 @@ def main():
         **{plat: {"caption": CAPTION} for plat in ("tiktok", "instagram", "facebook")},
     }
     json.dump(ep, open(p, "w", encoding="utf-8"), indent=2, ensure_ascii=False)
+    if "--texts-only" in sys.argv:   # episode.json only: short.mp4 stays until the render is approved
+        return
     subprocess.run([sys.executable, "episode.py", "publish", PID], cwd=SCRIPTS, check=True)
 
 

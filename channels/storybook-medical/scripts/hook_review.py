@@ -70,7 +70,7 @@ def review(pid: str, seconds: float = 4.0, build: bool = False) -> tuple[Path, P
     info = [f"{pid} · CASE {pk.get('case', 0):02d} · card: {card}",
             f"{len(packaging.card_words(card))} words · {len(packaging.card_lines(card))} lines · box <= {packaging.card_height(card)} px "
             f"(15% = {packaging.HOOK_MAX_H}) · amber: {', '.join(packaging.card_amber(card)) or '-'} · anchor {v2['hook']['anchor']}",
-            f"pop-in 0-0.6 s · collapse into the chip {v2['hook']['until'] - 0.3:.2f}-{v2['hook']['until']:.2f} s · captions from "
+            f"full card on frame 0 · amber brightens 0-0.4 s · collapse into the chip {v2['hook']['until'] - 0.3:.2f}-{v2['hook']['until']:.2f} s · captions from "
             f"'{' '.join(w['word'] for w in caps[:4])}…'",
             "checks: " + ("all pass (words, lines, box, = publish.md hook_card)" if not probs else " | ".join(probs))]
     tw, th = tiles[0][0].size

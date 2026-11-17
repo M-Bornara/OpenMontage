@@ -2,6 +2,8 @@
 
 Length 51.8s · 1080×1920 · -14 LUFS · loops seamlessly
 
+hook_card: one group bled. / one left *alone*.
+
 ## Publish times
 
 | Platform | When | Scheduled in |

@@ -139,64 +139,28 @@ ep["music"] = {"lufs": -22, "selected": "m1", "prompts": {
     "m1": "Instrumental, 18th-century chamber score for a serious true story: solo cello and harpsichord, a low tense "
           "pulse, a dark sudden sting in the middle, then a hopeful, dignified string swell rising at the end. No vocals."}}
 # packaging v2 (plan/packaging-v2-spec.md, C006; built 2026-11-16): applied at build time by scripts/packaging_v2.py
+# v2.1 (C006 v2.1, user 2026-11-17): card A "a GRENADE through / the window. Why?" (claims: a grenade thrown through
+# Mather's window, VERIFIED, diary). Frame 1 = s6b framed tighter on the ball (v2.0 opened on s7, which repeats at its own
+# beat, L28). Card at the TOP (y 360-~600 covers the wall/smoke, not the ember or the ball); the ember sits at ~y 760.
+# The open runs to "Boston" (harbour s1a); no pause in "In 1721, smallpox hit Boston" -> the card holds the full 2.5 s.
 ep["packaging"] = {
  "version": 2,
  "case": 8,
- "hook": {
-  "until": 6.7,
-  "anchor": "bottom",
-  "size": 54
- },
+ "hook": {"card": "A *grenade* through / the window. Why?", "anchor": "top"},
  "open": {
-  "source": "projects/hcs06-onesimus/assets/images/keyframes/s7.png",
+  "source": "projects/hcs06-onesimus/assets/images/keyframes/s6b.png",
   "until": 2.14,
   "captionY": 1030,
-  "motion": {
-   "type": "snap",
-   "from": 1.12,
-   "to": 1.28,
-   "at": 0,
-   "frames": 50,
-   "x": -7.0,
-   "y": -4,
-   "y0": -4
-  },
+  # s6b measured on the image: ember (0.530, 0.486), ball (0.48, 0.55-0.68), the broken window y 0.06-0.31
+  "motion": {"type": "snap", "from": 1.15, "to": 1.42, "at": 0, "frames": 45, "x0": -1, "x": -1.5, "y0": -6, "y": -8.4},   # a CU, clearly closer than s6b at its own beat (1.04-1.18, L28)
   "fx": [
-   {
-    "kind": "spark",
-    "x": 0.555,
-    "y": 0.305,
-    "r": 0.03
-   },
-   {
-    "kind": "particles",
-    "style": "steam",
-    "x": 0.56,
-    "y": 0.29,
-    "tx": 0.64,
-    "ty": 0.03,
-    "spread": 0.01,
-    "every": 0.22,
-    "life": 2.4,
-    "size": 100,
-    "color": "205,205,200",
-    "opacity": 0.4
-   }
+   {"kind": "spark", "x": 0.530, "y": 0.486, "r": 0.03},
+   {"kind": "particles", "style": "steam", "x": 0.532, "y": 0.48, "tx": 0.55, "ty": 0.33, "spread": 0.008, "every": 0.2,
+    "life": 2.2, "size": 80, "color": "205,205,200", "opacity": 0.4}
   ]
  },
- "sfx": [
-  {
-   "name": "paper-burn",
-   "at": 0.0,
-   "gain_db": -12,
-   "dur": 2.2,
-   "fade_out": 0.4
-  }
- ],
- "sfx_move": {
-  "gulls-water": 2.14,
-  "ship-bell": 2.2
- }
+ "sfx": [{"name": "paper-burn", "at": 0.0, "gain_db": -12, "dur": 2.2, "fade_out": 0.4}],
+ "sfx_move": {"gulls-water": 2.14, "ship-bell": 2.2}
 }
 ep["motion_lint"] = "warn"   # cut before Rule 0; v2 changes only the opening
 json.dump(ep, open(P / "episode.json", "w", encoding="utf-8"), indent=2, ensure_ascii=False)

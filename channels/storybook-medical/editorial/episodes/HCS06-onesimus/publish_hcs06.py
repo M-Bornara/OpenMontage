@@ -36,6 +36,7 @@ DESCRIPTION = (
 
 CAPTION = ("1721: smallpox hit Boston. The idea that saved lives came from an enslaved man named Onesimus. "
            "#history #blackhistory #medicalhistory #oddlymatt")
+HOOK_CARD = "A *grenade* through / the window. Why?"   # C006 v2.1, card A picked 2026-11-17 (plan/hook-cards-v2.1.md)
 
 
 def main():
@@ -46,6 +47,7 @@ def main():
         # and sat under TikTok's UI); the picture moves down so his face sits under the title
         "cover": {"image": "proj:assets/images/keyframes/s9.png", "title": "He Saved Boston", "accent": ["SAVED"],
                   "kicker": "BOSTON · 1721", "textY": 300, "scale": 1.08, "x": 0, "y": 14},
+        "hook_card": HOOK_CARD,
         "youtube": {
             "title": "The Enslaved Man Who Saved Boston", "description": DESCRIPTION, "sources": SOURCES,
             "tags": ["Onesimus", "Cotton Mather", "Zabdiel Boylston", "smallpox", "inoculation", "variolation",
@@ -59,6 +61,8 @@ def main():
         **{plat: {"caption": CAPTION} for plat in ("tiktok", "instagram", "facebook")},
     }
     json.dump(ep, open(p, "w", encoding="utf-8"), indent=2, ensure_ascii=False)
+    if "--texts-only" in sys.argv:   # episode.json only: short.mp4 stays until the render is approved
+        return
     subprocess.run([sys.executable, "episode.py", "publish", PID], cwd=SCRIPTS, check=True)
 
 

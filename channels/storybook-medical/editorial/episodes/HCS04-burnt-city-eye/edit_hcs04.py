@@ -147,7 +147,10 @@ ep["packaging"] = {
  "case": 7,
  "hook": {
   "card": "She wore *gold* / in her eye socket",
-  "anchor": "top"
+  "anchor": "top",
+  # the "in Iran" join (2026-11-17, re-cut with no gap: user heard a hole) leaves no pause before "was", so the
+  # pause rule would collapse at "a woman" (1.6 s, too short to read); hold to "was" as approved (captions "was buried...")
+  "until": next(round(w["start"], 2) for w in c.words if norm(w["word"]) == "was"),
  },
  "frame1": {
   "motion": {

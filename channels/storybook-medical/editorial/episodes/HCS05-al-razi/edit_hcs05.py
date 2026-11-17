@@ -166,5 +166,31 @@ ep["music"] = {"lufs": -22, "selected": "m1", "gaps": MUSIC_GAPS, "prompts": {
            "10th-century physician: santur and setar, a breathy ney flute, soft daf and tombak; curious and careful, a "
            "playful, slightly mischievous turn near the end, then a calm close. No Western orchestra, no vocals, no "
            "modern drums, no synths."}}}
+# packaging v2.1 (plan/packaging-v2-spec.md, C006 v2.1, approved 2026-11-17): card "one group bled. / one left ALONE."
+# (bled one group, "intentionally" left another unbled: VERIFIED P1; "half" and "first clinical trial" are not used).
+# Frame 1 = s5a as a medium shot: he draws the curtain that splits the ward (the v2 spec's anti-model was the ward
+# conversation s1a, now shot 2 from "refused", where its bowl snap lands). Card at the TOP over the vault/rope; his
+# face at ~y 900. The curtain ripples (wiggle, free) and the wall lamp flickers. s5a returns at its own beat
+# ("So he split his patients in two") at 1.0-1.1: a different size, not a repeat. Card in the theme font (Lalezar).
+# Measured on s5a: face (0.48, 0.485), hand on the curtain (0.71, 0.54), curtain x 0.5-0.72 / y 0.15-0.62, lamp (0.93, 0.66).
+ep["packaging"] = {
+ "version": 2,
+ "case": 12,
+ "hook": {"card": "one group bled. / one left *alone*.", "anchor": "top",
+          # the only pause is at 1.79 s (too soon to read): hold to "refused" (captions "refused to treat...", as proposed)
+          "until": next(round(w["start"], 2) for w in c.words if norm(w["word"]) == "refused")},
+ "open": {
+  "source": "projects/hcs05-al-razi/assets/images/keyframes/s5a.png",
+  "until": next(round(w["start"] - 0.05, 2) for w in c.words if norm(w["word"]) == "refused"),
+  "captionY": 1030,
+  "motion": {"type": "snap", "from": 1.18, "to": 1.3, "at": 0, "frames": 40, "x0": -5, "x": -6.5, "y0": -1, "y": -1.2},
+  "fx": [
+   {"kind": "wiggle", "cx": 0.62, "cy": 0.42, "rx": 0.12, "ry": 0.2, "strength": 10, "period": 1.8, "from": 0},
+   {"kind": "glow", "x": 0.93, "y": 0.66, "r": 0.06, "at": 0, "dur": 0.15, "strength": 0.4}
+  ]
+ },
+ "sfx": [{"name": "cloth-rustle", "at": 0.05, "gain_db": -10}]
+}
+ep["motion_lint"] = "warn"   # cut before Rule 0 (as the other v2 Shorts); v2 changes only the opening
 json.dump(ep, open(P / "episode.json", "w", encoding="utf-8"), indent=2, ensure_ascii=False)
 print(f"{len(c.shots)} shots, {len(c.ov)} overlays, {len(c.fx)} sfx, {total} s")

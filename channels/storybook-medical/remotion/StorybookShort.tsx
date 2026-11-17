@@ -503,7 +503,7 @@ const Captions: React.FC<{ words: Word[]; per: number; y: number; shots: Shot[];
 // v2.1 hook card (2026-11-17; v2.0's 5-line narration card spoiled endings). Box: padding 22 + 26, the 14 px amber
 // edge + 28 / 30 side padding; the font is fitted so the longest line fills the safe width, capped at maxSize (2 lines
 // at 100 px = 268 px <= 15% of 1920; scripts/packaging_v2.py checks the same bound).
-const HOOK_POP = 0.6;       // s: the words pop in over this
+const HOOK_BRIGHTEN = 0.4;  // s: the amber word brightens over this (the card itself is complete on frame 0)
 const HOOK_COLLAPSE = 0.3;  // s: the card shrinks into the CASE chip over the last 0.3 s
 const CARD_PAD_Y = 48;
 const CARD_INNER = SAFE.right - SAFE.left - 14 - 28 - 30;
@@ -537,36 +537,30 @@ const HookCard: React.FC<{ lines: string[]; dur: number; y: number; anchor?: "to
   const fs = Math.floor(Math.min(maxSize ?? 100, (100 * CARD_INNER) / widest));
   const h = parsed.length * fs * 1.1 + CARD_PAD_Y;
   const top = anchor === "bottom" ? SAFE.bottom - h : y;
-  // pop: one word after the other over HOOK_POP s; the first word is already in on frame 0 (the frame people decide on)
-  const n = parsed.flat().length;
-  const step = n > 1 ? ((HOOK_POP - 0.15) * fps) / (n - 1) : 0;
-  const panel = spring({ frame: frame + 2, fps, config: { damping: 13, stiffness: 220, mass: 0.5 } });
+  // user 2026-11-17: the WHOLE card is on screen on frame 0 (no word pop-in, no panel scale); what moves is the amber
+  // word, which brightens and gains a glow over HOOK_BRIGHTEN s
+  const b = interpolate(frame, [0, HOOK_BRIGHTEN * fps], [0, 1],
+    { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.out(Easing.cubic) });
   // collapse: shrink toward the chip's corner (x 65, y 288) and fade into it
   const c = interpolate(frame, [dur - HOOK_COLLAPSE * fps, dur], [0, 1],
     { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.inOut(Easing.cubic) });
   const shrink = 1 - c * 0.78;
-  let k = -1;
   return (
     <div style={{ position: "absolute", left: SAFE.left, top, transformOrigin: "0 0",
-      transform: `translateY(${(SAFE.top - top) * c}px) scale(${interpolate(panel, [0, 1], [0.9, 1]) * shrink})`,
+      transform: `translateY(${(SAFE.top - top) * c}px) scale(${shrink})`,
       opacity: interpolate(c, [0.55, 1], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) }}>
       <div style={{ background: "rgba(34,38,42,0.86)", borderLeft: `14px solid ${AMBER}`, borderRadius: 16,
         padding: "22px 30px 26px 28px", boxShadow: "0 10px 0 rgba(0,0,0,0.3)", visibility: ready ? "visible" : "hidden" }}>
         {parsed.map((ws, li) => (
           <div key={li} style={{ whiteSpace: "nowrap", lineHeight: 1.1, height: fs * 1.1 }}>
-            {ws.map((w, wi) => {
-              k += 1;
-              const local = frame + 2 - k * step;
-              const pop = spring({ frame: local, fps, config: { damping: 11, stiffness: 260, mass: 0.45 } });
-              return (
-                <span key={wi} style={{ display: "inline-block", fontFamily: theme.family, fontWeight: theme.weight, fontSize: fs,
-                  color: w.amber ? AMBER : BONE, marginRight: wi < ws.length - 1 ? fs * 0.28 : 0, transformOrigin: "50% 80%",
-                  opacity: interpolate(local, [0, 2], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }),
-                  transform: `scale(${interpolate(pop, [0, 1], [0.45, 1])})` }}>
-                  {w.text}
-                </span>
-              );
-            })}
+            {ws.map((w, wi) => (
+              <span key={wi} style={{ display: "inline-block", fontFamily: theme.family, fontWeight: theme.weight, fontSize: fs,
+                color: w.amber ? AMBER : BONE, marginRight: wi < ws.length - 1 ? fs * 0.28 : 0,
+                ...(w.amber ? { filter: `brightness(${interpolate(b, [0, 1], [0.62, 1.12])})`,
+                  textShadow: `0 0 ${Math.round(b * 26)}px rgba(232,163,61,${(0.75 * b).toFixed(2)})` } : {}) }}>
+                {w.text}
+              </span>
+            ))}
           </div>
         ))}
       </div>

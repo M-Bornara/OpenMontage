@@ -2,6 +2,8 @@
 
 Length 45.6s · 1080×1920 · -14 LUFS · loops seamlessly
 
+hook_card: 500+ dead. / was it the *water*?
+
 ## Publish times
 
 | Platform | When | Scheduled in |

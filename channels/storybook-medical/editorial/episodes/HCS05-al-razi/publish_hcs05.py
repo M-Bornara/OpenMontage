@@ -62,6 +62,8 @@ More true stories on YouTube: oddlymatt.com
 
 #history #medicalhistory"""
 
+HOOK_CARD = "one group bled. / one left *alone*."   # C006 v2.1, approved 2026-11-17 (plan/hook-cards-v2.1.md)
+
 
 def main():
     p = REPO / "projects" / PID / "episode.json"
@@ -71,6 +73,7 @@ def main():
         # s1b: his face close-up (the 1956 portrait look); title in the TOP band above the turban
         "cover": {"image": "proj:assets/images/keyframes/s1b.png", "title": "Untreated. On Purpose",
                   "accent": ["PURPOSE"], "kicker": "PERSIA · c. 900", "textY": 300, "scale": 1.06, "x": 0, "y": 24},
+        "hook_card": HOOK_CARD,
         "youtube": {
             "title": "1,100 Years Ago, a Doctor Refused to Treat Patients on Purpose", "description": DESCRIPTION,
             "sources": SOURCES,
@@ -96,6 +99,8 @@ def main():
                      "publish_at": {"date": "2026-12-08", "et": "18:00", "alberta": "17:00"}},
     }
     json.dump(ep, open(p, "w", encoding="utf-8"), indent=2, ensure_ascii=False)
+    if "--texts-only" in sys.argv:   # episode.json only: short.mp4 stays until the render is approved
+        return
     subprocess.run([sys.executable, "episode.py", "publish", PID], cwd=SCRIPTS, check=True)
     publish_social.finish(PID)
 

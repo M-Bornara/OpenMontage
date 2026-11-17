@@ -1,6 +1,8 @@
 # The 5,000-Year-Old Golden Eye
 
-Length 44.6s · 1080×1920 · -14 LUFS · loops seamlessly
+Length 44.7s · 1080×1920 · -14 LUFS · loops seamlessly
+
+hook_card: She wore *gold* / in her eye socket
 
 ## Publish times
 
@@ -79,21 +81,21 @@ Educational historical content. Not medical advice.
 **Publish:** Sun Nov 22, 18:00 ET = 17:00 Alberta
 
 ```
-5,000 years ago, a woman in Iran was buried wearing a golden eye. Archaeologists still argue about what it was. #history #archaeology #truestory #oddlymatt
+A golden eye, worn in a woman's eye socket 5,000 years ago. Archaeologists still argue about what it was. #history #archaeology #truestory #oddlymatt
 ```
 
 ## Instagram
 **Publish:** Sun Nov 22, 18:00 ET = 17:00 Alberta
 
 ```
-5,000 years ago, a woman in Iran was buried wearing a golden eye. Archaeologists still argue about what it was. #history #archaeology #truestory #oddlymatt
+A golden eye, worn in a woman's eye socket 5,000 years ago. Archaeologists still argue about what it was. #history #archaeology #truestory #oddlymatt
 ```
 
 ## Facebook
 **Publish:** Sun Nov 22, 18:00 ET = 17:00 Alberta
 
 ```
-5,000 years ago, a woman in Iran was buried wearing a golden eye. Archaeologists still argue about what it was. #history #archaeology #truestory #oddlymatt
+A golden eye, worn in a woman's eye socket 5,000 years ago. Archaeologists still argue about what it was. #history #archaeology #truestory #oddlymatt
 ```
 
 ## Upload checklist

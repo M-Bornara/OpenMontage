@@ -2,6 +2,8 @@
 
 Length 48.3s · 1080×1920 · -14 LUFS · loops seamlessly
 
+hook_card: A *grenade* through / the window. Why?
+
 ## Publish times
 
 | Platform | When | Scheduled in |

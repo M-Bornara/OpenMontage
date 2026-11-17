@@ -112,6 +112,8 @@ def v2_collisions(ep: dict, words: list[dict]) -> list[str]:
     """Packaging v2: the hook card, CASE chip and end line against the captions and every overlay."""
     out = []
     for kind, label, t0, t1, y0, y1, x0, x1 in ep.get("_v2_boxes", []):
+        if kind == "hook":   # in its last 0.1 s the card is a faded thumbnail flying into the chip, not a box
+            t1 -= 0.1
         for o in ep.get("overlays", []):
             a, b = max(t0, o["start"]), min(t1, o["end"])
             (oy0, oy1), (ox0, ox1) = _span(o), _x_span(o)

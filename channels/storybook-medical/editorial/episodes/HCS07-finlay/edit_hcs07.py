@@ -186,5 +186,25 @@ ep["music"] = {"lufs": -22, "selected": "m1", "gaps": MUSIC_GAPS, "prompts": {
            "about a patient doctor nobody believed. Solo piano playing the habanera rhythm, a tres guitar melody, soft guiro "
            "and claves; curious and warm, a hopeful lift near the end, then a gentle resolving close. No vocals, no modern "
            "drums, no synths."}}}
+# packaging v2.1 (plan/packaging-v2-spec.md, C006 v2.1, approved 2026-11-17): card "a tiny suspect. / 19 years of doubt."
+# (mosquito theory 14 Aug 1881 VERIFIED P1; accepted only in 1900 VERIFIED S1, S2; it doesn't say he was right).
+# Card at the TOP (y 360-~610 covers the lamp, not the mosquito at ~y 900-1100). Frame 1 moves from frame 0: the
+# push-in to the mosquito starts at 0 and settles on "yellow fever" (ease-out, 38 frames), plus the lamp's flicker and
+# dust in its light. Measured on s1c: flame (0.29, 0.296), mosquito MOSQ_S1C. (The planned mosquito layer will add a
+# wing flick; not built yet.)
+ep["packaging"] = {
+ "version": 2,
+ "case": 11,
+ "hook": {"card": "a tiny suspect. / *19* years of doubt.", "anchor": "top"},
+ "frame1": {
+  "motion": {"type": "snap", "from": 1.03, "to": 1.3, "at": 0, "frames": round(yf * 30) + 1,
+             "x": round(-(MOSQ_S1C[0] - 0.5) * 30, 2), "y": round(-(MOSQ_S1C[1] - 0.5) * 30, 2)},
+  "fx": [
+   {"kind": "glow", "x": 0.29, "y": 0.296, "r": 0.2, "at": 0, "dur": 0.15, "strength": 0.35},
+   {"kind": "particles", "style": "haze", "x": 0.42, "y": 0.4, "tx": 0.78, "ty": 0.34, "spread": 0.06, "every": 0.18,
+    "life": 2.2, "size": 70, "color": "250,215,150", "opacity": 0.35, "from": 0, "to": 2.4}
+  ]
+ }
+}
 json.dump(ep, open(P / "episode.json", "w", encoding="utf-8"), indent=2, ensure_ascii=False)
 print(f"{len(c.shots)} shots, {len(c.ov)} overlays, {len(c.fx)} sfx, {total} s")
