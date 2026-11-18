@@ -1,6 +1,6 @@
 # The Enslaved Man Who Saved Boston
 
-Length 48.3s · 1080×1920 · -14 LUFS · loops seamlessly
+Length 49.0s · 1080×1920 · -14 LUFS · loops seamlessly
 
 hook_card: A *grenade* through / the window. Why?
 
@@ -84,23 +84,64 @@ Educational historical content. Not medical advice.
 ## Tiktok
 **Publish:** Tue Nov 24, 18:00 ET = 17:00 Alberta
 
+**Caption:**
 ```
-1721: smallpox hit Boston. The idea that saved lives came from an enslaved man named Onesimus. #history #blackhistory #medicalhistory #oddlymatt
+Onesimus, an enslaved West African man in Boston, knew a way to fight smallpox. 1721: one doctor tried it, and someone threw a grenade through a minister's window.
+
+More true stories on YouTube: Oddly Matt
+
+#history #blackhistory #medicalhistory #oddlymatt
 ```
+**First comment** (post it right after the post goes live, then pin it):
+```
+Should Onesimus be as famous as Edward Jenner? 🤔 Tell us why. (And did you spot Matt's glasses? 👓)
+
+More true stories: search Oddly Matt on YouTube
+```
+**Playlist:** none
 
 ## Instagram
 **Publish:** Tue Nov 24, 18:00 ET = 17:00 Alberta
 
+**Caption:**
 ```
-1721: smallpox hit Boston. The idea that saved lives came from an enslaved man named Onesimus. #history #blackhistory #medicalhistory #oddlymatt
+1721, Boston: the smallpox idea that saved lives came from an enslaved man named Onesimus.
+
+He told the minister Cotton Mather how people in West Africa protected themselves: a tiny cut and a little matter from a smallpox sore. One doctor, Zabdiel Boylston, tried it. That year about 1 in 7 people who caught smallpox died; among his inoculated patients, about 1 in 40.
+Source: Boylston's account (1726); Mather's letters and diary.
+
+More true stories on YouTube (link in bio)
+
+#history #blackhistory #medicalhistory #oddlymatt
 ```
+**First comment** (post it right after the post goes live, then pin it):
+```
+Should Onesimus be as famous as Edward Jenner? 🤔 Tell us why. (And did you spot Matt's glasses? 👓)
+
+More true stories: link in bio
+```
+**Playlist:** none (Instagram has no playlists)
 
 ## Facebook
 **Publish:** Tue Nov 24, 18:00 ET = 17:00 Alberta
 
+**Caption:**
 ```
-1721: smallpox hit Boston. The idea that saved lives came from an enslaved man named Onesimus. #history #blackhistory #medicalhistory #oddlymatt
+In 1721, smallpox swept through Boston. The idea that saved lives came from Onesimus, an enslaved West African man.
+
+He had told the minister Cotton Mather how people in West Africa protected themselves: a tiny cut, a little matter from a smallpox sore, a mild illness, then protection for life. Only one doctor, Zabdiel Boylston, agreed to try it. The town was furious: someone threw a grenade through Mather's window, and the fuse went out. About 1 in 7 people who caught smallpox in Boston that year died; among Boylston's inoculated patients, about 1 in 40. For centuries, Onesimus's name was mostly left out of the story. A history story, not medical advice.
+
+More true stories on YouTube: oddlymatt.com
+
+#history #blackhistory
 ```
+**First comment** (post it right after the post goes live, then pin it):
+```
+Should Onesimus be as famous as Edward Jenner? 🤔 Tell us why. (And did you spot Matt's glasses? 👓)
+
+More true stories on YouTube: https://www.youtube.com/@oddlymatt
+```
+**Playlist:** History Got It Wrong (one playlist only on Facebook; no cover needed)
 
 ## Upload checklist
 

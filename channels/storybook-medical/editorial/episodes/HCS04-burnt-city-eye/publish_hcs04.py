@@ -28,6 +28,7 @@ DESCRIPTION = (
     "More true medical stories: \"The Man With a Window Into His Stomach\" (linked above).")
 
 # user 2026-11-17: start with the eye, not the country (the description keeps Shahr-e Sukhteh, south-east Iran)
+# user 2026-11-18 (Iran rule): the country stays out of the hook, captions, cover and tags; only the description facts name it
 # NOTE (2026-11-17): publish.md now has per-platform TikTok/IG/FB captions + first comments written by hand; running
 # episode.py publish (this script without --texts-only) would replace them with this single caption. Carry them over first.
 CAPTION = ("A golden eye, worn in a woman's eye socket 5,000 years ago. Archaeologists still argue about what it was. "
@@ -48,7 +49,7 @@ def main():
         "youtube": {
             "title": "She Was Buried With a Golden Eye", "description": DESCRIPTION, "sources": SOURCES,
             "tags": ["Shahr-e Sukhteh", "Burnt City", "golden eye", "artificial eye", "ancient prosthetic",
-                     "ancient Iran", "archaeology", "history of medicine", "Oddly Matt"],
+                     "archaeology", "history of medicine", "Oddly Matt"],
             "hashtags": ["#history", "#archaeology", "#oddlymatt"],
             "pinned_comment": "Golden eye or fancy eyepatch? 👁️ Pick a side. (And did you spot Matt's glasses? 👓)",
             "related_video": "The Man With a Window Into His Stomach",

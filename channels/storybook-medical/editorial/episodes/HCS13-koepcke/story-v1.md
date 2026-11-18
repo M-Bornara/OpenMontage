@@ -11,12 +11,11 @@ CASE 16 · YouTube Wed Dec 9, 15:00 ET = 14:00 Alberta · socials Thu Dec 10, 18
 - **The cost:** eleven days alone; the sweets run out on day four; insects lay eggs in her wounds (C25, C30, C37).
 - **The payoff:** day ten, a boat, a hut; men walk out of the trees; she was the only one of 92 who lived; she became a biologist and runs her parents' jungle station (C04, C33, C34, C45).
 
-## Beats + script v1 (≈ 125 words ≈ 50 s)
+## Beats + script v1 (≈ 122 words ≈ 49 s)
 | Beat | Line | Fact | Tension |
 |---|---|---|---|
 | B1 HOOK | [intense] Christmas Eve, 1971. A seventeen-year-old falls from the sky over the Amazon… still strapped to her seat. | C01, C08, C14 | 9 |
 | B1 HOOK | "I hadn't left the plane," she said. "The plane had left me." | C13 | 8 |
-| B2 STAKES | [serious] A storm had torn it apart. | C10 | 7 |
 | B2 STAKES | [pause] Juliane Koepcke woke the next morning under her seat row. Alone. | C18 | 7 |
 | B2 STAKES | Collarbone broken. One eye swollen shut. | C19, C20 | 6 |
 | B3 CHOICE | Search planes flew over. They couldn't see her. | C27 | 7 |
@@ -30,7 +29,6 @@ CASE 16 · YouTube Wed Dec 9, 15:00 ET = 14:00 Alberta · socials Thu Dec 10, 18
 ```
 [intense] Christmas Eve, 1971. A seventeen-year-old falls from the sky over the Amazon… still strapped to her seat.
 "I hadn't left the plane," she said. "The plane had left me."
-[serious] A storm had torn it apart.
 [pause] Juliane Koepcke woke the next morning under her seat row. Alone.
 Collarbone broken. One eye swollen shut.
 Search planes flew over. They couldn't see her.
@@ -42,7 +40,7 @@ Her sweets ran out on day four. Insects laid eggs in her wounds.
 [warm] Juliane became a biologist. Today she runs the jungle station her parents built.
 ```
 
-**Kept out on purpose:** the fall height (C16 ATTRIBUTED, no named source: not said; the picture shows height instead), "walked away unhurt" and "lightning blew the plane up" (C48, C49 REMOVE), lightning on the wing (C11, her account: could be added as "she saw a flash on the wing" if you want it), the fuel on the wound (C31 DISPUTED, medical risk 2), other survivors of the impact (C05 DISPUTED), the rescuers' names (C35 UNKNOWN), Herzog (C43, C44: pinned comment), her "why was I the only survivor" line (C42: strong but heavy after the mother line; pinned comment or a softer ending if you prefer it). "Eleven days" (C37) is on the stamp, not in the narration, to keep it under 50 s.
+**Kept out on purpose:** the fall height (C16 ATTRIBUTED, no named source: not said; the picture shows height instead), "walked away unhurt" and "lightning blew the plane up" (C48, C49 REMOVE), lightning on the wing (C11, her account: could be added as "she saw a flash on the wing" if you want it), the fuel on the wound (C31 DISPUTED, medical risk 2), other survivors of the impact (C05 DISPUTED), the rescuers' names (C35 UNKNOWN), Herzog (C43, C44: pinned comment), her "why was I the only survivor" line (C42: strong but heavy after the mother line; pinned comment or a softer ending if you prefer it). "Eleven days" (C37) is on the stamp, not in the narration, to keep it under 50 s. Cut 2026-11-18 to get under 50 s: "A storm had torn it apart." (frame 1 shows the storm; C10 stays in the picture).
 
 ## Hook card (pick one) · title (C009)
 - **A** `She fell from the sky / *strapped* to her seat.` (recommended, 8 words) · **B** `*17*. Alone / in the Amazon.` · **C** `*11* days alone / in the jungle.`

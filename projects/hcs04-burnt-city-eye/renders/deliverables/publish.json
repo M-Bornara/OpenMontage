@@ -6,7 +6,7 @@
       "GOLDEN",
       "EYE"
     ],
-    "kicker": "IRAN · 2900 BC",
+    "kicker": "BURNT CITY · 2900 BC",
     "textY": 300,
     "scale": 1.1,
     "x": 2,
@@ -22,7 +22,6 @@
       "golden eye",
       "artificial eye",
       "ancient prosthetic",
-      "ancient Iran",
       "archaeology",
       "history of medicine",
       "Oddly Matt"
@@ -44,27 +43,33 @@
     }
   },
   "tiktok": {
-    "caption": "5,000 years ago, a woman in Iran was buried wearing a golden eye. Archaeologists still argue about what it was. #history #archaeology #truestory #oddlymatt",
+    "caption": "A golden eye, worn in a woman's eye socket 5,000 years ago 👁️ The Burnt City, around 2900 BC. Archaeologists still argue: an eye, or an eyepatch?\n\nMore true stories on YouTube: Oddly Matt\n\n#history #archaeology #ancienthistory #oddlymatt",
     "publish_at": {
       "date": "2026-11-22",
       "et": "18:00",
       "alberta": "17:00"
-    }
+    },
+    "first_comment": "Golden eye or fancy eyepatch? 👁️ Pick a side. (And did you spot Matt's glasses? 👓)\n\nMore true stories: search Oddly Matt on YouTube",
+    "playlist": "none"
   },
   "instagram": {
-    "caption": "5,000 years ago, a woman in Iran was buried wearing a golden eye. Archaeologists still argue about what it was. #history #archaeology #truestory #oddlymatt",
+    "caption": "A golden eye, worn in a woman's eye socket 5,000 years ago.\n\nA thin layer of gold over a tar-like paste, with an iris and rays of light drawn on it. Marks in her eye socket show she wore it for a long time. Some archaeologists think it was an eyepatch, not an eye.\nSource: L. Moghadasi (2014); Archaeology Magazine (2011).\n\nMore true stories on YouTube (link in bio)\n\n#history #archaeology #ancienthistory #oddlymatt",
     "publish_at": {
       "date": "2026-11-22",
       "et": "18:00",
       "alberta": "17:00"
-    }
+    },
+    "first_comment": "Golden eye or fancy eyepatch? 👁️ Pick a side. (And did you spot Matt's glasses? 👓)\n\nMore true stories: link in bio",
+    "playlist": "none (Instagram has no playlists)"
   },
   "facebook": {
-    "caption": "5,000 years ago, a woman in Iran was buried wearing a golden eye. Archaeologists still argue about what it was. #history #archaeology #truestory #oddlymatt",
+    "caption": "A golden eye, found in a woman's left eye socket: about 5,000 years old.\n\nShe was buried around 2900 BC at Shahr-e Sukhteh, the \"Burnt City\". The eye is a half-ball about 2.5 cm across: a tar-like paste under a thin layer of gold, with an iris and fine rays drawn on it. Tiny holes on both sides held it in place with a thread, and marks in her socket show she wore it for a long time. Was she a priestess? That part is a legend. And some archaeologists think it was an eyepatch, not an eye.\n\nMore true stories on YouTube: oddlymatt.com\n\n#history #archaeology",
     "publish_at": {
       "date": "2026-11-22",
       "et": "18:00",
       "alberta": "17:00"
-    }
+    },
+    "first_comment": "Golden eye or fancy eyepatch? 👁️ Pick a side. (And did you spot Matt's glasses? 👓)\n\nMore true stories on YouTube: https://www.youtube.com/@oddlymatt",
+    "playlist": "Weirdest Moments (one playlist only on Facebook; no cover needed)"
   }
 }

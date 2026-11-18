@@ -45,7 +45,7 @@ Educational historical content. Not medical advice.
 
 #history #archaeology #oddlymatt
 ```
-**Tags:** Shahr-e Sukhteh, Burnt City, golden eye, artificial eye, ancient prosthetic, ancient Iran, archaeology, history of medicine, Oddly Matt
+**Tags:** Shahr-e Sukhteh, Burnt City, golden eye, artificial eye, ancient prosthetic, archaeology, history of medicine, Oddly Matt
 
 **Pinned comment:** Golden eye or fancy eyepatch? 👁️ Pick a side. (And did you spot Matt's glasses? 👓)
 
@@ -80,23 +80,64 @@ Educational historical content. Not medical advice.
 ## Tiktok
 **Publish:** Sun Nov 22, 18:00 ET = 17:00 Alberta
 
+**Caption:**
 ```
-A golden eye, worn in a woman's eye socket 5,000 years ago. Archaeologists still argue about what it was. #history #archaeology #truestory #oddlymatt
+A golden eye, worn in a woman's eye socket 5,000 years ago 👁️ The Burnt City, around 2900 BC. Archaeologists still argue: an eye, or an eyepatch?
+
+More true stories on YouTube: Oddly Matt
+
+#history #archaeology #ancienthistory #oddlymatt
 ```
+**First comment** (post it right after the post goes live, then pin it):
+```
+Golden eye or fancy eyepatch? 👁️ Pick a side. (And did you spot Matt's glasses? 👓)
+
+More true stories: search Oddly Matt on YouTube
+```
+**Playlist:** none
 
 ## Instagram
 **Publish:** Sun Nov 22, 18:00 ET = 17:00 Alberta
 
+**Caption:**
 ```
-A golden eye, worn in a woman's eye socket 5,000 years ago. Archaeologists still argue about what it was. #history #archaeology #truestory #oddlymatt
+A golden eye, worn in a woman's eye socket 5,000 years ago.
+
+A thin layer of gold over a tar-like paste, with an iris and rays of light drawn on it. Marks in her eye socket show she wore it for a long time. Some archaeologists think it was an eyepatch, not an eye.
+Source: L. Moghadasi (2014); Archaeology Magazine (2011).
+
+More true stories on YouTube (link in bio)
+
+#history #archaeology #ancienthistory #oddlymatt
 ```
+**First comment** (post it right after the post goes live, then pin it):
+```
+Golden eye or fancy eyepatch? 👁️ Pick a side. (And did you spot Matt's glasses? 👓)
+
+More true stories: link in bio
+```
+**Playlist:** none (Instagram has no playlists)
 
 ## Facebook
 **Publish:** Sun Nov 22, 18:00 ET = 17:00 Alberta
 
+**Caption:**
 ```
-A golden eye, worn in a woman's eye socket 5,000 years ago. Archaeologists still argue about what it was. #history #archaeology #truestory #oddlymatt
+A golden eye, found in a woman's left eye socket: about 5,000 years old.
+
+She was buried around 2900 BC at Shahr-e Sukhteh, the "Burnt City". The eye is a half-ball about 2.5 cm across: a tar-like paste under a thin layer of gold, with an iris and fine rays drawn on it. Tiny holes on both sides held it in place with a thread, and marks in her socket show she wore it for a long time. Was she a priestess? That part is a legend. And some archaeologists think it was an eyepatch, not an eye.
+
+More true stories on YouTube: oddlymatt.com
+
+#history #archaeology
 ```
+**First comment** (post it right after the post goes live, then pin it):
+```
+Golden eye or fancy eyepatch? 👁️ Pick a side. (And did you spot Matt's glasses? 👓)
+
+More true stories on YouTube: https://www.youtube.com/@oddlymatt
+```
+**Playlist:** Weirdest Moments (one playlist only on Facebook; no cover needed)
 
 ## Upload checklist
 
