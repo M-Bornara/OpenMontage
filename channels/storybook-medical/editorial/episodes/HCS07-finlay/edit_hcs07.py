@@ -194,7 +194,7 @@ ep["music"] = {"lufs": -22, "selected": "m1", "gaps": MUSIC_GAPS, "prompts": {
 # wing flick; not built yet.)
 ep["packaging"] = {
  "version": 2,
- "case": 11,
+ "case": 13,   # release order (slate 2026-11-18: Thu Dec 3 = CASE 13; was 11)
  "hook": {"card": "a tiny suspect. / *19* years of doubt.", "anchor": "top"},
  "frame1": {
   "motion": {"type": "snap", "from": 1.03, "to": 1.3, "at": 0, "frames": round(yf * 30) + 1,

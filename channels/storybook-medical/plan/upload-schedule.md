@@ -42,13 +42,20 @@ to Sunday every 14 days).
 | 9 | Mon Nov 23 | **HCS06** The enslaved man who saved Boston (Onesimus, 1721) | HC001-L | Tue Nov 24 | Thu Nov 19 | package ready |
 | 10 | Wed Nov 25 | **HCS08** The doctor who stopped a plague by breaking a pump (John Snow, 1854) | HC001-L | Thu Nov 26 | Sat Nov 21 | package ready (2026-11-10) |
 | 11 | Fri Nov 27 | **HCS09** The doctor they hated for saying "wash your hands" (Semmelweis, 1847) | HC001-L | Sat Nov 28 | Mon Nov 23 | package ready (2026-11-10) |
-| 12 | **Sun Nov 29** · L | **HC002-L** Phineas Gage: The Story Everyone Gets Wrong | – | (FB: optional, Mon Nov 30) | **Wed Nov 25** | script v2 |
-| 13 | Tue Dec 1 | HC002-S1 An Iron Rod Went Through His Skull | HC002-L | Wed Dec 2 | Fri Nov 27 | script v2 |
-| 14 | Thu Dec 3 | **HCS07** He Was Right About the Mosquito. It Took 19 Years. (Finlay; Dec 3 = his birthday, verified) | HC001-L (HC002-L once live) | Fri Dec 4 | Sun Nov 29 | package ready (2026-11-15) |
-| 15 | Sat Dec 5 | HC002-S2 Did Phineas Gage Really Become a Different Person? | HC002-L | Sun Dec 6 | Tue Dec 1 | script v2 |
-| 16 | Mon Dec 7 | **HCS05** 1,100 Years Ago, a Doctor Refused to Treat Patients on Purpose (al-Razi) | HC001-L (HC002-L once live) | Tue Dec 8 | Thu Dec 3 | package ready (2026-11-15) |
-| – | Dec 9 / Dec 11 | two standalone Shorts | | | | |
-| – | **Sun Dec 13** · L | **HC003-L** The Dancing Plague of 1518, then HC003-S1, S2 | | | | script v2 |
+| 12 | Sun Nov 29 | **HC002-S1** An Iron Rod Went Through His Skull (Gage; teaser for the Gage long on Dec 13; Related video → HC002-L on Dec 13) | HC001-L | Mon Nov 30 | **Wed Nov 25** | script v2 → produce (slate 2026-11-18) |
+| 13 | Tue Dec 1 | **HCS10** He Drank Cholera to Prove a Point (Pettenkofer, 1892) | HC001-L | Wed Dec 2 | Fri Nov 27 | research (slate 2026-11-18) |
+| 14 | Thu Dec 3 | **HCS07** He Was Right About the Mosquito. It Took 19 Years. (Finlay; Dec 3 = his birthday, verified) | HC001-L | Fri Dec 4 | Sun Nov 29 | package ready (v2.1; CASE chip 11 → 13) |
+| 15 | Sat Dec 5 | **HC003-S1** The Woman Who Couldn't Stop Dancing (standalone; HC003-L moved to January) | HC001-L | Sun Dec 6 | Tue Dec 1 | script v2 → produce |
+| 16 | Mon Dec 7 | **HCS11** Frozen Solid, She Woke Up (Jean Hilliard, 1980) | HC001-L | Tue Dec 8 | Thu Dec 3 | research (al-Razi parked 2026-11-17) |
+| 17 | Wed Dec 9 | **HCS13** She Fell From the Sky and Walked Out of the Jungle (Koepcke, 1971) | HC001-L | Thu Dec 10 | Sat Dec 5 | research |
+| 18 | Fri Dec 11 | **HCS12** The Doctor Who Drank Yellow Fever Vomit (Ffirth) | HC001-L | Sat Dec 12 | Mon Dec 7 | research |
+| – | **Sun Dec 13** · L | **HC002-L** Phineas Gage: The Story Everyone Gets Wrong (replaces HC003-L, user 2026-11-18) | – | (FB: optional, Mon Dec 14) | **Wed Dec 9** | research + story map; long script needed |
+| 19 | Tue Dec 15 | **HC002-S2** Did Phineas Gage Really Become a Different Person? (after the long: it is the long's twist) | HC002-L | Wed Dec 16 | Fri Dec 11 | script v2 → produce |
+| – | January | **HC003-L** The Dancing Plague of 1518, then HC003-S2 | | | | script v2 |
+
+**Slate Nov 29 – Dec 15 (approved 2026-11-18):** see slate-nov29-dec11.md (CASE numbers, briefs, fallbacks). v2 same day: Gage long on Dec 13, Gage S1 before it as a teaser, S2 after it.
+
+**Pace (user, 2026-11-17):** keep **1 Short every 2 days**; open slots must be filled, not skipped.
 
 **Mix rule (user, 2026-11-06):** at most **one story from outside Europe / North America per week**, never two
 back to back: the channel is still finding a Western audience. So al-Razi moved to Dec 7 (two weeks after the

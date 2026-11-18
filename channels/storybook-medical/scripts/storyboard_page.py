@@ -49,6 +49,31 @@ EPISODES = {
             ("quran_folio_950.jpg", "Handwriting of his time", "Angular cursive on paper: the look of his notebook pages (shot 7a).", "Quran folio, 950–1000 · The Met via Wikimedia Commons · public domain"),
         ],
     },
+    "hc002s1": {
+        "anchor": "gage-s1", "short": "Gage S1", "slot": "CASE 11 · Sun Nov 29 · 15:00 ET = 14:00 Alberta · ready by Wed Nov 25",
+        "storyboard": EP / "HC002-phineas-gage/s1-storyboard-v1.md", "story": EP / "HC002-phineas-gage/s1-story-v2.md",
+        "project": REPO / "projects/hc002-s1", "previz": REPO / "projects/hc002-s1/review/previz", "maps": [],
+        "refs_dir": REPO / "projects/hc002-s1/refs",
+        "refs": [
+            ("gage_wilgus.jpg", "Phineas Gage (likeness only)", "Square face, clean-shaven, dark hair. Taken years after the accident: used for his face, never shown (it belongs to the long video's twist).", "Daguerreotype, 1850s · Wilgus collection via Wikimedia Commons · CC BY-SA 3.0"),
+            ("gage_miller.jpg", "Phineas Gage, second portrait (likeness only)", "The same face from a second angle; not shown in S1.", "Photograph, 1850s · Wikimedia Commons · public domain"),
+            ("tamping_iron.jpg", "The tamping iron", "Smooth, round, pointed at one end: not a crowbar (shots 1, 3, 5, 7, 11).", "Harlow 1868 · Wikimedia Commons · public domain"),
+            ("harlow_skull_1868.jpg", "Harlow's skull drawing, 1868", "Shot 6: the bar's path draws itself on this engraving; no flesh anywhere.", "Harlow 1868, fig. 1 · Wikimedia Commons · public domain"),
+            ("bigelow_1850_side.png", "Bigelow 1850, side view", "The path through the skull as the doctors drew it in 1850.", "Am J Med Sci 1850 · Wikimedia Commons · public domain"),
+            ("cavendish_cut.jpg", "The rock cut at Cavendish today", "Grey rock walls of the cut (presumed site): the set of shots 1–5 and 8.", "Photo, 2009 · Wikimedia Commons · CC BY-SA 3.0"),
+            ("ox_carts_1850s.jpg", "Ox carts, 1850s", "Wooden carts and oxen of the period (shot 9).", "Photo, 1850s, St. Anthony, Minnesota · DPLA via Wikimedia Commons · public domain"),
+        ],
+        "extra": [EP / "HC002-phineas-gage/script-long-v1.md", EP / "HCS10-pettenkofer/story-v1.md", EP / "HCS11-hilliard/story-v1.md",
+                  EP / "HCS13-koepcke/story-v1.md", EP / "HCS12-ffirth/story-v1.md"],
+        "page_title": "Slate Scripts for Approval",
+        "status": "Gage S1 storyboard · Gage long script · 4 new Short scripts · waiting for your OK",
+        "story_kicker": "Story doctor · story v2 · 2026-11-18 · for approval",
+        "v1_label": "v1 (S1 script, Oct 18)",
+        "script_heading": "Script v2 (for approval; not recorded yet)",
+        "h1": "Nov 29 – Dec 13: Gage S1, the Gage long, and four new Shorts",
+        "lede": "First the Short (CASE 11, Sun Nov 29): story v2 from the story doctor, its tension curve against the October script, then the storyboard, where every shot has its level (HERO, ALIVE or BREATH) and the After Effects tricks that make it move. HERO shots get new pieces; ALIVE shots move what is already in the picture. S1 is a teaser: nothing after 1849 is said or shown, so the long video keeps its twist. Below it: Gage long script v1 (Sun Dec 13), then script v1 of the four new Shorts in release order (Pettenkofer Dec 1, Hilliard Dec 7, Koepcke Dec 9, Ffirth Dec 11), each with its spine, beats, hook cards and title. All four topics passed the documented-core rule; every line names its claim, and each script lists what was kept out and why. There are no sketches yet: the free motion pre-viz of the three HERO shots comes after your OK. Tap any picture to enlarge it.",
+        "ask": "<p><b>Gage S1:</b> OK the story and the storyboard, or tell me what to change by shot number. Pick a hook card (A, recommended; B or C), a title (1, recommended) and say yes or no to the music theme (a lone fiddle, a banjo drone, a low drum). Estimated cost <b>≈ $1.87</b> (fal balance $20.97; images on Google credit). After your OK, the next step is free: a motion pre-viz of shots 1, 4 and 8 on stand-ins, with the piece prompts, on this page. Nothing is paid before you approve that.</p><p><b>Long script v1:</b> OK it or send line numbers to change, and answer its three open questions.</p><p><b>Four Short scripts:</b> OK each one or send changes, and pick a hook card and a title for each. Pettenkofer first: it is ready-by Fri Nov 27.</p>",
+    },
 }
 
 
@@ -104,7 +129,7 @@ def parse(md_path: Path) -> dict:
             "cost": cost.group(1) if cost else "", "secs": secs}
 
 
-def tension_svg(beats: list[tuple[str, int, int]]) -> str:
+def tension_svg(beats: list[tuple[str, int, int]], v1_label: str = "v1 (rough cut 1)") -> str:
     """v1 vs v2 tension per beat (editorial rating 0-10). Two series: legend + direct labels; native hover titles."""
     W, H, L, R, T, B = 640, 250, 34, 44, 14, 46
     n = len(beats)
@@ -115,7 +140,7 @@ def tension_svg(beats: list[tuple[str, int, int]]) -> str:
     ticks = "".join(f'<text x="{x(i):.1f}" y="{H - B + 18}" class="ax" text-anchor="middle">{html.escape(b[0])}</text>'
                     for i, b in enumerate(beats))
     out = []
-    for key, idx, label in (("v1", 1, "v1 (rough cut 1)"), ("v2", 2, "v2 (proposed)")):
+    for key, idx, label in (("v1", 1, v1_label), ("v2", 2, "v2 (proposed)")):
         pts = " ".join(f"{x(i):.1f},{y(b[idx]):.1f}" for i, b in enumerate(beats))
         dots = "".join(f'<circle cx="{x(i):.1f}" cy="{y(b[idx]):.1f}" r="4.5" class="d {key}"><title>{label} · {html.escape(b[0])}: '
                        f'{b[idx]}/10</title></circle>' for i, b in enumerate(beats))
@@ -181,11 +206,11 @@ def story_block(k: str, e: dict, img: Path) -> str:
     rh = "".join("<tr>" + "".join(f"<td>{inline(c)}</td>" for c in r) + "</tr>" for r in rhythm)
     sc = "".join("<tr>" + "".join(f"<td>{inline(c)}</td>" for c in r) + "</tr>" for r in score)
     return f"""
-  <div class="block story"><div class="kicker">Round 2 · story v2 · approved 2026-11-15</div>
+  <div class="block story"><div class="kicker">{html.escape(e.get("story_kicker", "Round 2 · story v2 · approved 2026-11-15"))}</div>
   <p class="lede">{inline(why.removeprefix('Why: '))}</p>
   <h3>The tension curve (editorial rating per beat)</h3>
-  <div class="chart"><div class="key"><span><i class="sw v1"></i>v1, rough cut 1</span><span><i class="sw v2"></i>v2, proposed</span></div>
-  {tension_svg(list(merged.values()))}</div>
+  <div class="chart"><div class="key"><span><i class="sw v1"></i>{html.escape(e.get("v1_label", "v1, rough cut 1"))}</span><span><i class="sw v2"></i>v2, proposed</span></div>
+  {tension_svg(list(merged.values()), e.get("v1_label", "v1 (rough cut 1)"))}</div>
   <h3>Spine</h3><ul class="spine">{''.join(f'<li>{inline(s)}</li>' for s in spine)}</ul>
   <h3>Script v2, beat by beat</h3><div class="cast"><table><tr><th>Beat</th><th>Line (Liam)</th><th>Tension v1 → v2</th></tr>{''.join(rows)}</table></div>
   <div class="notes"><p>{inline(changed)}</p></div>
@@ -211,6 +236,47 @@ def prompt_html(spec: dict) -> str:
     roles = f'<p class="roles">{inline(spec["roles"])}</p>' if spec.get("roles") else ""
     return (f'<details class="prompt"><summary>Image prompt</summary><p class="pmeta">{html.escape(meta)}</p>{roles}'
             + "".join(f"<p>{inline(x)}</p>" for x in out) + "</details>")
+
+
+def md_section(f: Path) -> str:
+    """A markdown file (headings, paragraphs, bullet lists, tables) as one page block: the long script on the S1 page."""
+    out, para, tbl, lst = [], [], [], []
+    def flush():
+        if para:
+            out.append(f"<p>{inline(' '.join(para))}</p>"); para.clear()
+        if lst:
+            out.append("<ul>" + "".join(f"<li>{inline(x)}</li>" for x in lst) + "</ul>"); lst.clear()
+        if tbl:
+            rows = [r for r in tbl if not re.match(r"^\|[-\s|]+\|$", r)]
+            cells = [[c.strip() for c in r.strip().strip("|").split("|")] for r in rows]
+            head = "".join(f"<th>{inline(c)}</th>" for c in cells[0])
+            body = "".join("<tr>" + "".join(f"<td>{inline(c)}</td>" for c in r) + "</tr>" for r in cells[1:])
+            out.append(f'<div class="cast"><table><tr>{head}</tr>{body}</table></div>'); tbl.clear()
+    lines = f.read_text(encoding="utf-8").splitlines()
+    title = lines[0].lstrip("# ")
+    for ln in lines[1:]:
+        if ln.startswith("|"):
+            if para or lst:
+                flush()
+            tbl.append(ln); continue
+        if tbl:
+            flush()
+        if ln.startswith("#"):
+            flush(); out.append(f"<h3>{inline(ln.lstrip('# '))}</h3>")
+        elif re.match(r"^\s*- ", ln):
+            if para:
+                flush()
+            lst.append(ln.strip()[2:])
+        elif re.match(r"^\s{2,}\S", ln) and lst:
+            lst[-1] += " " + ln.strip()
+        elif not ln.strip() or ln.strip() == "---":
+            flush()
+        else:
+            if lst:
+                flush()
+            para.append(ln.strip())
+    flush()
+    return f'<div class="block mdsec"><div class="kicker">for approval</div><h2>{inline(title)}</h2>{"".join(out)}</div>'
 
 
 def episode_json(e: dict) -> dict:
@@ -464,6 +530,8 @@ def build(out: Path, keys: list[str]) -> Path:
                                   else "v2 sketches + prompts · waiting for your OK")
         if layered:
             stage = stages[-1] = "layered pilot · real pieces · waiting for your OK"
+        if e.get("status"):
+            stage = stages[-1] = e["status"]
         # reference images to make (cast sheets, set plates) with their prompts
         refgen = []
         for rn, spec in ep.get("references", {}).items():
@@ -532,15 +600,19 @@ def build(out: Path, keys: list[str]) -> Path:
   {story}
   {vid}
   <div class="block"><h3>Notes and period rules</h3><div class="notes">{notes}</div></div>
-  <div class="block"><h3>Script v2 (approved, recorded)</h3><div class="script">{''.join(sc)}</div></div>
+  <div class="block"><h3>{html.escape(e.get("script_heading", "Script v2 (approved, recorded)"))}</h3><div class="script">{''.join(sc)}</div></div>
   <div class="block"><h3>People and places: the real pictures we follow</h3><div class="refs">{''.join(figs)}</div></div>
   <div class="block"><h3>Cast and sets</h3><div class="cast"><table><tr><th>Who / where</th><th>Look</th><th>Shots</th></tr>{cast}</table></div></div>
   <div class="block"><h3>Set map (where each camera stands)</h3><div class="maps">{''.join(maps)}</div></div>
   {f'<div class="block"><h3>Reference images made first (cast sheets and empty sets)</h3><div class="refgen">{"".join(refgen)}</div></div>' if refgen else ''}
   <div class="block"><h3>Shots</h3><p class="legend"><span></span>orange band = where the on-screen text sits · dotted lines = the Shorts safe zone</p>
   <div class="shots">{''.join(cards)}</div></div>
+  {"".join(md_section(f) for f in e.get("extra", []))}
 </section>""")
-    if pilots:
+    first = eps[0][1]
+    if first.get("h1"):
+        h1, lede, ask = first["h1"], first["lede"], first["ask"]
+    elif pilots:
         h1 = "Layered animation pilot: Finlay’s mosquito"
         lede = ("Our own animation instead of AI clips: the painting becomes layers (a clean plate, a mosquito cut out in four "
                 "states, a shadow, the lamp’s glow) and we move them with keyframes, like After Effects. Watch the 3 s preview "
@@ -553,13 +625,13 @@ def build(out: Path, keys: list[str]) -> Path:
         h1 = "Next two Shorts: rough cut 2"
         lede = ("Round 2 (after your rough-cut review): each Short now starts with the proposed story v2, its tension curve against rough cut 1, and which shots stay, get fixed, are redone or are new. Below it: rough cut 1 and the approved v1 storyboard for reference. Each shot shows a rough sketch of the framing (people as silhouettes, where the text goes), the narration line it covers, and what the painting will show. The real portraits and period pictures set how people and places look. Tap any picture to enlarge it.")
         ask = ("<p>Rough cut 2 is at the top of each Short (watch with sound): story v2, the 11 new images, the silent climaxes. Tell me by time or shot number what to change, or say it is ready for covers and publish packages. Reply in chat with the shot numbers you want changed (for example \"al-Razi 6: Matt holds the lamp higher\"), or say both are OK. The order is always: storyboard and sketches, then the image prompts (open \"Image prompt\" under any shot), then the images. Nothing is paid for until you approve the step before it.</p>")
-    page = f"""<title>Finlay and al-Razi Storyboards</title>
+    page = f"""<title>{html.escape(first.get("page_title", "Finlay and al-Razi Storyboards"))}</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400&family=Montserrat:wght@700;800&display=swap">
 <style>{CSS}</style>
 <div class="wrap">
-  <div class="kicker">Oddly Matt · approval page · {html.escape("layered pilot · real pieces · waiting for your OK" if pilots else (stages[0] if len(set(stages)) == 1 else ", ".join(stages)))}</div>
+  <div class="kicker">Oddly Matt · approval page · {html.escape(first.get("status") or "layered pilot · real pieces · waiting for your OK" if first.get("status") or pilots else (stages[0] if len(set(stages)) == 1 else ", ".join(stages)))}</div>
   <h1>{html.escape(h1)}</h1>
   <p class="lede">{html.escape(lede)}</p>
   <nav>{nav}</nav>

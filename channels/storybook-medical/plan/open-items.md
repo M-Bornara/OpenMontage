@@ -4,6 +4,11 @@ Updated 2026-11-16.
 
 ## Social media (2026-11-11)
 - [x] HC001-S1 pinned comment on YouTube: done by the user 2026-11-11.
+- [ ] **Slate Nov 29 – Dec 15 APPROVED (user, 2026-11-18, v2)**: plan/slate-nov29-dec11.md. al-Razi parked until golden eye 7-day (~Nov 28). **Gage long HC002-L on Sun Dec 13** (replaces Dancing long → January); Gage S1 Nov 29 = teaser, Gage S2 Dec 15 after the long. Due: **Gage S1 ready Wed Nov 25**; Pettenkofer ready Fri Nov 27; Finlay chip 11 → 13; Dancing S1 Tue Dec 1; Hilliard Thu Dec 3; Koepcke Sat Dec 5; Ffirth Mon Dec 7; **Gage long script now, ready Wed Dec 9**; Gage S2 Fri Dec 11. ~$30 Shorts + ~$15–18 long; check the fal balance. Dec 13: Gage S1 Related video → HC002-L, HC001-L end screen top box → HC002-L. Go/no-go on the long's image spend if Gage S1 is well below the median by Dec 6.
+  - [x] **Finlay CASE 13** (2026-11-18): chip re-rendered (edit_hcs07.py case 13), text check 0 collisions, deliverables/short.mp4 replaced (50.8 s). User: re-upload it (YouTube Thu Dec 3 + socials) if the CASE 11 version was already scheduled.
+  - [ ] **Waiting for the user's OK (2026-11-18), approval page https://claude.ai/artifact/8XvTt251tTa55p9kfqNRfJ:** Gage S1 story v2 + storyboard v1 (HC002-phineas-gage/s1-story-v2.md, s1-storyboard-v1.md: 13 shots, HERO 1 / 4 / 8, hook card A/B/C, title, theme new-england-1840s, ≈$1.87); Gage long script v1 (script-long-v1.md, 956 words ≈ 6.8 min, 3 open questions; claims C17–C29 added); script v1 for Pettenkofer, Hilliard, Koepcke, Ffirth (HCS10–13 */story-v1.md; research + claims.csv in each, all PASS the documented-core rule: 4.40 / 4.55 / 4.70 / 4.40). After the Gage S1 OK: free motion pre-viz of the 3 HERO shots + piece prompts on the page (no spend before that OK). Fal balance $20.97 (Nov 18).
+  - [ ] Gage S1 refs: 4 Commons images still to fetch (gage_wilgus, tamping_iron, bigelow_1850_side, cavendish_cut): Wikimedia answered 429 (rate limit) on Nov 18; scratchpad fetch_refs.py, use thumbnail width 1280.
+  - [ ] Check before narration: Gage C19 (Williams' "piazza" wording + page), C22/C23 pages, C24 + C28 exact quotes; Ffirth thesis page numbers against the page images; Pettenkofer: German MMW 1892 original if a library copy is reachable; Hilliard: NYT 3 Jan 1981 / Montreal Gazette quotes.
 - [ ] TikTok / Instagram / Facebook copies: post the challenge as the first comment after each goes live and pin it; St. Martin Shorts add the "full story" line (FB: link youtu.be/7-uszA4Qpuw; TikTok: "Search Oddly Matt on YouTube"; IG: "link in bio"). Can't be scheduled. Next: S1 copies Thu Nov 12, 18:00 ET (17:00 AB).
 - [x] **Social plan v1** approved by the user 2026-11-11 (all 5 decisions). Change tracking: plan/change-log.csv (§10).
 - [x] End screen HC001-L: Best for viewer + Most recent upload set by the user 2026-11-11 (change C000).
@@ -27,7 +32,7 @@ Updated 2026-11-16.
 - [x] Gemini credits topped up by the user 2026-11-14. Was: **BLOCKER (2026-11-14): Google Gemini prepaid credits depleted** (402 RESOURCE_EXHAUSTED). User tops up at https://ai.studio/projects (billing). Then: `episode.py keyframes hcs07-finlay --batch --missing` (6 fixed redos: s1a s4b s6a s7a s9a s9b, ≈$0.40) and `episode.py keyframes hcs05-al-razi --batch --missing` (s1b + anything the resumed batch didn't return). Spent so far on these two: refs $0.53 + Finlay first keyframes $1.23 (+ al-Razi batch when collected).
 - [x] Prompts approved by the user 2026-11-14 ("make sure duplications are not happening then you can go ahead"). Was: **HCS07 Finlay + HCS05 al-Razi IMAGE PROMPTS waiting for the user's OK (2026-11-14)** on the same page (https://claude.ai/artifact/Dy34MeUVzxbLtEMi4ujsJC, "Image prompt" under each shot). Storyboard v1.1 + pre-viz APPROVED ("now i can say we go for next"; previz_approved set in both episode.json; caribbean-colonial music theme counted as approved). Lint clean. Cost estimate: Finlay 21 images $1.57, al-Razi 14 images $1.04 (Gemini Batch) + ≈$0.13 each for narration and music. After OK: episode.py refs --batch, then keyframes --batch; images go on the same page for the next OK. CREDITS: al-Razi's look follows the Wellcome portrait (CC BY 4.0): credit "Wellcome Collection" in HCS05's CREDITS.
 - [x] Storyboards v1.1 + pre-viz approved 2026-11-14. Was: **Storyboards v1.1 + free pre-viz (2026-11-14), visual page: https://claude.ai/artifact/Dy34MeUVzxbLtEMi4ujsJC** (rebuild: scripts/storyboard_page.py). Real portraits + period photos per character (references.md in each episode). User approves by shot number. Was: **Storyboards v1: HCS07 Finlay (Thu Dec 3, 16 shots, ≈43 s, ≈$1.60) + HCS05 al-Razi (Mon Dec 7, 12 shots, ≈40 s, ≈$1.30)** (2026-11-12, editorial/episodes/HCS07-finlay + HCS05-al-razi/storyboard-v1.md): user approves, incl. the new caribbean-colonial music theme for Finlay. Then free pre-viz, then prompts. Ready-by: Finlay Sun Nov 29, al-Razi Thu Dec 3. Finlay Dec 3 birthday VERIFIED.
-- [ ] **Dec 1 + Dec 5 slots** (were the Gage Shorts; Gage long parked): user decides: Gage Shorts as standalone, or two other stories.
+- [x] (superseded 2026-11-18 by the slate) **Dec 1 + Dec 5 slots** (were the Gage Shorts; Gage long parked): user decides: Gage Shorts as standalone, or two other stories.
 
 ## From the weekly review 2026-11-15 (editorial/reviews/2026-11-15-weekly.md)
 - [x] Openings rule approved 2026-11-15 -> **packaging v2** (plan/packaging-v2-spec.md, change C006): hook card frame 1, CASE NN label, end line. Production: re-render golden eye (ready-by Tue Nov 17), Onesimus (Thu Nov 19), Snow (Sat Nov 21), Semmelweis (Mon Nov 23), Finlay, al-Razi; then replace the scheduled uploads. Marshall + Bågenholm stay v1.
@@ -36,11 +41,11 @@ Updated 2026-11-16.
   - [ ] **User review of the 4 v2 renders** → then copy each to deliverables/short.mp4 and the user re-uploads (YouTube delete + re-upload, TikTok reschedule, IG/FB replace). Golden eye first (ready-by Tue Nov 17).
   - [ ] Finlay + al-Razi v2 with their retrofits (Finlay: mosquito in s1c / s5b / s8a, optional $0.07 Finlay pose sheet; al-Razi: 7a draw-on, frame 1 = an action shot).
 - [ ] Pinning best posts: deferred by the user (only 3 posts on the profiles). Revisit at ~9 posts per profile (~Nov 24).
-- [ ] Approve: Nov 29 slot = a standalone Short (Gage long stays parked); pick topics.
+- [x] (superseded 2026-11-18 by the slate) Approve: Nov 29 slot = a standalone Short (Gage long stays parked); pick topics.
 - [x] Facebook copy of S3 was published Nov 14 (user; Metricool missed it). Business Suite upload error still to watch.
 - [ ] TikTok Promote: not now (re-check next Sunday).
 
-- [ ] HCS07 Finlay (Dec 3) + HCS05 al-Razi (Dec 7) packages checked 2026-11-15: aligned (facts, C001 blocks, playlists, times). With Gage parked and Dec 5 empty they become consecutive uploads: decide Dec 5 or accept.
+- [x] (resolved 2026-11-18: al-Razi parked) HCS07 Finlay (Dec 3) + HCS05 al-Razi (Dec 7) packages checked 2026-11-15: aligned (facts, C001 blocks, playlists, times). With Gage parked and Dec 5 empty they become consecutive uploads: decide Dec 5 or accept.
 
 - [ ] **Competitor research 2026-11-15** (Claude Doc "Oddly Matt: what comparable channels teach us", https://claude.ai/artifact/98nbS2r3GAWXzvxzCr9PLr): approve C008 (YouTube Shorts series "Season Zero"), C009 (title rule), C010 (frame 1 = the strange object, Matt in shot). TikTok/Instagram competitors pending vidIQ credits (refill Dec 11).
 - [ ] vidIQ credits: 2 left until Dec 11. The evening comment task reads YouTube/TikTok via vidIQ: switch it to Chrome (YouTube Studio comments) or accept gaps.
@@ -50,7 +55,7 @@ Updated 2026-11-16.
 - [x] **Layered animation plan approved (2026-11-16)**: plan/layered-animation.md §7. Levels HERO / ALIVE / BREATH per storyboard shot; v2 re-renders get no new HERO shots; al-Razi 7a = free HERO (pen + writing draws on); the Nov 29 Short is the first fully layered one.
 - [ ] **HCS07 s3 mosquito, real pieces ($0.13 approved 2026-11-16)**: plate-s3-empty + sprite-mosquito (Batch) → cut sheet → hand mask → swap PLATE/SPRITES in edit_hcs07.py → preview → user OK → full Finlay re-render + text check → replace the package's short.mp4.
 - [ ] **al-Razi 7a**: build draw-on writing + pen cut-out (free), preview on the approval page.
-- [ ] **Nov 29 Short topic** (user): the first Short planned with levels from the storyboard.
+- [x] (superseded 2026-11-18 by the slate) **Nov 29 Short topic** (user): the first Short planned with levels from the storyboard.
 
 ## Decisions waiting for the user
 - [x] editing-v2 approved (2026-10-19); the original structure is kept (see section 0).
@@ -118,7 +123,7 @@ Updated 2026-11-16.
       17:00 MT, Related Video = HC001-L. Ready by Wed Nov 4. S2 (59.6 s) and S3 (57.3 s) run over the 35-55 s target.
 - [x] The old "Hired as a Human Test Tube" Short (Oct 17) is NOT published: superseded by HC001-S3, flagged REWRITE
       in master instructions v3, and titled "Part 2" (trailer-style). Kept as an art source only.
-- [x] **End screen HC001-L**: done 2026-11-11 (see Social media). **Remind Sun Nov 22**: top box = HC002-L only if it is made (Gage parked).
+- [x] **End screen HC001-L**: done 2026-11-11 (see Social media). **Remind Sun Dec 13**: top box = HC002-L (Gage long now scheduled Dec 13).
 - [ ] **Instagram Reels by hand** (no schedule option found): **Remind** Tue Nov 10, Thu Nov 12, Sat Nov 14 at 17:00 Alberta: post S2 / S1 / S3 as a Reel (settings in each Short's publish.md). Try Meta Business Suite → Planner for scheduling next time.
 - [x] Clean narration (no warble): blind A/B 2026-11-04, user picked #3 = v3 speed 1.0, stability 0.5 + atempo 1.14 (#6, same at stability 0.4, second). Now the default in episode.py VOICE.
 
