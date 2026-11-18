@@ -38,7 +38,11 @@ def cast(*people: str, extra: str = "") -> str:
     who = "; ".join(people)
     return f"CAST: exactly {n} {'person' if n == 1 else 'people'}: {who}. Nobody else in the frame.{(' ' + extra) if extra else ''}"
 # L8 · props with writing: the model writes words (labels on maps, "Contract", signatures).
-NO_TEXT = "No text, letters, numbers, labels, signatures or watermark anywhere; any writing is illegible scribble."
+NO_TEXT = ("No text, letters, numbers, labels, signatures or watermark anywhere; any writing is illegible scribble. "
+           "No colour swatches, palette chips or colour bars.")
+# L44 (HC002-S1 plate-cut + plate-s8, 2026-11-18): the style prefix lists the palette as hex codes, and the plate came
+# back with a row of colour swatches labelled "#E8A33D ..." painted over the floor (the next plate copied it from its
+# reference). NO_TEXT and episode.py TAIL now forbid swatches.
 # L15 · "illegible copperplate" came back as readable "Lorem ipsum ... Contract ... signature" (HC001 I13, twice).
 WAVY_WRITING = ("Any handwriting is drawn ONLY as rows of soft wavy ink lines with no letters, words, numbers or signature, "
                 "slightly out of focus, like writing seen from too far away to read. No heading or title on the page.")
@@ -159,7 +163,18 @@ CLIP_HOLD = "ONE single action only; once it is done, everything holds completel
 # Sheets come back on a flat chroma-key green so fx_prep.sheet() cuts them cleanly (the green is unmixed from smoky,
 # semi-transparent parts such as insect wings); their light and angle are the plate's, or they never sit in it.
 KEY_BG = ("BACKGROUND: one flat, solid, evenly lit chroma-key green (#00B140) from edge to edge: no shadow on it, no "
-          "floor line, no gradient, no texture, no vignette, nothing else on it.")
+          "floor line, no gradient, no texture, no vignette, no panels, frames or boxes behind the drawings, nothing "
+          "else on it.")
+# L45 (HC002-S1 sprite-hat + pose-gage-s8, 2026-11-18): a sprite / pose sheet that takes a character MODEL SHEET as
+# reference came back with that sheet printed underneath as ghosts (five half-transparent bodies, extra legs, a
+# close-up head). REF_IDENTITY_ONLY goes in every sheet that has a ref:sheet-* reference (lint L45).
+REF_IDENTITY_ONLY = ("The reference sheet is for IDENTITY ONLY (face, hair, build, clothes): do NOT copy its layout, its "
+                     "other views, its close-up heads or its paper background, and nothing of it shows through; draw "
+                     "nothing but the drawings listed here.")
+# L46 (HC002-S1 pose-gage-s1 / s4, 2026-11-18): "both hands on a bar (no bar drawn)" came back holding a T-handled
+# tool, and "both hands on the tamping iron" as a D-handled auger. A prop that is animated separately: say EMPTY HANDS
+# and where they are; a prop that stays in the hands: give its full description (TAMPING_IRON) with what it is NOT.
+EMPTY_HANDS = "His hands are EMPTY (open or loosely curled around nothing): no tool, bar, rod or handle is drawn."
 
 
 def sprite_sheet(obj: str, states: list[str], plate: str, light: str, angle: str, scale: str = "") -> str:
@@ -172,7 +187,7 @@ def sprite_sheet(obj: str, states: list[str], plate: str, light: str, angle: str
             f"overlaps or leaves the picture): {cells} Every drawing is the identical design, the identical size and "
             f"scale, seen from the same angle: {angle}. LIGHT: as in the shot it will be animated into ({plate}): "
             f"{light}. {scale + ' ' if scale else ''}Ink outline, colours and brushwork of our film's painting style. "
-            f"Only the {obj}: no people, no hands, no props, no ground under it. {KEY_BG} {FULL_BLEED} {NO_TEXT}")
+            f"Only the {obj}: no people, no hands, no props, no ground under it. {REF_IDENTITY_ONLY} {KEY_BG} {FULL_BLEED} {NO_TEXT}")
 
 
 def pose_sheet(person: str, poses: list[str], plate: str, light: str, angle: str, crop: str = "the whole figure") -> str:
@@ -183,7 +198,7 @@ def pose_sheet(person: str, poses: list[str], plate: str, light: str, angle: str
             f"left to right, each drawing separate with wide empty space around it: {cells} Each drawing shows "
             f"{crop}, the identical size, costume, face and proportions, seen from the same camera: {angle}. LIGHT: as "
             f"in the shot ({plate}): {light}. The person appears only in these {len(poses)} poses; no other people, no "
-            f"furniture, no ground. Ink outline and painting style of our film. {KEY_BG} {FULL_BLEED} {NO_TEXT}")
+            f"furniture, no ground. Ink outline and painting style of our film. {REF_IDENTITY_ONLY} {KEY_BG} {FULL_BLEED} {NO_TEXT}")
 
 
 def empty_plate(frame: str, remove: str, behind: str) -> str:
@@ -294,6 +309,21 @@ def lint(name: str, spec: dict) -> list[str]:
         issues.append("L43: sprite/pose sheet without KEY_BG and a LIGHT line matching its plate (use sprite_sheet() / "
                       "pose_sheet()): a busy or shaded background doesn't cut cleanly; a sprite lit from another side "
                       "never sits in the plate")
+    # L45: a sheet with a character model sheet as reference must say identity only (else the sheet prints as ghosts)
+    if ("sprite sheet" in p or "pose sheet" in p) and any(str(r).startswith("ref:sheet-") for r in refs) \
+            and "identity only" not in p:
+        issues.append("L45: sprite/pose sheet with a model sheet as reference and no REF_IDENTITY_ONLY: the "
+                      "reference sheet comes back printed underneath as ghosts")
+    # L45b (HC002-S1 pose-gage-s8 v2, 2026-11-18): even with REF_IDENTITY_ONLY a LYING pose sheet printed the standing
+    # model sheet underneath as ghosts. A pose far from the sheet's standing views (lying, sitting on the ground) whose
+    # face isn't seen: no sheet reference at all, describe him in words.
+    if "pose sheet" in p and any(str(r).startswith("ref:sheet-") for r in refs) and re.search(r"lying", p):
+        issues.append("L45b: lying pose sheet with a standing model sheet as reference: it prints as ghosts even with "
+                      "REF_IDENTITY_ONLY; drop the sheet reference (describe the person in words)")
+    # L46: a held prop with "no ... drawn" in brackets gets drawn anyway, as the wrong tool
+    if "pose sheet" in p and re.search(r"\(no [a-z ]+ drawn\)", p):
+        issues.append("L46: '(no X drawn)' for a held prop: the model draws a wrong tool; use EMPTY_HANDS, or give "
+                      "the prop's full description with what it is NOT")
     if "empty plate" in p and "exactly the same picture" not in p:
         issues.append("L43: empty plate without empty_plate() (the model recomposes the frame: the actor's landing spot moves)")
     if "spectacles" in p and "amber" not in p and "no spectacles" not in p:

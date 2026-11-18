@@ -66,21 +66,43 @@ EPISODES = {
         "extra": [EP / "HC002-phineas-gage/script-long-v1.md", EP / "HCS10-pettenkofer/story-v1.md", EP / "HCS11-hilliard/story-v1.md",
                   EP / "HCS13-koepcke/story-v1.md", EP / "HCS12-ffirth/story-v1.md"],
         "page_title": "Slate Scripts for Approval",
-        "status": "Gage S1 HERO motion pre-viz + all image prompts · waiting for your OK",
-        "layered_title": "Gage S1: the three HERO shots, moving (free stand-ins)",
-        "layered_lede": ("Shots 1, 4 and 8 run in the real renderer on drawn stand-ins: plates drawn here and simple cut-out figures. "
-                         "Judge the MOTION and the timing, not the drawing: in shot 1 the bar leaves the dust above his hat, hangs and turns once in slow motion under the hook card, "
-                         "then flies out top right while Gage falls back and his hat tumbles; in shot 4 his head turns on “shoulder”; in shot 8, in silence, "
-                         "his fingers move and he props up on his elbow on “spoke”. The timing comes from a SCRATCH timeline (no narration yet): "
-                         "every key is tied to a word, so the real narration re-times it. No sound yet (no narration or music). "
-                         "The paid pieces below replace the stand-ins with the same names (Gemini Batch, <b>${tot}</b> for the sheets; the three plates are with the references)."),
-        "plate_note": "a drawn stand-in plate, empty of what moves (Gage, the bar, the hat). The paid plate is painted in our style.",
+        "status": "Gage S1 HERO shots on the real pieces · waiting for your OK",
+        "layered_title": "Gage S1: the three HERO shots on the real pieces",
+        "layered_lede": ("Shots 1, 4 and 8 now run in the real renderer on the <b>paid pieces</b>: the painted plates and the cut-outs from "
+                         "the pose and sprite sheets, with the same motion you saw on the stand-ins. Next to each preview: what happens in "
+                         "the shot in plain words, then every piece it uses with the picture that came back and its full prompt, exactly "
+                         "as it was sent (style lock, references, prompt, house style). The timing is still a SCRATCH timeline (no "
+                         "narration yet; every key is tied to a word, so the real narration re-times it), and there is no sound yet."),
+        "hero": {
+            "s01": {"label": "Shot 1 · the blast", "pieces": ["plate-s1", "pose-gage-s1", "sprite-iron", "sprite-hat"],
+                    "desc": ("Low on the floor of the rock cut, looking up, with the hook card on top. The charge goes off: dust and "
+                             "smoke burst up, the picture shakes, and two of his men duck with their arms over their heads. Gage, "
+                             "dark against the smoke like a silhouette, is thrown backward with his arms flung up, and his hat spins "
+                             "away to the left. The iron bar shoots up out of the dust <b>above</b> him (never across his head), hangs "
+                             "and turns once in slow motion under the hook card, then flies out top right as the card ends."),
+                    "notes": {"plate-s1": "v1. The two crewmen came out mid-frame, facing us (asked: at the edges, from behind), so Gage stands between them.",
+                              "pose-gage-s1": "v2. v1 held a T-handled tool and stood on pale panels; v2 has empty hands (lesson L46). Darkened in the edit.",
+                              "sprite-iron": "v1, clean.",
+                              "sprite-hat": "v2. v1 had the Gage sheet printed under it (L45) and was a bowler (not yet invented in 1848)."}},
+            "s05": {"label": "Shot 4 · the look", "pieces": ["plate-s4", "pose-gage-s4"],
+                    "desc": ("From the pit, behind two of his men (their backs fill the foreground). Up on the ledge, Gage stands with "
+                             "both hands on the tamping iron, its point in the drill hole, eyes down. On the word “shoulder” he turns "
+                             "his head over his right shoulder toward his men: the second that starts everything. A slow push in."),
+                    "notes": {"plate-s4": "v1, as asked: the ledge, the drill hole and a keg, two backs in front.",
+                              "pose-gage-s4": "v2. v1 held a D-handled auger and turned his whole body; v2 holds the smooth iron and only his head turns."}},
+            "s09": {"label": "Shot 8 · he spoke", "pieces": ["plate-s8", "pose-gage-s8"],
+                    "desc": ("No music. The smoke settles over the rock floor in a shaft of light. Gage lies on his back with his head "
+                             "turned away from us; we never see his face, and there is no blood. In the silence his fingers curl; on "
+                             "the word “spoke” he pushes himself up on his elbow."),
+                    "notes": {"plate-s8": "v2. v1 had a colour-swatch strip with hex codes (L44). It repeats the set plate's camera instead of a ground-level view; fine for the pre-viz.",
+                              "pose-gage-s8": "v3. v1 and v2 printed the Gage sheet underneath as ghosts; v3 has no sheet reference (L45b). It came back as a 2×2 grid: the bottom-left drawing is a spare, not used."}},
+        },
         "story_kicker": "Story doctor · story v2 · 2026-11-18 · for approval",
         "v1_label": "v1 (S1 script, Oct 18)",
         "script_heading": "Script v2 (for approval; not recorded yet)",
-        "h1": "Gage S1: the HERO motion pre-viz and the image prompts",
-        "lede": "Round 2 for Gage S1 (CASE 11, Sun Nov 29). The storyboard is approved (2026-11-18). At the top: the three HERO shots moving in the real renderer on free stand-ins. Below them, every shot with its blocking sketch and, for the story stills, its image prompt (open “Image prompt”). The cast sheets, the set plate and the three HERO plates are in “Reference images made first”. All 21 prompts pass the prompt lint (0 findings). Below the Short: the approved long script and the four Short scripts, for reference. Tap any picture to enlarge it.",
-        "ask": "<p><b>Gage S1:</b> OK the motion of shots 1, 4 and 8 (or tell me what to change: timing, how far he falls, how long the bar hangs) and the 21 image prompts. Also confirm hook card A, title 1 and the fiddle/banjo theme, which are still my recommendations. Cost after your OK: 21 images on Gemini Batch ≈ $1.41 (Google credit), narration ≈ $0.07 and music ≈ $0.13 on fal (balance $20.97); total ≈ $1.61, plus a retry margin. The reference photo of the cut (and three other Commons pictures) still has to be fetched: Wikimedia was blocking downloads on Nov 18.</p><p><b>Hilliard and Koepcke scripts:</b> your OK is still open (the cuts are in).</p>",
+        "h1": "Gage S1: the HERO shots on the real pieces",
+        "lede": "Round 3 for Gage S1 (CASE 11, Sun Nov 29). Hook card A, title 1 and the fiddle/banjo theme are approved. As you asked, only the pieces the three HERO shots need were made first: the 3 character sheets, the set plate, the 3 HERO plates and the 5 pose / sprite sheets. At the top: shots 1, 4 and 8 moving on those real pieces, each with its plain-language description and the full prompt of every piece next to it. Further down, “Reference images made first” shows the character sheets and the set plate with their prompts, and every other shot keeps its sketch and its image prompt (not made yet). Tap any picture to enlarge it.",
+        "ask": "<p><b>Gage S1, the three HERO shots:</b> OK them on the real pieces, or tell me what to change (timing, size, how far he falls, how long the bar hangs, the silhouette in shot 1). Then I make the rest: the 9 story stills, ≈ $0.60 on Gemini Batch, or ≈ $1.21 if each also gets its 16:9 version for the long video (your Q1: reuse the S1 images). I'd also redo the bandaged-Gage sheet (+$0.07): its bandage misses the crown, and one close-up shows both eyes. After that come narration (≈ $0.07) and music (≈ $0.13) on fal, which has a $20.97 balance.</p><p><b>Spent this round:</b> $1.34 for 20 images (Google credit). 12 were your list plus the set plate, which the 3 HERO plates use as their look reference; 8 were retries (swatches, ghosted sheets, a bowler hat and wrong tools). Each failure is now a prompt rule with a lint check (L44, L45, L45b, L46).</p><p><b>Hilliard and Koepcke scripts:</b> your OK is still open (the cuts are in).</p>",
     },
 }
 
@@ -246,6 +268,38 @@ def prompt_html(spec: dict) -> str:
             + "".join(f"<p>{inline(x)}</p>" for x in out) + "</details>")
 
 
+def sent_prompt(spec: dict) -> str:
+    """The prompt EXACTLY as episode.py sends it (style lock + roles + prompt + aspect + tail + style prefix)."""
+    try:
+        sys.path.insert(0, str(Path(__file__).parent))
+        import episode as epi
+        return (epi.LOCK + spec.get("roles", "") + " " + spec["prompt"] + f" Aspect {spec.get('aspect', '9:16')}."
+                + epi.TAIL + " " + epi.style_prefix())
+    except Exception:
+        return spec.get("roles", "") + " " + spec.get("prompt", "")
+
+
+def hero_pieces(k: str, sid: str, hero: dict, ep: dict, p: Path, img: Path) -> str:
+    """Per HERO shot (user 2026-11-18): each paid piece it uses = the picture that came back + its full prompt."""
+    refs = ep.get("references", {})
+    out = []
+    for rn in hero.get("pieces", []):
+        spec = refs.get(rn)
+        if not spec:
+            continue
+        f = p / "assets/images/refs" / f"{rn}.png"
+        pic = (f'<img src="img/{shrink(f, img / f"{k}-{sid}-{rn}", 1100)}" alt="{html.escape(rn)}, as generated" loading="lazy">'
+               if f.exists() else '<p class="st new">not made yet</p>')
+        names = ", ".join(r.split(":", 1)[-1].split("/")[-1] for r in spec.get("refs", []))
+        out.append(f'<article class="piece"><figure>{pic}<figcaption><b>{html.escape(rn)}</b>'
+                   f'<span>{html.escape(hero.get("notes", {}).get(rn, ""))}</span></figcaption></figure>'
+                   f'<details class="prompt" open><summary>Full prompt, exactly as sent</summary>'
+                   f'<p class="pmeta">{html.escape(spec.get("aspect", "9:16"))} · {html.escape(spec.get("resolution", ep.get("image_resolution", "2K")))}'
+                   f' · references in: {html.escape(names or "none")}</p>'
+                   f'<p class="full">{html.escape(sent_prompt(spec))}</p></details></article>')
+    return f'<div class="pieces">{"".join(out)}</div>' if out else ""
+
+
 def md_section(f: Path) -> str:
     """A markdown file (headings, paragraphs, bullet lists, tables) as one page block: the long script on the S1 page."""
     out, para, tbl, lst = [], [], [], []
@@ -368,6 +422,14 @@ def layered_block(k: str, e: dict, ep: dict, out: Path, img: Path) -> str:
                                 f'don’t match a camera looking down at the hand, so the beat and the fold are made from the '
                                 f'top-down frame by turning each wing at its root.</span>')
                              + '</figcaption></figure>')
+        hero = e.get("hero", {}).get(sid)
+        if hero:   # user 2026-11-18: the shot in plain words + every piece's picture and full prompt beside the preview
+            arts.append(f'<article class="layered"><div class="head"><span class="num">{html.escape(hero.get("label", sid))}</span>'
+                        f'<span class="chip">{s["end"] - s["start"]:.1f} s</span><span class="size">{html.escape(sid)} · layered · real pieces</span></div>'
+                        f'<div class="lgrid">{vid}<div class="cast"><p class="desc">{hero["desc"]}</p>'
+                        f'<details><summary>Layers and motion</summary><table><tr><th>Layer</th><th>What</th><th>Motion</th></tr>{plan}</table></details></div></div>'
+                        f'{sheet}{hero_pieces(k, sid, hero, ep, p, img)}</article>')
+            continue
         arts.append(f'<article class="layered"><div class="head"><span class="num">{html.escape(Path(str(s["source"])).stem)}</span>'
                     f'<span class="chip">{s["end"] - s["start"]:.1f} s</span><span class="size">{html.escape(sid)} · layered</span></div>'
                     f'<div class="lgrid">{vid}<div class="cast"><table><tr><th>Layer</th><th>What</th><th>Motion</th></tr>{plan}</table></div></div>'
@@ -389,7 +451,10 @@ def layered_block(k: str, e: dict, ep: dict, out: Path, img: Path) -> str:
         pieces.append(f'<article><b>{html.escape(rn)}</b><span class="st {"" if made else "new"}">'
                       f'{"made" if made else f"waiting for your OK · ${usd:.3f}"}</span>'
                       f'{prompt_html(spec).replace("<details", "<details open", 1)}</article>')
-    if tot == 0 and pieces:
+    if e.get("hero") and e.get("layered_lede"):   # prompts already sit beside each shot
+        return (f'<div class="block"><h3>{html.escape(e.get("layered_title", "Layered shots"))}</h3>'
+                f'<p class="lede">{e["layered_lede"].replace("{tot}", f"{tot:.2f}")}</p>{"".join(arts)}</div>')
+    if tot == 0 and pieces and not e.get("layered_lede"):
         return (f'<div class="block"><h3>Layered shots: our own animation (pilot)</h3>'
                 f'<p class="lede">The preview now runs on the <b>real pieces</b> (made 2026-11-16, $0.134): the plate without the '
                 f'mosquito and the cut-out mosquito, warmed to the lamp’s light. Same motion you approved.</p>'
@@ -493,6 +558,7 @@ svg.tension .lab{fill:var(--ink);font:700 12px var(--display)}
 .st{font:700 11px var(--display);letter-spacing:.06em;padding:2px 8px;border-radius:999px;background:var(--line)}
 .st.redo,.st.new{background:var(--amber-soft);color:var(--ink)}
 .layered{background:var(--surface);border:2px solid var(--teal);border-radius:14px;padding:14px;display:grid;gap:14px;margin-top:12px}
+.layered .desc{margin:0 0 10px;font-size:1.02rem;line-height:1.5}.pieces{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:14px}.piece{background:var(--bg);border-radius:10px;padding:10px;display:grid;gap:8px;align-content:start}.piece figure{margin:0}.piece img{width:100%;height:auto;border-radius:6px;cursor:zoom-in}.piece figcaption{display:grid;gap:2px;margin-top:6px}.piece .full{white-space:pre-wrap;font-size:.84rem;line-height:1.45;overflow-wrap:anywhere}
 .lgrid{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:16px;align-items:start}
 img.wide{width:100%;height:auto;border-radius:8px;border:1px solid var(--line);cursor:zoom-in}
 .layered figure img{aspect-ratio:auto;object-fit:contain;background:var(--bg)}
@@ -653,7 +719,7 @@ def build(out: Path, keys: list[str]) -> Path:
 <div id="lb" hidden><img alt=""></div>
 <script>
 const lb=document.getElementById('lb'),lbi=lb.querySelector('img');
-document.addEventListener('click',e=>{{const t=e.target;if(t.tagName==='IMG'&&t.closest('figure,.shot,.maps,.v2grid,.layered')){{lbi.src=t.src;lbi.alt=t.alt;lb.hidden=false}}else if(t.closest('#lb')){{lb.hidden=true}}}});
+document.addEventListener('click',e=>{{const t=e.target;if(t.tagName==='IMG'&&t.closest('figure,.shot,.maps,.v2grid,.layered,.piece')){{lbi.src=t.src;lbi.alt=t.alt;lb.hidden=false}}else if(t.closest('#lb')){{lb.hidden=true}}}});
 document.addEventListener('keydown',e=>{{if(e.key==='Escape')lb.hidden=true}});
 </script>
 """

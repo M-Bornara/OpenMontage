@@ -172,7 +172,7 @@ def resolve_ref(pid: str, ref: str) -> str:
 
 LOCK = ("Match the art style of the references EXACTLY: same ink line weight, same gouache brush texture, same two-tone "
         "cel shading, same amber/teal palette, same level of facial simplification. ")
-TAIL = " No text, no labels, no captions, no watermark."
+TAIL = " No text, no labels, no captions, no watermark, no colour swatches or palette chips."  # L44
 
 
 def gen_images(pid: str, section: str, out_dir: str, only: list[str]):

@@ -17,7 +17,7 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[5]
 sys.path.insert(0, str(REPO / "channels/storybook-medical/scripts"))
-from prompt_kit import (FULL_BLEED, NO_TEXT, ONE_EACH, PERIOD, SAFE_FRAMING, camera, cast, crowd, framing,  # noqa: E402
+from prompt_kit import (EMPTY_HANDS, FULL_BLEED, NO_TEXT, ONE_EACH, PERIOD, SAFE_FRAMING, camera, cast, crowd, framing,  # noqa: E402
                         glasses_gag, lint_all, matt_beat, pose_sheet, set_block, sprite_sheet)
 
 PID = "hc002-s1"
@@ -40,13 +40,14 @@ The doctor remembered the greeting: "Doctor, here is business enough for you."
 # ── people ──────────────────────────────────────────────────────────────────────────────────────────────────────────
 GAGE = ("PHINEAS GAGE in September 1848 (25; a strong, square-jawed young face, clean-shaven, thick dark hair, both eyes "
         "open and unhurt; a white work shirt with the sleeves rolled up, dark braces, dark wool trousers, work boots, a "
-        "low-crowned dark felt hat)")
+        "soft, wide-brimmed, low flat-crowned dark felt hat (a slouch hat of 1848: NOT a bowler or derby, NOT a top hat))")
+GAGE_NOHAT = GAGE.split(", a soft, wide-brimmed")[0] + "; NO hat)"   # shots 1 and 8: the hat is its own sprite / gone
 GAGE_AFTER = ("PHINEAS GAGE after the accident, 1848 (the same young man, 25: a clean white cloth bandage wrapped around "
               "his head, covering his LEFT eye and the top of his head; no blood, no wound visible anywhere; calm; the "
               "same white shirt and braces, a dark jacket over his shoulders)")
 TAMPING_IRON = ("tamping iron of 1848: a smooth, perfectly straight, round iron rod, about 3 ft 7 in long and thick as a "
                 "thumb, dark grey with a dull sheen, tapering to a POINT at one end and blunt at the other (NOT a crowbar: "
-                "no hook, no claw, no bend)")
+                "no hook, no claw, no bend; NOT a drill or auger: no handle, no grip, no crossbar, no screw tip)")
 CREW = [
     "a grey-bearded older driller in his fifties, broad and weathered, a battered straw hat",
     "a red-haired, freckled youth of about seventeen, thin, no hat",
@@ -125,32 +126,39 @@ REFERENCES.update({
                                            "the same, a little foreshortened as if turning toward the viewer"],
                             "s1: a blast in a rock cut under a pale sky", "soft daylight from the upper LEFT",
                             "from the side, level", "Each rod is about four fifths of the picture's width.")),
-    "sprite-hat": dict(aspect="16:9", refs=[G], roles="Reference 1 is Phineas Gage: copy ONLY his hat. ",
-        prompt=sprite_sheet("low-crowned dark felt hat of 1848", ["seen from the side", "seen from below, tumbling"],
+    "sprite-hat": dict(aspect="16:9", refs=[SHEET_LAYOUT],   # v2: not the Gage sheet (v1 printed it underneath, L45)
+        roles="Reference 1 is our model-sheet layout and painting style ONLY: do not copy the person on it. ",
+        prompt=sprite_sheet("soft, wide-brimmed, low flat-crowned dark felt slouch hat of 1848 (NOT a bowler or derby)", ["seen from the side", "seen from below, tumbling"],
                             "s1: a blast in a rock cut under a pale sky", "soft daylight from the upper LEFT",
                             "from the side and below")),
     "pose-gage-s1": dict(aspect="16:9", refs=[G],
         roles="Reference 1 is PHINEAS GAGE (his build and clothes only: this shot shows him as a dark silhouette). ",
-        prompt=pose_sheet(GAGE, ["standing, both hands on a bar in a drill hole, at the moment of the blast (no bar drawn)",
-                                 "thrown backward by the blast, arms flung up, back arched, hat gone"],
+        prompt=pose_sheet(GAGE_NOHAT,
+                          ["standing braced over a drill hole, legs apart, leaning forward, at the moment of the blast. "
+                           + EMPTY_HANDS + " His hands are low in front of him",
+                           "thrown backward by the blast, arms flung up, back arched. " + EMPTY_HANDS],
                           "s1: a blast in a rock cut, the sky behind him", "strong back light from the pale sky: he is "
                           "almost a dark silhouette against it, a thin light rim on his edges", "from low in front, the "
                           "whole figure, feet at the bottom of each drawing")),
     "pose-gage-s4": dict(aspect="16:9", refs=[G],
         roles="Reference 1 is PHINEAS GAGE (face, hair, clothes). ",
-        prompt=pose_sheet(GAGE, ["both hands on the tamping iron standing in the drill hole, eyes down on the hole",
-                                 "the same stance and hands, his head turned over his RIGHT shoulder toward the viewer, "
-                                 "eyes on his men"],
+        prompt=pose_sheet(GAGE, [f"standing three-quarter to the viewer's left, both hands resting on the top (blunt) end of the "
+                                 f"{TAMPING_IRON}, which stands upright, point down, at his feet; his eyes down on it",
+                                 "EXACTLY the same stance, body angle, hands and iron as drawing (1); ONLY his head turns over "
+                                 "his RIGHT shoulder toward the viewer, eyes on his men"],
                           "s4: the ledge seen from the pit", "daylight from the upper LEFT",
                           "from slightly below, a little to his right", "from the knees up")),
-    "pose-gage-s8": dict(aspect="16:9", refs=[G],
-        roles="Reference 1 is PHINEAS GAGE (hair, clothes). ",
-        prompt=pose_sheet(GAGE.replace("a low-crowned dark felt hat", "no hat") + " with his hair grey with dust",
-                          ["lying on his back on rock, still, his face turned AWAY from the viewer",
-                           "the same, the fingers of his right hand curling against the rock",
-                           "pushing up on his right elbow, head lifting, still facing away"],
+    "pose-gage-s8": dict(aspect="16:9", refs=[],   # v3: NO sheet reference (v1 + v2 printed the sheet as ghosts, L45b)
+        roles="",
+        prompt=pose_sheet(GAGE_NOHAT[:-1] + ", his hair grey with dust)",
+                          ["lying flat on his back, seen from the side, his head at the RIGHT end, still; his head is turned AWAY "
+                           "from the viewer toward the far side, so only the back of his head and his dusty hair show, never "
+                           "his face or profile. He lies on the flat green: no rock, no ground drawn under him",
+                           "EXACTLY the same, only the fingers of his right hand curling",
+                           "the same body pushing up on his right elbow, head lifting, still facing away"],
                           "s8: the rock floor in settling smoke", "soft grey daylight from the upper RIGHT through smoke",
-                          "from ground level behind his RIGHT shoulder; his face is never seen; no blood, no wound")),
+                          "from ground level at his side, a little behind his head; his face is never seen; no blood, no wound",
+                          "the whole figure, the same size in all three")),
 })
 
 # ── the story stills ─────────────────────────────────────────────────────────────────────────────────────────────────

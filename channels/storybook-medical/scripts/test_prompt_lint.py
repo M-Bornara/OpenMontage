@@ -137,5 +137,21 @@ l43, l43ok = prompt_kit.lint_all(bad, require_matt=False), prompt_kit.lint_all(g
 status = "PASS" if all(any("L43" in m for m in l43.get(n, [])) for n in bad) and not l43ok else "FAIL"
 print(f"{status} L43 sprite sheet / empty plate without the layered-shot templates caught{'' if not l43ok else f' (template findings: {l43ok})'}")
 ok = ok and status == "PASS"
+# L44-L46 (HC002-S1 first HERO pieces, 2026-11-18): swatches; a model sheet printed as ghosts under a sprite / pose
+# sheet; "(no bar drawn)" drawn as the wrong tool.
+bad = {"pose-x": {"aspect": "16:9", "refs": ["ref:sheet-gage"], "prompt": prompt_kit.pose_sheet(
+           "a man", ["standing, both hands on a bar (no bar drawn)", "thrown back"], "s1", "light from the left", "front"
+       ).replace(prompt_kit.REF_IDENTITY_ONLY, "")}}
+good = {"pose-x": {"aspect": "16:9", "refs": ["ref:sheet-gage"], "prompt": prompt_kit.pose_sheet(
+            "a man", ["standing. " + prompt_kit.EMPTY_HANDS, "thrown back"], "s1", "light from the left", "front")}}
+bad["lie-x"] = {"aspect": "16:9", "refs": ["ref:sheet-gage"], "prompt": prompt_kit.pose_sheet(
+    "a man", ["lying flat on his back", "propped on an elbow"], "s8", "light from the right", "side")}
+lb, lg = prompt_kit.lint_all(bad, require_matt=False), prompt_kit.lint_all(good, require_matt=False)
+assert any(m.startswith("L45b") for m in lb.get("lie-x", [])), "L45b lying pose with a sheet reference not caught"
+import episode  # noqa: E402
+status = ("PASS" if {"L45", "L46"} <= {m[:3] for m in lb.get("pose-x", [])} and not lg
+          and "swatch" in prompt_kit.NO_TEXT and "swatch" in episode.TAIL else "FAIL")
+print(f"{status} L44 swatches forbidden, L45 sheet ghosts, L46 '(no X drawn)' caught{'' if not lg else f' (template findings: {lg})'}")
+ok = ok and status == "PASS"
 sys.exit(0 if ok else 1)
 

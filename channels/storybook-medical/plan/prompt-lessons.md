@@ -128,3 +128,17 @@ Every generation round teaches us something. A lesson only counts once it's **en
 - **Story, not just images:** the cut felt flat because the scripts were lists of facts and the shots were poses.
   New step before every script approval: `.claude/skills/story-doctor/SKILL.md` (spine, beats, tension curve,
   action shots, rhythm map, score) → `story-v2.md` → approval page.
+
+## L44 · L45 · L45b · L46 (HC002-S1 Gage, first HERO pieces, 2026-11-18)
+- **L44:** plate-cut came back with a row of colour swatches labelled with hex codes (the style prefix lists the palette as
+  hex), and plate-s8 copied them from it. `NO_TEXT` and episode.py `TAIL` now forbid swatches / palette chips.
+- **L45:** a sprite / pose sheet with a character MODEL SHEET as reference printed that sheet underneath as ghosts (hat sprite,
+  lying poses). `REF_IDENTITY_ONLY` is now in `sprite_sheet()` / `pose_sheet()`; lint L45 checks it. An object sprite (the hat)
+  takes no character sheet at all: describe it in words.
+- **L45b:** even with `REF_IDENTITY_ONLY`, a LYING pose sheet ghosted the standing sheet again. A pose far from the sheet's
+  standing views, whose face isn't seen: no sheet reference (lint L45b).
+- **L46:** "both hands on a bar (no bar drawn)" came back with a T-handled tool, "hands on the tamping iron" as a D-handled
+  auger. Use `EMPTY_HANDS` when the prop is its own sprite; otherwise give the prop's full description with what it is NOT.
+- Also: "low-crowned felt hat" became a bowler (London, 1849): name the period hat ("slouch hat of 1848, NOT a bowler").
+- Cut-outs: `cutouts_hc002s1.py` `solidify()` keeps the largest piece and makes the inside opaque WITHOUT filling holes
+  (filling put the key green back between the iron and his leg); colours close to the key (the hat's teal) use rembg.
