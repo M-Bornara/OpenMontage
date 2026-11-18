@@ -156,3 +156,13 @@ Every generation round teaches us something. A lesson only counts once it's **en
   "plain, no lettering". Painted out locally (rebuild the band from the wood above / below; inpaint smears it).
 - Building prompt/lint code through a shell heredoc turned `\b` into a real backspace (two lint rules silently dead).
   Write such edits with a file, then grep for control characters.
+- **L48 (HC002-S1 sheet-gage-after v2, 2026-11-18):** "a bandage over his LEFT eye" came back over his RIGHT eye in every
+  view (the model took the viewer's left). Say "his own LEFT eye (in a front view, on the RIGHT side of the picture)".
+  Fixed for free by mirroring the whole model sheet (only button side and profile side change).
+- **L49 (HC002-S1 s11, 2026-11-18):** a hand-only keyframe that took the character sheet (for the sleeve) came back fine at
+  9:16, but its 16:9 recompose (which gets the same references) painted the WHOLE person standing in the doorway with
+  an over-long arm. A hand-only / object-only still: no character sheet; or redo the 16:9 from the 9:16 frame alone
+  (`wide_s11.py`). v1 had also copied the HC001 study (shelves, lamp, quill, test tubes) from the style plate into the
+  16:9: spell a bare room out ("no furniture, no shelves, no lamp") and keep other films' rooms out of the references.
+- Text on set signs: "CAVENDISH HOTEL" came back readable despite NO_TEXT (a hotel invites a sign). Flat boards are
+  painted out locally (`fix_s10_sign.py`: the board's letter holes inpainted).

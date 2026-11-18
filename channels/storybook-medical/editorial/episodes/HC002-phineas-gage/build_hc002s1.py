@@ -42,9 +42,10 @@ GAGE = ("PHINEAS GAGE in September 1848 (25; a strong, square-jawed young face, 
         "open and unhurt; a white work shirt with the sleeves rolled up, dark braces, dark wool trousers, work boots, a "
         "soft, wide-brimmed, low flat-crowned dark felt hat (a slouch hat of 1848: NOT a bowler or derby, NOT a top hat))")
 GAGE_NOHAT = GAGE.split(", a soft, wide-brimmed")[0] + "; NO hat)"   # shots 1 and 8: the hat is its own sprite / gone
-GAGE_AFTER = ("PHINEAS GAGE after the accident, 1848 (the same young man, 25: a clean white cloth bandage wrapped around "
-              "his head, covering his LEFT eye and the top of his head; no blood, no wound visible anywhere; calm; the "
-              "same white shirt and braces, a dark jacket over his shoulders)")
+GAGE_AFTER = ("PHINEAS GAGE after the accident, 1848 (the same young man, 25, no hat: a clean white cloth bandage wrapped "
+              "over the CROWN of his head and down diagonally over his own LEFT eye (L48: in a front view that is on the RIGHT "
+              "side of the picture), so the top of his head and his left eye are covered; his right eye open; no blood, no wound visible anywhere; calm; the same white shirt and dark "
+              "braces, and a short dark wool work jacket over them (NOT a long frock coat))")
 TAMPING_IRON = ("tamping iron of 1848: a smooth, perfectly straight, round iron rod, about 3 ft 7 in long and thick as a "
                 "thumb, dark grey with a dull sheen, tapering to a POINT at one end and blunt at the other (NOT a crowbar: "
                 "no hook, no claw, no bend; NOT a drill or auger: no handle, no grip, no crossbar, no screw tip)")
@@ -83,9 +84,13 @@ REFERENCES = {
         prompt=(f"Clean character model sheet on plain bone-white paper: {GAGE}. Front view, three-quarter view, profile "
                 "view, back view, plus three head close-ups (confident, giving an order; concentrating, looking down; "
                 "turning his head over his shoulder). Same scale in every view. No text, labels or watermark.")),
-    "sheet-gage-after": dict(aspect="16:9", refs=[SHEET_LAYOUT, "proj:refs/gage_miller.jpg"], roles=SHEET + PHOTO,
+    # v2 (2026-11-18): v1's bandage missed the crown, one close-up showed both eyes, and he wore a frock coat. Reference 1 is
+    # now the approved 1848 sheet (same face as the shots already made), with its layout.
+    "sheet-gage-after": dict(aspect="16:9", refs=[G], roles=("Reference 1 is the model sheet of PHINEAS GAGE before the "
+                             "accident: the same man, face, hair, build and layout; here he wears no hat and has the bandage. "),
         prompt=(f"Clean character model sheet on plain bone-white paper: {GAGE_AFTER}. Front view, three-quarter view, "
                 "profile view from his RIGHT side, back view, plus two head close-ups (calm, a dry half smile; tired). "
+                "In EVERY view and both close-ups the bandage covers the crown and his LEFT eye exactly the same way. "
                 "Same scale in every view. No text, labels or watermark.")),
     "sheet-crew": dict(aspect="16:9", refs=[SHEET_LAYOUT], roles=SHEET,
         prompt=("Clean character model sheet (a line-up) on plain bone-white paper: three different railroad workmen of 1848, standing "
@@ -220,10 +225,15 @@ KEYFRAMES = {
                 f"{cast(GAGE_AFTER, 'DR. EDWARD WILLIAMS, seen only from behind in the foreground: tall hat, dark coat, a leather medical bag', 'MATT')} "
                 f"{matt_beat('a brown waistcoat and a low felt hat of 1848', 'leaning on the piazza post behind Gage, pencil frozen over his notebook, jaw dropped')} "
                 f"{ONE} No blood. {SAFE_FRAMING} {PERIOD} {NO_TEXT}")),
-    "s11": dict(aspect="9:16", refs=[STYLE_PLATE], roles=STYLE_ONLY,
+    # v2 (2026-11-18): v1 drew TWO crossing rods, and its 16:9 version copied the HC001 study (shelves, lamp, quill, test
+    # tubes) from the style plate: the Gage sheet is now the style + sleeve reference, the room is spelled out bare.
+    "s11": dict(aspect="9:16", refs=[G], roles=("Reference 1 is PHINEAS GAGE: copy ONLY the painting style and his white "
+                                               "shirt sleeve, rolled up; only his hand and forearm are in this picture. "),
         prompt=(f"{ROOM} {framing('CU', 'eye level', '85 mm', f'a young man’s hand grips the {TAMPING_IRON} leaning in the corner by a doorway', 'quiet, possessive')} "
                 f"{camera('close to the door frame', 'into the corner', 'bare plank wall in soft daylight')} "
-                "Only the hand and cuff are in the picture, no face. "
+                "Exactly ONE iron rod in the whole picture. The room is bare: plank walls and a plank floor only; no "
+                "furniture, no shelves, no books, no bottles, no lamp, no stove. "
+                f"Only the hand and its rolled white shirt sleeve are in the picture, no face. {ONE_EACH} "
                 f"{glasses_gag('hanging by one arm from a nail on the plank wall above the iron')} {SAFE_FRAMING} {PERIOD} {NO_TEXT}")),
     "s12": dict(aspect="9:16", refs=[STYLE_PLATE, GA],
         roles=STYLE_ONLY + "Reference 2 is PHINEAS GAGE after the accident (small, out of focus). ",
@@ -239,10 +249,21 @@ def main():
     p = REPO / "projects" / PID / "episode.json"
     ep = json.load(open(p, encoding="utf-8"))
     ep.update(image_resolution="2K", references=REFERENCES, keyframes=KEYFRAMES,
+              previz_approved=("2026-11-18: user approved the HERO shots v6 (1 as is; 4 + 8 with fixes) and said go "
+                               "ahead with the 9 story stills + 16:9 and the bandaged-Gage sheet redo"),
               glasses="s11: Matt's spectacles hanging from a nail above the iron",
               theme={"culture": "new-england-1840s (proposed)", "font": "montserrat"},
               storyboard="2026-11-18: s1-storyboard-v1.md; HERO pre-viz on stand-ins (previz_hc002s1.py, edit_hc002s1.py)")
     ep["narration"]["v3_text"] = NARRATION
+    # theme new-england-1840s (approved 2026-11-18): fiddle, banjo drone, low drum; 2 candidates, no vocals
+    ep["music"] = {**ep.get("music", {}), "lufs": ep.get("music", {}).get("lufs", -22),
+                   "selected": "m2", "prompts": {   # m2 46.1 s covers the Short; m1 is 37.2 s
+        "m1": {"sections": 2, "prompt": ("Instrumental, rural Vermont 1848: a solo fiddle playing a slow, haunting old-time air "
+               "in a minor key over a low open-string banjo drone and a soft frame drum like a distant heartbeat; tense and "
+               "curious, a stunned hush in the middle, then a quiet, wondering close. No vocals, no modern drums, no synths.")},
+        "m2": {"sections": 2, "prompt": ("Instrumental, New England 1840s old-time music: clawhammer banjo picking a tense, "
+               "repeating figure, a fiddle answering with long mournful notes, a low bass drum on every other bar; builds "
+               "unease, then a hushed, eerie ending. No vocals, no synths, no modern drums.")}}}
     json.dump(ep, open(p, "w", encoding="utf-8"), indent=2, ensure_ascii=False)
     issues = lint_all({**REFERENCES, **KEYFRAMES})
     for n, v in issues.items():

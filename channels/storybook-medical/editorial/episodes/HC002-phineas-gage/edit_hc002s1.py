@@ -42,26 +42,67 @@ PLAN = [
     ("12", 4.6, "But his friends said… he was \"no longer Gage.\"", LOW, 0.4, 1.2),
 ]
 
-# ── the scratch timeline ───────────────────────────────────────────────────────────────────────────────────────────────
-words, starts, t = [], {}, 0.0
-for name, secs, line, *_rest in PLAN:
-    a, b = t + _rest[1], t + secs - _rest[2]
-    toks = line.split()
-    wt = [len(norm(x)) + 2 for x in toks]
-    k = (b - a) / sum(wt)
-    x = a
-    for tok, wgt in zip(toks, wt):
-        words.append({"word": tok, "start": round(x, 3), "end": round(x + wgt * k - 0.04, 3), "shot": name})
-        x += wgt * k
-    starts[name] = round(t, 2)
-    t += secs
-TOTAL_NARR = round(t, 2)
-(P / "artifacts").mkdir(parents=True, exist_ok=True)
-json.dump([{k: v for k, v in w_.items() if k != "shot"} for w_ in words],
-          open(P / "artifacts/word_timestamps.json", "w", encoding="utf-8"), indent=1)
-(P / "assets/audio").mkdir(parents=True, exist_ok=True)
-subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "lavfi", "-i", "anullsrc=r=48000:cl=mono", "-t", f"{TOTAL_NARR}",
-                "-c:a", "pcm_s16le", str(P / "assets/audio/narration.wav")], check=True)
+# ── the timeline: the REAL narration once it exists (a non-silent narration.wav from `episode.py narrate`), else the
+# SCRATCH one (silent wav + words spread over each shot's storyboard length, for the pre-viz)
+def _audible(wav: Path) -> bool:
+    if not wav.exists():
+        return False
+    import wave
+    with wave.open(str(wav)) as f:
+        data = f.readframes(f.getnframes())
+    return any(b not in (0, 255) for b in data[::97])        # pcm16 silence = 00 00 / ff ff around zero
+
+
+WAV, WT = P / "assets/audio/narration.wav", P / "artifacts/word_timestamps.json"
+REAL = _audible(WAV) and WT.exists()
+words, starts, dur = [], {}, {}
+if REAL:
+    # each shot starts `lead` before its first word (never before the previous shot's last word ends) and runs to the
+    # next shot; the shot's first words are found in order in the transcript (2 tokens, then 1)
+    real = json.load(open(WT, encoding="utf-8"))
+    toks = [norm(x["word"]) for x in real]
+    firsts, i = [], 0
+    for name, secs, line, cap, lead, tail in PLAN:
+        want = [norm(x) for x in line.split() if norm(x)][:2]
+        j = next((k for k in range(i, len(toks)) if toks[k:k + 2] == want), None)
+        if j is None:
+            j = next((k for k in range(i, len(toks)) if toks[k] == want[0]), i)
+        firsts.append(j)
+        i = j + 1
+    for n_, (name, secs, line, cap, lead, tail) in enumerate(PLAN):
+        j = firsts[n_]
+        last = firsts[n_ + 1] - 1 if n_ + 1 < len(PLAN) else len(real) - 1
+        prev_end = real[j - 1]["end"] + 0.12 if j > 0 else 0.0
+        starts[name] = 0.0 if n_ == 0 else round(max(prev_end, real[j]["start"] - lead), 2)
+        for x in real[j:last + 1]:
+            words.append({**x, "shot": name})
+    names = [x[0] for x in PLAN]
+    end_all = round(real[-1]["end"] + PLAN[-1][5], 2)
+    for k, name in enumerate(names):
+        dur[name] = round((starts[names[k + 1]] if k + 1 < len(names) else end_all) - starts[name], 2)
+    import subprocess as _sp
+    TOTAL_NARR = float(_sp.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", str(WAV)],
+                               capture_output=True, text=True).stdout.strip())
+else:
+    t = 0.0
+    for name, secs, line, *_rest in PLAN:
+        a_, b_ = t + _rest[1], t + secs - _rest[2]
+        toks = line.split()
+        wt = [len(norm(x)) + 2 for x in toks]
+        k = (b_ - a_) / sum(wt)
+        x = a_
+        for tok, wgt in zip(toks, wt):
+            words.append({"word": tok, "start": round(x, 3), "end": round(x + wgt * k - 0.04, 3), "shot": name})
+            x += wgt * k
+        starts[name], dur[name] = round(t, 2), secs
+        t += secs
+    TOTAL_NARR = round(t, 2)
+    (P / "artifacts").mkdir(parents=True, exist_ok=True)
+    json.dump([{k: v for k, v in w_.items() if k != "shot"} for w_ in words],
+              open(WT, "w", encoding="utf-8"), indent=1)
+    (P / "assets/audio").mkdir(parents=True, exist_ok=True)
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "lavfi", "-i", "anullsrc=r=48000:cl=mono", "-t", f"{TOTAL_NARR}",
+                    "-c:a", "pcm_s16le", str(WAV)], check=True)
 
 
 def w(phrase: str, shot: str, word: int = 0) -> float:
@@ -131,8 +172,11 @@ SPOKE = w("spoke", "8")
 # "spoke" (the shoulder rises to ~y 0.47). Width ~0.97 of the frame (HERO >= 1/3).
 GAGE8 = {"id": "gage", "sprites": SPR + "gage-s8/sprites.json", "w": 1.0, "face": "fixed", "xfade": 0.25,
          "grade": "brightness(0.86) sepia(0.15) saturate(0.85)",
-         "breath": {"amp": 0.010, "period": 2.6, "states": ["lie", "fingers", "prop"]},
+         "breath": {"amp": 0.010, "period": 2.6, "states": ["lie", "fingers", "lift", "prop"]},
+         # user 2026-11-18: the prop frame is matched to the lying body (match_s8.py: same scale, pinned at the waist) and
+         # "lift" (the fingers frame tipped up at the waist) bridges them, so the shoulder rises from where it lay
          "keys": [{"t": 0.0, "x": 0.47, "y": 1.0, "state": "lie"}, {"t": 1.6, "x": 0.47, "y": 1.0, "state": "fingers"},
+                  {"t": round(SPOKE - 0.45, 2), "x": 0.47, "y": 1.0, "state": "lift"},
                   {"t": SPOKE, "x": 0.47, "y": 1.0, "state": "prop"}]}
 SMOKE8 = {"kind": "particles", "style": "haze", "x": 0.5, "y": 0.45, "tx": 0.5, "ty": 0.62, "spread": 0.3, "every": 0.3,
           "life": 3.5, "size": 260, "color": "200,194,182", "opacity": 0.3, "from": 0, "to": 5}
@@ -140,8 +184,8 @@ SMOKE8 = {"kind": "particles", "style": "haze", "x": 0.5, "y": 0.45, "tx": 0.5, 
 # ── the shots ──────────────────────────────────────────────────────────────────────────────────────────────────────────
 SKETCH = {"push": {"type": "push", "from": 1.02, "to": 1.08, "x": 0, "y": 0}}
 shots = []
-for i, (name, secs, line, cap, *_r) in enumerate(PLAN):
-    s = {"id": f"s{i + 1:02d}", "start": starts[name], "end": round(starts[name] + secs, 2), "source": PV + f"{name}.png",
+for i, (name, _secs, line, cap, *_r) in enumerate(PLAN):
+    s = {"id": f"s{i + 1:02d}", "start": starts[name], "end": round(starts[name] + dur[name], 2), "source": PV + f"{name}.png",
          "motion": SKETCH["push"], "captionY": cap, "breath": True, "previz": name}
     if name == "1":
         s.update(source=PLATE + "plate-s1.png", motion={"type": "pull", "from": 1.08, "to": 1.02},
@@ -168,8 +212,11 @@ overlays = [
 ep = json.load(open(P / "episode.json", encoding="utf-8"))
 ep.update({"title": "He Took an Iron Bar Through the Skull… and Spoke", "format": "short", "loop": True, "tail_seconds": 1.0,
            "motion_lint": "warn",   # PRE-VIZ: the non-HERO shots are sketches (breath); the real cut runs the full lint
-           "previz": "scratch timeline 2026-11-18; replace with the real narration", "shots": shots, "overlays": overlays,
-           "sfx": [], "music": {"selected": "", "prompts": {}},
+           "previz": "real narration" if REAL else "scratch timeline 2026-11-18; replace with the real narration", "shots": shots, "overlays": overlays,
+           "sfx": ep.get("sfx", []),
+           # music prompts live in build_hc002s1.py; the music stops for shot 8's silence (cut -> just after "spoke")
+           "music": {**ep.get("music", {}), "gaps": [{"from": starts["8"], "to": round(starts["8"] + SPOKE + 0.25, 2),
+                                                     "fade_out": 0.3, "fade_in": 0.6}]},
            "packaging": {"version": 2, "case": 11, "hook": {"card": "An iron bar / through his *skull*.", "anchor": "top"}}})
 json.dump(ep, open(P / "episode.json", "w", encoding="utf-8"), indent=2, ensure_ascii=False)
-print(f"{len(shots)} shots, {len(words)} scratch words, {TOTAL_NARR} s; turn at {TURN} s in shot 4, 'spoke' at {SPOKE} s in shot 8")
+print(f"{'REAL' if REAL else 'SCRATCH'} timeline: {len(shots)} shots, {len(words)} words, {TOTAL_NARR} s; turn at {TURN} s in shot 4, 'spoke' at {SPOKE} s in shot 8")
