@@ -146,7 +146,9 @@ good = {"pose-x": {"aspect": "16:9", "refs": ["ref:sheet-gage"], "prompt": promp
             "a man", ["standing. " + prompt_kit.EMPTY_HANDS, "thrown back"], "s1", "light from the left", "front")}}
 bad["lie-x"] = {"aspect": "16:9", "refs": ["ref:sheet-gage"], "prompt": prompt_kit.pose_sheet(
     "a man", ["lying flat on his back", "propped on an elbow"], "s8", "light from the right", "side")}
+bad["plate-x"] = {"aspect": "9:16", "prompt": "EMPTY LOCATION PLATE: no people. The near foreground is clear (a man's shoulder and hand are added there later, large). " + prompt_kit.SAFE_FRAMING}
 lb, lg = prompt_kit.lint_all(bad, require_matt=False), prompt_kit.lint_all(good, require_matt=False)
+assert any(m.startswith("L47") for m in lb.get("plate-x", [])), "L47 empty plate naming body parts not caught"
 assert any(m.startswith("L45b") for m in lb.get("lie-x", [])), "L45b lying pose with a sheet reference not caught"
 import episode  # noqa: E402
 status = ("PASS" if {"L45", "L46"} <= {m[:3] for m in lb.get("pose-x", [])} and not lg

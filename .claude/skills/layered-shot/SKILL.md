@@ -129,3 +129,10 @@ preview, then the full render (text_check runs after it).
   before and after (memory: report-ai-costs).
 - A failed piece (wrong light, merged figures, a recomposed plate) becomes a prompt_kit rule + lint + regression test
   (memory: prompt-lessons-loop).
+
+## HERO size rule (user, 2026-11-18)
+In a HERO shot the moving subject fills **at least 1/3 of the frame** (width or height, times the camera zoom) at its key
+moment: phones show a 0.34-wide bar or a 0.24-tall figure as nothing. Plan plates at that scale (MS / CU, the subject large
+in the foreground, not a wide establishing view); a small gesture gets a push-in that ends at MS on the beat word; a flying
+object comes closer (z), with a lit edge / glint / trail, and stays in frame through its word. A silhouette still carries
+the character's known look. `layers.lint_hero_size` fails the build otherwise (warn for "motion_lint": "warn").

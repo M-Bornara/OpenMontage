@@ -75,47 +75,65 @@ def w(phrase: str, shot: str, word: int = 0) -> float:
     raise SystemExit(f"{phrase!r} not in shot {shot}")
 
 
-# ── HERO 1: the bar in the air (hook card on top, y 360-~610: the bar stays below y 0.36 while the card is up) ───────
-# plate-s1: the blast hole at (0.47, 0.68), the two ducking crewmen at x 0.22-0.37 and 0.62-0.73; Gage stands between
-# them in the foreground (feet just below the frame at 1.065, head top ~0.66, raised hands below ~0.60: the LOW caption
-# at 0.54 stays above them), darkened to a back-lit silhouette.
-IRON = {"id": "iron", "sprites": SPR + "iron/sprites.json", "w": 0.34, "face": "keys",
-        "motionBlur": {"samples": 10, "shutter": 0.6},
-        "keys": [{"t": 0.0, "x": 0.54, "y": 0.45, "rot": -72},                        # already ABOVE his hat (care: never across his head)
-                 {"t": 0.45, "x": 0.55, "y": 0.44, "rot": -20, "ease": "out"},        # fast, then...
-                 {"t": 2.4, "x": 0.60, "y": 0.43, "rot": 330},                        # ...hangs, one slow turn (time remap)
-                 {"t": 3.0, "x": 1.2, "y": 0.05, "rot": 560, "ease": "in"}]}          # card gone: out top-right
-GAGE1 = {"id": "gage", "sprites": SPR + "gage-s1/sprites.json", "w": 0.48, "face": "keys", "xfade": 0.08,
-         "grade": "brightness(0.15) saturate(0.5)",            # back-lit by the pale sky: a silhouette (storyboard, care)
-         "states": {"stand": {}, "thrown": {}},
-         "keys": [{"t": 0.0, "x": 0.50, "y": 1.065, "rot": -3, "state": "stand"},
-                  {"t": 0.1, "x": 0.50, "y": 1.065, "rot": -6, "state": "thrown"},
-                  {"t": 0.8, "x": 0.48, "y": 1.07, "rot": -13, "ease": "out"},
-                  {"t": 3.0, "x": 0.475, "y": 1.07, "rot": -15}]}
-HAT = {"id": "hat", "sprites": SPR + "hat/sprites.json", "w": 0.13, "face": "keys",
-       "grade": "brightness(0.55) saturate(0.7)", "states": {"side": {}, "tumble": {}},
+# ── HERO 1: the bar in the air (user 2026-11-18: the bar 2-3x bigger and closer, sunlit edge + glint + trail, visible until
+# "skull"; Gage clearly thrown backward, a TRUE silhouette carrying his shot-4 look; HERO rule: the subject >= 1/3 frame)
+# plate-s1: the blast hole at (0.47, 0.68), the two ducking crewmen at x 0.22-0.37 and 0.62-0.73; Gage between them in the
+# foreground. The hook card covers y 0.19-0.33 until ~2.5 s; captions only after it (the LOW line at 0.54-0.58 on "skull").
+SKULL = w("skull", "1")
+# the bar: iron-lit (looks_hc002s1.py) = sunlit top edge, states rod / glint; z grows 1.0 -> 1.55 (it comes closer):
+# 0.60 -> 0.93 of the frame width. Pointed end first, never across his head (lowest end at frame 0: y 0.60, his hat 0.63+).
+IRON_KEYS = [{"t": 0.0, "x": 0.53, "y": 0.46, "rot": -58, "z": 1.0, "state": "rod"},
+             {"t": 0.35, "x": 0.55, "y": 0.44, "rot": -30, "z": 1.2, "ease": "out"},       # fast out of the dust...
+             {"t": 0.85, "x": 0.552, "y": 0.432, "rot": -18, "z": 1.28, "state": "glint"},  # ...hangs: the sun catches it
+             {"t": 1.5, "x": 0.556, "y": 0.425, "rot": -8, "z": 1.36, "state": "rod"},
+             {"t": SKULL, "x": 0.565, "y": 0.415, "rot": 4, "z": 1.46, "state": "glint"},  # glint on "skull"
+             {"t": 3.0, "x": 0.58, "y": 0.40, "rot": 14, "z": 1.55}]
+IRON = {"id": "iron", "sprites": SPR + "iron-lit/sprites.json", "w": 0.6, "face": "keys", "xfade": 0.18,
+        "depth": {"blur": 0}, "motionBlur": {"samples": 10, "shutter": 0.6}, "keys": IRON_KEYS}
+# the trail: the same bar a moment earlier, fainter (behind the bar)
+TRAILS = [{**IRON, "id": f"iron-trail{i}", "opacity": op, "xfade": 0, "motionBlur": {"samples": 6, "shutter": 1.2},
+           "keys": [{**{k: v for k, v in key.items() if k != "state"}, "t": round(key["t"] + lag, 3), "state": "rod"}
+                    for key in IRON_KEYS]}
+          for i, (lag, op) in enumerate(((0.05, 0.38), (0.11, 0.18)), 1)]
+# Gage: gage-s1-sil (true silhouette + warm rim; the white shirt a shade lighter, braces and his hat still read), thrown
+# BACKWARD toward the camera: lifted, tipping back, growing (z), then dropping out of the bottom of the frame.
+GAGE1 = {"id": "gage", "sprites": SPR + "gage-s1-sil/sprites.json", "w": 0.48, "face": "keys", "xfade": 0.08,
+         "depth": {"blur": 0}, "states": {"stand": {}, "thrown": {}},
+         "keys": [{"t": 0.0, "x": 0.50, "y": 1.065, "rot": 0, "z": 1.0, "state": "stand"},
+                  {"t": 0.08, "x": 0.51, "y": 1.04, "rot": 4, "z": 1.04, "state": "thrown"},
+                  {"t": 0.5, "x": 0.53, "y": 1.0, "rot": 10, "z": 1.15, "ease": "out"},
+                  {"t": 1.4, "x": 0.55, "y": 1.08, "rot": 18, "z": 1.25},
+                  {"t": 3.0, "x": 0.57, "y": 1.2, "rot": 26, "z": 1.32, "ease": "in"}]}
+HAT = {"id": "hat", "sprites": SPR + "hat-sil/sprites.json", "w": 0.13, "face": "keys", "depth": {"blur": 0},
+       "states": {"side": {}, "tumble": {}},
        "keys": [{"t": 0.0, "x": 0.53, "y": 0.655, "rot": 0, "state": "side"},
-                {"t": 0.25, "x": 0.47, "y": 0.58, "rot": -60, "state": "tumble"},
-                {"t": 1.3, "x": 0.27, "y": 0.42, "rot": -220, "ease": "out"},
-                {"t": 3.0, "x": 0.12, "y": 0.47, "rot": -300}]}
+                {"t": 0.25, "x": 0.47, "y": 0.6, "rot": -60, "state": "tumble"},
+                {"t": 1.3, "x": 0.22, "y": 0.58, "rot": -220, "ease": "out"},
+                {"t": 3.0, "x": 0.08, "y": 0.62, "rot": -300}]}
 DUST1 = {"kind": "particles", "style": "haze", "x": 0.47, "y": 0.70, "tx": 0.5, "ty": 0.5, "spread": 0.12, "every": 0.12,
          "life": 2.6, "size": 220, "color": "196,186,166", "opacity": 0.45, "from": 0, "to": 3}
 
-# ── HERO 4: the look over the shoulder (on "shoulder") ─────────────────────────────────────────────────────────────────
+# ── HERO 4: the look over the shoulder (on "shoulder"). User 2026-11-18: push in on Gage during the shot so the head turn
+# is big (end at MS). Gage on the ledge: x 0.487, feet 0.512, head top ~0.274 (0.24 of the frame tall). The push ends at
+# 3.6x with his head top at y 0.30 (under the TOP caption, 0.15-0.26): he fills ~0.86 of the frame height (HERO >= 1/3);
+# the shared ease puts ~93 % of the push before the turn. Sprite 513 px wide shown ~590 px: no soft upscale on him.
 TURN = w("shoulder", "4")
-# plate-s4: the drill hole on the ledge at (0.485, 0.506), between the two crewmen's backs: the iron's tip stands in it
-# (the rod is centred on the canvas, its tip at the feet line); Gage about 0.27 of the frame tall.
+PUSH4 = {"type": "push", "from": 1.02, "to": 3.6, "x": round(-(0.487 - 0.5) * 3.6 * 100, 2),
+         "y": round((0.30 - 0.5 - (0.274 - 0.5) * 3.6) * 100, 2)}
 GAGE4 = {"id": "gage", "sprites": SPR + "gage-s4/sprites.json", "w": 0.152, "face": "fixed", "xfade": 0.2,
          "grade": "sepia(0.12)", "breath": {"amp": 0.008, "period": 3.0, "states": ["down", "turn"]},
          "keys": [{"t": 0.0, "x": 0.487, "y": 0.512, "state": "down"}, {"t": TURN, "x": 0.487, "y": 0.512, "state": "turn"}]}
 
 # ── HERO 8: the climax, in silence (fingers move, then up on the elbow on "spoke") ──────────────────────────────────────
 SPOKE = w("spoke", "8")
-# plate-s8: the clear floor in the lower middle (x 0.25-0.75, y 0.66-0.86); his head to the right, away from us.
-GAGE8 = {"id": "gage", "sprites": SPR + "gage-s8/sprites.json", "w": 0.62, "face": "fixed", "xfade": 0.25,
-         "grade": "brightness(0.88) sepia(0.18)", "breath": {"amp": 0.012, "period": 2.6, "states": ["lie", "fingers", "prop"]},
-         "keys": [{"t": 0.0, "x": 0.49, "y": 0.80, "state": "lie"}, {"t": 1.6, "x": 0.49, "y": 0.80, "state": "fingers"},
-                  {"t": SPOKE, "x": 0.49, "y": 0.80, "state": "prop"}]}
+# plate-s8 v4 (ground level, user 2026-11-18): the bare floor fills the lower half. The close pose sheet (v4): the waist cut
+# just off the left edge, his open hand large at the lower left, the back of his head at the right; up on his elbow on
+# "spoke" (the shoulder rises to ~y 0.47). Width ~0.97 of the frame (HERO >= 1/3).
+GAGE8 = {"id": "gage", "sprites": SPR + "gage-s8/sprites.json", "w": 1.0, "face": "fixed", "xfade": 0.25,
+         "grade": "brightness(0.86) sepia(0.15) saturate(0.85)",
+         "breath": {"amp": 0.010, "period": 2.6, "states": ["lie", "fingers", "prop"]},
+         "keys": [{"t": 0.0, "x": 0.47, "y": 1.0, "state": "lie"}, {"t": 1.6, "x": 0.47, "y": 1.0, "state": "fingers"},
+                  {"t": SPOKE, "x": 0.47, "y": 1.0, "state": "prop"}]}
 SMOKE8 = {"kind": "particles", "style": "haze", "x": 0.5, "y": 0.45, "tx": 0.5, "ty": 0.62, "spread": 0.3, "every": 0.3,
           "life": 3.5, "size": 260, "color": "200,194,182", "opacity": 0.3, "from": 0, "to": 5}
 
@@ -128,10 +146,10 @@ for i, (name, secs, line, cap, *_r) in enumerate(PLAN):
     if name == "1":
         s.update(source=PLATE + "plate-s1.png", motion={"type": "pull", "from": 1.08, "to": 1.02},
                  hit={"at": 0, "strength": 3.2, "seconds": 0.8}, fx=[DUST1], breath=False,
-                 layers={"bg": "proj:assets/images/refs/plate-s1.png", "actors": [GAGE1, IRON, HAT]})
+                 layers={"bg": "proj:assets/images/refs/plate-s1.png", "actors": [GAGE1, *TRAILS, IRON, HAT]})
     if name == "4":
         s.update(source=PLATE + "plate-s4.png", breath=False,
-                 motion={"type": "push", "from": 1.02, "to": 1.1, "x": -2, "y": 4},
+                 motion=PUSH4,
                  layers={"bg": "proj:assets/images/refs/plate-s4.png", "mg": [GAGE4]})
     if name == "8":
         s.update(source=PLATE + "plate-s8.png", breath=False,

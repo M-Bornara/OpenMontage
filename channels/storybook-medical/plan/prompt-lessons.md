@@ -142,3 +142,17 @@ Every generation round teaches us something. A lesson only counts once it's **en
 - Also: "low-crowned felt hat" became a bowler (London, 1849): name the period hat ("slouch hat of 1848, NOT a bowler").
 - Cut-outs: `cutouts_hc002s1.py` `solidify()` keeps the largest piece and makes the inside opaque WITHOUT filling holes
   (filling put the key green back between the iron and his leg); colours close to the key (the hat's teal) use rembg.
+
+## L47 + HERO size (HC002-S1 Gage HERO round 2, 2026-11-18)
+- **HERO rule (user):** the moving subject fills at least 1/3 of the frame in a HERO shot (phone). Plates are designed at
+  that scale (MS / CU, the subject large in the foreground); small gestures get a push-in to MS on the beat word.
+  `layers.lint_hero_size` checks it at `episode.py build`.
+- **L47:** an empty plate whose prompt named what is added later ("a man's shoulder and hand are added there later,
+  large") came back with a man's hand painted in. Describe only the empty place. Also: `framing()` in an empty plate says
+  "waist up" / "faces": write a plain SHOT line instead.
+- A whole earlier plate as reference copied its wide camera again (L40 for plates): pass a DETAIL crop of it (rock, smoke,
+  light) instead (`refs/s8_light_detail.png`).
+- "kegs of blasting powder" came back with readable "BLASTING POWDER" labels: prop descriptions that name contents need
+  "plain, no lettering". Painted out locally (rebuild the band from the wood above / below; inpaint smears it).
+- Building prompt/lint code through a shell heredoc turned `\b` into a real backspace (two lint rules silently dead).
+  Write such edits with a file, then grep for control characters.

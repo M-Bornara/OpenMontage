@@ -57,7 +57,7 @@ CREW = [
 # ── sets (references: the photo of the cut, period ox carts) ─────────────────────────────────────────────────────────
 CUT = set_block("The railroad rock cut near Cavendish, Vermont", "13 September 1848",
                 "a fresh cut through grey schist rock with raw, layered walls and a rough ledge; drill holes; small wooden "
-                "kegs of blasting powder; stacked rails and timber; wooded hills in early autumn colour beyond")
+                "kegs of blasting powder (plain wood, no lettering); stacked rails and timber; wooded hills in early autumn colour beyond")
 ROAD = set_block("A dirt road through fields near Cavendish, Vermont", "September 1848",
                  "a rutted dirt road between stubble fields and stone walls, maples just turning, a clapboard village ahead")
 HOTEL = set_block("The front of a village hotel in Cavendish, Vermont", "September 1848",
@@ -115,11 +115,21 @@ REFERENCES.update({
             "Two crewmen in the foreground, seen from behind (backs, hats and shoulders, soft focus), at the left and right "
             "edges. On the ledge in the middle distance: the drill hole, a small keg, nothing else. "
             + NOT_HERE.format(who="Phineas Gage") + f" {ONE_EACH} {SAFE_FRAMING} {PERIOD} {NO_TEXT}")),
-    "plate-s8": dict(aspect="9:16", refs=[CUTP], roles=CUT_LOOK, set="cut",
-        prompt=(f"{CUT} {framing('MS', 'ground level', '50 mm', 'the smoke of the blast settles over the rock floor', 'stunned silence')} "
-                f"{camera('on the rock floor, at ground level', 'along the floor', 'the rock floor with small stones in the lower half, settling grey smoke and a shaft of daylight through it above')} "
-                "The middle of the floor is clear: a man will lie there (added later). "
-                + NOT_HERE.format(who="Phineas Gage") + f" No blood anywhere. {SAFE_FRAMING} {PERIOD} {NO_TEXT}")),
+    # v4 (user 2026-11-18: "remake the plate as planned: ground-level MS, his hand + shoulder large in the foreground, face
+    # turned away; the light shafts are good: keep them"). v3 painted a man's hand (the prompt named it, L47) and copied the
+    # v2 plate's wide camera (it was the whole reference): v4 takes only a DETAIL crop of v2 (rock, smoke, light shafts).
+    # no framing() here: its 'waist up' / 'faces' wording invites a person into an empty plate (L47)
+    "plate-s8": dict(aspect="9:16", refs=["proj:refs/s8_light_detail.png"],
+        roles=("Reference 1 is a small DETAIL of our rock cut: copy ONLY its painting style, the grey layered rock, the "
+               "settling smoke and the slanting shafts of daylight. It is not a camera or a composition. "), set="cut",
+        prompt=(f"{CUT} SHOT: ground-level view, the camera lies ON the rock floor, 35 mm, shallow focus; stunned silence after a blast. "
+                f"{camera('on the rock floor itself, the lens a few inches above the ground', 'along the floor toward the foot of the rock wall', 'the foot of a grey layered rock wall a few yards away, settling smoke, shafts of daylight from the upper LEFT')} "
+                "The rock floor is seen almost edge-on: big out-of-focus pebbles and grit right at the bottom edge, the bare "
+                "floor rising in steep perspective through the whole lower half of the frame to the foot of a grey layered rock "
+                "wall a few yards away, which fills the upper half; settling grey smoke drifts over the floor, and shafts of "
+                "daylight slant down through it from the upper LEFT. The near foreground is bare, clear rock floor. "
+                "EMPTY LOCATION PLATE: no people, no hands, no bodies, no clothes, no tools anywhere. No blood. "
+                f"{SAFE_FRAMING} {PERIOD} {NO_TEXT}")),
     "sprite-iron": dict(aspect="16:9", refs=[SHEET_LAYOUT],
         roles="Reference 1 is our model-sheet layout and painting style ONLY: do not copy the person on it. ",
         prompt=sprite_sheet(TAMPING_IRON, ["lying straight and level, side view, the POINT to the RIGHT",
@@ -148,17 +158,21 @@ REFERENCES.update({
                                  "his RIGHT shoulder toward the viewer, eyes on his men"],
                           "s4: the ledge seen from the pit", "daylight from the upper LEFT",
                           "from slightly below, a little to his right", "from the knees up")),
-    "pose-gage-s8": dict(aspect="16:9", refs=[],   # v3: NO sheet reference (v1 + v2 printed the sheet as ghosts, L45b)
-        roles="",
+    # v4 (2026-11-18): close, for the ground-level MS plate: his right shoulder and hand LARGE in the foreground. No sheet
+    # reference (L45b); the face is never seen.
+    "pose-gage-s8": dict(aspect="16:9", refs=[], roles="",
         prompt=pose_sheet(GAGE_NOHAT[:-1] + ", his hair grey with dust)",
-                          ["lying flat on his back, seen from the side, his head at the RIGHT end, still; his head is turned AWAY "
-                           "from the viewer toward the far side, so only the back of his head and his dusty hair show, never "
-                           "his face or profile. He lies on the flat green: no rock, no ground drawn under him",
+                          ["lying on his back on the ground, still: his right shoulder and upper arm nearest to the viewer, "
+                           "his right hand lying open, palm up, closest of all; beyond the shoulder his head is turned AWAY "
+                           "from the viewer, so only the back of his head and his dusty hair show, never his face or profile",
                            "EXACTLY the same, only the fingers of his right hand curling",
-                           "the same body pushing up on his right elbow, head lifting, still facing away"],
-                          "s8: the rock floor in settling smoke", "soft grey daylight from the upper RIGHT through smoke",
-                          "from ground level at his side, a little behind his head; his face is never seen; no blood, no wound",
-                          "the whole figure, the same size in all three")),
+                           "the same man pushing up on his right elbow: the shoulder rising toward the viewer, his head lifting, "
+                           "still turned away"],
+                          "s8: the rock floor in settling smoke, camera on the ground",
+                          "soft grey daylight from the upper LEFT through smoke",
+                          "from ground level at his right side, close to his right shoulder; his face is never seen; no blood, no wound",
+                          "his head, shoulders, chest and right arm with the hand, the body cut off straight at the waist, "
+                          "the same size in all three")),
 })
 
 # ── the story stills ─────────────────────────────────────────────────────────────────────────────────────────────────

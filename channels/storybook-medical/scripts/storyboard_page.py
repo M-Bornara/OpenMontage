@@ -66,43 +66,56 @@ EPISODES = {
         "extra": [EP / "HC002-phineas-gage/script-long-v1.md", EP / "HCS10-pettenkofer/story-v1.md", EP / "HCS11-hilliard/story-v1.md",
                   EP / "HCS13-koepcke/story-v1.md", EP / "HCS12-ffirth/story-v1.md"],
         "page_title": "Slate Scripts for Approval",
-        "status": "Gage S1 HERO shots on the real pieces · waiting for your OK",
-        "layered_title": "Gage S1: the three HERO shots on the real pieces",
-        "layered_lede": ("Shots 1, 4 and 8 now run in the real renderer on the <b>paid pieces</b>: the painted plates and the cut-outs from "
-                         "the pose and sprite sheets, with the same motion you saw on the stand-ins. Next to each preview: what happens in "
-                         "the shot in plain words, then every piece it uses with the picture that came back and its full prompt, exactly "
-                         "as it was sent (style lock, references, prompt, house style). The timing is still a SCRATCH timeline (no "
-                         "narration yet; every key is tied to a word, so the real narration re-times it), and there is no sound yet."),
+        "status": "Gage S1 HERO shots, round 2 (closer, per your notes) · waiting for your OK",
+        "layered_title": "Gage S1: the three HERO shots, closer (your notes of Nov 18)",
+        "layered_lede": ("Your rule from now on: in a HERO shot the moving subject fills at least 1/3 of the frame (the build now checks it). "
+                         "All three shots are reworked to it. Next to each preview: what happens in plain words, what changed, then every "
+                         "piece the shot uses with the picture that came back and its full prompt, exactly as sent. The timing is still a "
+                         "SCRATCH timeline (no narration yet; every key is tied to a word, so the real narration re-times it), and there "
+                         "is no sound yet."),
         "hero": {
             "s01": {"label": "Shot 1 · the blast", "pieces": ["plate-s1", "pose-gage-s1", "sprite-iron", "sprite-hat"],
-                    "desc": ("Low on the floor of the rock cut, looking up, with the hook card on top. The charge goes off: dust and "
-                             "smoke burst up, the picture shakes, and two of his men duck with their arms over their heads. Gage, "
-                             "dark against the smoke like a silhouette, is thrown backward with his arms flung up, and his hat spins "
-                             "away to the left. The iron bar shoots up out of the dust <b>above</b> him (never across his head), hangs "
-                             "and turns once in slow motion under the hook card, then flies out top right as the card ends."),
-                    "notes": {"plate-s1": "v1. The two crewmen came out mid-frame, facing us (asked: at the edges, from behind), so Gage stands between them.",
-                              "pose-gage-s1": "v2. v1 held a T-handled tool and stood on pale panels; v2 has empty hands (lesson L46). Darkened in the edit.",
-                              "sprite-iron": "v1, clean.",
-                              "sprite-hat": "v2. v1 had the Gage sheet printed under it (L45) and was a bowler (not yet invented in 1848)."}},
+                    "desc": ("Low on the floor of the rock cut, looking up, with the hook card on top. The charge goes off: dust bursts up, "
+                             "the picture shakes, two of his men duck. The iron bar shoots up out of the dust <b>above</b> him (never across "
+                             "his head) and comes toward us: it grows from 0.6 to 0.93 of the frame width, with a sunlit top edge, a trail "
+                             "behind it while it is fast, and a glint that runs along it twice (once as it hangs, once on “skull”). It stays "
+                             "in the frame to the cut. Gage is a true silhouette with a warm rim of light: his hat, shirt and braces read "
+                             "as shapes, his face does not. He is thrown backward toward the camera, tipping back as his hat spins away, "
+                             "and drops out of the bottom of the frame."
+                             "<br><b>Changed:</b> the bar 2–3× bigger and closer (it was 0.34 wide), lit edge + glint + trail, visible until "
+                             "“skull”; Gage a true silhouette instead of a dimmed lit figure; a big, clear fall backward."),
+                    "notes": {"plate-s1": "v1, unchanged.",
+                              "pose-gage-s1": "v2. Made into a silhouette locally (no new image): the white shirt kept a shade lighter, a warm rim on the edges.",
+                              "sprite-iron": "v1. The sunlit edge and the glint are added locally (no new image).",
+                              "sprite-hat": "v2, as a silhouette (locally)."}},
             "s05": {"label": "Shot 4 · the look", "pieces": ["plate-s4", "pose-gage-s4"],
-                    "desc": ("From the pit, behind two of his men (their backs fill the foreground). Up on the ledge, Gage stands with "
-                             "both hands on the tamping iron, its point in the drill hole, eyes down. On the word “shoulder” he turns "
-                             "his head over his right shoulder toward his men: the second that starts everything. A slow push in."),
-                    "notes": {"plate-s4": "v1, as asked: the ledge, the drill hole and a keg, two backs in front.",
-                              "pose-gage-s4": "v2. v1 held a D-handled auger and turned his whole body; v2 holds the smooth iron and only his head turns."}},
+                    "desc": ("It opens wide, from the pit behind two of his men, with Gage up on the ledge holding the tamping iron in the "
+                             "drill hole. The camera pushes in on him through the shot and lands at a medium shot (3.6×) just before the "
+                             "word “shoulder”, when he turns his head over his right shoulder toward his men: the turn now fills the "
+                             "frame.<br><b>Changed:</b> the push in, ending at MS (he grows from 0.24 to about 0.86 of the frame height). "
+                             "The background softens as it is enlarged; he stays sharp."),
+                    "notes": {"plate-s4": "v1, unchanged.", "pose-gage-s4": "v2, unchanged."}},
             "s09": {"label": "Shot 8 · he spoke", "pieces": ["plate-s8", "pose-gage-s8"],
-                    "desc": ("No music. The smoke settles over the rock floor in a shaft of light. Gage lies on his back with his head "
-                             "turned away from us; we never see his face, and there is no blood. In the silence his fingers curl; on "
-                             "the word “spoke” he pushes himself up on his elbow."),
-                    "notes": {"plate-s8": "v2. v1 had a colour-swatch strip with hex codes (L44). It repeats the set plate's camera instead of a ground-level view; fine for the pre-viz.",
-                              "pose-gage-s8": "v3. v1 and v2 printed the Gage sheet underneath as ghosts; v3 has no sheet reference (L45b). It came back as a 2×2 grid: the bottom-left drawing is a spare, not used."}},
+                    "desc": ("No music. Ground level, on the rock floor: the smoke settles in your shafts of light. Gage lies across the "
+                             "foreground, his open hand large at the lower left, his head turned away (only the back of his head). In "
+                             "the silence his fingers curl; on the word “spoke” he pushes himself up on his elbow, his shoulder rising "
+                             "toward us. No face, no blood.<br><b>Changed:</b> the plate remade as planned (ground-level, close), and a new "
+                             "close pose sheet to match it, because the full-body side view could not fill the foreground without going soft."),
+                    "notes": {"plate-s8": ("v4. v3 painted a man's hand into the empty plate, because my prompt named the hand that is "
+                                           "added later (new lesson L47), and it copied the old wide camera. v4 takes only a detail of "
+                                           "the old plate (the rock, the smoke and your light shafts). Two kegs came back labelled "
+                                           "“BLASTING POWDER”: the lettering is painted out locally, and the set description now asks "
+                                           "for unmarked kegs."),
+                              "pose-gage-s8": ("v4, close, no sheet reference. The propped-up drawing came back facing the other way, "
+                                               "so it is mirrored and lined up at the waist. Dark flecks in his hair that read like "
+                                               "wounds are painted out locally.")}},
         },
         "story_kicker": "Story doctor · story v2 · 2026-11-18 · for approval",
         "v1_label": "v1 (S1 script, Oct 18)",
         "script_heading": "Script v2 (for approval; not recorded yet)",
-        "h1": "Gage S1: the HERO shots on the real pieces",
-        "lede": "Round 3 for Gage S1 (CASE 11, Sun Nov 29). Hook card A, title 1 and the fiddle/banjo theme are approved. As you asked, only the pieces the three HERO shots need were made first: the 3 character sheets, the set plate, the 3 HERO plates and the 5 pose / sprite sheets. At the top: shots 1, 4 and 8 moving on those real pieces, each with its plain-language description and the full prompt of every piece next to it. Further down, “Reference images made first” shows the character sheets and the set plate with their prompts, and every other shot keeps its sketch and its image prompt (not made yet). Tap any picture to enlarge it.",
-        "ask": "<p><b>Gage S1, the three HERO shots:</b> OK them on the real pieces, or tell me what to change (timing, size, how far he falls, how long the bar hangs, the silhouette in shot 1). Then I make the rest: the 9 story stills, ≈ $0.60 on Gemini Batch, or ≈ $1.21 if each also gets its 16:9 version for the long video (your Q1: reuse the S1 images). I'd also redo the bandaged-Gage sheet (+$0.07): its bandage misses the crown, and one close-up shows both eyes. After that come narration (≈ $0.07) and music (≈ $0.13) on fal, which has a $20.97 balance.</p><p><b>Spent this round:</b> $1.34 for 20 images (Google credit). 12 were your list plus the set plate, which the 3 HERO plates use as their look reference; 8 were retries (swatches, ghosted sheets, a bowler hat and wrong tools). Each failure is now a prompt rule with a lint check (L44, L45, L45b, L46).</p><p><b>Hilliard and Koepcke scripts:</b> your OK is still open (the cuts are in).</p>",
+        "h1": "Gage S1: the three HERO shots, closer",
+        "lede": "Round 4 for Gage S1 (CASE 11, Sun Nov 29). Your notes on the three HERO shots are in: everything moving is now at least a third of the frame (the build checks it from now on); shot 1's bar is bigger, closer and lit, and Gage is a true silhouette thrown backward; shot 4 pushes in to MS for the head turn; shot 8 has its ground-level plate with his hand and shoulder in the foreground. Hilliard and Koepcke scripts: approved. Further down, “Reference images made first” shows the character sheets and the set plate with their prompts, and the story stills keep their sketches and prompts (not made yet). Tap any picture to enlarge it.",
+        "ask": "<p><b>Gage S1, the three HERO shots:</b> OK them, or tell me what to change. After your OK I make the story stills you approved: the 9 stills with their 16:9 versions for the long, ≈ $1.21 on Gemini Batch, plus the bandaged-Gage sheet redo (+$0.07). After that come narration (≈ $0.07) and music (≈ $0.13) on fal ($20.97 balance).</p><p><b>Spent this round:</b> $0.20 for 3 images. Shot 8 needed both a new plate and a matching close pose sheet: you estimated ~$0.07 for the plate alone, and the full-body cut-outs would have gone soft at that size. One more plate try was needed after v3 painted a hand in. Everything else (the lit bar, the glint, the trail, the silhouettes, the push) was done locally for free. Gage S1 total so far: $1.54 for 23 images.</p>",
     },
 }
 

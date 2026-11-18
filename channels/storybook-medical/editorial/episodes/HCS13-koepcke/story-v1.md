@@ -1,4 +1,4 @@
-# HCS13 Juliane Koepcke · story + script v1 (story-doctor, 2026-11-18)
+# HCS13 Juliane Koepcke · story + script v1 (story-doctor, 2026-11-18) · APPROVED 2026-11-18
 
 CASE 16 · YouTube Wed Dec 9, 15:00 ET = 14:00 Alberta · socials Thu Dec 10, 18:00 ET · ready by **Sat Dec 5** · Impossible Survival · mix rule: the week's one non-Western story (Finlay is the week before). Facts: `claims.csv` (research verdict PASS, 4.70). **She is alive and public:** only what she published or said on record; her words quoted, never her thoughts invented. **Her mother:** only "did not survive" (C40); no speculation about her last days (C41 UNKNOWN). No bodies, no dead passengers, no injuries in close-up; insects in the wound said, never shown.
 

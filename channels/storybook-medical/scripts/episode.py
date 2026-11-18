@@ -656,7 +656,7 @@ def step_build(pid, *_):
     import layers
     # story-craft Rule 0 (2026-11-16): a story shot needs an action besides the camera, or "breath": True.
     # Episodes cut before the rule carry "motion_lint": "warn".
-    motion = layers.lint_motion(ep["shots"])
+    motion = layers.lint_motion(ep["shots"]) + layers.lint_hero_size(ep["shots"], p)   # + HERO >= 1/3 (user 2026-11-18)
     if motion:
         print("MOTION LINT:\n  " + "\n  ".join(motion))
         if ep.get("motion_lint", "fail") != "warn":

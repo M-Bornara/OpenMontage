@@ -2,6 +2,7 @@
 remotion/Stage.tsx (<Actor>, <LayerStack>); this module does what Python must do for it:
 
     lint_motion(shots)   a story shot with only CAM motion (push / pan / zoom) fails unless it is marked "breath"
+    lint_hero_size(shots, proj)   a layered (HERO) shot whose biggest moving actor never fills 1/3 of the frame
     sfx_cues(ep)         sound fired from actor keyframes -> ordinary sfx cues for episode.py sfx / mix
     all_sfx(ep)          ep["sfx"] + the keyframe cues (what step_sfx and step_mix read)
     build_layers(...)    episode.json shot "layers" -> props.json (plate, masks and sprites fitted / copied to public/)
@@ -60,6 +61,47 @@ def lint_motion(shots: list[dict]) -> list[str]:
     return [f"shot {s['id']} ({Path(str(s.get('source', ''))).name}): {CAM_ONLY}; give it a moving layer "
             f"(plan/layered-animation.md) or mark it breath=True"
             for s in shots if not s.get("breath") and not moving_layers(s)]
+
+
+HERO_MIN = 1 / 3   # user 2026-11-18: "in a HERO shot the moving subject fills at least 1/3 of the frame" (phone)
+
+
+def lint_hero_size(shots: list[dict], proj: Path) -> list[str]:
+    """Each layered shot: the largest on-screen extent (width or height, as a fraction of the frame) of its biggest
+    moving actor at any key, times the camera's zoom at that moment (push / pull scale at the key's time), must reach
+    1/3. Sprite aspect from its sprites.json canvas."""
+    out = []
+    for s in shots:
+        lay = s.get("layers") or {}
+        if not lay or s.get("breath"):
+            continue
+        m, dur = s.get("motion") or {}, max(1e-6, s["end"] - s["start"])
+        def cam(t: float) -> float:
+            if m.get("type") in ("push", "pull"):
+                a = m.get("from", 1.04 if m["type"] == "push" else 1.18)
+                b = m.get("to", 1.18 if m["type"] == "push" else 1.04)
+                return a + (b - a) * min(1.0, t / dur)
+            return m.get("scale", 1.04)
+        best = 0.0
+        for g in ("mg", "actors", "three", "fg"):
+            for a in lay.get(g, []):
+                keys = a.get("keys", [])
+                if len(keys) < 2 and not a.get("breath"):
+                    continue
+                sp = str(a.get("sprites", ""))
+                f = proj / sp.split(":", 1)[1] if sp.startswith("proj:") else Path(sp)
+                try:
+                    cw, ch = json.load(open(f))["canvas"]
+                    aspect = ch / cw
+                except Exception:
+                    aspect = a.get("aspect", 1.0)
+                for k in keys:
+                    z = k.get("z", 1.0) * cam(k["t"])
+                    best = max(best, a["w"] * z, a["w"] * z * aspect * 1080 / 1920)
+        if best < HERO_MIN:
+            out.append(f"shot {s['id']}: the moving subject fills at most {best:.0%} of the frame (HERO rule: >= 33%; "
+                       f"bring it closer, push in, or use a closer plate)")
+    return out
 
 
 def _until(keys: list[dict], i: int, until) -> float | None:

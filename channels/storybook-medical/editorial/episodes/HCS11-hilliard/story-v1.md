@@ -1,4 +1,4 @@
-# HCS11 Jean Hilliard · story + script v1 (story-doctor, 2026-11-18)
+# HCS11 Jean Hilliard · story + script v1 (story-doctor, 2026-11-18) · APPROVED 2026-11-18
 
 CASE 15 · YouTube Mon Dec 7, 15:00 ET = 14:00 Alberta · socials Tue Dec 8, 18:00 ET · ready by **Thu Dec 3** · Impossible Survival · pair: Bågenholm (HCS03). Facts: `claims.csv` (research verdict PASS, 4.55). She is a private person: only what she and the press made public; no current-life details (C44 REMOVE).
 **Different from Bågenholm:** Bågenholm was trapped under ice; this one is a choice and a walk (the car, the wrong distance, the two empty farmhouses), and an ending in her own light voice. The cold-medicine line ("not dead until warm and dead") stays with Bågenholm.

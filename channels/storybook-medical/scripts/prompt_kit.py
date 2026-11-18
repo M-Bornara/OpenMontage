@@ -317,9 +317,15 @@ def lint(name: str, spec: dict) -> list[str]:
     # L45b (HC002-S1 pose-gage-s8 v2, 2026-11-18): even with REF_IDENTITY_ONLY a LYING pose sheet printed the standing
     # model sheet underneath as ghosts. A pose far from the sheet's standing views (lying, sitting on the ground) whose
     # face isn't seen: no sheet reference at all, describe him in words.
-    if "pose sheet" in p and any(str(r).startswith("ref:sheet-") for r in refs) and re.search(r"lying", p):
+    if "pose sheet" in p and any(str(r).startswith("ref:sheet-") for r in refs) and re.search(r"\blying\b", p):
         issues.append("L45b: lying pose sheet with a standing model sheet as reference: it prints as ghosts even with "
                       "REF_IDENTITY_ONLY; drop the sheet reference (describe the person in words)")
+    # L47 (HC002-S1 plate-s8 v3, 2026-11-18): an empty plate that names the missing person's body ("a man's shoulder and
+    # hand are added there later, large") came back with a man's hand painted in. Describe only the empty place.
+    if ("empty location plate" in p or "is not in this picture" in p) and re.search(
+            r"\b(?:man|woman|person|boy|girl|his|her)(?:'s|’s)? (?:shoulder|hand|arm|head|body|face|legs?)\b", p):
+        issues.append("L47: an empty plate names the missing person's body parts: the model paints them in; describe only "
+                      "the empty place (where he goes is the edit's job)")
     # L46: a held prop with "no ... drawn" in brackets gets drawn anyway, as the wrong tool
     if "pose sheet" in p and re.search(r"\(no [a-z ]+ drawn\)", p):
         issues.append("L46: '(no X drawn)' for a held prop: the model draws a wrong tool; use EMPTY_HANDS, or give "
