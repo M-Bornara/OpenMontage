@@ -275,7 +275,8 @@ class ElevenLabsTTS(BaseTool):
             params={"output_format": output_format},
             timeout=120,
         )
-        response.raise_for_status()
+        if not response.ok:
+            raise RuntimeError(f"HTTP {response.status_code}: {response.text[:600]}")
 
         alignment = None
         if with_timestamps:

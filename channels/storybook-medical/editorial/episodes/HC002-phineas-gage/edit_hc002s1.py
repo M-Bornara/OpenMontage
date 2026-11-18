@@ -121,6 +121,7 @@ def w(phrase: str, shot: str, word: int = 0) -> float:
 # plate-s1: the blast hole at (0.47, 0.68), the two ducking crewmen at x 0.22-0.37 and 0.62-0.73; Gage between them in the
 # foreground. The hook card covers y 0.19-0.33 until ~2.5 s; captions only after it (the LOW line at 0.54-0.58 on "skull").
 SKULL = w("skull", "1")
+D1 = dur["1"]   # the real shot length: the last keys end on the cut, nothing freezes
 # the bar: iron-lit (looks_hc002s1.py) = sunlit top edge, states rod / glint; z grows 1.0 -> 1.55 (it comes closer):
 # 0.60 -> 0.93 of the frame width. Pointed end first, never across his head (lowest end at frame 0: y 0.60, his hat 0.63+).
 IRON_KEYS = [{"t": 0.0, "x": 0.53, "y": 0.46, "rot": -58, "z": 1.0, "state": "rod"},
@@ -128,7 +129,7 @@ IRON_KEYS = [{"t": 0.0, "x": 0.53, "y": 0.46, "rot": -58, "z": 1.0, "state": "ro
              {"t": 0.85, "x": 0.552, "y": 0.432, "rot": -18, "z": 1.28, "state": "glint"},  # ...hangs: the sun catches it
              {"t": 1.5, "x": 0.556, "y": 0.425, "rot": -8, "z": 1.36, "state": "rod"},
              {"t": SKULL, "x": 0.565, "y": 0.415, "rot": 4, "z": 1.46, "state": "glint"},  # glint on "skull"
-             {"t": 3.0, "x": 0.58, "y": 0.40, "rot": 14, "z": 1.55}]
+             {"t": D1, "x": 0.58, "y": 0.40, "rot": 14, "z": 1.55}]
 IRON = {"id": "iron", "sprites": SPR + "iron-lit/sprites.json", "w": 0.6, "face": "keys", "xfade": 0.18,
         "depth": {"blur": 0}, "motionBlur": {"samples": 10, "shutter": 0.6}, "keys": IRON_KEYS}
 # the trail: the same bar a moment earlier, fainter (behind the bar)
@@ -144,15 +145,15 @@ GAGE1 = {"id": "gage", "sprites": SPR + "gage-s1-sil/sprites.json", "w": 0.48, "
                   {"t": 0.08, "x": 0.51, "y": 1.04, "rot": 4, "z": 1.04, "state": "thrown"},
                   {"t": 0.5, "x": 0.53, "y": 1.0, "rot": 10, "z": 1.15, "ease": "out"},
                   {"t": 1.4, "x": 0.55, "y": 1.08, "rot": 18, "z": 1.25},
-                  {"t": 3.0, "x": 0.57, "y": 1.2, "rot": 26, "z": 1.32, "ease": "in"}]}
+                  {"t": D1, "x": 0.57, "y": 1.2, "rot": 26, "z": 1.32, "ease": "in"}]}
 HAT = {"id": "hat", "sprites": SPR + "hat-sil/sprites.json", "w": 0.13, "face": "keys", "depth": {"blur": 0},
        "states": {"side": {}, "tumble": {}},
        "keys": [{"t": 0.0, "x": 0.53, "y": 0.655, "rot": 0, "state": "side"},
                 {"t": 0.25, "x": 0.47, "y": 0.6, "rot": -60, "state": "tumble"},
                 {"t": 1.3, "x": 0.22, "y": 0.58, "rot": -220, "ease": "out"},
-                {"t": 3.0, "x": 0.08, "y": 0.62, "rot": -300}]}
+                {"t": D1, "x": 0.08, "y": 0.62, "rot": -300}]}
 DUST1 = {"kind": "particles", "style": "haze", "x": 0.47, "y": 0.70, "tx": 0.5, "ty": 0.5, "spread": 0.12, "every": 0.12,
-         "life": 2.6, "size": 220, "color": "196,186,166", "opacity": 0.45, "from": 0, "to": 3}
+         "life": 2.6, "size": 220, "color": "196,186,166", "opacity": 0.45, "from": 0, "to": D1}
 
 # ── HERO 4: the look over the shoulder (on "shoulder"). User 2026-11-18: push in on Gage during the shot so the head turn
 # is big (end at MS). Gage on the ledge: x 0.487, feet 0.512, head top ~0.274 (0.24 of the frame tall). The push ends at
@@ -175,7 +176,7 @@ GAGE8 = {"id": "gage", "sprites": SPR + "gage-s8/sprites.json", "w": 1.0, "face"
          "breath": {"amp": 0.010, "period": 2.6, "states": ["lie", "fingers", "lift", "prop"]},
          # user 2026-11-18: the prop frame is matched to the lying body (match_s8.py: same scale, pinned at the waist) and
          # "lift" (the fingers frame tipped up at the waist) bridges them, so the shoulder rises from where it lay
-         "keys": [{"t": 0.0, "x": 0.47, "y": 1.0, "state": "lie"}, {"t": 1.6, "x": 0.47, "y": 1.0, "state": "fingers"},
+         "keys": [{"t": 0.0, "x": 0.47, "y": 1.0, "state": "lie"}, {"t": round(max(0.6, SPOKE - 1.3), 2), "x": 0.47, "y": 1.0, "state": "fingers"},
                   {"t": round(SPOKE - 0.45, 2), "x": 0.47, "y": 1.0, "state": "lift"},
                   {"t": SPOKE, "x": 0.47, "y": 1.0, "state": "prop"}]}
 SMOKE8 = {"kind": "particles", "style": "haze", "x": 0.5, "y": 0.45, "tx": 0.5, "ty": 0.62, "spread": 0.3, "every": 0.3,

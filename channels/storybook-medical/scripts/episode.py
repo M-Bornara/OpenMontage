@@ -56,6 +56,11 @@ REPO = Path(__file__).resolve().parents[3]
 KIT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO))
 
+try:   # Kaspersky re-signs some HTTPS hosts (api.elevenlabs.io) with its own root, which only the Windows store trusts:
+    import truststore      # verify against the OS store (still verified, like a browser), not certifi's list
+    truststore.inject_into_ssl()
+except ImportError:
+    pass
 import yaml  # noqa: E402
 from PIL import Image, ImageDraw  # noqa: E402
 
@@ -70,6 +75,10 @@ PLAYBOOK = "storybook-medical"
 # Speed comes from atempo only: ElevenLabs speed 1.2 + atempo stacked to ~1.37x and warbled (HC001). Blind A/B
 # 2026-11-04 (scripts/voice_ab.py): the user picked v3 at speed 1.0, stability 0.5 ("Natural") + atempo 1.14.
 VOICE = {"voice": "Liam", "model_id": "eleven-v3", "stability": 0.5, "speed": 1.0}
+# user 2026-11-18: all narration through the DIRECT ElevenLabs key (Starter, $6/month, 40k characters; logged monthly in
+# cost-ledger.csv): same Liam voice, same settings. fal stays only as the fallback when no ELEVENLABS_API_KEY is set.
+# If ElevenLabs refuses a line, STOP and show the user: never split or reword to get past it.
+VOICE_DIRECT = {"voice_id": "TX3LPaxmHKxFdv7VOQHJ", "model_id": "eleven_v3", "stability": 0.5, "speed": 1.0}   # Liam
 # Channel narrator: Liam, always (master instructions v3.1). "narration": {"convert": true} (Chatterbox voice
 # conversion with a reference kept outside git) exists but is not used for the channel.
 VOICE_REF = REPO / "projects/voice/ref-hook.mp3"
@@ -327,12 +336,20 @@ def step_init(pid: str, *_):
 
 def _voice_take(pid: str, ep: dict, text: str, raw: Path, out: Path):
     """One ElevenLabs take -> speed + loudness only (memory: narration-audio-processing) -> out (no tail pad)."""
-    cost = len(text) / 1000 * PRICES["tts_per_1k_chars"]
-    cost_ledger.estimate(f"narration {out.stem} ({len(text)} characters, ElevenLabs v3)", 1, cost, fal=True)
-    r = tools()["fal_elevenlabs_tts"].execute({"text": text, **VOICE, "output_path": str(raw)})
-    if not r.success:
-        raise SystemExit(r.error)
-    log_cost(pid, f"narration:{out.stem}", cost)
+    import os
+    if os.environ.get("ELEVENLABS_API_KEY"):
+        print(f"narration {out.stem}: {len(text)} characters on the ElevenLabs Starter plan (40k / month, logged monthly)")
+        r = tools()["elevenlabs_tts"].execute({"text": text, **VOICE_DIRECT, "output_path": str(raw)})
+        if not r.success:
+            raise SystemExit(f"ElevenLabs refused or failed (stop and show the user, do not work around it): {r.error}")
+        log_cost(pid, f"narration:{out.stem}:elevenlabs-direct:{len(text)}chars", 0.0)
+    else:
+        cost = len(text) / 1000 * PRICES["tts_per_1k_chars"]
+        cost_ledger.estimate(f"narration {out.stem} ({len(text)} characters, ElevenLabs v3)", 1, cost, fal=True)
+        r = tools()["fal_elevenlabs_tts"].execute({"text": text, **VOICE, "output_path": str(raw)})
+        if not r.success:
+            raise SystemExit(r.error)
+        log_cost(pid, f"narration:{out.stem}", cost)
     take = raw
     ref = Path(ep["narration"].get("voice_ref", VOICE_REF))
     if ep["narration"].get("convert", False) and ref.exists():
@@ -360,8 +377,27 @@ def _voice_take(pid: str, ep: dict, text: str, raw: Path, out: Path):
 
 
 def _timed_words(path: Path) -> list[dict]:
+    """Word timings of a take: Azure Speech, else (2026-11-18: Azure answered 401) the local faster-whisper transcriber
+    (free, offline). A take must never end up with 0 words: that would break every word-timed edit."""
     r = tools()["azure_stt"].execute({"input_path": str(path), "language": "en-US"})
-    return r.data.get("word_timestamps") or [w for s in r.data.get("segments", []) for w in s.get("words", [])]
+    d = r.data or {}
+    words = d.get("word_timestamps") or [w for s in d.get("segments", []) for w in s.get("words", [])]
+    if r.success and words:
+        return words
+    print(f"Azure STT unavailable ({(r.error or 'no words')[:120]}): using local faster-whisper")
+    # decoded by ffmpeg and handed over as samples: this faster-whisper's own decoder needs a newer PyAV than the venv's
+    import numpy as np
+    from faster_whisper import WhisperModel
+    raw = subprocess.run(["ffmpeg", "-v", "error", "-i", str(path), "-f", "s16le", "-ac", "1", "-ar", "16000", "-"],
+                         capture_output=True, check=True).stdout
+    audio = np.frombuffer(raw, np.int16).astype(np.float32) / 32768.0
+    segs, _ = WhisperModel("small", device="cpu", compute_type="int8").transcribe(audio, language="en",
+                                                                                   word_timestamps=True)
+    words = [{"word": w.word.strip(), "start": round(w.start, 3), "end": round(w.end, 3)}
+             for sg in segs for w in (sg.words or []) if w.word.strip()]
+    if not words:
+        raise SystemExit(f"no word timings for {path.name}")
+    return words
 
 
 def step_narrate(pid: str, *only):

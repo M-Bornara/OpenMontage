@@ -81,7 +81,11 @@ def review(pid: str, key: str, start: float | None = None, seconds: float = 3.0,
     # contact sheet: start, middle, end of the preview, with the time in the shot and the layer plan
     n = b_f - a_f + 1
     tiles = []
-    for j, fr in enumerate((0, n // 2, n - 1)):
+    # the tiles come from the frames the preview really has: with the mix muxed in, -shortest can drop a few frames
+    got = subprocess.run(["ffprobe", "-v", "error", "-count_frames", "-select_streams", "v:0", "-show_entries",
+                          "stream=nb_read_frames", "-of", "csv=p=0", str(mp4)], capture_output=True, text=True).stdout
+    n = min(n, int(got.strip().strip(",") or n))
+    for j, fr in enumerate((0, n // 2, max(0, n - 1))):
         png = out / f"_{sid}-{j}.png"
         subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(mp4), "-vf", f"select=eq(n\\,{fr})", "-frames:v", "1", str(png)], check=True)
         im = Image.open(png).convert("RGB")
