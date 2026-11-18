@@ -66,13 +66,21 @@ EPISODES = {
         "extra": [EP / "HC002-phineas-gage/script-long-v1.md", EP / "HCS10-pettenkofer/story-v1.md", EP / "HCS11-hilliard/story-v1.md",
                   EP / "HCS13-koepcke/story-v1.md", EP / "HCS12-ffirth/story-v1.md"],
         "page_title": "Slate Scripts for Approval",
-        "status": "Gage S1 storyboard · Gage long script · 4 new Short scripts · waiting for your OK",
+        "status": "Gage S1 HERO motion pre-viz + all image prompts · waiting for your OK",
+        "layered_title": "Gage S1: the three HERO shots, moving (free stand-ins)",
+        "layered_lede": ("Shots 1, 4 and 8 run in the real renderer on drawn stand-ins: plates drawn here and simple cut-out figures. "
+                         "Judge the MOTION and the timing, not the drawing: in shot 1 the bar leaves the dust above his hat, hangs and turns once in slow motion under the hook card, "
+                         "then flies out top right while Gage falls back and his hat tumbles; in shot 4 his head turns on “shoulder”; in shot 8, in silence, "
+                         "his fingers move and he props up on his elbow on “spoke”. The timing comes from a SCRATCH timeline (no narration yet): "
+                         "every key is tied to a word, so the real narration re-times it. No sound yet (no narration or music). "
+                         "The paid pieces below replace the stand-ins with the same names (Gemini Batch, <b>${tot}</b> for the sheets; the three plates are with the references)."),
+        "plate_note": "a drawn stand-in plate, empty of what moves (Gage, the bar, the hat). The paid plate is painted in our style.",
         "story_kicker": "Story doctor · story v2 · 2026-11-18 · for approval",
         "v1_label": "v1 (S1 script, Oct 18)",
         "script_heading": "Script v2 (for approval; not recorded yet)",
-        "h1": "Nov 29 – Dec 13: Gage S1, the Gage long, and four new Shorts",
-        "lede": "First the Short (CASE 11, Sun Nov 29): story v2 from the story doctor, its tension curve against the October script, then the storyboard, where every shot has its level (HERO, ALIVE or BREATH) and the After Effects tricks that make it move. HERO shots get new pieces; ALIVE shots move what is already in the picture. S1 is a teaser: nothing after 1849 is said or shown, so the long video keeps its twist. Below it: Gage long script v1 (Sun Dec 13), then script v1 of the four new Shorts in release order (Pettenkofer Dec 1, Hilliard Dec 7, Koepcke Dec 9, Ffirth Dec 11), each with its spine, beats, hook cards and title. All four topics passed the documented-core rule; every line names its claim, and each script lists what was kept out and why. There are no sketches yet: the free motion pre-viz of the three HERO shots comes after your OK. Tap any picture to enlarge it.",
-        "ask": "<p><b>Gage S1:</b> OK the story and the storyboard, or tell me what to change by shot number. Pick a hook card (A, recommended; B or C), a title (1, recommended) and say yes or no to the music theme (a lone fiddle, a banjo drone, a low drum). Estimated cost <b>≈ $1.87</b> (fal balance $20.97; images on Google credit). After your OK, the next step is free: a motion pre-viz of shots 1, 4 and 8 on stand-ins, with the piece prompts, on this page. Nothing is paid before you approve that.</p><p><b>Long script v1:</b> OK it or send line numbers to change, and answer its three open questions.</p><p><b>Four Short scripts:</b> OK each one or send changes, and pick a hook card and a title for each. Pettenkofer first: it is ready-by Fri Nov 27.</p>",
+        "h1": "Gage S1: the HERO motion pre-viz and the image prompts",
+        "lede": "Round 2 for Gage S1 (CASE 11, Sun Nov 29). The storyboard is approved (2026-11-18). At the top: the three HERO shots moving in the real renderer on free stand-ins. Below them, every shot with its blocking sketch and, for the story stills, its image prompt (open “Image prompt”). The cast sheets, the set plate and the three HERO plates are in “Reference images made first”. All 21 prompts pass the prompt lint (0 findings). Below the Short: the approved long script and the four Short scripts, for reference. Tap any picture to enlarge it.",
+        "ask": "<p><b>Gage S1:</b> OK the motion of shots 1, 4 and 8 (or tell me what to change: timing, how far he falls, how long the bar hangs) and the 21 image prompts. Also confirm hook card A, title 1 and the fiddle/banjo theme, which are still my recommendations. Cost after your OK: 21 images on Gemini Batch ≈ $1.41 (Google credit), narration ≈ $0.07 and music ≈ $0.13 on fal (balance $20.97); total ≈ $1.61, plus a retry margin. The reference photo of the cut (and three other Commons pictures) still has to be fetched: Wikimedia was blocking downloads on Nov 18.</p><p><b>Hilliard and Koepcke scripts:</b> your OK is still open (the cuts are in).</p>",
     },
 }
 
@@ -341,8 +349,8 @@ def layered_block(k: str, e: dict, ep: dict, out: Path, img: Path) -> str:
         if bg:
             f = Path(p / bg.split(":", 1)[-1]) if bg.startswith("proj:") else Path(bg)
             if f.exists():
-                cap = ('<b>Plate (free stand-in)</b><span>' + html.escape(f.name) + ': the mosquito painted out locally. '
-                       'The paid plate repaints it cleanly.</span>') if ".free" in f.name else (
+                cap = ('<b>Plate (free stand-in)</b><span>' + html.escape(f.name) + ': ' + html.escape(e.get("plate_note",
+                       "the mosquito painted out locally. The paid plate repaints it cleanly.")) + '</span>') if ".free" in f.name else (
                       '<b>Plate (real, $0.067)</b><span>The same painting repainted without the mosquito; it lines up with '
                       'the still within 1.5 px, so the landing spot holds.</span>')
                 stand.append(f'<figure><img src="img/{shrink(f, img / f"{k}-{sid}-plate", 900)}" alt="Plate without the mosquito" loading="lazy">'
@@ -387,6 +395,10 @@ def layered_block(k: str, e: dict, ep: dict, out: Path, img: Path) -> str:
                 f'mosquito and the cut-out mosquito, warmed to the lamp’s light. Same motion you approved.</p>'
                 f'{"".join(arts)}'
                 f'<details><summary>The two prompts</summary><div class="refgen">{"".join(pieces)}</div></details></div>')
+    if e.get("layered_lede"):
+        return (f'<div class="block"><h3>{html.escape(e.get("layered_title", "Layered shots"))}</h3>'
+                f'<p class="lede">{e["layered_lede"].replace("{tot}", f"{tot:.2f}")}</p>{"".join(arts)}'
+                f'<h3>The paid pieces (prompts)</h3><div class="refgen">{"".join(pieces)}</div></div>')
     return (f'<div class="block"><h3>Layered shots: our own animation (pilot)</h3>'
             f'<p class="lede">The preview runs on free stand-ins: the plate with the mosquito painted out on this machine, '
             f'and a drawn mosquito. It shows the MOTION: the path, the landing on “suspect”, the wings folding, the shadow on the skin, '

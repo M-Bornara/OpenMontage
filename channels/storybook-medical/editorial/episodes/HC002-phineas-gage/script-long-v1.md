@@ -1,6 +1,6 @@
 # HC002-L — Phineas Gage: The Story Everyone Gets Wrong · long script v1
 
-**Status: v1 for approval (2026-11-18).** Slot: Sun Dec 13, 11:00 ET = 10:00 Alberta. Ready by Wed Dec 9.
+**Status: APPROVED by the user 2026-11-18.** Q1: reuse S1's images in the cold open. Q2: no bridge line, fine. Q3: keep chapter 6 layered; spend the $0.49 clip only if the layered pre-viz looks cheap. **Narration waits for the C33, C22, C24 and C28 checks.** Slot: Sun Dec 13, 11:00 ET = 10:00 Alberta. Ready by Wed Dec 9.
 - **Runtime:** 956 words of narration. At Liam's channel speed (about 155 words/min) that is about **6.2 min**; with the pauses, the sting, the chapter cards and the end screen, about **6.8 min**.
 - **Rules followed:** facts in `claims.csv` (C20–C29 added for this script; nothing used that isn't in the log), story-craft.md Rule 0 (every row is a scene: the moment, the action, the feeling, the camera, what moves, the sound), the spine in `story-map.md`.
 - **How it fits the Shorts:**

@@ -1,0 +1,232 @@
+"""HC002-S1 Gage: the image prompts (story v2 + storyboard v1, approved 2026-11-18; HERO pre-viz on stand-ins) into
+projects/hc002-s1/episode.json "references" + "keyframes", then the prompt lint. Nothing is generated here.
+Run from the repo root:
+    python channels/storybook-medical/editorial/episodes/HC002-phineas-gage/build_hc002s1.py
+After the user approves the motion pre-viz AND these prompts on the approval page:
+    episode.py refs hc002-s1 --batch          (sheets + set plate first: everything else takes them as references)
+    episode.py refs hc002-s1 plate-s1 plate-s4 plate-s8 --batch, then the sprite / pose sheets (they take the plates)
+    episode.py keyframes hc002-s1 --batch
+    then fx_prep.py sheet ... -> assets/images/sprites/<name>/ (same names as the stand-ins), point edit_hc002s1.py at them.
+
+Teaser rule: nothing after 1849 (no Chile, no portrait, no later life). Care: never the bar in a head, never a wound;
+Gage is a silhouette in shot 1 and faces away in shot 8; after the accident a cloth bandage covers his left eye and crown.
+"""
+import json
+import sys
+from pathlib import Path
+
+REPO = Path(__file__).resolve().parents[5]
+sys.path.insert(0, str(REPO / "channels/storybook-medical/scripts"))
+from prompt_kit import (FULL_BLEED, NO_TEXT, ONE_EACH, PERIOD, SAFE_FRAMING, camera, cast, crowd, framing,  # noqa: E402
+                        glasses_gag, lint_all, matt_beat, pose_sheet, set_block, sprite_sheet)
+
+PID = "hc002-s1"
+HC1 = "projects/hc001-window-into-his-stomach/assets/images/refs"
+STYLE_PLATE = f"{HC1}/plate-study.png"           # HC001 people-free plate: painting style only
+SHEET_LAYOUT = f"{HC1}/sheet-osler.png"          # HC001 model sheet: layout + style only
+
+NARRATION = """[intense] In 1848, an iron bar shot straight through a man's skull.
+[curious] Phineas Gage. Twenty-five. Railroad foreman. The best his bosses had.
+His job: pack blasting powder into the rock with an iron bar. Thirteen pounds.
+[quiet] His men caught his eye. He looked over his shoulder…
+[fast] …and the iron struck the rock. A spark.
+The bar went in under his cheekbone, behind his eye… and out the top of his head.
+It landed about eighty feet away.
+[pause] [whispers] Within minutes… he spoke.
+[curious] He rode to his hotel sitting up in an ox cart.
+The doctor remembered the greeting: "Doctor, here is business enough for you."
+[warm] He survived. He even kept the iron. [pause] [whispers] But his friends said… he was "no longer Gage.\""""
+
+# ── people ──────────────────────────────────────────────────────────────────────────────────────────────────────────
+GAGE = ("PHINEAS GAGE in September 1848 (25; a strong, square-jawed young face, clean-shaven, thick dark hair, both eyes "
+        "open and unhurt; a white work shirt with the sleeves rolled up, dark braces, dark wool trousers, work boots, a "
+        "low-crowned dark felt hat)")
+GAGE_AFTER = ("PHINEAS GAGE after the accident, 1848 (the same young man, 25: a clean white cloth bandage wrapped around "
+              "his head, covering his LEFT eye and the top of his head; no blood, no wound visible anywhere; calm; the "
+              "same white shirt and braces, a dark jacket over his shoulders)")
+TAMPING_IRON = ("tamping iron of 1848: a smooth, perfectly straight, round iron rod, about 3 ft 7 in long and thick as a "
+                "thumb, dark grey with a dull sheen, tapering to a POINT at one end and blunt at the other (NOT a crowbar: "
+                "no hook, no claw, no bend)")
+CREW = [
+    "a grey-bearded older driller in his fifties, broad and weathered, a battered straw hat",
+    "a red-haired, freckled youth of about seventeen, thin, no hat",
+    "a heavy, dark-moustached man in his thirties with a round face and a flat cap",
+]
+
+# ── sets (references: the photo of the cut, period ox carts) ─────────────────────────────────────────────────────────
+CUT = set_block("The railroad rock cut near Cavendish, Vermont", "13 September 1848",
+                "a fresh cut through grey schist rock with raw, layered walls and a rough ledge; drill holes; small wooden "
+                "kegs of blasting powder; stacked rails and timber; wooded hills in early autumn colour beyond")
+ROAD = set_block("A dirt road through fields near Cavendish, Vermont", "September 1848",
+                 "a rutted dirt road between stubble fields and stone walls, maples just turning, a clapboard village ahead")
+HOTEL = set_block("The front of a village hotel in Cavendish, Vermont", "September 1848",
+                  "a two-storey white clapboard hotel with a covered wooden piazza (porch) along its front, wooden chairs, "
+                  "a hitching rail, a dirt street")
+ROOM = set_block("A plain rented room in a Vermont village", "1849", "bare plank walls, a narrow doorway, daylight")
+STREET = set_block("A village street in Vermont", "1849", "clapboard houses, a doorway on a dirt street, grey daylight")
+
+SHEET = "Reference 1 shows our character model-sheet layout and painting style only (not this person). "
+PHOTO = ("Reference 2 is a period photograph of the real Phineas Gage taken YEARS AFTER the accident (his left eye closed, "
+         "holding his iron): paint THIS face (head shape, jaw, hair, brow, nose) in our storybook style, YOUNGER (25) and "
+         "with BOTH EYES OPEN AND UNHURT, never as a photo, and do not copy the iron or the photograph's pose. ")
+MATT = "kit:matt-sheet.jpg"
+G, GA, CREW_REF, CUTP = "ref:sheet-gage-1848", "ref:sheet-gage-after", "ref:sheet-crew", "ref:plate-cut"
+CUT_LOOK = ("Reference 1 is the rock cut's set plate, for the painting style, rock, light and palette ONLY: do NOT copy its "
+            "composition or camera position. ")
+STYLE_ONLY = ("Reference 1 is a people-free room plate from another film, for the painting style ONLY: never its room, "
+              "composition or camera. ")
+NOT_HERE = "{who} is NOT in this picture (he is animated in later as a separate cut-out): leave the place where he stands empty."
+
+REFERENCES = {
+    "sheet-gage-1848": dict(aspect="16:9", refs=[SHEET_LAYOUT, "proj:refs/gage_miller.jpg"], roles=SHEET + PHOTO,
+        prompt=(f"Clean character model sheet on plain bone-white paper: {GAGE}. Front view, three-quarter view, profile "
+                "view, back view, plus three head close-ups (confident, giving an order; concentrating, looking down; "
+                "turning his head over his shoulder). Same scale in every view. No text, labels or watermark.")),
+    "sheet-gage-after": dict(aspect="16:9", refs=[SHEET_LAYOUT, "proj:refs/gage_miller.jpg"], roles=SHEET + PHOTO,
+        prompt=(f"Clean character model sheet on plain bone-white paper: {GAGE_AFTER}. Front view, three-quarter view, "
+                "profile view from his RIGHT side, back view, plus two head close-ups (calm, a dry half smile; tired). "
+                "Same scale in every view. No text, labels or watermark.")),
+    "sheet-crew": dict(aspect="16:9", refs=[SHEET_LAYOUT], roles=SHEET,
+        prompt=("Clean character model sheet (a line-up) on plain bone-white paper: three different railroad workmen of 1848, standing "
+                "side by side, full figure, front view: " + "; ".join(f"({i}) {c}" for i, c in enumerate(CREW, 1)) +
+                ". Shirts with rolled sleeves, braces, wool trousers, boots. Each has a clearly different face, age, build "
+                "and hair; no look-alikes. No text, labels or watermark.")),
+    "plate-cut": dict(aspect="9:16", refs=[STYLE_PLATE, "proj:refs/cavendish_cut.jpg"],
+        roles=(STYLE_ONLY + "Reference 2 is a modern photograph of the real cut, used ONLY for the rock: grey layered "
+               "schist walls; ignore the modern trees, rails and road. "),
+        prompt=(f"{CUT} Vertical frame along the floor of the cut toward the open end, rock walls rising on both sides. "
+                f"EMPTY LOCATION PLATE: no people. Three clear depth layers. {PERIOD} {NO_TEXT}")),
+}
+
+# ── HERO pieces (layered: the plate is empty of what moves; the sheets hold exactly the poses the keys use) ──────────
+REFERENCES.update({
+    "plate-s1": dict(aspect="9:16", refs=[CUTP], roles=CUT_LOOK, set="cut",
+        prompt=(f"{CUT} {framing('LS', 'very low angle from the floor of the cut', '24 mm', 'a blast has just gone off: grey-brown smoke and dust billow up from a drill hole low in the frame', 'violent, sudden')} "
+                f"{camera('on the floor of the cut, low, near the blast hole', 'up and along the cut toward a pale September sky', 'the two rock walls rising on the left and right and the pale sky between them filling the upper half')} "
+                "Two crewmen duck at the far left and right edges, arms over their heads, seen from behind. The upper half "
+                "of the frame is open pale sky (the iron bar and the hook card are added there later). "
+                + NOT_HERE.format(who="Phineas Gage") + " No iron bar, no hat in the air. "
+                f"{SAFE_FRAMING} {PERIOD} {NO_TEXT}")),
+    "plate-s4": dict(aspect="9:16", refs=[CUTP, CREW_REF], roles=CUT_LOOK + "Reference 2 is the crew (only the two backs). ",
+        set="cut", prompt=(
+            f"{CUT} {framing('OTS', 'eye level', '50 mm, shallow focus', 'two of his men in the pit look up toward the ledge', 'a normal working moment, about to go wrong')} "
+            f"{camera('in the pit behind two crewmen', 'up toward the rock ledge', 'the ledge with a drill hole and a powder keg on it, the wooded hills and sky behind')} "
+            "Two crewmen in the foreground, seen from behind (backs, hats and shoulders, soft focus), at the left and right "
+            "edges. On the ledge in the middle distance: the drill hole, a small keg, nothing else. "
+            + NOT_HERE.format(who="Phineas Gage") + f" {ONE_EACH} {SAFE_FRAMING} {PERIOD} {NO_TEXT}")),
+    "plate-s8": dict(aspect="9:16", refs=[CUTP], roles=CUT_LOOK, set="cut",
+        prompt=(f"{CUT} {framing('MS', 'ground level', '50 mm', 'the smoke of the blast settles over the rock floor', 'stunned silence')} "
+                f"{camera('on the rock floor, at ground level', 'along the floor', 'the rock floor with small stones in the lower half, settling grey smoke and a shaft of daylight through it above')} "
+                "The middle of the floor is clear: a man will lie there (added later). "
+                + NOT_HERE.format(who="Phineas Gage") + f" No blood anywhere. {SAFE_FRAMING} {PERIOD} {NO_TEXT}")),
+    "sprite-iron": dict(aspect="16:9", refs=[SHEET_LAYOUT],
+        roles="Reference 1 is our model-sheet layout and painting style ONLY: do not copy the person on it. ",
+        prompt=sprite_sheet(TAMPING_IRON, ["lying straight and level, side view, the POINT to the RIGHT",
+                                           "the same, a little foreshortened as if turning toward the viewer"],
+                            "s1: a blast in a rock cut under a pale sky", "soft daylight from the upper LEFT",
+                            "from the side, level", "Each rod is about four fifths of the picture's width.")),
+    "sprite-hat": dict(aspect="16:9", refs=[G], roles="Reference 1 is Phineas Gage: copy ONLY his hat. ",
+        prompt=sprite_sheet("low-crowned dark felt hat of 1848", ["seen from the side", "seen from below, tumbling"],
+                            "s1: a blast in a rock cut under a pale sky", "soft daylight from the upper LEFT",
+                            "from the side and below")),
+    "pose-gage-s1": dict(aspect="16:9", refs=[G],
+        roles="Reference 1 is PHINEAS GAGE (his build and clothes only: this shot shows him as a dark silhouette). ",
+        prompt=pose_sheet(GAGE, ["standing, both hands on a bar in a drill hole, at the moment of the blast (no bar drawn)",
+                                 "thrown backward by the blast, arms flung up, back arched, hat gone"],
+                          "s1: a blast in a rock cut, the sky behind him", "strong back light from the pale sky: he is "
+                          "almost a dark silhouette against it, a thin light rim on his edges", "from low in front, the "
+                          "whole figure, feet at the bottom of each drawing")),
+    "pose-gage-s4": dict(aspect="16:9", refs=[G],
+        roles="Reference 1 is PHINEAS GAGE (face, hair, clothes). ",
+        prompt=pose_sheet(GAGE, ["both hands on the tamping iron standing in the drill hole, eyes down on the hole",
+                                 "the same stance and hands, his head turned over his RIGHT shoulder toward the viewer, "
+                                 "eyes on his men"],
+                          "s4: the ledge seen from the pit", "daylight from the upper LEFT",
+                          "from slightly below, a little to his right", "from the knees up")),
+    "pose-gage-s8": dict(aspect="16:9", refs=[G],
+        roles="Reference 1 is PHINEAS GAGE (hair, clothes). ",
+        prompt=pose_sheet(GAGE.replace("a low-crowned dark felt hat", "no hat") + " with his hair grey with dust",
+                          ["lying on his back on rock, still, his face turned AWAY from the viewer",
+                           "the same, the fingers of his right hand curling against the rock",
+                           "pushing up on his right elbow, head lifting, still facing away"],
+                          "s8: the rock floor in settling smoke", "soft grey daylight from the upper RIGHT through smoke",
+                          "from ground level behind his RIGHT shoulder; his face is never seen; no blood, no wound")),
+})
+
+# ── the story stills ─────────────────────────────────────────────────────────────────────────────────────────────────
+ONE = ONE_EACH
+KEYFRAMES = {
+    "s2a": dict(aspect="9:16", refs=[CUTP, G], set="cut",
+        roles=CUT_LOOK + "Reference 2 is PHINEAS GAGE (face, hair, clothes). ",
+        prompt=(f"{CUT} {framing('MS', 'low angle', '35 mm', 'the foreman signals his crew, one arm raised, the iron bar in his other hand', 'confident, in charge, morning energy')} "
+                f"{camera('below the ledge', 'up at him', 'the rock wall and early autumn trees against a bright morning sky')} "
+                f"{cast(GAGE)} {ONE} {SAFE_FRAMING} {PERIOD} {NO_TEXT}")),
+    "s2b": dict(aspect="9:16", refs=[CUTP, G, CREW_REF], set="cut",
+        roles=CUT_LOOK + "Reference 2 is PHINEAS GAGE. Reference 3 is the crew (three different men). ",
+        prompt=(f"{CUT} {framing('LS', 'high angle from the hillside', '28 mm', 'the crew swing sledgehammers on drills in the cut below while Gage on the rim waves them on', 'busy, proud work')} "
+                f"{camera('on the wooded hillside above the cut', 'down into it', 'the raw cut through the autumn hills, stacked rails beside it')} "
+                + crowd("the cut below", CREW + ["a contractor of 1848 in a top hat and frock coat with mutton-chop whiskers, "
+                        "a ledger under his arm, standing on the bank and nodding toward Gage"]) +
+                f" Phineas Gage stands small on the rim. {ONE} {SAFE_FRAMING} {PERIOD} {NO_TEXT}")),
+    "s3": dict(aspect="9:16", refs=[CUTP], set="cut", roles=CUT_LOOK,
+        prompt=(f"{CUT} {framing('INSERT', 'three-quarter top view', '50 mm', 'a hand tips a small powder flask over a drill hole in the rock, black grains pouring in', 'careful, routine, dangerous')} "
+                f"{camera('just above the drill hole', 'down at it', 'grey rock around the hole, a small wooden powder keg at the edge')} "
+                "Only one hand and cuff are in the picture, no person. No iron bar in the picture (it is animated in later). "
+                f"{FULL_BLEED} {SAFE_FRAMING} {PERIOD} {NO_TEXT}")),
+    "s5": dict(aspect="9:16", refs=[CUTP], set="cut", roles=CUT_LOOK,
+        prompt=(f"{CUT} {framing('ECU', 'low', '100 mm macro', 'the lip of a drill hole in grey rock, dark powder grains around it, waiting', 'the second before disaster')} "
+                f"{camera('at the rock surface', 'along it to the hole', 'out-of-focus rock and dust')} "
+                "No iron bar, no hand, no spark in the picture (they are animated in later). "
+                f"{FULL_BLEED} {SAFE_FRAMING} {PERIOD} {NO_TEXT}")),
+    "s7": dict(aspect="9:16", refs=[STYLE_PLATE], roles=STYLE_ONLY,
+        prompt=(f"{CUT.replace('The railroad rock cut', 'The grassy slope beyond the rock cut')} "
+                f"{framing('LS', 'eye level', '35 mm', 'far down a grassy slope two crewmen start running toward the camera', 'alarm')} "
+                f"{camera('on the grassy slope', 'back toward the cut', 'grass, a stone wall and the mouth of the cut far behind, small')} "
+                "The middle ground is open grass (an iron bar lands there, animated later). "
+                + crowd("far away on the slope", CREW[:2]) + f" {SAFE_FRAMING} {PERIOD} {NO_TEXT}")),
+    "s9": dict(aspect="9:16", refs=[STYLE_PLATE, GA, CREW_REF, "proj:refs/ox_carts_1850s.jpg"],
+        roles=(STYLE_ONLY + "Reference 2 is PHINEAS GAGE after the accident (bandage over the LEFT eye). Reference 3 is "
+               "the crew. Reference 4 is a period photograph used ONLY for the cart and oxen. "),
+        prompt=(f"{ROAD} {framing('LS', 'eye level', '35 mm', 'two oxen pull a wooden cart left to right; Gage sits UPRIGHT in it, a cloth pressed to his bandaged head; his men walk beside it', 'stunned, strangely calm')} "
+                f"{camera('at the side of the road', 'across it', 'stubble fields, a stone wall and maples')} "
+                + crowd("walking beside the cart", CREW[:2]) + f" {ONE} No blood. {SAFE_FRAMING} {PERIOD} {NO_TEXT}")),
+    "s10": dict(aspect="9:16", refs=[STYLE_PLATE, GA, MATT],
+        roles=(STYLE_ONLY + "Reference 2 is PHINEAS GAGE after the accident. Reference 3 is MATT: copy his face, amber "
+               "round spectacles, teal scarf and amber notebook only; his clothes are of 1848. "),
+        prompt=(f"{HOTEL} {framing('MS', 'eye level', '35 mm', 'Gage, sitting calmly in a wooden chair on the piazza, legs crossed, raises one hand in greeting to a doctor stepping down from his carriage', 'deadpan, absurdly calm')} "
+                f"{camera('in the street behind the doctor', 'toward the piazza', 'the white clapboard hotel front and its piazza')} "
+                f"{cast(GAGE_AFTER, 'DR. EDWARD WILLIAMS, seen only from behind in the foreground: tall hat, dark coat, a leather medical bag', 'MATT')} "
+                f"{matt_beat('a brown waistcoat and a low felt hat of 1848', 'leaning on the piazza post behind Gage, pencil frozen over his notebook, jaw dropped')} "
+                f"{ONE} No blood. {SAFE_FRAMING} {PERIOD} {NO_TEXT}")),
+    "s11": dict(aspect="9:16", refs=[STYLE_PLATE], roles=STYLE_ONLY,
+        prompt=(f"{ROOM} {framing('CU', 'eye level', '85 mm', f'a young man’s hand grips the {TAMPING_IRON} leaning in the corner by a doorway', 'quiet, possessive')} "
+                f"{camera('close to the door frame', 'into the corner', 'bare plank wall in soft daylight')} "
+                "Only the hand and cuff are in the picture, no face. "
+                f"{glasses_gag('hanging by one arm from a nail on the plank wall above the iron')} {SAFE_FRAMING} {PERIOD} {NO_TEXT}")),
+    "s12": dict(aspect="9:16", refs=[STYLE_PLATE, GA],
+        roles=STYLE_ONLY + "Reference 2 is PHINEAS GAGE after the accident (small, out of focus). ",
+        prompt=(f"{STREET} {framing('MS', 'eye level', '50 mm', 'two friends whisper in a doorway and one glances back over his shoulder at the street', 'uneasy, unsure of him')} "
+                f"{camera('just outside the doorway', 'past the two friends into the street', 'the dirt street where Phineas Gage, small and out of focus, walks away')} "
+                + crowd("in the doorway", ["a lanky man of about thirty with a short brown beard and a cap",
+                                           "a stout clean-shaven man of about forty-five in a waistcoat"]) +
+                f" {ONE} {SAFE_FRAMING} {PERIOD} {NO_TEXT}")),
+}
+
+
+def main():
+    p = REPO / "projects" / PID / "episode.json"
+    ep = json.load(open(p, encoding="utf-8"))
+    ep.update(image_resolution="2K", references=REFERENCES, keyframes=KEYFRAMES,
+              glasses="s11: Matt's spectacles hanging from a nail above the iron",
+              theme={"culture": "new-england-1840s (proposed)", "font": "montserrat"},
+              storyboard="2026-11-18: s1-storyboard-v1.md; HERO pre-viz on stand-ins (previz_hc002s1.py, edit_hc002s1.py)")
+    ep["narration"]["v3_text"] = NARRATION
+    json.dump(ep, open(p, "w", encoding="utf-8"), indent=2, ensure_ascii=False)
+    issues = lint_all({**REFERENCES, **KEYFRAMES})
+    for n, v in issues.items():
+        print(n, *v, sep="\n  ")
+    print(f"{len(REFERENCES)} references, {len(KEYFRAMES)} keyframes -> {p}  ({len(issues)} with lint findings)")
+
+
+if __name__ == "__main__":
+    main()

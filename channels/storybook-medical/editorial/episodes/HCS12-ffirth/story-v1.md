@@ -1,4 +1,4 @@
-# HCS12 Stubbins Ffirth · story + script v1 (story-doctor, 2026-11-18)
+# HCS12 Stubbins Ffirth · story + script v1 (story-doctor, 2026-11-18) · APPROVED 2026-11-18
 
 CASE 17 · YouTube Fri Dec 11, 15:00 ET = 14:00 Alberta · socials Sat Dec 12, 18:00 ET · ready by **Mon Dec 7** · Crazy Science · callback: Finlay (CASE 13, Dec 3). Facts: `claims.csv` (research verdict PASS, 4.40; his own 1804 thesis). **Gross factor: described, never shown** (no vomit, no liquid in an eye, no wound, no drinking close-up: the cup, his face, the pulse). The animal tests stay out (C10, C11: a dog died).
 
