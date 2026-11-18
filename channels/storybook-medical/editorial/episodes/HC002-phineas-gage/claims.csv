@@ -13,7 +13,7 @@ HC002,C11,S2 0:26,"Macmillan argues he made a surprisingly good psychosocial ada
 HC002,C12,S2 0:34,"Portraits of Gage holding the iron identified in 2009 and 2010",B,Wilgus & Wilgus 2009,,,scholarly,,0,TBD - use our own illustration based on it,VERIFIED,"Don't reproduce the photo without checking rights; illustrate instead"
 HC002,C13,L,"Died 21 May 1860 of seizures in California, about 36",B,Macmillan 2000,,Harlow 1868 (gives 1861 in error),primary+scholarly,,1,,VERIFIED,
 HC002,C14,L,"Skull exhumed (1867) and with the iron given to Harlow; both now at Harvard's Warren Anatomical Museum",B,Macmillan 2000,,Harlow 1868,primary,,0,,VERIFIED,
-HC002,C15,L,"Exhibited at Barnum's museum in New York with his iron",B,Macmillan 2000,,Harlow 1868 p.14,primary,,0,,VERIFIED,
+HC002,C15,L,"Exhibited at Barnum's museum in New York with his iron",B,Macmillan 2000,,Harlow 1868 p.14,primary,,0,,ATTRIBUTED,"Rests on Harlow's statement (1868 p.14); narrate 'Harlow wrote that...' (fact check 2026-11-18)"
 HC002,C16,L,"Lost his foreman job: contractors 'could not give him his place again'",B,,,Harlow 1868 p.13,primary,,0,,VERIFIED,
 HC002,C17,S1 (cut 2026-11-18) / L,"He got out of the cart with a little assistance and walked up a long flight of stairs",B,Macmillan 2000,,Harlow 1868 pp.5-6,primary,,0,,VERIFIED,"'with a little help'; don't say 'alone'"
 HC002,C18,S1 0:05,"Before the accident his employers thought him 'the most efficient and capable foreman in their employ'",B,Macmillan 2000,,Harlow 1868 p.13,primary,,0,,VERIFIED,"Narration paraphrase: 'the best foreman his bosses had'"
@@ -28,3 +28,8 @@ HC002,C26,L 4:55,"Aug 1852: went to Chile to help set up a coach line at Valpara
 HC002,C27,L 5:35,"He loved children, horses and dogs and told nephews and nieces 'fabulous' (wild) stories",B,Macmillan 2000,,Harlow 1868,primary,,0,,VERIFIED,"Shown as story-telling at the inn: staging, not a claim about Chile"
 HC002,C28,L 5:50,"Wilgus & Wilgus: the portrait 'exploded the common image of Gage as a dirty, disheveled misfit'",B,Wilgus & Wilgus 2009,,,scholarly,,0,,ATTRIBUTED,"CHECK exact wording in J Hist Neurosci 2009 (seen via Wikipedia)"
 HC002,C29,L 6:00,"1859-60: health failed; went to his mother in San Francisco; farm work near Santa Clara; seizures from Feb 1860",B,Macmillan 2000,,Harlow 1868 pp.14-16,primary,,1,,VERIFIED,"Seizures in words only"
+HC002,C30,L 2:05,"Dr. John Harlow took over Gage's care on the day of the accident and later wrote the main reports (1848, 1868)",B,Macmillan 2000,,Harlow 1868,primary,,0,,VERIFIED,
+HC002,C31,L 2:15,"In the weeks after the accident a severe infection set in and his life was in danger",B,Macmillan 2000,,Harlow 1868,primary,,1,,VERIFIED,"Words only; never shown (research.md timeline, P1)"
+HC002,C32,L 2:25,"He recovered physically under Harlow's care (1848-49)",B,Macmillan 2000,,Harlow 1868,primary,,0,,VERIFIED,"research.md timeline, P1"
+HC002,C33,L 2:25,"He went home to his parents (Lebanon, New Hampshire, Nov 1848)",C,Macmillan 2000,,Harlow 1868,primary,,0,,UNKNOWN,"CHECK Harlow 1868 for the page; until confirmed, cut 'He went home.' from line 26"
+HC002,C34,L 4:10,"He was shown to the Boston Society for Medical Improvement (1849-50)",B,Macmillan 2000,,Harlow 1868 p.14,primary,,0,,VERIFIED,"research.md timeline, P1 / S1"

@@ -5,7 +5,7 @@ Why: the S1 script of 2026-10-18 (script-v2.md) was written before Rule 0, packa
 ## Spine
 - **Who:** Phineas Gage, 25, railroad foreman in Vermont, 1848 (C01).
 - **Wants:** to blast a path for the railroad through the rock; he is the best foreman his bosses have (C18).
-- **Against:** a hole full of blasting powder and a six-kilo iron bar (C02).
+- **Against:** a hole full of blasting powder and a thirteen-pound iron bar (C02).
 - **Stakes:** his life, in one spark.
 - **The choice:** he looks away for a second, over his shoulder at his men; the iron strikes the rock (C03). Then the second act a viewer judges: he speaks, sits up in the cart and greets the doctor with a joke (C05, C06).
 - **The cost or turn:** he survived, but the man who came back was "no longer Gage" (C08).
@@ -16,17 +16,17 @@ Why: the S1 script of 2026-10-18 (script-v2.md) was written before Rule 0, packa
 |---|---|---|---|
 | B1 HOOK | [intense] In 1848, an iron bar shot straight through a man's skull. | C01, C04 | 7 → 9 |
 | B2 WORLD + STAKES | [curious] Phineas Gage. Twenty-five. Railroad foreman. The best his bosses had. | C01, C18 | 4 → 5 |
-| B3 THE CHOICE | His job: pack blasting powder into the rock with an iron bar. Six kilos. | C02 | 4 → 6 |
+| B3 THE CHOICE | His job: pack blasting powder into the rock with an iron bar. Thirteen pounds. | C02 | 4 → 6 |
 | B3 THE CHOICE | [quiet] His men caught his eye. He looked over his shoulder… | C03 | 6 → 7 |
 | B4 ESCALATION | [fast] …and the iron struck the rock. A spark. | C03 | 7 → 9 |
 | B4 ESCALATION | The bar went in under his cheekbone, behind his eye… and out the top of his head. | C04 | 7 → 8 |
-| B4 ESCALATION | It landed twenty-five metres away. | C04 | 6 → 7 |
+| B4 ESCALATION | It landed about eighty feet away. | C04 | 6 → 7 |
 | B5 CLIMAX | [pause] [whispers] Within minutes… he spoke. | C05 | 7 → 10 |
 | B6 TWIST / PAYOFF | [curious] He rode to his hotel sitting up in an ox cart. | C05 | 6 → 8 |
 | B6 TWIST / PAYOFF | The doctor remembered the greeting: "Doctor, here is business enough for you." | C06 | 7 → 8 |
 | B7 RESONANCE | [warm] He survived. He even kept the iron. [pause] [whispers] But his friends said… he was "no longer Gage." | C07, C08 | 6 → 7 |
 
-**Changed from v1:** the hook is the event itself, in the past tense of a headline, with the bar already in the air on screen (v1 added "and he sat up and talked" to the hook, which spent the climax in the first second). "The best his bosses had" gives the stakes: we see who is about to be lost. The strike is split into four short lines so the edit can accelerate. "Within minutes… he spoke" becomes the climax, alone, after a written pause and in silence. "For the rest of his life" is gone from the iron line, and the 2009 portrait is gone from the shots: both point to his later life, which is the long video's twist. **Same facts as v1, nothing added.** The quote stays ATTRIBUTED ("the doctor remembered"); the distance stays "about 80 ft" in the claims log and is said as "twenty-five metres".
+**Changed from v1:** the hook is the event itself, in the past tense of a headline, with the bar already in the air on screen (v1 added "and he sat up and talked" to the hook, which spent the climax in the first second). "The best his bosses had" gives the stakes: we see who is about to be lost. The strike is split into four short lines so the edit can accelerate. "Within minutes… he spoke" becomes the climax, alone, after a written pause and in silence. "For the rest of his life" is gone from the iron line, and the 2009 portrait is gone from the shots: both point to his later life, which is the long video's twist. **Same facts as v1, nothing added.** The quote stays ATTRIBUTED ("the doctor remembered"); Narration in US units (user, 2026-11-18): "thirteen pounds", "about eighty feet"; the on-screen labels show both.
 
 ## Shots (v1 10 → v2 14; all new: S1 was never made)
 | # | Beat | Action (the verb) | Status |

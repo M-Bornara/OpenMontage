@@ -33,7 +33,7 @@
 | 10 | `[warm]` His bosses thought he was the most efficient, capable foreman they had. | S1 shot 2a reused: Gage signals his crew from the ledge, arm up; low push | C18 |
 | 11 | His doctor later wrote that he had "an iron will as well as an iron frame." | MCU Gage lifts a powder keg onto his shoulder without effort, the crew grinning; push | C22 |
 | 12 | The work was simple, and deadly. Drill a hole in the rock. Pour in the powder. Set the fuse. Pack it down. | four fast inserts: a hammer drives a drill, powder pours, a fuse is laid, the iron tamps; on 2s, hard cuts on the drum | C23 |
-| 13 | For the packing, he used an iron bar. Smooth. More than a metre long. Six kilos. Pointed at one end. | the iron on a rock in morning light; a measure line draws along it (1.1 m · 6 kg / 3 ft 7 in · 13¼ lb) | C02 |
+| 13 | For the packing, he used an iron bar. Smooth. Three feet seven inches long. Thirteen pounds. Pointed at one end. | the iron on a rock in morning light; a measure line draws along it (3 ft 7 in · 13¼ lb / 1.1 m · 6 kg) | C02 |
 | 14 | Not a crowbar, as many retellings say. A tamping iron. | the word CROWBAR stamped, then crossed out; the real iron's shape beside it | C02 |
 | 15 | `[quiet]` On the thirteenth of September, his men in the pit behind him caught his attention. | OTS from the pit: two crewmen look up at him; one raises an arm | C01, C03 |
 | 16 | He looked over his shoulder. The iron came down… and "struck fire upon the rock." | his head turns; ECU the iron meets the rock, one spark (S1 shot 5 from a new angle: free crop) | C03 |
@@ -47,10 +47,10 @@
 | 20 | He got down with a little help and walked up a long flight of stairs. | low angle up a steep wooden staircase; Gage climbs, one hand on the rail, a crewman's hand at his elbow; bandage on his head | C17 |
 | 21 | `[curious]` When the local doctor, Edward Williams, arrived, Gage greeted him with a line the doctor wrote down: | S1 shot 10: the piazza, the doctor steps down from his carriage | C06, C19 |
 | 22 | "Doctor, here is business enough for you." | Gage's raised hand, deadpan; Matt's pencil freezes (S1's cameo) | C06 |
-| 23 | Then came the doctor who would tell his story to the world: John Harlow. | MS Harlow in shirtsleeves rolls up his cuffs by a lamp, bag open; push to his eyes | P1 |
-| 24 | The real danger came in the weeks after. A severe infection set in. | a sickroom at night; a basin, a cloth wrung out, a candle burning low; the figure in the bed only a shape | P1 (timeline) |
-| 25 | For a while, it looked like the iron might win after all. | the candle gutters; the window goes from night to grey dawn | P1 (timeline) |
-| 26 | It didn't. Slowly, he got up. He walked. He went home. | spring light; Gage, thinner, steps out of a door into a farmyard, squints at the sun | P1 (timeline) |
+| 23 | Then came the doctor who would tell his story to the world: John Harlow. | MS Harlow in shirtsleeves rolls up his cuffs by a lamp, bag open; push to his eyes | C30 |
+| 24 | The real danger came in the weeks after. A severe infection set in. | a sickroom at night; a basin, a cloth wrung out, a candle burning low; the figure in the bed only a shape | C31 |
+| 25 | For a while, it looked like the iron might win after all. | the candle gutters; the window goes from night to grey dawn | C31 |
+| 26 | It didn't. Slowly, he got up. He walked. He went home. | spring light; Gage, thinner, steps out of a door into a farmyard, squints at the sun | C32, C33 |
 | 27 | `[pause]` He survived. The question was… who survived? | hold on his face in profile, the right side; the music stops | – |
 
 ## 3 · No Longer Gage (2:40–3:25)
@@ -77,8 +77,8 @@
 ## 5 · The Evidence (4:10–4:55)
 | # | Narration | Scene | Claims |
 |---|---|---|---|
-| 41 | Start with what he did. He didn't hide. He went to Boston and stood in front of its doctors. | a lecture room of doctors; Gage stands by a table, the iron laid on it; three distinct faces lean forward | P1 (timeline) |
-| 42 | He spent time at Barnum's American Museum in New York… with his iron. | a museum hall with gaslight and posters; Gage beside the iron on a stand, a boy staring up at it | C15 |
+| 41 | Start with what he did. He didn't hide. He went to Boston and stood in front of its doctors. | a lecture room of doctors; Gage stands by a table, the iron laid on it; three distinct faces lean forward | C34 |
+| 42 | Harlow wrote that he spent time at Barnum's American Museum in New York… with his iron. | a museum hall with gaslight and posters; Gage beside the iron on a stand, a boy staring up at it | C15 |
 | 43 | He gave the iron to Harvard's medical museum. Then he went back… and took it home. | a museum shelf; a label being written; then the shelf is empty and a hand lifts the iron away | C07 |
 | 44 | From then on, Harlow wrote, it was his "constant companion." | the iron leaning by a bed, a coat on a hook, morning light | C07 |
 | 45 | He worked for a year and a half at a livery stable in Hanover, New Hampshire. With horses. | a stable door; Gage leads a horse out, brushes its neck; the horse nods | C25 |
@@ -113,14 +113,17 @@
 | # | Narration | Scene | Claims |
 |---|---|---|---|
 | 64 | `[curious]` Gage's case helped convince doctors that damage to the front of the brain could change who a person is. | a period lecture: a doctor points to the front of a skull drawing; heads nod | C20 |
-| 65 | His later life suggests something just as important: that people can adapt, even after damage like that. | the coach again, at evening, horses walking home | C11 |
+| 65 | Historians like Macmillan think his later life shows something just as important: that people can adapt, even after damage like that. | the coach again, at evening, horses walking home | C11 |
 | 66 | `[warm]` The man in those photographs isn't a monster. He's a coach driver on the other side of the world… holding the reins. | the portrait and the coach driver dissolve into each other | C12, C10 |
 | 67 | And the iron that went through his head? He never let it go. | final: the iron in his hand in the portrait; hold; end screen | C07 |
 
 ---
 
-## New claims added for this script (claims.csv C20–C29)
-C20 most famous patient / the frontal lobe role (Macmillan 2000) · C21 born c. 1823, New Hampshire (S1) · C22 "an iron will as well as an iron frame" (Harlow 1868) · C23 the blasting steps (Harlow 1868) · C24 Macmillan's findings and quote (Macmillan 2000) · C25 livery stable in Hanover, about 18 months (Harlow 1868 p.14) · C26 Aug 1852 to Chile to help set up a coach line at Valparaíso (Harlow 1868 p.14; Macmillan) · C27 told children "fabulous" stories (Harlow 1868) · C28 the Wilgus quote on the portrait (Wilgus & Wilgus 2009) · C29 health failing 1859, mother in San Francisco, farm work, seizures from Feb 1860 (Harlow 1868 pp.14–16; Macmillan). Rows marked CHECK need the exact wording or page confirmed before narration.
+## Fact check 2026-11-18 (user)
+Narration in US units ("three feet seven inches", "thirteen pounds"; labels show both). Lines 23–26 and 41 now cite C30–C34. Barnum's (line 42) rests on Harlow's statement, so it is narrated as "Harlow wrote that…" (C15 now ATTRIBUTED). Line 65 is attributed to Macmillan (C11). The exact wording and pages of C22, C24 and C28 stay open until checked.
+
+## New claims added for this script (claims.csv C20–C34)
+C20 most famous patient / the frontal lobe role (Macmillan 2000) · C21 born c. 1823, New Hampshire (S1) · C22 "an iron will as well as an iron frame" (Harlow 1868) · C23 the blasting steps (Harlow 1868) · C24 Macmillan's findings and quote (Macmillan 2000) · C25 livery stable in Hanover, about 18 months (Harlow 1868 p.14) · C26 Aug 1852 to Chile to help set up a coach line at Valparaíso (Harlow 1868 p.14; Macmillan) · C27 told children "fabulous" stories (Harlow 1868) · C28 the Wilgus quote on the portrait (Wilgus & Wilgus 2009) · C29 health failing 1859, mother in San Francisco, farm work, seizures from Feb 1860 (Harlow 1868 pp.14–16; Macmillan) · C30 Harlow took over his care · C31 a severe infection in the weeks after · C32 his physical recovery · C33 he went home to his parents (CHECK page) · C34 shown to the Boston Society for Medical Improvement. Rows marked CHECK need the exact wording or page confirmed before narration.
 
 ## Open questions for you
 1. The cold open re-uses S1's images (free). OK, or do you want new ones for the long?

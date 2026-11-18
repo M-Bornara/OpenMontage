@@ -21,9 +21,9 @@ CASE 17 · YouTube Fri Dec 11, 15:00 ET = 14:00 Alberta · socials Sat Dec 12, 1
 | B4 ESCALATION | He breathed its steam. Swallowed it dried, as pills. | C16, C18 | 8 |
 | B5 CLIMAX | [pause] [whispers] Then… he drank it. | C19 | 10 |
 | B5 CLIMAX | Half an ounce at first. Later, two. Undiluted. | C19, C20 | 9 |
-| B6 TWIST | [curious] He never got sick. Yellow fever, he wrote, "never has been… and never can be" contagious. | C23, C24 | 7 |
+| B6 TWIST | [curious] He never caught the fever. Yellow fever, he wrote, "never has been… and never can be" contagious. | C23, C24, C17, C46 | 7 |
 | B6 TWIST | [firm] He was right that you can't catch it that way. But wrong about why. It takes a mosquito. | C27, C33 | 9 |
-| B7 RESONANCE | [warm] Nobody suspected that for almost eighty years… until a doctor in Havana named Carlos Finlay. | C30 | 7 |
+| B7 RESONANCE | [warm] Almost eighty years later, a doctor in Havana, Carlos Finlay, blamed the mosquito. | C30 | 7 |
 
 ```
 [intense] Philadelphia, 1802. A medical student cuts his own arm… and puts a yellow fever patient's black vomit into the cut.
@@ -33,12 +33,12 @@ More than twenty cuts. Drops in his eye.
 He breathed its steam. Swallowed it dried, as pills.
 [pause] [whispers] Then… he drank it.
 Half an ounce at first. Later, two. Undiluted.
-[curious] He never got sick. Yellow fever, he wrote, "never has been… and never can be" contagious.
+[curious] He never caught the fever. Yellow fever, he wrote, "never has been… and never can be" contagious.
 [firm] He was right that you can't catch it that way. But wrong about why. It takes a mosquito.
-[warm] Nobody suspected that for almost eighty years… until a doctor in Havana named Carlos Finlay.
+[warm] Almost eighty years later, a doctor in Havana, Carlos Finlay, blamed the mosquito.
 ```
 
-**Kept out on purpose:** the retellings that aren't in the thesis (C39–C43 REMOVE: his own veins, cuticles, bathing in it, transfusion); the animals (C10, C11); "he was right" as a plain verdict (C33 DISPUTED: the script says exactly where he was right and wrong); why one early-stage sample didn't infect him (C29 UNKNOWN). The late-stage samples (C28 ATTRIBUTED, "probably") go to the pinned comment. Not a pure hero: his gravestone points to slaveholding (C38); he is not praised beyond the facts, and the p.46 passage is never quoted past "parents of their children". "Almost eighty years": 1802 → Finlay 1881 (C30). The Finlay line works best if Finlay (Dec 3) is live, which it will be.
+**Kept out on purpose:** the retellings that aren't in the thesis (C39–C43 REMOVE: his own veins, cuticles, bathing in it, transfusion); the animals (C10, C11); "he was right" as a plain verdict (C33 DISPUTED: the script says exactly where he was right and wrong); why one early-stage sample didn't infect him (C29 UNKNOWN). The late-stage samples (C28 ATTRIBUTED, "probably") go to the pinned comment. Not a pure hero: his gravestone points to slaveholding (C38); he is not praised beyond the facts, and the p.46 passage is never quoted past "parents of their children". "Almost eighty years later": 1802 → Finlay 1881 (C30). Fact check 2026-11-18: not "nobody suspected it until" (others had suggested mosquitoes before Finlay), and "never caught the fever", not "never got sick" (the hot room gave him a headache, C17; his later health is unknown, C46). The Finlay line works best if Finlay (Dec 3) is live, which it will be.
 
 ## Hook card (pick one) · title (C009)
 - **A** `He drank his patients' / black *vomit*.` (recommended; the word is on the card, never on screen as a picture) · **B** `To prove a fever / wasn't *catching*.` · **C** `*1802*: a student / tests a fever on himself.`

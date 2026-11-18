@@ -6,8 +6,8 @@ CASE 16 · YouTube Wed Dec 9, 15:00 ET = 14:00 Alberta · socials Thu Dec 10, 18
 - **Who:** Juliane Koepcke, 17, on a Christmas Eve flight over the Peruvian rainforest (C01, C02, C08).
 - **Wants:** to get out of the jungle alive.
 - **Against:** a broken collarbone, one eye swollen shut, no glasses, one sandal, a bag of sweets (C19, C20, C23, C25).
-- **Stakes:** her life; nobody knows she's alive (search planes can't see her, C27).
-- **The choice:** she doesn't wait at the wreck; she finds water and follows it, as her biologist parents taught her (C26).
+- **Stakes:** her life; nobody knows she's alive (search planes pass over and she can't signal them, C27).
+- **The choice:** she doesn't wait at the wreck; she finds water and follows it, as her parents taught her (C26).
 - **The cost:** eleven days alone; the sweets run out on day four; insects lay eggs in her wounds (C25, C30, C37).
 - **The payoff:** day ten, a boat, a hut; men walk out of the trees; she was the only one of 92 who lived; she became a biologist and runs her parents' jungle station (C04, C33, C34, C45).
 
@@ -18,8 +18,8 @@ CASE 16 · YouTube Wed Dec 9, 15:00 ET = 14:00 Alberta · socials Thu Dec 10, 18
 | B1 HOOK | "I hadn't left the plane," she said. "The plane had left me." | C13 | 8 |
 | B2 STAKES | [pause] Juliane Koepcke woke the next morning under her seat row. Alone. | C18 | 7 |
 | B2 STAKES | Collarbone broken. One eye swollen shut. | C19, C20 | 6 |
-| B3 CHOICE | Search planes flew over. They couldn't see her. | C27 | 7 |
-| B3 CHOICE | [determined] So she did what her biologist parents taught her: follow the water. Streams lead to rivers… rivers to people. | C26 | 7 |
+| B3 CHOICE | Search planes flew over. She couldn't signal them. | C27 | 7 |
+| B3 CHOICE | [determined] So she did what her parents taught her: follow the water. Streams lead to rivers… rivers to people. | C26 | 7 |
 | B4 ESCALATION | Her sweets ran out on day four. Insects laid eggs in her wounds. | C25, C30 | 9 |
 | B5 CLIMAX | [pause] [whispers] Day ten… a boat. | C33 | 10 |
 | B6 TWIST | [warm] Then three men walked out of the trees. | C34 | 8 |
@@ -31,8 +31,8 @@ CASE 16 · YouTube Wed Dec 9, 15:00 ET = 14:00 Alberta · socials Thu Dec 10, 18
 "I hadn't left the plane," she said. "The plane had left me."
 [pause] Juliane Koepcke woke the next morning under her seat row. Alone.
 Collarbone broken. One eye swollen shut.
-Search planes flew over. They couldn't see her.
-[determined] So she did what her biologist parents taught her: follow the water. Streams lead to rivers… rivers to people.
+Search planes flew over. She couldn't signal them.
+[determined] So she did what her parents taught her: follow the water. Streams lead to rivers… rivers to people.
 Her sweets ran out on day four. Insects laid eggs in her wounds.
 [pause] [whispers] Day ten… a boat.
 [warm] Then three men walked out of the trees.
@@ -44,5 +44,5 @@ Her sweets ran out on day four. Insects laid eggs in her wounds.
 
 ## Hook card (pick one) · title (C009)
 - **A** `She fell from the sky / *strapped* to her seat.` (recommended, 8 words) · **B** `*17*. Alone / in the Amazon.` · **C** `*11* days alone / in the jungle.`
-- **Title:** 1 `She Fell From the Sky and Walked Out of the Jungle` (recommended, slate title) · 2 `She Fell Out of a Plane and Survived 11 Days Alone`
+- **Title:** 2 `She Fell Out of a Plane and Survived 11 Days Alone` (chosen 2026-11-18) · 1 `She Fell From the Sky and Walked Out of the Jungle` (slate title)
 - **Frame 1 (C010):** the seat row spinning down through storm cloud toward the canopy, leaves already whipping past, rain streaks (layered parallax + rotation + particles). HERO beats: B1 the falling seat row, B3 her feet stepping into the stream (water ripples, displacement), B5 the boat coming into view through leaves (rack focus). Colour: storm grey → jungle green → the warm hut light. Matt cameo: never on the flight or among the real rescuers; in the last shot (B7) he's a visiting student at the jungle station, binoculars up, glasses glint.
