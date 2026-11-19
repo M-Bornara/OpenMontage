@@ -182,4 +182,15 @@ good = storyboard_lint.lint_md(chr(10).join(H + [
 status = "PASS" if len(bad) == 2 and not good else "FAIL"
 print(f"{status} L50 violent rows without a Rule 0b tool caught ({len(bad)}/2), no false positives ({good or 'none'})")
 ok = ok and status == "PASS"
+# L47b (user 2026-11-19, HC002-S1 2a/2b): a full set plate as a reference carries its camera
+mb = "SHOT: LS, high angle from the hillside. The crew swing sledgehammers."
+l47b_bad = [prompt_kit.lint("s2b", {"refs": ["ref:plate-cut", "ref:sheet-gage"], "roles": "Reference 1 is the set plate, for the style ONLY: do NOT copy its camera. ", "prompt": mb}),
+            prompt_kit.lint("s9", {"refs": ["proj:refs/plate-s1.png"], "prompt": mb})]
+l47b_good = [prompt_kit.lint("s2b", {"refs": ["proj:refs/plate-cut-detail.png", "ref:sheet-gage"], "prompt": mb}),
+             prompt_kit.lint("s2b", {"refs": ["ref:sheet-gage"], "prompt": mb}),
+             prompt_kit.lint("s5b", {"refs": ["ref:plate-ward"], "prompt": mb + " " + prompt_kit.SAME_CAMERA})]
+ok47 = all(any(i.startswith("L47b") for i in x) for x in l47b_bad) and not any(i.startswith("L47b") for x in l47b_good for i in x)
+status = "PASS" if ok47 else "FAIL"
+print(f"{status} L47b full set plate reference caught (2 bad), detail crop / no plate / SAME_CAMERA pass (3 good)")
+ok = ok and status == "PASS"
 sys.exit(0 if ok else 1)

@@ -166,3 +166,18 @@ Every generation round teaches us something. A lesson only counts once it's **en
   16:9: spell a bare room out ("no furniture, no shelves, no lamp") and keep other films' rooms out of the references.
 - Text on set signs: "CAVENDISH HOTEL" came back readable despite NO_TEXT (a hotel invites a sign). Flat boards are
   painted out locally (`fix_s10_sign.py`: the board's letter holes inpainted).
+
+## L47b + L51 + L52 (HC002-S1 Gage, user 2026-11-19)
+- **L47b:** s2a and s2b both took the rock cut's set plate as Reference 1 with "do NOT copy its composition or camera
+  position" in the roles, and both came back with the plate's camera (same cliff, kegs, planks): 2a -> 2b read as a jump
+  cut with the crew popping in. A full set plate always carries its camera; the words don't hold it back. Lint L47b:
+  a `ref:plate-*` / `plate-*.png` reference fails unless the file is a cropped detail (name with `detail` / `crop`), the
+  spec is an empty plate, or the prompt says `prompt_kit.SAME_CAMERA`. For a new angle: no plate (style in words or a
+  detail crop).
+- **L51:** a hand close-up came back with a toy keg and a bar thinner than a finger: `prompt_kit.scale()` states every
+  object's size next to the hand.
+- **L52 (edit, not prompt):** `scripts/cut_check.py`, run by `episode.py build`: ORB + a RANSAC similarity fit on the two
+  stills either side of every cut; same camera at a similar size (x0.67-1.5) over the same part of the set fails, unless
+  the storyboard row says "same-camera cut intended". Free fix for Gage: 2a reframed as a tight MCU on a soft-background
+  still (mcu2a_hc002s1.py), size ratio x0.37 = close -> wide.
+

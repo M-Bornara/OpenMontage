@@ -111,6 +111,8 @@ def framing(size: str, angle: str, lens: str, action: str, mood: str = "") -> st
 # L51 (user 2026-11-19, HC002-S1 s3): an insert of a hand pouring powder came back with a toy-sized keg beside the hand and
 # a drill hole too small for the hand (and the animated bar read thinner than a finger). The model has no sense of scale
 # unless it is told: every close-up with a hand states the true size of EVERY object next to the hand, against the hand.
+# L47b: a shot that WANTS the set plate's own camera (a locked-off time cut, an empty plate) says so in its prompt
+SAME_CAMERA = "Same camera as the set plate (intended)."
 HAND_SIZE = "an adult man's hand is about 7 1/2 in (19 cm) long and one finger about 3/4 in (2 cm) wide"
 
 
@@ -339,6 +341,17 @@ def lint(name: str, spec: dict) -> list[str]:
             r"\b(?:man|woman|person|boy|girl|his|her)(?:'s|’s)? (?:shoulder|hand|arm|head|body|face|legs?)\b", p):
         issues.append("L47: an empty plate names the missing person's body parts: the model paints them in; describe only "
                       "the empty place (where he goes is the edit's job)")
+    # L47b (user 2026-11-19, HC002-S1 2a/2b): a SET PLATE passed as a reference always carries its camera. s2a and s2b
+    # both had "do NOT copy its composition or camera position" in the roles and both came back as the plate's camera
+    # (same cliff, kegs, planks): a jump cut. Words don't hold it back. For a different angle pass a cropped DETAIL of the
+    # plate (file name with "detail" or "crop": texture, light, palette, no layout) or no plate at all; a shot that
+    # really wants the plate's camera says SAME_CAMERA. Empty plates of an approved frame keep their camera by design.
+    plate_refs = [r for r in refs if re.search(r"(?:^ref:plate-|(?:^|[/\\])plate[-_][^/\\]*\.(?:png|jpe?g|webp)$)", str(r), re.I)
+                  and not re.search(r"detail|crop", str(r), re.I)]
+    if plate_refs and "empty plate" not in p and SAME_CAMERA.lower() not in p:
+        issues.append(f"L47b: full set plate as a reference ({', '.join(map(str, plate_refs))}): it carries its camera "
+                      "whatever the prompt says (HC002-S1 2a/2b came back as the same camera = a jump cut). Pass a cropped "
+                      "detail (file name with 'detail'/'crop') or no plate; or say SAME_CAMERA if that camera is the point")
     # L46: a held prop with "no ... drawn" in brackets gets drawn anyway, as the wrong tool
     if "pose sheet" in p and re.search(r"\(no [a-z ]+ drawn\)", p):
         issues.append("L46: '(no X drawn)' for a held prop: the model draws a wrong tool; use EMPTY_HANDS, or give "

@@ -350,8 +350,12 @@ KEPT = w("kept", "11")
 SAID, NO12 = w("said", "12"), w("no longer", "12")
 
 ALIVE = {
-    "2a": dict(motion={"type": "push", "from": 1.02, "to": 1.09, "x": 2.0, "y": 1.0},
-               fx=[wag("s2a", "arm", [0.545, 0.39], 8, 0.55, 0.25, 0.25 + 2 * 0.55),
+    # user 2026-11-19: s2a and s2b share the set plate's camera (a jump cut, the crew popping in). 2a is now a tight MCU on
+    # Gage (hat, face, raised hand, chest) on s2a-dof.png (mcu2a_hc002s1.py: the cliff soft behind him), so 2a -> 2b
+    # cuts close -> wide. The caption (TOP) and the name tag sit on the soft cliff above him; a slow push in.
+    "2a": dict(motion={"type": "keys", "keys": [cam(0.0, 2.8, 0.425, 0.36), cam(dur["2a"], 2.95, 0.425, 0.36, ease="linear")]},
+               source=KF + "s2a-dof.png",
+               fx=[wag("s2a-dof", "arm", [0.545, 0.39], 8, 0.55, 0.25, 0.25 + 2 * 0.55),
                    {"kind": "particles", "style": "haze", "x": 0.7, "y": 0.62, "tx": 0.85, "ty": 0.55, "spread": 0.15,
                     "every": 0.4, "life": 3.0, "size": 260, "color": "214,196,160", "opacity": 0.22}]),
     "2b": dict(motion={"type": "slide", "from": 2.5, "to": -2.5, "scale": 1.1},
@@ -399,7 +403,7 @@ for i, (name, _secs, line, cap, *_r) in enumerate(PLAN):
     s = {"id": f"s{i + 1:02d}", "start": starts[name], "end": round(starts[name] + dur[name], 2), "source": PV + f"{name}.png",
          "motion": SKETCH["push"], "captionY": cap, "breath": True, "previz": name}
     if name in ALIVE:
-        s.update(source=KF + f"s{name}.png", breath=False, **ALIVE[name])
+        s.update({"source": KF + f"s{name}.png", "breath": False, **ALIVE[name]})     # an ALIVE entry may name its own source (2a: s2a-dof)
     if name == "1":
         s.update(source=PLATE + "plate-s1-nocrew.png", motion=CAM1,
                  hit={"at": 0, "strength": 2.6, "seconds": 0.9}, fx=[DUST1, FLASH1], breath=False,
@@ -417,7 +421,7 @@ for i, (name, _secs, line, cap, *_r) in enumerate(PLAN):
     shots.append(s)
 
 overlays = [
-    {"kind": "nameTag", "start": starts["2a"] + 0.2, "end": starts["2a"] + 2.5, "text": "Phineas Gage", "sub": "railroad foreman, 25", "y": 1000},
+    {"kind": "nameTag", "start": starts["2a"] + 0.2, "end": starts["2a"] + 2.5, "text": "Phineas Gage", "sub": "railroad foreman, 25", "y": 600},   # 2a MCU: on the soft cliff above his hat (y 1000 = his face)
     # the place stamp on 2b, the wide of the cut (rough cut 1: on 2a it sat on Gage's hat or under the caption, and
     # text_check's caption box leaves no room above his raised hand); 2b's caption is LOW
     {"kind": "stamp", "start": starts["2b"] + 0.1, "end": starts["2b"] + 2.3, "text": "CAVENDISH, VERMONT · 1848", "y": TOP},
@@ -456,6 +460,8 @@ ep = json.load(open(P / "episode.json", encoding="utf-8"))
 ep.update({"title": "He Took an Iron Bar Through the Skull… and Spoke", "format": "short", "loop": True, "tail_seconds": 1.0,
            # rough cut 1: every shot is real now, so the full motion lint runs (the pre-viz ran it as "warn")
            "motion_lint": "fail" if REAL else "warn",
+           # L52 cut check (user 2026-11-19): its storyboard, for any row marked "same-camera cut intended"
+           "storyboard": "channels/storybook-medical/editorial/episodes/HC002-phineas-gage/s1-storyboard-v1.md",
            "previz": "rough cut 1 (real narration)" if REAL else "scratch timeline 2026-11-18; replace with the real narration", "shots": shots, "overlays": overlays,
            "sfx": SFX,
            # music prompts live in build_hc002s1.py; the music stops for shot 8's silence (cut -> just after "spoke")

@@ -697,6 +697,14 @@ def step_build(pid, *_):
         print("MOTION LINT:\n  " + "\n  ".join(motion))
         if ep.get("motion_lint", "fail") != "warn":
             raise SystemExit("motion lint failed (plan/layered-animation.md); fix the shots or mark breath=True")
+    # L52 (user 2026-11-19, Gage S1 2a -> 2b): two consecutive shots with the same camera at the same size = a jump cut.
+    # Opt-out per cut: "same-camera cut intended" in the storyboard row (ep["storyboard"]) or the shot's "cut" field.
+    import cut_check
+    cuts = cut_check.check(pid, ep, verbose=False)
+    if cuts:
+        print("CUT CHECK:\n  " + "\n  ".join(cuts))
+        if ep.get("cut_lint", "fail") != "warn":
+            raise SystemExit("cut check failed (L52 jump cut); reframe, regenerate without the set plate, or mark it intended")
     shots = []
     for s in ep["shots"]:
         # a layered shot shows its CLEAN plate (nothing that moves is painted into it); the still stays the reference
