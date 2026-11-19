@@ -5,7 +5,8 @@
               white shirt stays a shade lighter than the trousers, so his look (shirt, braces, hat) still reads.
   gage-s1-black/   (story-craft Rule 0b, user 2026-11-19) PURE black inside the warm rim: no face, no shirt shade, so the bar
               can burst out of the top of his head with nothing to see but a black shape, a flash and the bar.
-    python channels/storybook-medical/editorial/episodes/HC002-phineas-gage/looks_hc002s1.py [--black-only]
+  iron-thick/  the same lit bar 1.55x thicker (user 2026-11-19, scale): for the close-ups, shots 3 and 5.
+    python channels/storybook-medical/editorial/episodes/HC002-phineas-gage/looks_hc002s1.py [--black-only | --iron-thick]
 """
 import json
 import shutil
@@ -80,11 +81,17 @@ def silhouette(name: str, out: str, flat: bool = False):
     print(out, "ok")
 
 
-def lit_iron():
-    src, dst = S / "iron", S / "iron-lit"
+def lit_iron(thick: float = 1.0, out: str = "iron-lit"):
+    """thick: the rod's thickness x this (its length unchanged), BEFORE the light and the glint, so the star keeps its
+    shape. iron-thick (x1.55, user 2026-11-19): in the close-ups (shots 3, 5) the bar must be ~2 finger-widths (1 1/4 in),
+    it read thinner than a finger."""
+    src, dst = S / "iron", S / out
     shutil.rmtree(dst, ignore_errors=True)
     dst.mkdir(parents=True)
-    rod = np.array(Image.open(src / "rod-0.png").convert("RGBA")).astype(np.float32)
+    im0 = Image.open(src / "rod-0.png").convert("RGBA")
+    if thick != 1.0:
+        im0 = im0.resize((im0.width, round(im0.height * thick)), Image.LANCZOS)
+    rod = np.array(im0).astype(np.float32)
     PAD = 90                                               # room above / below for the glint's rays (anchor stays centred)
     rod = np.pad(rod, ((PAD, PAD), (0, 0), (0, 0)))
     r = rim(rod[..., 3], 7, 0)
@@ -111,16 +118,20 @@ def lit_iron():
     g.alpha_composite(star)
     g.save(dst / "glint-0.png")
     copy_meta(src, dst, {"rod": ["rod-0.png"], "glint": ["glint-0.png"]}, [lit.width, lit.height])
-    print("iron-lit ok", lit.size, "glint at", gx, gy)
+    print(out, "ok", lit.size, "glint at", gx, gy)
 
 
 if __name__ == "__main__":
     import sys
+    if "--iron-thick" in sys.argv:
+        lit_iron(1.55, "iron-thick")
+        raise SystemExit
     if "--black-only" in sys.argv:
         silhouette("gage-s1", "gage-s1-black", flat=True)
         silhouette("hat", "hat-black", flat=True)
         raise SystemExit
     lit_iron()
+    lit_iron(1.55, "iron-thick")
     silhouette("gage-s1", "gage-s1-sil")
     silhouette("hat", "hat-sil")
     silhouette("gage-s1", "gage-s1-black", flat=True)

@@ -286,8 +286,9 @@ def wag(still, name, hinge, deg, period, a, b=None):
             "deg": deg, "period": period, "from": a, **({"to": b} if b is not None else {})}
 
 
-def iron(keys, w_, blur=True):
-    return {"id": "iron", "sprites": SPR + "iron-lit/sprites.json", "w": w_, "face": "keys", "depth": {"blur": 0},
+def iron(keys, w_, blur=True, spr="iron-lit"):
+    """spr "iron-thick" in the close-ups (shots 3, 5; user 2026-11-19): 1 1/4 in = ~2 finger-widths next to the hand."""
+    return {"id": "iron", "sprites": SPR + f"{spr}/sprites.json", "w": w_, "face": "keys", "depth": {"blur": 0},
             **({"motionBlur": {"samples": 8, "shutter": 0.5}} if blur else {}), "keys": keys}
 
 
@@ -307,7 +308,7 @@ IRON3 = iron([{"t": 0.0, "x": IN3[0], "y": IN3[1], "rot": -97, "state": "rod"},
               {"t": round(IRON3_T - 0.32, 2), "x": IN3[0], "y": IN3[1], "rot": -97},
               {"t": IRON3_T, "x": C3[0], "y": C3[1], "rot": -97, "ease": "out", "contact": {"squash": 0.04}},
               {"t": round(TAMP3 - 0.25, 2), "x": UP3[0], "y": UP3[1], "rot": -97, "ease": "out"},
-              {"t": TAMP3, "x": C3[0], "y": C3[1], "rot": -97, "ease": "in", "contact": {"squash": 0.05}}], 1.0)
+              {"t": TAMP3, "x": C3[0], "y": C3[1], "rot": -97, "ease": "in", "contact": {"squash": 0.05}}], 1.0, spr="iron-thick")
 # shot 5: the bar drives straight down (blunt end first, rot -90) and strikes the lip of the hole (0.495, 0.48) on "struck";
 # the big spark + glow + jolt on "spark". 1.3 frame widths long: the top end stays out of frame.
 STRUCK, SPARK5 = w("struck", "5"), w("spark", "5")
@@ -315,7 +316,7 @@ Y5 = round(0.48 - 1.3 * 1080 * 0.955 / 2 / 1920, 4)
 IRON5 = iron([{"t": 0.0, "x": 0.495, "y": -0.42, "rot": -90, "state": "rod"},
               {"t": 0.12, "x": 0.495, "y": -0.42, "rot": -90},
               {"t": STRUCK, "x": 0.495, "y": Y5, "rot": -90, "ease": "in", "contact": {"squash": 0.06}},
-              {"t": round(SPARK5, 2), "x": 0.495, "y": round(Y5 + 0.004, 4), "rot": -90, "state": "glint"}], 1.3)
+              {"t": round(SPARK5, 2), "x": 0.495, "y": round(Y5 + 0.004, 4), "rot": -90, "state": "glint"}], 1.3, spr="iron-thick")
 # shot 6: the bar's path draws itself over the engraving (straight, as engraved): in under the cheekbone on "cheekbone",
 # behind the eye on "eye", out of the top on "top". Points in ENGRAVING fractions, placed by paper_s6.py's layout.
 LAY6 = json.load(open(P / "assets/images/keyframes/s6_layout.json", encoding="utf-8"))["9x16"]

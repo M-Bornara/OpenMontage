@@ -108,6 +108,19 @@ def framing(size: str, angle: str, lens: str, action: str, mood: str = "") -> st
             f"set is seen from a new angle, not as a repeat of another shot.")
 
 
+# L51 (user 2026-11-19, HC002-S1 s3): an insert of a hand pouring powder came back with a toy-sized keg beside the hand and
+# a drill hole too small for the hand (and the animated bar read thinner than a finger). The model has no sense of scale
+# unless it is told: every close-up with a hand states the true size of EVERY object next to the hand, against the hand.
+HAND_SIZE = "an adult man's hand is about 7 1/2 in (19 cm) long and one finger about 3/4 in (2 cm) wide"
+
+
+def scale(items: dict[str, str]) -> str:
+    """SCALE line for close-ups with hands: scale({"the powder flask": "about the size of his fist",
+    "the drill hole": "about 2 in (5 cm) across, a little wider than two fingers"})."""
+    return ("SCALE (true sizes, keep these proportions to the hand; " + HAND_SIZE + "): "
+            + "; ".join(f"{k} {v}" for k, v in items.items()) + ". Nothing next to the hand is toy-sized or oversized.")
+
+
 # L36 (user, HCS08 Snow, 2026-11-09): s1b, s2, s3, s4b and s8 all came back with the same street behind them. framing()
 # said "a new angle" but never WHICH, and the set plate (one fixed camera view) won over the words. Every shot on a set
 # that appears more than once states where the camera stands, which way it faces and exactly what fills the background,
@@ -332,6 +345,11 @@ def lint(name: str, spec: dict) -> list[str]:
                       "the prop's full description with what it is NOT")
     if "empty plate" in p and "exactly the same picture" not in p:
         issues.append("L43: empty plate without empty_plate() (the model recomposes the frame: the actor's landing spot moves)")
+    # L51: a close-up / insert with a hand in it must state the size of every object next to the hand (scale())
+    if (not model_sheet and re.search(r"\b(?:insert|close-up|extreme close-up|macro|ecu)\b", p) and re.search(r"\bhands?\b", p)
+            and not re.search(r"\bno (?:people, no )?hands?\b", p) and "scale (true sizes" not in p):
+        issues.append("L51: close-up with a hand and no SCALE line: the model paints toy-sized or giant objects next to "
+                      "the hand; state every object's true size against the hand with scale()")
     if "spectacles" in p and "amber" not in p and "no spectacles" not in p:
         issues.append("L11: spectacles that aren't Matt's (confuses the spot-the-glasses game)")
     return issues

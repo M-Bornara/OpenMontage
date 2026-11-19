@@ -155,6 +155,20 @@ status = ("PASS" if {"L45", "L46"} <= {m[:3] for m in lb.get("pose-x", [])} and 
           and "swatch" in prompt_kit.NO_TEXT and "swatch" in episode.TAIL else "FAIL")
 print(f"{status} L44 swatches forbidden, L45 sheet ghosts, L46 '(no X drawn)' caught{'' if not lg else f' (template findings: {lg})'}")
 ok = ok and status == "PASS"
+# L51 (user 2026-11-19, HC002-S1 s3): a close-up with a hand must state every object's size against the hand
+bad = {"s3": {"prompt": prompt_kit.framing("INSERT", "top view", "50 mm", "a hand tips a small powder flask over a drill hole")
+              + " A small wooden powder keg at the edge. Only one hand and cuff are in the picture."},
+       "s11": {"prompt": prompt_kit.framing("CU", "eye level", "85 mm", "a young man's hand grips an iron rod")}}
+good = {"s3": {"prompt": bad["s3"]["prompt"] + " " + prompt_kit.scale({"the powder flask": "about the size of his fist",
+                                                                       "the drill hole": "about 2 in across"})},
+        "s5": {"prompt": prompt_kit.framing("ECU", "low", "100 mm macro", "the lip of a drill hole") + " No iron bar, no hand, no spark."},
+        "plate": {"prompt": prompt_kit.framing("CU", "eye level", "50 mm", "an empty desk") + " NO PEOPLE anywhere: no people, no hands."}}
+lb, lg = prompt_kit.lint_all(bad, require_matt=False), prompt_kit.lint_all(good, require_matt=False)
+caught = [n for n in bad if any(m.startswith("L51") for m in lb.get(n, []))]
+fp = {n: m for n, ms in lg.items() for m in ms if m.startswith("L51")}
+status = "PASS" if len(caught) == len(bad) and not fp else "FAIL"
+print(f"{status} L51 hand close-ups without a SCALE line caught ({len(caught)}/{len(bad)}), no false positives ({fp or 'none'})")
+ok = ok and status == "PASS"
 # L50 (story-craft Rule 0b, user 2026-11-19): a violent storyboard row must name its softening tool
 import storyboard_lint  # noqa: E402
 H = ["| # | Narration | What we see | SFX |", "|---|---|---|---|"]

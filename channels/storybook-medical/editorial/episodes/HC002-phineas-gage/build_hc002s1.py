@@ -17,7 +17,7 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[5]
 sys.path.insert(0, str(REPO / "channels/storybook-medical/scripts"))
-from prompt_kit import (EMPTY_HANDS, FULL_BLEED, NO_TEXT, ONE_EACH, PERIOD, SAFE_FRAMING, camera, cast, crowd, framing,  # noqa: E402
+from prompt_kit import (EMPTY_HANDS, FULL_BLEED, NO_TEXT, ONE_EACH, PERIOD, SAFE_FRAMING, camera, cast, crowd, framing, scale,  # noqa: E402
                         glasses_gag, lint_all, matt_beat, pose_sheet, set_block, sprite_sheet)
 
 PID = "hc002-s1"
@@ -196,9 +196,14 @@ KEYFRAMES = {
                         "a ledger under his arm, standing on the bank and nodding toward Gage"]) +
                 f" Phineas Gage stands small on the rim. {ONE} {SAFE_FRAMING} {PERIOD} {NO_TEXT}")),
     "s3": dict(aspect="9:16", refs=[CUTP], set="cut", roles=CUT_LOOK,
-        prompt=(f"{CUT} {framing('INSERT', 'three-quarter top view', '50 mm', 'a hand tips a small powder flask over a drill hole in the rock, black grains pouring in', 'careful, routine, dangerous')} "
-                f"{camera('just above the drill hole', 'down at it', 'grey rock around the hole, a small wooden powder keg at the edge')} "
-                "Only one hand and cuff are in the picture, no person. No iron bar in the picture (it is animated in later). "
+        # user 2026-11-19 (scale, L51): v1 had a toy-sized keg beside the hand and a hole too small for it; the keg was
+        # painted out (keg_out_hc002s1.py). If s3 is ever regenerated, this prompt states every size against the hand.
+        prompt=(f"{CUT} {framing('INSERT', 'three-quarter top view', '50 mm', 'a hand tips a fist-sized powder flask over a drill hole in the rock, black grains pouring in', 'careful, routine, dangerous')} "
+                f"{camera('just above the drill hole', 'down at it', 'grey rock around the hole, no keg or barrel anywhere near the hand')} "
+                + scale({"the powder flask": "about the size of his fist (a pear-shaped leather-and-brass flask)",
+                         "the drill hole": "about 2 in (5 cm) across, a little wider than two fingers side by side",
+                         "any powder keg": "about twice the hand's height (none in this picture)"}) +
+                " Only one hand and cuff are in the picture, no person. No iron bar in the picture (it is animated in later). "
                 f"{FULL_BLEED} {SAFE_FRAMING} {PERIOD} {NO_TEXT}")),
     "s5": dict(aspect="9:16", refs=[CUTP], set="cut", roles=CUT_LOOK,
         prompt=(f"{CUT} {framing('ECU', 'low', '100 mm macro', 'the lip of a drill hole in grey rock, dark powder grains around it, waiting', 'the second before disaster')} "
@@ -231,7 +236,9 @@ KEYFRAMES = {
                                                "shirt sleeve, rolled up; only his hand and forearm are in this picture. "),
         prompt=(f"{ROOM} {framing('CU', 'eye level', '85 mm', f'a young man’s hand grips the {TAMPING_IRON} leaning in the corner by a doorway', 'quiet, possessive')} "
                 f"{camera('close to the door frame', 'into the corner', 'bare plank wall in soft daylight')} "
-                "Exactly ONE iron rod in the whole picture. The room is bare: plank walls and a plank floor only; no "
+                + scale({"the iron rod": "1 1/4 in (3 cm) thick, about two fingers wide, so the fist closes round it with "
+                                         "the fingertips just meeting the thumb"}) +
+                " Exactly ONE iron rod in the whole picture. The room is bare: plank walls and a plank floor only; no "
                 "furniture, no shelves, no books, no bottles, no lamp, no stove. "
                 f"Only the hand and its rolled white shirt sleeve are in the picture, no face. {ONE_EACH} "
                 f"{glasses_gag('hanging by one arm from a nail on the plank wall above the iron')} {SAFE_FRAMING} {PERIOD} {NO_TEXT}")),
