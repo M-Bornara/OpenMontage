@@ -48,6 +48,21 @@ in it is false?" If not, cut it.
 6. the sound tied to the action.
 Zoom and pan alone are never enough for a story beat: every shot carries an action and a feeling.
 
+
+## Rule 0b: show the main action, soften the harshness (user, 2026-11-19; applies to EVERY script, storyboard and shot)
+Never cut the key action out of a story to stay safe. If the story is "an iron bar went through his skull", the
+viewer must SEE the bar go through, in the first seconds if it is the hook. What we control is how harsh it looks,
+not whether it happens.
+- Tools, in this order: **silhouette** (a black shape: no face, no wound) · **effects** (a white flash on the
+  impact, a smear frame, speed lines, a camera shake, a cut on the transient) · **no-blood colour** (amber, white or
+  teal light instead of red; a colour drain to grey) · **blur or soft focus** on the injured part only · **framing**
+  (the act at the edge, the reaction big) · **documents** (an engraving, a diagram, a period page).
+- Never: blood, open wounds, exposed organs, vomit or a corpse shown realistically, or a recognisable face in pain
+  at the moment of injury. Gross fluids are described in narration, shown as objects (a bowl, a cup), never as matter.
+- The old "keep it off the body" habit (e.g. the bar never crossing his head, Gage S1 v1) is replaced by this rule.
+- Storyboards name the softening tool per violent beat, e.g. `s1 hit: silhouette + white flash + head snap`.
+- Thumbnails and covers keep the stricter rule (master-instructions-v3: nothing centred on blood or wounds); the
+  silhouette version of the action is allowed.
 ## The emotional engine
 **WHAT?!** (impossible premise) → **HOW?!** (needs explaining) → **WAIT…** (it gets complicated) → **WOW.**
 (something worth remembering)

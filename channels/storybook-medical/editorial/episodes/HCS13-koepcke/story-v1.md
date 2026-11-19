@@ -1,6 +1,6 @@
 # HCS13 Juliane Koepcke · story + script v1 (story-doctor, 2026-11-18) · APPROVED 2026-11-18
 
-CASE 16 · YouTube Wed Dec 9, 15:00 ET = 14:00 Alberta · socials Thu Dec 10, 18:00 ET · ready by **Sat Dec 5** · Impossible Survival · mix rule: the week's one non-Western story (Finlay is the week before). Facts: `claims.csv` (research verdict PASS, 4.70). **She is alive and public:** only what she published or said on record; her words quoted, never her thoughts invented. **Her mother:** only "did not survive" (C40); no speculation about her last days (C41 UNKNOWN). No bodies, no dead passengers, no injuries in close-up; insects in the wound said, never shown.
+CASE 16 · YouTube Wed Dec 9, 15:00 ET = 14:00 Alberta · socials Thu Dec 10, 18:00 ET · ready by **Sat Dec 5** · Impossible Survival · mix rule: the week's one non-Western story (Finlay is the week before). Facts: `claims.csv` (research verdict PASS, 4.70). **She is alive and public:** only what she published or said on record; her words quoted, never her thoughts invented. **Her mother:** only "did not survive" (C40); no speculation about her last days (C41 UNKNOWN). No bodies, no dead passengers, no injuries in close-up; insects in the wound said, never shown (Rule 0b: the fall IS shown, as a silhouette; wounds only as bandage silhouettes; see the table at the end).
 
 ## Spine
 - **Who:** Juliane Koepcke, 17, on a Christmas Eve flight over the Peruvian rainforest (C01, C02, C08).
@@ -46,3 +46,13 @@ Her sweets ran out on day four. Insects laid eggs in her wounds.
 - **A** `She fell from the sky / *strapped* to her seat.` (recommended, 8 words) · **B** `*17*. Alone / in the Amazon.` · **C** `*11* days alone / in the jungle.`
 - **Title:** 2 `She Fell Out of a Plane and Survived 11 Days Alone` (chosen 2026-11-18) · 1 `She Fell From the Sky and Walked Out of the Jungle` (slate title)
 - **Frame 1 (C010):** the seat row spinning down through storm cloud toward the canopy, leaves already whipping past, rain streaks (layered parallax + rotation + particles). HERO beats: B1 the falling seat row, B3 her feet stepping into the stream (water ripples, displacement), B5 the boat coming into view through leaves (rack focus). Colour: storm grey → jungle green → the warm hut light. Matt cameo: never on the flight or among the real rescuers; in the last shot (B7) he's a visiting student at the jungle station, binoculars up, glasses glint.
+
+## Rule 0b · violent beats (story-craft Rule 0b, user 2026-11-19; copy each row's `0b:` into the storyboard row, lint L50)
+The main action is SHOWN; only its harshness is softened. Nothing here is generated before the storyboard + free pre-viz are approved.
+
+| # | Beat | What we see (the action, shown) | 0b · softening tool |
+|---|---|---|---|
+| 1 | B1 HOOK · she falls with the seat row | the seat row spinning down through storm cloud toward the canopy, Juliane strapped in it, leaves whipping past, rain streaks | 0b: silhouette (the seat row and her as one dark shape, no face) + effects (rain streaks, speed lines, motion blur, lightning flash) + storm-grey colour; no other passengers |
+| 2 | B2 · collarbone broken, one eye swollen shut | she wakes under the seat row and sits up, holding her shoulder; her face in profile from the good side | 0b: framing (the good side of her face, the hurt shoulder held under her arm) + soft focus; no bruise or swelling drawn |
+| 3 | B4 · insects laid eggs in her wounds | she wades down a stream, a cloth tied around her arm; flies buzz past in the light | 0b: narration only for the maggots + bandage silhouette (the cloth over the arm; no wound, no larvae drawn) |
+| 4 | B6 · her mother did not survive | the empty seat row in the leaves, rain dripping from it; nobody in it, nobody near it | 0b: framing (the empty seat only: no bodies, no other passengers, ever) + colour drain |

@@ -155,5 +155,17 @@ status = ("PASS" if {"L45", "L46"} <= {m[:3] for m in lb.get("pose-x", [])} and 
           and "swatch" in prompt_kit.NO_TEXT and "swatch" in episode.TAIL else "FAIL")
 print(f"{status} L44 swatches forbidden, L45 sheet ghosts, L46 '(no X drawn)' caught{'' if not lg else f' (template findings: {lg})'}")
 ok = ok and status == "PASS"
+# L50 (story-craft Rule 0b, user 2026-11-19): a violent storyboard row must name its softening tool
+import storyboard_lint  # noqa: E402
+H = ["| # | Narration | What we see | SFX |", "|---|---|---|---|"]
+bad = storyboard_lint.lint_md(chr(10).join(H + [
+    "| 1 | The bar shot through his skull. | Gage thrown back | a hit |",
+    "| 2 | He drank the cholera. | glass to his lips · 0b: dramatic | gulp |"]))
+good = storyboard_lint.lint_md(chr(10).join(H + [
+    "| 1 | The bar shot through his skull. | 0b: silhouette + white flash + head snap | hit |",
+    "| 2 | The iron falls in from the top. | the bar lands in the grass | thud |",
+    "| 3 | His job: pack powder in the rock cut, arm up. | a hand pours powder | hiss |"]))
+status = "PASS" if len(bad) == 2 and not good else "FAIL"
+print(f"{status} L50 violent rows without a Rule 0b tool caught ({len(bad)}/2), no false positives ({good or 'none'})")
+ok = ok and status == "PASS"
 sys.exit(0 if ok else 1)
-

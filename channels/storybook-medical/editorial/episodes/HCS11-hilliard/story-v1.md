@@ -47,3 +47,13 @@ Her verdict? "I didn't see the light… It was kind of disappointing."
 - **A** `About 6 hours / at *22* below.` (recommended; "about" added with the fact check) · **B** `Frozen stiff. / By noon, she *talked*.` (spends the payoff) · **C** `Needles wouldn't go / into her *skin*.`
 - **Title:** 1 `She Lay in the Snow at 22 Below for Six Hours` (recommended) · 2 `She Froze Stiff in the Snow, and Talked by Noon`
 - **Frame 1 (C010):** night snow blowing over a girl's hand reaching toward a farmhouse door light, frost creeping in from the frame edges. HERO beats: B1 frost + the reaching hand (mask + particles), B4 the fall and crawl (pose swap + crawl marks drawing on), B5 the door opening (light spilling, Wally's silhouette). Colour shift trick (18): blue-grey → warm on "heating pads". Matt cameo: a hospital orderly in the hallway, glasses fogged.
+
+## Rule 0b · violent beats (story-craft Rule 0b, user 2026-11-19; copy each row's `0b:` into the storyboard row, lint L50)
+The main action is SHOWN; only its harshness is softened. Nothing here is generated before the storyboard + free pre-viz are approved.
+
+| # | Beat | What we see (the action, shown) | 0b · softening tool |
+|---|---|---|---|
+| 1 | B1 HOOK · she lies in the snow | night snow blowing over her gloved hand reaching toward a farmhouse door light; frost creeping in from the frame edges | 0b: frost + blue colour drain (no frostbitten skin: gloves, scarf, snow over her) + framing (the hand and the door light big, her face hidden in the scarf) |
+| 2 | B4 · she falls... and crawls | she stumbles and falls face-first a few steps from Wally's yard, then crawls; crawl marks draw on in the snow behind her | 0b: silhouette (a dark coat shape against the snow, back to camera) + blue drain; the fall shown in full, no injury shown |
+| 3 | B5 CLIMAX · Wally finds her | the door opens, light spills over the snow, Wally's silhouette runs out; she is a snow-covered shape; a few breath bubbles at her nose in the cold light | 0b: silhouette (Wally) + framing (her face turned away under the scarf; only the bubbles and frost read) + frost; never a frozen face or skin |
+| 4 | B6 · needles wouldn't go in | hospital: a nurse's hand and a needle stopping above a blanket-covered arm; her worried face big | 0b: framing (the nurse's face, the needle never touching skin) + blue drain lifting to warm on "heating pads" |

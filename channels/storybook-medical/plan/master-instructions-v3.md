@@ -271,7 +271,8 @@ Level 0 historical facts (internal) · Level 1 settled physiology (authoritative
 mechanisms, survival explanations, unusual cases (qualified fact-check) · Level 3 treatment/diagnosis/
 prevention/advice (avoid unless essential and professionally reviewed).
 No thumbnails/opening scenes centred on blood, exposed organs, severe wounds, vomit, corpses, graphic
-surgery, traumatic injury. Documentary + illustrated + restrained.
+surgery, traumatic injury. Documentary + illustrated + restrained. (2026-11-19: the ACTION itself is still shown,
+softened by silhouette / effects / no-blood colour / blur / framing / documents: story-craft.md Rule 0b, lint L50.)
 
 ## 57–63. Monetization and expansion
 Order: long-form ads → YouTube Premium → sponsorships → affiliates (only if relevant) → owned audience →

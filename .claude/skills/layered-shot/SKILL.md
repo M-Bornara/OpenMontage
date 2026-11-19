@@ -24,7 +24,7 @@ Pilot and worked example: HCS07 s3, the mosquito (`editorial/episodes/HCS07-finl
 | Motion | `layers={…}` on the shot in `edit_<ep>.py` → `remotion/Stage.tsx` `<Actor>` / `<LayerStack>` | free |
 | Sound | an actor key's `"sfx": {"name", "until": "contact", "fade_out"}` → `scripts/layers.py` → the mix | free |
 | Review | `layer_review.py <pid> <shot> [--build]` → `review/layers/<shot>-preview.mp4` + `-sheet.jpg` | free |
-| Lint | `episode.py build` fails a story shot with only CAM motion unless `breath=True` | free |
+| Lint | `episode.py build` fails a story shot with only CAM motion unless `breath=True`; `storyboard_lint.py` (L50) fails a violent row without `0b:` | free |
 
 ## 1. Layer plan (with the storyboard, before any prompt)
 
@@ -60,7 +60,22 @@ For each shot, one row per layer. Decide what stays painted and what moves:
 | FG | depth: lamp edge, curtain, smoke | `parallax` > 1, blur | cut from the plate |
 
 Write the beat first (story-craft Rule 0): the moment, the action (a verb), the feeling, the camera, the sound. The
-layers exist to perform that beat. One idea per shot: one actor doing one thing well beats five things moving.
+layers exist to perform that beat.
+
+**Rule 0b (user, 2026-11-19): show the main action, soften the harshness.** A violent beat (a hit, a fall, a cut, a
+drink of a germ, a wound) is SHOWN, never cut away from; the storyboard row names the softening tool:
+`0b: silhouette + white flash + head snap` (lint L50, `scripts/storyboard_lint.py`, runs with `storyboard_page.py`).
+How each tool is built here:
+- **silhouette**: a pure black cut-out inside a warm rim (`looks_hc002s1.silhouette(..., flat=True)`): no face, no wound;
+- **effects**: `{"kind": "flash", x, y, r, at, dur, start, lift}` in the shot's fx (ShortFx: a white-hot core + halo that
+  fades in `dur`; keep it short (~0.25 s) or it stays put while the body moves and lands on the wrong part), the
+  shot's `hit` (shake), a pose swap with a rot kick (head snap), `motionBlur` / trails (smear);
+- **through the body**: put the object BEHIND the silhouette in the actor order so only the part outside the body shows
+  (size it so its far end stays inside the black shape: measure the gaps between arms and legs);
+- **no-blood colour**: `tint` / colour drain to grey, amber glows; **blur**: `depth.blur` on the injured part only;
+- **framing**: the act at the edge, the reaction big; **documents**: an engraving / diagram with a drawn path.
+Worked example: HC002-S1 shot 1 v2 (`edit_hc002s1.py` IRON_KEYS / GAGE1 / FLASH1): the bar bursts up out of the top of
+Gage's black silhouette with a white flash and a head snap. One idea per shot: one actor doing one thing well beats five things moving.
 
 ## 2. Prompts → approval (nothing is paid before the user's OK)
 

@@ -122,10 +122,17 @@ def w(phrase: str, shot: str, word: int = 0) -> float:
 # foreground. The hook card covers y 0.19-0.33 until ~2.5 s; captions only after it (the LOW line at 0.54-0.58 on "skull").
 SKULL = w("skull", "1")
 D1 = dur["1"]   # the real shot length: the last keys end on the cut, nothing freezes
-# the bar: iron-lit (looks_hc002s1.py) = sunlit top edge, states rod / glint; z grows 1.0 -> 1.55 (it comes closer):
-# 0.60 -> 0.93 of the frame width. Pointed end first, never across his head (lowest end at frame 0: y 0.60, his hat 0.63+).
-IRON_KEYS = [{"t": 0.0, "x": 0.53, "y": 0.46, "rot": -58, "z": 1.0, "state": "rod"},
-             {"t": 0.35, "x": 0.55, "y": 0.44, "rot": -30, "z": 1.2, "ease": "out"},       # fast out of the dust...
+# v2 (story-craft Rule 0b, user 2026-11-19, option A): the hit is SHOWN, softened by silhouette + white flash + head snap.
+# On the blast the bar bursts UP out of the top of his PURE black silhouette (gage-s1-black: no face, no wound, no blood):
+# it starts BEHIND him (layer order), so only the part above his head shows, small (z 0.7) so its tail stays inside the
+# black torso (measured: the tail at frame 0 is at (0.49, 0.80), the torso spans x 0.41-0.58 there; the leg gap starts at
+# y 0.85). A white flash at his head (start 0.6 at frame 0 so the hook frame reads, peak at 0.05 s, gone by 0.24 s: a longer flash stays put while he moves and lands on his chest), his
+# head snaps back (stand -> thrown at 0.06 s, rot kick), and the bar flies on, coming closer (z 0.7 -> 1.55): the old
+# hang + glint on "skull" are kept. The hat is knocked off up-left in frame 0.
+HEAD1 = (0.552, 0.676)          # the top of his head at frame 0 (stand pose, w 0.48, anchor y 1.065)
+IRON_KEYS = [{"t": 0.0, "x": 0.53, "y": 0.688, "rot": -80, "z": 0.7, "state": "rod"},     # tip just out of the skull top
+             {"t": 0.12, "x": 0.545, "y": 0.60, "rot": -76, "z": 0.85},                   # bursts up (fast, linear)
+             {"t": 0.4, "x": 0.552, "y": 0.45, "rot": -45, "z": 1.15, "ease": "out"},     # ...tumbling...
              {"t": 0.85, "x": 0.552, "y": 0.432, "rot": -18, "z": 1.28, "state": "glint"},  # ...hangs: the sun catches it
              {"t": 1.5, "x": 0.556, "y": 0.425, "rot": -8, "z": 1.36, "state": "rod"},
              {"t": SKULL, "x": 0.565, "y": 0.415, "rot": 4, "z": 1.46, "state": "glint"},  # glint on "skull"
@@ -137,19 +144,22 @@ TRAILS = [{**IRON, "id": f"iron-trail{i}", "opacity": op, "xfade": 0, "motionBlu
            "keys": [{**{k: v for k, v in key.items() if k != "state"}, "t": round(key["t"] + lag, 3), "state": "rod"}
                     for key in IRON_KEYS]}
           for i, (lag, op) in enumerate(((0.05, 0.38), (0.11, 0.18)), 1)]
-# Gage: gage-s1-sil (true silhouette + warm rim; the white shirt a shade lighter, braces and his hat still read), thrown
-# BACKWARD toward the camera: lifted, tipping back, growing (z), then dropping out of the bottom of the frame.
-GAGE1 = {"id": "gage", "sprites": SPR + "gage-s1-sil/sprites.json", "w": 0.48, "face": "keys", "xfade": 0.08,
+# Gage: gage-s1-black, thrown BACKWARD toward the camera; the head snaps back on the pose swap (0.06 s) with a rot kick,
+# then he tips back, grows (z) and drops out of the bottom of the frame.
+GAGE1 = {"id": "gage", "sprites": SPR + "gage-s1-black/sprites.json", "w": 0.48, "face": "keys", "xfade": 0.05,
          "depth": {"blur": 0}, "states": {"stand": {}, "thrown": {}},
          "keys": [{"t": 0.0, "x": 0.50, "y": 1.065, "rot": 0, "z": 1.0, "state": "stand"},
-                  {"t": 0.08, "x": 0.51, "y": 1.04, "rot": 4, "z": 1.04, "state": "thrown"},
-                  {"t": 0.5, "x": 0.53, "y": 1.0, "rot": 10, "z": 1.15, "ease": "out"},
+                  {"t": 0.06, "x": 0.51, "y": 1.045, "rot": 6, "z": 1.04, "state": "thrown"},
+                  {"t": 0.16, "x": 0.52, "y": 1.02, "rot": 11, "z": 1.09},                    # the snap overshoots...
+                  {"t": 0.5, "x": 0.53, "y": 1.0, "rot": 10, "z": 1.15, "ease": "out"},       # ...and settles
                   {"t": 1.4, "x": 0.55, "y": 1.08, "rot": 18, "z": 1.25},
                   {"t": D1, "x": 0.57, "y": 1.2, "rot": 26, "z": 1.32, "ease": "in"}]}
+FLASH1 = {"kind": "flash", "x": HEAD1[0], "y": HEAD1[1] - 0.01, "r": 0.24, "at": 0, "rise": 0.05, "dur": 0.24, "start": 0.6,
+          "lift": 0.18}
 HAT = {"id": "hat", "sprites": SPR + "hat-sil/sprites.json", "w": 0.13, "face": "keys", "depth": {"blur": 0},
        "states": {"side": {}, "tumble": {}},
-       "keys": [{"t": 0.0, "x": 0.53, "y": 0.655, "rot": 0, "state": "side"},
-                {"t": 0.25, "x": 0.47, "y": 0.6, "rot": -60, "state": "tumble"},
+       "keys": [{"t": 0.0, "x": 0.50, "y": 0.645, "rot": -22, "state": "tumble"},     # already knocked off (Rule 0b v2)
+                {"t": 0.25, "x": 0.44, "y": 0.59, "rot": -70},
                 {"t": 1.3, "x": 0.22, "y": 0.58, "rot": -220, "ease": "out"},
                 {"t": D1, "x": 0.08, "y": 0.62, "rot": -300}]}
 DUST1 = {"kind": "particles", "style": "haze", "x": 0.47, "y": 0.70, "tx": 0.5, "ty": 0.5, "spread": 0.12, "every": 0.12,
@@ -298,8 +308,9 @@ for i, (name, _secs, line, cap, *_r) in enumerate(PLAN):
         s.update(source=KF + f"s{name}.png", breath=False, **ALIVE[name])
     if name == "1":
         s.update(source=PLATE + "plate-s1.png", motion={"type": "pull", "from": 1.08, "to": 1.02},
-                 hit={"at": 0, "strength": 3.2, "seconds": 0.8}, fx=[DUST1], breath=False,
-                 layers={"bg": "proj:assets/images/refs/plate-s1.png", "actors": [GAGE1, *TRAILS, IRON, HAT]})
+                 hit={"at": 0, "strength": 3.2, "seconds": 0.8}, fx=[DUST1, FLASH1], breath=False,
+                 # the bar BEHIND him (it bursts out of the top of his head), the hat in front
+                 layers={"bg": "proj:assets/images/refs/plate-s1.png", "actors": [*TRAILS, IRON, GAGE1, HAT]})
     if name == "4":
         s.update(source=PLATE + "plate-s4.png", breath=False,
                  motion=PUSH4,

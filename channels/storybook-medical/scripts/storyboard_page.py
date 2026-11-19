@@ -18,11 +18,14 @@ from pathlib import Path
 
 from PIL import Image
 
+import storyboard_lint
+
 REPO = Path(__file__).resolve().parents[3]
 EP = REPO / "channels/storybook-medical/editorial/episodes"
 
 EPISODES = {
     "hcs07": {
+        "lint_0b": "warn",   # storyboard approved before Rule 0b (2026-11-19)
         "anchor": "finlay", "short": "Finlay", "slot": "Thu Dec 3 · 15:00 ET = 14:00 Alberta",
         "storyboard": EP / "HCS07-finlay/storyboard-v2.md", "story": EP / "HCS07-finlay/story-v2.md", "project": REPO / "projects/hcs07-finlay",
         "previz": REPO / "projects/hcs07-finlay/review/previz", "maps": ["map-academy.png"],
@@ -37,6 +40,7 @@ EPISODES = {
         ],
     },
     "hcs05": {
+        "lint_0b": "warn",   # storyboard approved before Rule 0b (2026-11-19)
         "anchor": "al-razi", "short": "al-Razi", "slot": "Mon Dec 7 · 15:00 ET = 14:00 Alberta",
         "storyboard": EP / "HCS05-al-razi/storyboard-v2.md", "story": EP / "HCS05-al-razi/story-v2.md", "project": REPO / "projects/hcs05-al-razi",
         "previz": REPO / "projects/hcs05-al-razi/review/previz", "maps": ["map-ward.png"],
@@ -591,6 +595,14 @@ def build(out: Path, keys: list[str]) -> Path:
     img = out / "img"
     img.mkdir(parents=True, exist_ok=True)
     eps = [(k, EPISODES[k], parse(EPISODES[k]["storyboard"])) for k in keys]
+    # L50 (story-craft Rule 0b, 2026-11-19): every violent row names its softening tool (`0b: ...`). Storyboards made
+    # before the rule carry "lint_0b": "warn".
+    for k in keys:
+        issues = storyboard_lint.lint_file(EPISODES[k]["storyboard"])
+        for m in issues:
+            print(("WARN " if EPISODES[k].get("lint_0b") == "warn" else "") + m)
+        if issues and EPISODES[k].get("lint_0b") != "warn":
+            raise SystemExit(f"{k}: {len(issues)} violent row(s) without a Rule 0b softening tool (L50)")
     nav = "".join(f'<a href="#{e["anchor"]}">{html.escape(p["title"].split(" — ")[0])} · {e["short"]}</a>' for k, e, p in eps)
     body = []
     stages = []

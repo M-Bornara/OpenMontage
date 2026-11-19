@@ -3,7 +3,9 @@
               the edge). Switching states on the bar's own keys makes the glint ride the bar exactly.
   gage-s1-sil/, hat-sil/   a TRUE silhouette against the bright smoke, with a warm rim light on the top and sides. The
               white shirt stays a shade lighter than the trousers, so his look (shirt, braces, hat) still reads.
-    python channels/storybook-medical/editorial/episodes/HC002-phineas-gage/looks_hc002s1.py
+  gage-s1-black/   (story-craft Rule 0b, user 2026-11-19) PURE black inside the warm rim: no face, no shirt shade, so the bar
+              can burst out of the top of his head with nothing to see but a black shape, a flash and the bar.
+    python channels/storybook-medical/editorial/episodes/HC002-phineas-gage/looks_hc002s1.py [--black-only]
 """
 import json
 import shutil
@@ -43,7 +45,7 @@ def copy_meta(src: Path, dst: Path, frames: dict, canvas=None):
     json.dump(m, open(dst / "sprites.json", "w"), indent=1)
 
 
-def silhouette(name: str, out: str):
+def silhouette(name: str, out: str, flat: bool = False):
     src, dst = S / name, S / out
     shutil.rmtree(dst, ignore_errors=True)
     dst.mkdir(parents=True)
@@ -54,6 +56,8 @@ def silhouette(name: str, out: str):
             lum = (0.3 * a[..., 0] + 0.59 * a[..., 1] + 0.11 * a[..., 2]) / 255
             l2 = lum ** 2                                   # mid-tones (the face) go dark, the white shirt stays a shade up
             dark = np.stack([8 + 24 * l2, 9 + 26 * l2, 13 + 29 * l2], axis=-1)        # shirt ~29, face ~18, trousers ~9: no features
+            if flat:                                        # Rule 0b: one black shape, nothing inside it
+                dark = np.broadcast_to(np.array([8, 9, 12], np.float32), dark.shape)
             r = rim(a[..., 3], 7, 4)
             r = np.array(Image.fromarray((r * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(1.2))) / 255
             warm = np.array([250, 230, 190], np.float32)
@@ -98,6 +102,11 @@ def lit_iron():
 
 
 if __name__ == "__main__":
+    import sys
+    if "--black-only" in sys.argv:
+        silhouette("gage-s1", "gage-s1-black", flat=True)
+        raise SystemExit
     lit_iron()
     silhouette("gage-s1", "gage-s1-sil")
     silhouette("hat", "hat-sil")
+    silhouette("gage-s1", "gage-s1-black", flat=True)

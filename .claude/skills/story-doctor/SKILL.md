@@ -60,6 +60,19 @@ The curve must **rise, peak, turn**. A curve that stays between 4 and 6 is the "
   (walls painted as elevations, curtains hanging sideways). Top-down only for a tabletop/insert.
 - The hook shot is the most dynamic image in the video. The climax shot is the simplest.
 
+## 4b · Rule 0b: show the main action, soften the harshness (user, 2026-11-19; story-craft.md Rule 0b)
+- **Never cut the key action to stay safe.** If the story is "an iron bar went through his skull", the viewer SEES the
+  bar go through (in the hook if it is the hook). Replaces the old "keep it off the body" habit.
+- Soften with, in this order: **silhouette** (black shape, no face, no wound) · **effects** (white flash, smear frame,
+  speed lines, camera shake, cut on the transient) · **no-blood colour** (amber / white / teal light, a colour drain to
+  grey) · **blur / soft focus** on the injured part only · **framing** (the act at the edge, the reaction big) ·
+  **documents** (engraving, diagram, period page).
+- Never: blood, open wounds, organs, vomit or a corpse shown as matter, a recognisable face in pain at the moment of
+  injury. Gross fluids: in the narration, or as an OBJECT (a dark cup, a bowl), never as matter.
+- **Every violent beat in the shot plan names its tool in the row:** `0b: silhouette + white flash + head snap`. The
+  storyboard lint (`scripts/storyboard_lint.py`, L50) fails a violent row without one; a false positive is
+  `0b: n/a (why)`. Thumbnails / covers: the silhouette version only (nothing centred on a wound).
+
 ## 5 · Rhythm map (the edit plan, one row per beat)
 | Beat | Cut length | Camera | Music | Hero sound |
 |---|---|---|---|---|
@@ -82,5 +95,5 @@ These are editorial ratings: say so; the real test is retention in YouTube Studi
 
 ## Output (into the episode folder, then onto the approval page)
 `story-v2.md`: spine · beat table (beat, time, line, fact ID, tension) · script with performance tags · shot plan
-(keep / fix / redo / new, each with its action verb) · rhythm map · score v1 → v2 · cost of the changes.
+(keep / fix / redo / new, each with its action verb, and `0b:` + the softening tool on every violent beat) · rhythm map · score v1 → v2 · cost of the changes.
 Nothing is generated until the user approves it on the page.

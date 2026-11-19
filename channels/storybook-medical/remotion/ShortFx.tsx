@@ -34,6 +34,11 @@ export type ShotFx =
   | { kind: "travel"; points: [number, number][]; at: number; dur: number; colors?: [string, string]; width?: number }
   /** a soft light blooms at a point and breathes */
   | { kind: "glow"; x: number; y: number; r: number; at: number; dur?: number; color?: string; strength?: number }
+  /** an impact flash (story-craft Rule 0b: the hit is SHOWN, the flash softens it): a white-hot core + a wide halo that
+   *  peak `rise` s after `at` and fade out by `at + dur`; `start` = the strength at `at` itself (so frame 0 can already
+   *  carry the flash without burning out the hook frame); `lift` = a faint warm-white lift of the whole frame at the peak */
+  | { kind: "flash"; x: number; y: number; r: number; at: number; dur?: number; rise?: number; start?: number; color?: string;
+      strength?: number; lift?: number }
   /** a burning point (a lit fuse, a wick): a flickering hot core + glow, and small sparks that arc out and fall.
    *  Live from frame 0 unless `from` is given (packaging v2: something moves in frame 1). r = glow radius (of 1080). */
   | { kind: "spark"; x: number; y: number; r?: number; from?: number; to?: number; every?: number; color?: string; sparks?: boolean }
@@ -227,6 +232,25 @@ const Glow: React.FC<{ fx: Extract<ShotFx, { kind: "glow" }> }> = ({ fx }) => {
     background: `radial-gradient(circle, rgba(${c},${k}) 0%, rgba(${c},0) 70%)`, mixBlendMode: "screen" }} />;
 };
 
+const Flash: React.FC<{ fx: Extract<ShotFx, { kind: "flash" }> }> = ({ fx }) => {
+  const f = useCurrentFrame();
+  const t = f / FPS, rise = fx.rise ?? 0.07, dur = fx.dur ?? 0.4;
+  if (t < fx.at || t > fx.at + dur) return null;
+  const o = interpolate(t, [fx.at, fx.at + rise, fx.at + dur], [fx.start ?? 0, 1, 0],
+                        { ...CL, easing: Easing.out(Easing.quad) }) * (fx.strength ?? 1);
+  const c = fx.color ?? "255,246,228";
+  const R = fx.r * 1080, X = fx.x * 1080, Y = fx.y * 1920;
+  return (
+    <AbsoluteFill style={{ mixBlendMode: "screen" }}>
+      {fx.lift ? <AbsoluteFill style={{ backgroundColor: `rgba(${c},${fx.lift * o})` }} /> : null}
+      <div style={{ position: "absolute", left: X - R, top: Y - R, width: 2 * R, height: 2 * R, borderRadius: "50%",
+        background: `radial-gradient(circle, rgba(${c},${0.85 * o}) 0%, rgba(${c},${0.35 * o}) 30%, rgba(${c},0) 70%)` }} />
+      <div style={{ position: "absolute", left: X - R * 0.22, top: Y - R * 0.22, width: R * 0.44, height: R * 0.44, borderRadius: "50%",
+        background: `radial-gradient(circle, rgba(255,255,255,${o}) 0%, rgba(255,255,255,${0.6 * o}) 50%, rgba(255,255,255,0) 100%)` }} />
+    </AbsoluteFill>
+  );
+};
+
 const Spark: React.FC<{ fx: Extract<ShotFx, { kind: "spark" }>; id: string }> = ({ fx, id }) => {
   const f = useCurrentFrame();
   const s = f / FPS;
@@ -394,6 +418,7 @@ export const ShotFxLayer: React.FC<{ fx: ShotFx[]; src: string; shotId: string }
           case "tint": return <Tint key={id} fx={e} />;
           case "travel": return <Travel key={id} fx={e} />;
           case "glow": return <Glow key={id} fx={e} />;
+          case "flash": return <Flash key={id} fx={e} />;
           case "spark": return <Spark key={id} fx={e} id={id} />;
           case "ecg": return <Ecg key={id} fx={e} />;
           case "glint": return <Glint key={id} fx={e} />;

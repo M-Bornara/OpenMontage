@@ -14,12 +14,14 @@
 ---
 
 ## 0 · Cold open (0:00–0:35)
+**Rule 0b (story-craft, 2026-11-19):** the hit is shown, the same silhouette hit as S1 v2 (row 4); every violent row names its softening tool (`0b:`, lint L50).
+
 | # | Narration | Scene | Claims |
 |---|---|---|---|
 | 1 | `[intense]` Vermont, 1848. A man is packing blasting powder into a rock… with a bar of iron. | S1 shot 3 reused: powder pours into the drill hole, the iron slides in; push along the bar; powder hiss | C01, C02 |
 | 2 | He glances over his shoulder… | S1 shot 4: Gage's head turns toward his men; rack focus; a shout from the pit | C03 |
 | 3 | `[fast]` …and the iron strikes the rock. A spark. | S1 shot 5: contact, one spark, white flash, shake; clink → BOOM | C03 |
-| 4 | The bar shoots up through his cheek, behind his eye, and out the top of his skull. | S1 shot 1: the bar spins up out of the dust, Gage thrown back, hat flying; slow motion at the apex | C04 |
+| 4 | The bar shoots up through his cheek, behind his eye, and out the top of his skull. | S1 shot 1 **v2** (Rule 0b, 2026-11-19): on the blast a white flash at his head, the bar bursts UP out of the top of his pure black silhouette and flies on, spinning out of the dust; his head snaps back as he's thrown, hat flying; slow motion at the apex · **0b: silhouette (pure black, no face) + white flash + head snap; no wound, no blood** | C04 |
 | 5 | `[pause]` `[whispers]` He should be dead. Within minutes… he's talking. | S1 shot 8: in the settling smoke he pushes up on his elbow; music silent | C05 |
 | 6 | `[curious]` Phineas Gage became one of the most famous patients in the history of brain science. | slow pull out from a modern textbook page with his name on it | C20 |
 | 7 | But the story most people tell about what happened to him next… isn't what the records say. | the textbook page; a crude "monster" drawing of Gage; the page darkens | C09 |
@@ -41,7 +43,7 @@
 ## 2 · What Happened (1:30–2:40)
 | # | Narration | Scene | Claims |
 |---|---|---|---|
-| 17 | `[fast]` The powder exploded. The iron went in below his left cheekbone, passed behind his left eye, and came out through the top of his head. | Harlow's 1868 skull engraving: the path draws itself through it, in three beats on the three places | C04 |
+| 17 | `[fast]` The powder exploded. The iron went in below his left cheekbone, passed behind his left eye, and came out through the top of his head. | Harlow's 1868 skull engraving: the path draws itself through it, in three beats on the three places · **0b: document (the engraving) + amber line (no-blood colour)** | C04 |
 | 18 | `[pause]` He went down. And within a few minutes… he spoke. | S1 shot 8 again, closer; dust settles; one breath | C05 |
 | 19 | His men put him in an ox cart, and he rode three-quarters of a mile to his hotel… sitting up. | S1 shot 9: the cart rolls L→R, Gage upright, men walking beside | C05 |
 | 20 | He got down with a little help and walked up a long flight of stairs. | low angle up a steep wooden staircase; Gage climbs, one hand on the rail, a crewman's hand at his elbow; bandage on his head | C17 |
@@ -60,7 +62,7 @@
 | 29 | Gage was now "fitful, irreverent," "impatient of restraint," indulging at times in "the grossest profanity." | the quoted words write themselves over a grey MS of Gage arguing in a doorway, a man stepping back | C08 |
 | 30 | `[whispers]` His friends put it more simply. He was "no longer Gage." | S1 shot 12: two friends whisper and glance back; the colour drains | C08 |
 | 31 | And the contractors who had called him their best foreman… wouldn't give him his job back. | the contractor from S1 2b closes his ledger and shakes his head; Gage's hand drops from the gate | C16, C18 |
-| 32 | `[quiet]` For a man with an iron will, that was a second injury. | Gage alone on the rim of the cut at dusk, the crew working below without him; slow pull out | C16 |
+| 32 | `[quiet]` For a man with an iron will, that was a second injury. | Gage alone on the rim of the cut at dusk, the crew working below without him; slow pull out · 0b: n/a ("injury" is a figure of speech; nothing violent shown) | C16 |
 | 33 | And this is where most versions of his story end. | the image freezes and turns into a yellowed textbook page | C09 |
 
 ## 4 · The Myth (3:25–4:10)
@@ -103,7 +105,7 @@
 | # | Narration | Scene | Claims |
 |---|---|---|---|
 | 58 | `[serious]` In 1859 his health began to fail. He left Chile for San Francisco, where his mother lived. | a ship's deck at sea; Gage at the rail, coat buttoned, the iron wrapped in cloth beside his bag | C29 |
-| 59 | He worked on a farm near there. Then, in February 1860, the seizures began. | a farm field in California; a hoe left standing in the furrow; the wind | C29 |
+| 59 | He worked on a farm near there. Then, in February 1860, the seizures began. | a farm field in California; a hoe left standing in the furrow; the wind · **0b: framing (the dropped hoe, the empty field: he is never shown in a seizure) + narration** | C29 |
 | 60 | On the twenty-first of May, 1860, Phineas Gage died. He was about thirty-six. | an empty chair on a porch at evening; the iron leaning beside it | C13 |
 | 61 | Years later, Harlow asked his family for one last thing. | Harlow reads a letter by the window | C14 |
 | 62 | In 1867, his skull was recovered from his grave, and his family brought it, with the iron, to Harlow. | a closed wooden box and the wrapped iron handed across a doorstep; nothing inside shown | C14 |
@@ -115,7 +117,7 @@
 | 64 | `[curious]` Gage's case helped convince doctors that damage to the front of the brain could change who a person is. | a period lecture: a doctor points to the front of a skull drawing; heads nod | C20 |
 | 65 | Historians like Macmillan think his later life shows something just as important: that people can adapt, even after damage like that. | the coach again, at evening, horses walking home | C11 |
 | 66 | `[warm]` The man in those photographs isn't a monster. He's a coach driver on the other side of the world… holding the reins. | the portrait and the coach driver dissolve into each other | C12, C10 |
-| 67 | And the iron that went through his head? He never let it go. | final: the iron in his hand in the portrait; hold; end screen | C07 |
+| 67 | And the iron that went through his head? He never let it go. | final: the iron in his hand in the portrait; hold; end screen · 0b: n/a (the period portrait: no wound shown) | C07 |
 
 ---
 

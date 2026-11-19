@@ -46,3 +46,14 @@ The baking soda? It helped the germs. [pause] He survived the bet… but not the
 - **Chosen (user, 2026-11-18): hook A, title 1.** **A** `He drank *cholera*. / On purpose.` · **B** `Cholera killed *8,600*. / He drank it.` (would need "about") · **C** `He drank cholera / to beat his *rival*.`
 - **Title:** 1 `He Drank Cholera to Prove His Rival Wrong` (chosen) · 2 `The Professor Who Drank Cholera at 73`
 - **Frame 1 (C010):** the glass already rising to his lips in a Munich lab, a student's hand reaching to stop him, the liquid swirling. HERO beats: B1 the glass (sprite + swirl, the hand), B3 the refusal (his raised palm, pose swap), B5 the cramps (in silence: he grips the desk edge, the calendar flips to the 9th). Matt cameo: a student at the back taking notes.
+
+## Rule 0b · violent beats (story-craft Rule 0b, user 2026-11-19; copy each row's `0b:` into the storyboard row, lint L50)
+The main action is SHOWN; only its harshness is softened. Nothing here is generated before the storyboard + free pre-viz are approved.
+
+| # | Beat | What we see (the action, shown) | 0b · softening tool |
+|---|---|---|---|
+| 1 | B1 HOOK · about to drink | the glass already rising to his lips in the Munich lab; a student's hand reaching in to stop him; the liquid swirls | 0b: framing (the glass + his eyes big, the liquid a clear swirl, nothing in it to see) + amber lamplight |
+| 2 | B4 · baking soda, then the culture | his hand tips a spoon of soda into water, then the small culture flask over the glass: less than a teaspoon (C14) | 0b: object (the flask and the glass only; the germs never drawn as matter) |
+| 3 | B4 · "One gulp" | he drinks: glass to lips, the head tips back, the swallow in his throat; he sets the glass down, steady | 0b: n/a (a man drinking clear water-like liquid; his face calm, as he described it) |
+| 4 | B5 CLIMAX · the cramps (in silence) | two days later: his hand grips the desk edge, knuckles white; the calendar flips to the 9th; he leans over the desk, face turned down out of the light | 0b: framing (the hand on the desk big, his face turned away) + colour drain (warm lab -> grey-green) + slow push; no vomit, no bucket, nothing shown of the illness itself |
+| 5 | B5 · his gut swarmed with germs | a period microscope plate / Koch-style drawing of comma bacilli on paper, a lens sliding over it | 0b: document (period drawing; never his body or stools) |
