@@ -655,5 +655,41 @@
   "license": "https://creativecommons.org/licenses/by/4.0/",
   "duration": 47.2792,
   "url": "https://freesound.org/s/825281/"
+ },
+ "cow-moo": {
+  "file": "cow-moo.mp3",
+  "freesound_id": 700378,
+  "title": "Moo 1 - Moo Moo the Cow",
+  "author": "manofham",
+  "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+  "duration": 2.05599,
+  "url": "https://freesound.org/s/700378/"
+ },
+ "metal-ring": {
+  "file": "metal-ring.mp3",
+  "freesound_id": 370738,
+  "title": "Shovel hitting metal swing frame.mp3",
+  "author": "Jadester64",
+  "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+  "duration": 29.7749,
+  "url": "https://freesound.org/s/370738/"
+ },
+ "sand-pour": {
+  "file": "sand-pour.mp3",
+  "freesound_id": 215006,
+  "title": "Flowing Sand",
+  "author": "SteveMeli",
+  "license": "http://creativecommons.org/licenses/by/3.0/",
+  "duration": 9.16535,
+  "url": "https://freesound.org/s/215006/"
+ },
+ "whisper": {
+  "file": "whisper.mp3",
+  "freesound_id": 193810,
+  "title": "Four_Voices_Whispering_3.wav",
+  "author": "geoneo0",
+  "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+  "duration": 17.0769,
+  "url": "https://freesound.org/s/193810/"
  }
 }

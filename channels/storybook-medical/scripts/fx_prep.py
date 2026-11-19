@@ -65,7 +65,11 @@ def cut(image: str, name: str, box, how: str = "rembg", grow: int = 3, focus: fl
     im = Image.open(src).convert("RGB")
     X0, Y0, X1, Y1 = frame_box(im, box, focus)
     crop = im.crop((X0, Y0, X1, Y1))
-    if how == "bright":          # a lit surface without the dark ink on it (a watch's LCD face around its digits)
+    if how == "poly":            # exactly the traced outline (a thin tool: rembg grabs the person or the rock behind it)
+        if not poly:
+            raise ValueError("how='poly' needs a poly outline")
+        a = np.full((crop.height, crop.width), 255, np.uint8)
+    elif how == "bright":          # a lit surface without the dark ink on it (a watch's LCD face around its digits)
         a = ((np.array(crop.convert("L")) > 110) * 255).astype(np.uint8)
     else:
         a = _rembg(crop) if how == "rembg" else _color(crop)

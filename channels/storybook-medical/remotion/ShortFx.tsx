@@ -24,7 +24,7 @@ export type ShotFx =
   /** frost grows in from the edges between from..to and stays */
   | { kind: "frost"; from: number; to: number; reach?: number; opacity?: number }
   /** rising bubbles / steam, or a drifting haze, from (x, y) toward (tx, ty) */
-  | { kind: "particles"; style: "bubbles" | "steam" | "haze"; x: number; y: number; tx: number; ty: number; spread?: number;
+  | { kind: "particles"; style: "bubbles" | "steam" | "haze" | "grains"; x: number; y: number; tx: number; ty: number; spread?: number;
       every?: number; life?: number; size?: number; from?: number; to?: number; color?: string; opacity?: number }
   /** everything but one ellipse dims for a moment (highlight one person) */
   | ({ kind: "spot"; at: number; dur: number; dim?: number } & Ell)
@@ -145,9 +145,22 @@ const Particles: React.FC<{ fx: Extract<ShotFx, { kind: "particles" }>; id: stri
     const p = age / life;
     const r1 = random(`${id}a${b}`), r2 = random(`${id}b${b}`);
     const sp = (fx.spread ?? 0.03) * (r1 - 0.5) * 2;
-    const ease = fx.style === "bubbles" ? p : 1 - (1 - p) * (1 - p);
+    // grains (HC002 s3, powder poured from a flask): small hard dots that FALL (gravity: p^2), three per birth
+    const ease = fx.style === "bubbles" ? p : fx.style === "grains" ? p * p : 1 - (1 - p) * (1 - p);
     const x = (fx.x + sp + (fx.tx - fx.x) * ease + Math.sin(age / 6 + b) * 0.004) * 1080;
     const y = (fx.y + (fx.ty - fx.y) * ease) * 1920;
+    if (fx.style === "grains") {
+      const c = fx.color ?? "28,24,20";
+      const o = (fx.opacity ?? 0.95) * Math.min(1, (1 - p) * 6);
+      for (let g = 0; g < 3; g++) {
+        const rx = (random(`${id}g${b}x${g}`) - 0.5) * (fx.spread ?? 0.01) * 1080;
+        const ry = random(`${id}g${b}y${g}`) * 0.25 * Math.abs(fx.ty - fx.y) * 1920;
+        const s = size * (0.6 + 0.8 * random(`${id}g${b}s${g}`));
+        out.push(<div key={`${b}-${g}`} style={{ position: "absolute", left: x + rx - s / 2, top: y - ry * (1 - p) - s / 2, width: s,
+          height: s * 1.15, borderRadius: "45%", background: `rgba(${c},${o})` }} />);
+      }
+      continue;
+    }
     if (fx.style === "bubbles") {
       const s = size * (0.5 + r2);
       const o = (fx.opacity ?? 0.9) * Math.min(1, p * 6) * Math.min(1, (1 - p) * 5);

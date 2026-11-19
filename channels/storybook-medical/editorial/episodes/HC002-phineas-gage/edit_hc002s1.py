@@ -182,12 +182,118 @@ GAGE8 = {"id": "gage", "sprites": SPR + "gage-s8/sprites.json", "w": 1.0, "face"
 SMOKE8 = {"kind": "particles", "style": "haze", "x": 0.5, "y": 0.45, "tx": 0.5, "ty": 0.62, "spread": 0.3, "every": 0.3,
           "life": 3.5, "size": 260, "color": "200,194,182", "opacity": 0.3, "from": 0, "to": 5}
 
+# ── ALIVE shots (rough cut 1, user 2026-11-18 "go ahead with the first full cut"): the approved stills with FREE moves made
+# from the image itself (storyboard v1 tricks): masks + clean plates by alive_hc002s1.py, the iron sprite from shot 1,
+# shot 6 = Harlow's engraving on paper (paper_s6.py). Times are word-relative, positions measured on the stills.
+KF = f"projects/{PID}/assets/images/keyframes/"
+FX = KF + "fx/"
+
+
+def wag(still, name, hinge, deg, period, a, b=None):
+    return {"kind": "wag", "mask": FX + f"{still}-{name}.mask.png", "bg": FX + f"{still}-{name}.clean.png", "hinge": hinge,
+            "deg": deg, "period": period, "from": a, **({"to": b} if b is not None else {})}
+
+
+def iron(keys, w_, blur=True):
+    return {"id": "iron", "sprites": SPR + "iron-lit/sprites.json", "w": w_, "face": "keys", "depth": {"blur": 0},
+            **({"motionBlur": {"samples": 8, "shutter": 0.5}} if blur else {}), "keys": keys}
+
+
+def along(c, d, px):
+    """A point `px` pixels from c along the unit direction d (pixel space), back in frame fractions."""
+    return round(c[0] + d[0] * px / 1080, 4), round(c[1] + d[1] * px / 1920, 4)
+
+
+# shot 3: the flask pours (grains, nozzle 0.465,0.53 -> hole 0.42,0.61); on "iron" the bar slides into the hole (blunt end
+# down, the point up and a little left: rot -97, clear of the CASE chip; rough cut 1 had -114 and the point ran into the
+# chip), on "13" one tamp. w 1.0 = 1031 px long: its centre sits 515 px up the axis from the hole, the point at y ~0.08.
+IRON3_T, TAMP3 = w("iron bar", "3"), w("13", "3")
+D3 = (-0.12, -0.993)
+C3 = along((0.42, 0.615), D3, 515)
+IN3, UP3 = along(C3, D3, 1250), along(C3, D3, 45)
+IRON3 = iron([{"t": 0.0, "x": IN3[0], "y": IN3[1], "rot": -97, "state": "rod"},
+              {"t": round(IRON3_T - 0.32, 2), "x": IN3[0], "y": IN3[1], "rot": -97},
+              {"t": IRON3_T, "x": C3[0], "y": C3[1], "rot": -97, "ease": "out", "contact": {"squash": 0.04}},
+              {"t": round(TAMP3 - 0.25, 2), "x": UP3[0], "y": UP3[1], "rot": -97, "ease": "out"},
+              {"t": TAMP3, "x": C3[0], "y": C3[1], "rot": -97, "ease": "in", "contact": {"squash": 0.05}}], 1.0)
+# shot 5: the bar drives straight down (blunt end first, rot -90) and strikes the lip of the hole (0.495, 0.48) on "struck";
+# the big spark + glow + jolt on "spark". 1.3 frame widths long: the top end stays out of frame.
+STRUCK, SPARK5 = w("struck", "5"), w("spark", "5")
+Y5 = round(0.48 - 1.3 * 1080 * 0.955 / 2 / 1920, 4)
+IRON5 = iron([{"t": 0.0, "x": 0.495, "y": -0.42, "rot": -90, "state": "rod"},
+              {"t": 0.12, "x": 0.495, "y": -0.42, "rot": -90},
+              {"t": STRUCK, "x": 0.495, "y": Y5, "rot": -90, "ease": "in", "contact": {"squash": 0.06}},
+              {"t": round(SPARK5, 2), "x": 0.495, "y": round(Y5 + 0.004, 4), "rot": -90, "state": "glint"}], 1.3)
+# shot 6: the bar's path draws itself over the engraving (straight, as engraved): in under the cheekbone on "cheekbone",
+# behind the eye on "eye", out of the top on "top". Points in ENGRAVING fractions, placed by paper_s6.py's layout.
+LAY6 = json.load(open(P / "assets/images/keyframes/s6_layout.json", encoding="utf-8"))["9x16"]
+E6 = lambda u, v: [round(LAY6["x0"] + u * LAY6["w"], 4), round(LAY6["y0"] + v * LAY6["h"], 4)]  # noqa: E731
+CHEEK, EYE, TOPW = w("cheekbone", "6"), w("eye", "6"), w("top", "6")
+PATH6 = [((0.665, 0.90), (0.587, 0.66), CHEEK - 0.3, CHEEK + 0.05), ((0.587, 0.66), (0.539, 0.55), CHEEK + 0.05, EYE + 0.05),
+         ((0.539, 0.55), (0.412, 0.21), EYE + 0.05, TOPW + 0.05), ((0.412, 0.21), (0.372, 0.10), TOPW + 0.05, TOPW + 0.3)]
+DRAW6 = [{"points": [E6(*a), E6(*b)], "from": round(t0, 2), "to": round(t1, 2), "color": "#F0A23A", "width": 14, "glow": True}
+         for a, b, t0, t1 in PATH6]
+# shot 7: the bar falls in from the top and sticks point-first in the grass between the two runners (tip 0.555, 0.72) on "landed"
+LANDED = w("landed", "7")
+TIP7, D7 = (0.555, 0.72), (-0.087, 0.996)         # pointing down, 5 degrees left of vertical
+C7 = along(TIP7, D7, -0.45 * 1080 * 0.955 / 2)
+IRON7 = iron([{"t": 0.0, "x": 0.50, "y": -0.22, "rot": 80, "state": "rod"},
+              {"t": LANDED, "x": C7[0], "y": C7[1], "rot": 95, "ease": "in", "contact": {"squash": 0.1, "bounce": 0.02}}], 0.45)
+SAY10, BIZ = w("doctor here", "10"), w("business", "10")
+KEPT = w("kept", "11")
+SAID, NO12 = w("said", "12"), w("no longer", "12")
+
+ALIVE = {
+    "2a": dict(motion={"type": "push", "from": 1.02, "to": 1.09, "x": 2.0, "y": 1.0},
+               fx=[wag("s2a", "arm", [0.545, 0.39], 8, 0.55, 0.25, 0.25 + 2 * 0.55),
+                   {"kind": "particles", "style": "haze", "x": 0.7, "y": 0.62, "tx": 0.85, "ty": 0.55, "spread": 0.15,
+                    "every": 0.4, "life": 3.0, "size": 260, "color": "214,196,160", "opacity": 0.22}]),
+    "2b": dict(motion={"type": "slide", "from": 2.5, "to": -2.5, "scale": 1.1},
+               fx=[wag("s2b", "hammer1", [0.31, 0.678], 7, 0.7, 0.0), wag("s2b", "hammer2", [0.728, 0.757], 5, 0.7, 0.35),
+                   {"kind": "particles", "style": "haze", "x": 0.3, "y": 0.45, "tx": 0.5, "ty": 0.3, "spread": 0.2,
+                    "every": 0.45, "life": 3.2, "size": 300, "color": "205,200,190", "opacity": 0.2}]),
+    "3": dict(motion={"type": "push", "from": 1.02, "to": 1.08, "x": 0.5, "y": -0.5},
+              fx=[{"kind": "particles", "style": "grains", "x": 0.466, "y": 0.535, "tx": 0.425, "ty": 0.607, "spread": 0.012,
+                   "every": 0.034, "life": 0.42, "size": 7, "from": 0.05, "to": round(IRON3_T - 0.4, 2)}],
+              layers={"bg": f"proj:assets/images/keyframes/s3.png", "actors": [IRON3]}),
+    "5": dict(motion={"type": "push", "from": 1.03, "to": 1.1, "x": 0, "y": 1.0}, hit={"at": SPARK5, "strength": 3.4, "seconds": 0.6},
+              captionY=LOW,
+              fx=[{"kind": "spark", "x": 0.495, "y": 0.48, "r": 0.05, "from": STRUCK, "to": round(STRUCK + 0.3, 2)},
+                  {"kind": "spark", "x": 0.495, "y": 0.48, "r": 0.16, "from": SPARK5},
+                  {"kind": "glow", "x": 0.495, "y": 0.48, "r": 0.55, "at": SPARK5, "dur": 0.12, "strength": 0.85, "color": "255,214,150"}],
+              layers={"bg": f"proj:assets/images/keyframes/s5.png", "actors": [IRON5]}),
+    "6": dict(motion={"type": "push", "from": 1.0, "to": 1.06, "x": 0, "y": 1.0}, transition="flash", captionY=TOP4, draw=DRAW6),
+    "7": dict(motion={"type": "push", "from": 1.04, "to": 1.1, "x": -1.0, "y": -1.0}, hit={"at": LANDED, "strength": 2.4, "seconds": 0.45},
+              fx=[{"kind": "particles", "style": "haze", "x": TIP7[0], "y": TIP7[1], "tx": TIP7[0], "ty": TIP7[1] - 0.05,
+                   "spread": 0.05, "every": 0.05, "life": 1.0, "size": 170, "color": "196,184,150", "opacity": 0.55,
+                   "from": LANDED, "to": round(LANDED + 0.35, 2)}],
+              layers={"bg": f"proj:assets/images/keyframes/s7.png", "actors": [IRON7]}),
+    "9": dict(motion={"type": "slide", "from": -2.5, "to": 2.5, "scale": 1.1},
+              fx=[wag("s9", "ox1", [0.40, 0.53], 2.5, 1.0, 0.0), wag("s9", "ox2", [0.14, 0.52], 2.5, 1.15, 0.3),
+                  {"kind": "particles", "style": "haze", "x": 0.55, "y": 0.66, "tx": 0.75, "ty": 0.62, "spread": 0.12,
+                   "every": 0.3, "life": 2.4, "size": 240, "color": "214,190,150", "opacity": 0.28}]),
+    "10": dict(motion={"type": "push", "from": 1.02, "to": 1.035, "x": 0, "y": 0},
+               fx=[wag("s10", "hand", [0.47, 0.49], 7, 0.6, round(SAY10 - 0.1, 2), round(SAY10 - 0.1 + 2 * 0.6, 2)),
+                   {"kind": "glint", "x": 0.165, "y": 0.392, "at": round(BIZ + 0.1, 2), "size": 34}]),
+    "11": dict(motion={"type": "push", "from": 1.03, "to": 1.12, "x": -1.0, "y": 1.0},
+               fx=[{"kind": "travel", "points": [[0.74, 0.185], [0.635, 0.40]], "at": round(KEPT - 0.1, 2), "dur": 0.35,
+                    "colors": ["rgba(255,240,205,1)", "rgba(255,206,130,1)"], "width": 10},
+                   {"kind": "travel", "points": [[0.595, 0.52], [0.385, 0.925]], "at": round(KEPT + 0.22, 2), "dur": 0.55,
+                    "colors": ["rgba(255,240,205,1)", "rgba(255,206,130,1)"], "width": 10}]),
+    "12": dict(motion={"type": "push", "from": 1.02, "to": 1.05, "x": 1.0, "y": 0}, grey={"from": SAID, "to": round(NO12 + 0.3, 2)},
+               fx=[{"kind": "nudge", "mask": FX + "s12-lean.mask.png", "bg": FX + "s12-lean.clean.png", "at": round(SAID - 0.2, 2),
+                    "dur": 1.2, "dx": 0.007, "dy": 0.003},
+                   {"kind": "spot", "at": round(NO12 - 0.1, 2), "dur": 10.0, "cx": 0.2, "cy": 0.36, "rx": 0.16, "ry": 0.17, "dim": 0.45}]),
+}
+
 # ── the shots ──────────────────────────────────────────────────────────────────────────────────────────────────────────
 SKETCH = {"push": {"type": "push", "from": 1.02, "to": 1.08, "x": 0, "y": 0}}
 shots = []
 for i, (name, _secs, line, cap, *_r) in enumerate(PLAN):
     s = {"id": f"s{i + 1:02d}", "start": starts[name], "end": round(starts[name] + dur[name], 2), "source": PV + f"{name}.png",
          "motion": SKETCH["push"], "captionY": cap, "breath": True, "previz": name}
+    if name in ALIVE:
+        s.update(source=KF + f"s{name}.png", breath=False, **ALIVE[name])
     if name == "1":
         s.update(source=PLATE + "plate-s1.png", motion={"type": "pull", "from": 1.08, "to": 1.02},
                  hit={"at": 0, "strength": 3.2, "seconds": 0.8}, fx=[DUST1], breath=False,
@@ -205,16 +311,46 @@ for i, (name, _secs, line, cap, *_r) in enumerate(PLAN):
 
 overlays = [
     {"kind": "nameTag", "start": starts["2a"] + 0.2, "end": starts["2a"] + 2.5, "text": "Phineas Gage", "sub": "railroad foreman, 25", "y": 1000},
-    {"kind": "stamp", "start": starts["2a"] + 0.3, "end": starts["2a"] + 2.3, "text": "CAVENDISH, VERMONT · 1848", "y": MID},   # TOP collided with the caption (text_check)
-    {"kind": "stamp", "start": starts["3"] + 1.6, "end": starts["3"] + 3.1, "text": "3 ft 7 in · 13¼ lb (1.1 m · 6 kg)", "y": MID},
-    {"kind": "stamp", "start": starts["7"] + 0.4, "end": starts["7"] + 1.9, "text": "≈ 80 ft (25 m)", "y": MID},
+    # the place stamp on 2b, the wide of the cut (rough cut 1: on 2a it sat on Gage's hat or under the caption, and
+    # text_check's caption box leaves no room above his raised hand); 2b's caption is LOW
+    {"kind": "stamp", "start": starts["2b"] + 0.1, "end": starts["2b"] + 2.3, "text": "CAVENDISH, VERMONT · 1848", "y": TOP},
+    # the bar's size in two short stamps (one long stamp shrank to ~31 px type on the hand): the length when the bar slides
+    # in on "iron", the weight on "13 pounds"; y 1000 = the rock band under the flask (only the thin bar crosses it)
+    {"kind": "stamp", "start": starts["3"] + IRON3_T + 0.1, "end": starts["3"] + TAMP3 - 0.1, "text": "3 ft 7 in · 1.1 m", "y": 1000},
+    {"kind": "stamp", "start": starts["3"] + TAMP3, "end": starts["3"] + TAMP3 + 1.6, "text": "13¼ lb · 6 kg", "y": 1000},
+    {"kind": "stamp", "start": starts["7"] + LANDED + 0.1, "end": starts["7"] + 1.9, "text": "≈ 80 ft (25 m)", "y": MID},
+]
+# rough cut 1: a stamp never outlives its shot (the real narration made shot 7 1.62 s: "≈ 80 FT" ran into shot 8's silence)
+for o in overlays:
+    sh = next(x for x in shots if x["start"] <= o["start"] < x["end"])
+    o["start"], o["end"] = round(o["start"], 2), round(min(o["end"], sh["end"] - 0.05), 2)
+
+# sound (storyboard SFX column; library names in channels/storybook-medical/library/sfx, new ones fetched by `episode.py sfx`)
+S_ = lambda name, t, **k: {"name": name, "at": round(t, 2), **k}  # noqa: E731
+SFX = [
+    S_("whoosh", starts["1"] + 0.25, gain_db=-12),
+    S_("metal-clank", starts["2a"] + 0.2, gain_db=-18), S_("crow-caw", starts["2a"] + 1.9, gain_db=-22),
+    S_("metal-clank", starts["2b"] + 0.15, gain_db=-21), S_("metal-clank", starts["2b"] + 0.85, gain_db=-23),
+    S_("sand-pour", starts["3"] + 0.05, gain_db=-18, dur=round(IRON3_T - 0.35, 2), query="sand pouring"),
+    S_("stone-grind", starts["3"] + IRON3_T - 0.2, gain_db=-16, dur=0.5),
+    S_("metal-clank", starts["3"] + TAMP3, gain_db=-16),
+    S_("metal-clank", starts["5"] + STRUCK, gain_db=-12), S_("boom-low", starts["5"] + SPARK5, gain_db=-5),
+    S_("quill-writing", starts["6"] + CHEEK - 0.3, gain_db=-20, dur=round(TOPW - CHEEK + 0.6, 2)),
+    S_("whoosh", starts["7"], gain_db=-14), S_("stamp-thud", starts["7"] + LANDED, gain_db=-8),
+    S_("ear-ring", starts["8"], gain_db=-22, dur=2.4, fade_out=0.8), S_("gasp", starts["8"] + SPOKE - 0.35, gain_db=-22),
+    S_("horse-carriage", starts["9"], gain_db=-20, dur=2.6, fade_out=0.6),
+    S_("cow-moo", starts["9"] + 1.1, gain_db=-22, query="cow moo"),
+    S_("horse-carriage", starts["10"], gain_db=-18, dur=1.2, fade_out=0.5),
+    S_("metal-ring", starts["11"] + KEPT, gain_db=-18, dur=0.9, fade_out=0.6, query="metal rod ring"),   # the file is 30 s of hits: one
+    S_("whisper", starts["12"] + 0.2, gain_db=-16, dur=1.4, query="whisper"),
 ]
 
 ep = json.load(open(P / "episode.json", encoding="utf-8"))
 ep.update({"title": "He Took an Iron Bar Through the Skull… and Spoke", "format": "short", "loop": True, "tail_seconds": 1.0,
-           "motion_lint": "warn",   # PRE-VIZ: the non-HERO shots are sketches (breath); the real cut runs the full lint
-           "previz": "real narration" if REAL else "scratch timeline 2026-11-18; replace with the real narration", "shots": shots, "overlays": overlays,
-           "sfx": ep.get("sfx", []),
+           # rough cut 1: every shot is real now, so the full motion lint runs (the pre-viz ran it as "warn")
+           "motion_lint": "fail" if REAL else "warn",
+           "previz": "rough cut 1 (real narration)" if REAL else "scratch timeline 2026-11-18; replace with the real narration", "shots": shots, "overlays": overlays,
+           "sfx": SFX,
            # music prompts live in build_hc002s1.py; the music stops for shot 8's silence (cut -> just after "spoke")
            "music": {**ep.get("music", {}), "gaps": [{"from": starts["8"], "to": round(starts["8"] + SPOKE + 0.25, 2),
                                                      "fade_out": 0.3, "fade_in": 0.6}]},
