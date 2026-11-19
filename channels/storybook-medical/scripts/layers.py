@@ -81,6 +81,14 @@ def lint_hero_size(shots: list[dict], proj: Path) -> list[str]:
                 a = m.get("from", 1.04 if m["type"] == "push" else 1.18)
                 b = m.get("to", 1.18 if m["type"] == "push" else 1.04)
                 return a + (b - a) * min(1.0, t / dur)
+            if m.get("type") == "keys" and m.get("keys"):    # keyframed camera: linear between its keys is enough here
+                ks = m["keys"]
+                if t <= ks[0]["t"]:
+                    return ks[0]["scale"]
+                for p, q in zip(ks, ks[1:]):
+                    if t <= q["t"]:
+                        return p["scale"] + (q["scale"] - p["scale"]) * (t - p["t"]) / max(1e-6, q["t"] - p["t"])
+                return ks[-1]["scale"]
             return m.get("scale", 1.04)
         best = 0.0
         for g in ("mg", "actors", "three", "fg"):

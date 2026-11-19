@@ -199,7 +199,7 @@ export const StageScene: React.FC<{ s: StageSpec; cam: Cam; dur: number; spanOff
 // t = seconds after the shot starts; w = the actor's width as a fraction of the frame width at depth z = 1.
 // Sound is NOT played here: keyframe `sfx` is read by scripts/layers.py into the ffmpeg mix (one source of truth).
 export type EaseName = "linear" | "in" | "out" | "inOut" | "sine" | "outBack";
-const EASES: Record<EaseName, (u: number) => number> = {
+export const EASES: Record<EaseName, (u: number) => number> = {
   linear: (u) => u, in: Easing.in(Easing.cubic), out: Easing.out(Easing.cubic), inOut: Easing.inOut(Easing.cubic),
   sine: Easing.inOut(Easing.sin), outBack: Easing.out(Easing.back(1.4)),
 };

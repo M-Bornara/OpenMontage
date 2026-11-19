@@ -123,47 +123,129 @@ def w(phrase: str, shot: str, word: int = 0) -> float:
 SKULL = w("skull", "1")
 D1 = dur["1"]   # the real shot length: the last keys end on the cut, nothing freezes
 # v2 (story-craft Rule 0b, user 2026-11-19, option A): the hit is SHOWN, softened by silhouette + white flash + head snap.
-# On the blast the bar bursts UP out of the top of his PURE black silhouette (gage-s1-black: no face, no wound, no blood):
-# it starts BEHIND him (layer order), so only the part above his head shows, small (z 0.7) so its tail stays inside the
-# black torso (measured: the tail at frame 0 is at (0.49, 0.80), the torso spans x 0.41-0.58 there; the leg gap starts at
-# y 0.85). A white flash at his head (start 0.6 at frame 0 so the hook frame reads, peak at 0.05 s, gone by 0.24 s: a longer flash stays put while he moves and lands on his chest), his
-# head snaps back (stand -> thrown at 0.06 s, rot kick), and the bar flies on, coming closer (z 0.7 -> 1.55): the old
-# hang + glint on "skull" are kept. The hat is knocked off up-left in frame 0.
+# The bar bursts UP out of the top of his PURE black silhouette (gage-s1-black: no face, no wound, no blood): it starts
+# BEHIND him (layer order), so only the part above his head shows; its tail stays inside the black torso.
+# v3 (user 2026-11-19: "the impact is too small and too short, then 3 s of the bar sliding flat"): the same layers,
+# re-cut with a keyframed camera (StorybookShort motion "keys"):
+#   0-0.8 s   TIGHT on his head + shoulders (x2.8, the silhouette fills the frame), the burst at ~50 % speed (every key of
+#             v2's first 0.4 s at twice the time): the flash and the bar coming up out of his head, big;
+#   0.8-1.8 s a whip up (blur) and pull out following the bar; Gage falls, the two crewmen flinch (cut out of the plate,
+#             crew_hc002s1.py), the rock cut opens up;
+#   1.8 s-cut the bar spins END OVER END at the top (~415 deg/s, horizontal with the glint on "skull"), under the hook
+#             card until 2.5 s and above the LOW caption after it.
 HEAD1 = (0.552, 0.676)          # the top of his head at frame 0 (stand pose, w 0.48, anchor y 1.065)
-IRON_KEYS = [{"t": 0.0, "x": 0.53, "y": 0.688, "rot": -80, "z": 0.7, "state": "rod"},     # tip just out of the skull top
-             {"t": 0.12, "x": 0.545, "y": 0.60, "rot": -76, "z": 0.85},                   # bursts up (fast, linear)
-             {"t": 0.4, "x": 0.552, "y": 0.45, "rot": -45, "z": 1.15, "ease": "out"},     # ...tumbling...
-             {"t": 0.85, "x": 0.552, "y": 0.432, "rot": -18, "z": 1.28, "state": "glint"},  # ...hangs: the sun catches it
-             {"t": 1.5, "x": 0.556, "y": 0.425, "rot": -8, "z": 1.36, "state": "rod"},
-             {"t": SKULL, "x": 0.565, "y": 0.415, "rot": 4, "z": 1.46, "state": "glint"},  # glint on "skull"
-             {"t": D1, "x": 0.58, "y": 0.40, "rot": 14, "z": 1.55}]
+
+
+def cam(t, s, fx, fy, sx=0.5, sy=0.5, **k):
+    """Camera key: frame point (fx, fy) shown at screen point (sx, sy) at zoom s (translate % after the scale)."""
+    return {"t": round(t, 3), "scale": s, "x": round((sx - 0.5 - (fx - 0.5) * s) * 100, 2),
+            "y": round((sy - 0.5 - (fy - 0.5) * s) * 100, 2), **k}
+
+
+CAM1 = {"type": "keys", "keys": [cam(0.0, 2.8, 0.552, 0.70, 0.5, 0.66),                # head + shoulders fill the frame
+                                 cam(0.8, 2.4, 0.63, 0.57, 0.5, 0.56, ease="sine"),     # drifts up with the burst
+                                 cam(1.05, 1.8, 0.66, 0.46, ease="in", blur=5),         # the whip up after the bar
+                                 cam(1.35, 1.3, 0.60, 0.45, ease="out", blur=0),
+                                 cam(1.8, 1.08, 0.5, 0.5, ease="inOut"),                # ...lands on the wide
+                                 cam(D1, 1.04, 0.5, 0.5, ease="linear")]}
+
+# Gage: gage-s1-black, thrown BACKWARD; the head snaps back on the pose swap (0.12 s at half speed) with a rot kick, then
+# he tips back and falls out of the bottom of the wide. The thrown pose's head sits 0.15 of the frame further right than
+# the standing one, so he steps LEFT on the swap: the head stays in the tight frame.
+GKEYS = [{"t": 0.0, "x": 0.50, "y": 1.065, "rot": 0, "z": 1.0, "state": "stand"},
+         {"t": 0.12, "x": 0.44, "y": 1.045, "rot": 6, "z": 1.04, "state": "thrown"},
+         {"t": 0.32, "x": 0.40, "y": 1.02, "rot": 11, "z": 1.09},                    # the snap overshoots...
+         {"t": 0.8, "x": 0.41, "y": 1.005, "rot": 11, "z": 1.13, "ease": "out"},     # ...and hangs
+         {"t": 1.3, "x": 0.43, "y": 1.05, "rot": 16, "z": 1.2, "ease": "in"},        # then he goes down
+         {"t": 1.8, "x": 0.46, "y": 1.12, "rot": 24, "z": 1.26},
+         {"t": D1, "x": 0.50, "y": 1.34, "rot": 40, "z": 1.36, "ease": "in"}]
+GAGE1 = {"id": "gage", "sprites": SPR + "gage-s1-black/sprites.json", "w": 0.48, "face": "keys", "xfade": 0.04,
+         "depth": {"blur": 0}, "motionBlur": False,     # a blurred / cross-faded black body turns see-through: the bar behind showed
+         "states": {"stand": {}, "thrown": {}}, "keys": GKEYS}
+
+# The bar rides the BODY'S AXIS while it comes out: the line from the torso through the top of the head, measured on the
+# two pose sprites (canvas 906 x 1379, anchor (0.5, 0.9826)); emerged = the share of the bar already out of the head. Its
+# tail stays inside the black torso, so it reads as coming OUT OF HIS HEAD in every frame of the tight shot.
+AXIS = {"stand": ((0.60, 0.025), (0.47, 0.40)), "thrown": ((0.586, 0.085), (0.32, 0.42))}   # (head top, torso) sprite fractions
+
+
+def gage_at(t):
+    """Gage's key values at t (linear between his keys; the bar keys sit on or near them)."""
+    for p, q in zip(GKEYS, GKEYS[1:]):
+        if t <= q["t"]:
+            u = (t - p["t"]) / (q["t"] - p["t"])
+            return {k: p[k] + (q[k] - p[k]) * u for k in ("x", "y", "rot", "z")}
+    return GKEYS[-1]
+
+
+def on_axis(t, emerged, z, pose):
+    import math
+    g = gage_at(t)
+    w_ = 0.48 * g["z"] * 1080
+    h_ = w_ * 1379 / 906
+
+    def px(u, v):
+        dx, dy, r = (u - 0.5) * w_, (v - 0.9826) * h_, math.radians(g["rot"])
+        return g["x"] * 1080 + dx * math.cos(r) - dy * math.sin(r), g["y"] * 1920 + dx * math.sin(r) + dy * math.cos(r)
+    (hx, hy), (bx, by) = px(*AXIS[pose][0]), px(*AXIS[pose][1])
+    n = math.hypot(hx - bx, hy - by)
+    dx, dy = (hx - bx) / n, (hy - by) * 1 / n
+    L = 0.6 * z * 1080
+    return {"x": round((hx + dx * (emerged - 0.5) * L) / 1080, 4), "y": round((hy + dy * (emerged - 0.5) * L) / 1920, 4),
+            "rot": round(math.degrees(math.atan2(dy, dx)), 1), "z": z}
+
+
+def spin(t):            # the end-over-end rotation after the burst: from 70 deg at 1.2 s to 900 (horizontal) on "skull"
+    return round(70 + (900 - 70) * (t - 1.2) / (SKULL - 1.2), 1)
+
+
+def arc(t):             # the bar's centre after 1.2 s: up and across, slowing as it tops out
+    u = (t - 1.2) / (D1 - 1.2)
+    return round(0.67 - 0.14 * u, 4), round(0.43 - 0.07 * u + 0.05 * u * u, 4)
+
+
+ZS = 0.7                # the bar's depth in the spin: ~0.45 of the frame wide at the wide's zoom (HERO >= 1/3)
+IRON_KEYS = [{"t": 0.0, **on_axis(0.0, 0.30, 0.7, "stand"), "state": "rod"},     # tip just out of the skull top
+             {"t": 0.12, **on_axis(0.12, 0.40, 0.85, "thrown")},                   # bursts up (half speed), on his axis
+             {"t": 0.32, **on_axis(0.32, 0.55, 0.92, "thrown")},
+             {"t": 0.55, **on_axis(0.55, 0.72, 0.97, "thrown")},
+             {"t": 0.8, **on_axis(0.8, 0.86, 1.0, "thrown")},
+             {"t": 1.0, "x": 0.70, "y": 0.46, "rot": 10, "z": 0.88},                # out: it tips over...
+             {"t": 1.2, "x": arc(1.2)[0], "y": arc(1.2)[1], "rot": 70, "z": 0.78},   # ...end over end
+             *[{"t": t, "x": arc(t)[0], "y": arc(t)[1], "rot": spin(t), "z": round(max(ZS, 0.78 - 0.2 * (t - 1.2)), 3)}
+               for t in (1.5, 1.8, 2.1, 2.5, 2.85)],
+             {"t": SKULL, "x": arc(SKULL)[0], "y": arc(SKULL)[1], "rot": 900, "z": ZS, "state": "glint"},  # glint on "skull"
+             {"t": round(SKULL + 0.45, 2), "x": arc(SKULL + 0.45)[0], "y": arc(SKULL + 0.45)[1], "rot": spin(SKULL + 0.45),
+              "z": ZS, "state": "rod"},
+             {"t": D1, "x": arc(D1)[0], "y": arc(D1)[1], "rot": spin(D1), "z": ZS}]
 IRON = {"id": "iron", "sprites": SPR + "iron-lit/sprites.json", "w": 0.6, "face": "keys", "xfade": 0.18,
         "depth": {"blur": 0}, "motionBlur": {"samples": 10, "shutter": 0.6}, "keys": IRON_KEYS}
-# the trail: the same bar a moment earlier, fainter (behind the bar)
+# the trail: the same bar a moment earlier, fainter (behind the bar): in the spin it smears the rotation
 TRAILS = [{**IRON, "id": f"iron-trail{i}", "opacity": op, "xfade": 0, "motionBlur": {"samples": 6, "shutter": 1.2},
            "keys": [{**{k: v for k, v in key.items() if k != "state"}, "t": round(key["t"] + lag, 3), "state": "rod"}
                     for key in IRON_KEYS]}
-          for i, (lag, op) in enumerate(((0.05, 0.38), (0.11, 0.18)), 1)]
-# Gage: gage-s1-black, thrown BACKWARD toward the camera; the head snaps back on the pose swap (0.06 s) with a rot kick,
-# then he tips back, grows (z) and drops out of the bottom of the frame.
-GAGE1 = {"id": "gage", "sprites": SPR + "gage-s1-black/sprites.json", "w": 0.48, "face": "keys", "xfade": 0.05,
-         "depth": {"blur": 0}, "states": {"stand": {}, "thrown": {}},
-         "keys": [{"t": 0.0, "x": 0.50, "y": 1.065, "rot": 0, "z": 1.0, "state": "stand"},
-                  {"t": 0.06, "x": 0.51, "y": 1.045, "rot": 6, "z": 1.04, "state": "thrown"},
-                  {"t": 0.16, "x": 0.52, "y": 1.02, "rot": 11, "z": 1.09},                    # the snap overshoots...
-                  {"t": 0.5, "x": 0.53, "y": 1.0, "rot": 10, "z": 1.15, "ease": "out"},       # ...and settles
-                  {"t": 1.4, "x": 0.55, "y": 1.08, "rot": 18, "z": 1.25},
-                  {"t": D1, "x": 0.57, "y": 1.2, "rot": 26, "z": 1.32, "ease": "in"}]}
-FLASH1 = {"kind": "flash", "x": HEAD1[0], "y": HEAD1[1] - 0.01, "r": 0.24, "at": 0, "rise": 0.05, "dur": 0.24, "start": 0.6,
-          "lift": 0.18}
+          for i, (lag, op) in enumerate(((0.04, 0.38), (0.08, 0.18)), 1)]
+FLASH1 = {"kind": "flash", "x": HEAD1[0], "y": HEAD1[1] - 0.01, "r": 0.13, "at": 0, "rise": 0.1, "dur": 0.46, "start": 0.6,
+          "lift": 0.14}
 HAT = {"id": "hat", "sprites": SPR + "hat-sil/sprites.json", "w": 0.13, "face": "keys", "depth": {"blur": 0},
        "states": {"side": {}, "tumble": {}},
-       "keys": [{"t": 0.0, "x": 0.50, "y": 0.645, "rot": -22, "state": "tumble"},     # already knocked off (Rule 0b v2)
-                {"t": 0.25, "x": 0.44, "y": 0.59, "rot": -70},
-                {"t": 1.3, "x": 0.22, "y": 0.58, "rot": -220, "ease": "out"},
+       "keys": [{"t": 0.0, "x": 0.475, "y": 0.632, "rot": -26, "state": "tumble"},   # already knocked off, clear of the exit point
+                {"t": 0.5, "x": 0.44, "y": 0.59, "rot": -70},
+                {"t": 1.7, "x": 0.22, "y": 0.58, "rot": -220, "ease": "out"},
                 {"t": D1, "x": 0.08, "y": 0.62, "rot": -300}]}
-DUST1 = {"kind": "particles", "style": "haze", "x": 0.47, "y": 0.70, "tx": 0.5, "ty": 0.5, "spread": 0.12, "every": 0.12,
-         "life": 2.6, "size": 220, "color": "196,186,166", "opacity": 0.45, "from": 0, "to": D1}
+# the crew (cut from the plate by crew_hc002s1.py; at rest exactly on the painted men): they flinch AWAY from the blast
+# as the camera pulls out (lean + a squash = ducking), then settle. Out of frame while the camera is tight.
+CREW = json.load(open(P / "assets/images/sprites/crew.json", encoding="utf-8"))
+CREW1 = [{"id": n, "sprites": SPR + f"{n}/sprites.json", "w": CREW[n]["w"], "anchor": CREW[n]["anchor"], "face": "keys",
+          "depth": {"blur": 0}, "motionBlur": False, "states": {"stand": {}},
+          "keys": [{"t": 0.0, "x": CREW[n]["x"], "y": CREW[n]["y"], "rot": 0, "state": "stand"},
+                   {"t": 0.95, "x": CREW[n]["x"], "y": CREW[n]["y"], "rot": 0},
+                   {"t": 1.25, "x": CREW[n]["x"], "y": CREW[n]["y"], "rot": sgn * 5, "ease": "out",
+                    "contact": {"squash": 0.07, "hz": 3.0, "decay": 5}},
+                   {"t": D1, "x": CREW[n]["x"], "y": CREW[n]["y"], "rot": sgn * 3.5, "ease": "sine"}]}
+         for n, sgn in (("crew-l", -1), ("crew-r", 1))]
+DUST1 = {"kind": "particles", "style": "haze", "x": 0.40, "y": 0.66, "tx": 0.36, "ty": 0.5, "spread": 0.1, "every": 0.16,
+         "life": 2.4, "size": 200, "color": "196,186,166", "opacity": 0.3, "from": 0.9, "to": D1}
 
 # ── HERO 4: the look over the shoulder (on "shoulder"). User 2026-11-18: push in on Gage during the shot so the head turn
 # is big (end at MS). Gage on the ledge: x 0.487, feet 0.512, head top ~0.274 (0.24 of the frame tall). The push ends at
@@ -307,10 +389,10 @@ for i, (name, _secs, line, cap, *_r) in enumerate(PLAN):
     if name in ALIVE:
         s.update(source=KF + f"s{name}.png", breath=False, **ALIVE[name])
     if name == "1":
-        s.update(source=PLATE + "plate-s1.png", motion={"type": "pull", "from": 1.08, "to": 1.02},
-                 hit={"at": 0, "strength": 3.2, "seconds": 0.8}, fx=[DUST1, FLASH1], breath=False,
-                 # the bar BEHIND him (it bursts out of the top of his head), the hat in front
-                 layers={"bg": "proj:assets/images/refs/plate-s1.png", "actors": [*TRAILS, IRON, GAGE1, HAT]})
+        s.update(source=PLATE + "plate-s1-nocrew.png", motion=CAM1,
+                 hit={"at": 0, "strength": 2.6, "seconds": 0.9}, fx=[DUST1, FLASH1], breath=False,
+                 # the crew at the back, the bar BEHIND Gage (it bursts out of the top of his head), the hat in front
+                 layers={"bg": "proj:assets/images/refs/plate-s1-nocrew.png", "actors": [*CREW1, *TRAILS, IRON, GAGE1, HAT]})
     if name == "4":
         s.update(source=PLATE + "plate-s4.png", breath=False,
                  motion=PUSH4,
@@ -341,7 +423,7 @@ for o in overlays:
 # sound (storyboard SFX column; library names in channels/storybook-medical/library/sfx, new ones fetched by `episode.py sfx`)
 S_ = lambda name, t, **k: {"name": name, "at": round(t, 2), **k}  # noqa: E731
 SFX = [
-    S_("whoosh", starts["1"] + 0.25, gain_db=-12),
+    S_("whoosh", starts["1"] + 0.82, gain_db=-11),     # v3: on the whip up
     S_("metal-clank", starts["2a"] + 0.2, gain_db=-18), S_("crow-caw", starts["2a"] + 1.9, gain_db=-22),
     S_("metal-clank", starts["2b"] + 0.15, gain_db=-21), S_("metal-clank", starts["2b"] + 0.85, gain_db=-23),
     S_("sand-pour", starts["3"] + 0.05, gain_db=-18, dur=round(IRON3_T - 0.35, 2), query="sand pouring"),

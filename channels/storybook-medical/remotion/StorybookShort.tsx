@@ -19,7 +19,7 @@ import { loadFont as loadLalezar } from "@remotion/google-fonts/Lalezar";
 import { loadFont as loadFell } from "@remotion/google-fonts/IMFellEnglish";
 import { Clock } from "./Clock";
 import { ShotFx, ShotFxLayer } from "./ShortFx";
-import { LayerSpec, LayerStack } from "./Stage";
+import { EASES, EaseName, LayerSpec, LayerStack } from "./Stage";
 
 const { fontFamily } = loadFont("normal", { weights: ["600", "700", "800", "900"] });
 
@@ -59,7 +59,11 @@ type Motion =
   // (x0/y0: the translate at the start, so frame 0 can already be framed off-centre; packaging v2 frame-1 moves)
   | { type: "snap"; from?: number; to?: number; at?: number; frames?: number; x?: number; y?: number; x0?: number; y0?: number }
   // pan: slide the visible window across a wider master (objectPosition %, 0 = left edge, 100 = right edge)
-  | { type: "pan"; from?: number; to?: number; scale?: number };
+  | { type: "pan"; from?: number; to?: number; scale?: number }
+  // keys: a keyframed camera (HC002-S1 shot 1 v3: tight -> whip up -> wide). t = seconds in the shot; scale, x, y as push
+  // (x / y = translate %, after the scale); ease = the segment ARRIVING at the key (Stage EASES, default inOut);
+  // blur = px of blur on the picture + layers at the key (a whip), interpolated linearly
+  | { type: "keys"; keys: { t: number; scale: number; x?: number; y?: number; ease?: EaseName; blur?: number }[] };
 
 export interface Shot {
   id: string;
@@ -139,6 +143,7 @@ export const ShotLayer: React.FC<{ shot: Shot }> = ({ shot }) => {
   let scale = 1.04;
   let tx = 0;
   let ty = 0;
+  let camBlur = 0;
   if (m.type === "push" || m.type === "pull") {
     const a = m.from ?? (m.type === "push" ? 1.04 : 1.18);
     const b = m.to ?? (m.type === "push" ? 1.18 : 1.04);
@@ -160,6 +165,18 @@ export const ShotLayer: React.FC<{ shot: Shot }> = ({ shot }) => {
     scale = (m.from ?? 1.03) + ((m.to ?? 1.3) - (m.from ?? 1.03)) * k + drift;
     tx = (m.x0 ?? 0) + ((m.x ?? 0) - (m.x0 ?? 0)) * k;
     ty = (m.y0 ?? 0) + ((m.y ?? 0) - (m.y0 ?? 0)) * k;
+  } else if (m.type === "keys" && m.keys.length) {
+    const ks = m.keys, ts = frame / FPS;
+    let i = 0;
+    while (i < ks.length - 2 && ts >= ks[i + 1].t) i++;
+    const a = ks[i], b = ks[Math.min(i + 1, ks.length - 1)];
+    const u0 = b.t > a.t ? Math.min(1, Math.max(0, (ts - a.t) / (b.t - a.t))) : 1;
+    const u = ts <= ks[0].t ? 0 : (EASES[b.ease ?? "inOut"] ?? EASES.inOut)(u0);
+    const lerp = (p: number, q: number) => p + (q - p) * u;
+    scale = lerp(a.scale, b.scale);
+    tx = lerp(a.x ?? 0, b.x ?? 0);
+    ty = lerp(a.y ?? 0, b.y ?? 0);
+    camBlur = (a.blur ?? 0) + ((b.blur ?? 0) - (a.blur ?? 0)) * u0;
   } else if (m.type === "shake") {
     scale = m.scale ?? 1.1;
     const s = m.seconds ?? 0.4;
@@ -179,7 +196,7 @@ export const ShotLayer: React.FC<{ shot: Shot }> = ({ shot }) => {
 
   // Whip-in: fast horizontal slide with motion blur over the first 7 frames.
   let whipX = 0;
-  let blur = 0;
+  let blur = camBlur > 0.3 ? camBlur : 0;
   if (shot.transitionIn === "whip") {
     whipX = interpolate(frame, [0, 7], [100, 0], { extrapolateRight: "clamp", easing: Easing.out(Easing.cubic) });
     blur = interpolate(frame, [0, 7], [24, 0], { extrapolateRight: "clamp" });

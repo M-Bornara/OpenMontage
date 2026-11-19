@@ -74,8 +74,19 @@ How each tool is built here:
   (size it so its far end stays inside the black shape: measure the gaps between arms and legs);
 - **no-blood colour**: `tint` / colour drain to grey, amber glows; **blur**: `depth.blur` on the injured part only;
 - **framing**: the act at the edge, the reaction big; **documents**: an engraving / diagram with a drawn path.
-Worked example: HC002-S1 shot 1 v2 (`edit_hc002s1.py` IRON_KEYS / GAGE1 / FLASH1): the bar bursts up out of the top of
-Gage's black silhouette with a white flash and a head snap. One idea per shot: one actor doing one thing well beats five things moving.
+Worked example: HC002-S1 shot 1 v3 (`edit_hc002s1.py` CAM1 / IRON_KEYS / GKEYS / FLASH1): the bar bursts up out of the
+top of Gage's black silhouette with a white flash and a head snap. Lessons (user 2026-11-19, v2 -> v3):
+- **the impact must be big and long enough to read**: open TIGHT on the hit (the subject fills the frame) and slow it
+  (~50 %: write the burst's keys at twice the time), then whip out to the wide. Camera: `motion={"type": "keys", "keys":
+  [cam(t, scale, fx, fy, sx, sy, ease=, blur=)]}` (StorybookShort "keys"; `cam()` puts frame point fx,fy at screen sx,sy);
+- **an object "through" a body rides the body's axis** (head top -> torso, measured on each pose sprite: `on_axis()`),
+  recomputed for every pose; a pose swap can move the head far: shift the actor so the head stays put;
+- **no motion blur / long xfade on a black silhouette with something behind it**: half-transparent black shows the bar;
+- **a flight is a spin, not a slide**: end over end (rot keys ~400 deg/s, trails lagging 0.04 / 0.08 s), the glint
+  on the word with the bar horizontal (full length);
+- painted extras can react for free: cut them out of the plate (`crew_hc002s1.py`: rembg mask -> sprite + inpainted
+  plate) and flinch them (lean + contact squash) while the camera is elsewhere.
+One idea per shot: one actor doing one thing well beats five things moving.
 
 ## 2. Prompts → approval (nothing is paid before the user's OK)
 
