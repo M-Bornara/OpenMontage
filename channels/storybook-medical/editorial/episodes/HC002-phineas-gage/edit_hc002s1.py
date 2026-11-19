@@ -229,8 +229,10 @@ IRON5 = iron([{"t": 0.0, "x": 0.495, "y": -0.42, "rot": -90, "state": "rod"},
 LAY6 = json.load(open(P / "assets/images/keyframes/s6_layout.json", encoding="utf-8"))["9x16"]
 E6 = lambda u, v: [round(LAY6["x0"] + u * LAY6["w"], 4), round(LAY6["y0"] + v * LAY6["h"], 4)]  # noqa: E731
 CHEEK, EYE, TOPW = w("cheekbone", "6"), w("eye", "6"), w("top", "6")
-PATH6 = [((0.665, 0.90), (0.587, 0.66), CHEEK - 0.3, CHEEK + 0.05), ((0.587, 0.66), (0.539, 0.55), CHEEK + 0.05, EYE + 0.05),
-         ((0.539, 0.55), (0.412, 0.21), EYE + 0.05, TOPW + 0.05), ((0.412, 0.21), (0.372, 0.10), TOPW + 0.05, TOPW + 0.3)]
+# measured on the full plate (Harlow 1868 p.24 scan, refs/harlow_skull_1868_full.png): the bar's centre line runs
+# (0.372, 0.00) -> (0.612, 0.95); the path stays ON it, from the entry under the cheekbone to the exit at the top of the
+# skull, and stops there (user 2026-11-19: no lead-in from the jaw, nothing above the skull)
+PATH6 = [((0.548, 0.69), (0.511, 0.55), CHEEK - 0.1, EYE + 0.05), ((0.511, 0.55), (0.411, 0.155), EYE + 0.05, TOPW + 0.1)]
 DRAW6 = [{"points": [E6(*a), E6(*b)], "from": round(t0, 2), "to": round(t1, 2), "color": "#F0A23A", "width": 14, "glow": True}
          for a, b, t0, t1 in PATH6]
 # shot 7: the bar falls in from the top and sticks point-first in the grass between the two runners (tip 0.555, 0.72) on "landed"

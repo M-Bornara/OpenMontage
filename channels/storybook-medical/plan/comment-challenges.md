@@ -75,7 +75,8 @@ Weighted score = .30·Fit + .20·Ease + .20·Debate + .15·Emotion + .15·Data, 
 | | | "Should we judge his science apart from his politics?" | – | – | **fails the gate** (toxic risk in a Short) | | – |
 | 6 | HC002-L | ✔ "Before this video, did you believe the 'monster' version?" | Your story | 5/5/3/3/5 | 4.30 | – | **4.30** |
 | | | "Can a brain injury change who you are?" | – | – | **fails the gate** (invites health disclosures) | | – |
-| 7 | HC002-S1 Iron Rod | ✔ "How do you think he survived that? Your theory." | Your theory | 4/4/4/2/3 | 3.55 | – | **3.55** |
+| 7 | HC002-S1 Iron Rod | ✔ "'No longer Gage.' What do you think changed in him? Your guess 👇" (approved 2026-11-19; the end line, answered by the long + S2) | Your theory | 5/4/5/3/4 | 4.35 | – | **4.35** |
+| | | "How do you think he survived that? Your theory." | Your theory | 4/4/4/2/3 | 3.55 | – | 3.55 |
 | | | "Would you have kept the iron bar?" | Would you | 4/5/3/3/1 | 3.40 | – | 3.40 |
 | | | "'Here is business enough for you.' Write a better understatement." | Top this | 5/3/3/3/1 | 3.30 | – | 3.30 |
 | 8 | HC002-S2 Gage myth | ✔ "Which famous story do you suspect is a myth? Nominate one." | Nominate | 4/4/4/3/5 | 4.00 | – | **4.00** (tie → variety) |

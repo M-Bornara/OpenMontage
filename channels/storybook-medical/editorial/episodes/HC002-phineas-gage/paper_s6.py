@@ -1,9 +1,10 @@
 """HC002-S1 shot 6 (FREE, storyboard v1): Harlow's 1868 engraving of the skull, printed on aged paper, for both formats.
 
-The source is the Commons file "Phineas gage - 1868 skull diagram.jpg" (public domain, 1868). The full-size download goes
-to projects/hc002-s1/refs/harlow_skull_1868_full.jpg (the user fetches it by hand); until then the 165 px copy
-(harlow_skull_1868.jpg) stands in. Re-run this script after the full file arrives: the edit's path points are written in
-ENGRAVING fractions and mapped through the placement below, so nothing else changes.
+Source: Fig. 2 of the plate in Harlow 1868 (public domain), cropped from the Internet Archive scan of the NLM copy
+(archive.org/details/66210360R.nlm.nih.gov, page image 0024, box 881,473-1482,1280, levels stretched so the scan paper
+reads white) -> refs/harlow_skull_1868_full.png (601 x 807). The Commons file "Phineas gage - 1868 skull diagram.jpg" is
+only 165 px (its original IS that size), kept as harlow_skull_1868.jpg. The edit's path points are ENGRAVING fractions
+measured on the full plate and mapped through the placement below.
 
     python channels/storybook-medical/editorial/episodes/HC002-phineas-gage/paper_s6.py
 Writes assets/images/keyframes/s6.png (1536 x 2752), keyframes16x9/s6.png (2752 x 1536) and s6_layout.json.

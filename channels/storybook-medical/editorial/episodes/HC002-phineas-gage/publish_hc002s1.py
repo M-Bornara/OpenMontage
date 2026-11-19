@@ -1,4 +1,4 @@
-"""HC002-S1 Gage: the upload texts (episode.json "publish"), DRAFT for the user's review with rough cut 1 (2026-11-18).
+"""HC002-S1 Gage: the upload texts (episode.json "publish"); approved 2026-11-19 with "near Cavendish" (C01) and the shot 1 cover.
 `--texts-only` writes episode.json only; without it, `episode.py publish` builds projects/hc002-s1/renders/deliverables/
 and publish_social.finish() adds the publish times + the per-platform blocks (change C001). Run that only after the cut
 is approved.
@@ -29,10 +29,10 @@ SOURCES = """SOURCES
 - H. J. Bigelow, "Dr. Harlow's case of recovery from the passage of an iron bar through the head", American Journal of the Medical Sciences, 1850 (with Dr Edward Williams' statement).
 - M. Macmillan, "An Odd Kind of Fame: Stories of Phineas Gage", MIT Press, 2000.
 - "Phineas Gage", Wikipedia (with references). https://en.wikipedia.org/wiki/Phineas_Gage
-- Skull engraving: Harlow 1868 (public domain), via Wikimedia Commons."""
+- Skull engraving: Harlow 1868, plate Fig. 2 (public domain), from the Internet Archive scan of the National Library of Medicine copy."""
 
 DESCRIPTION = (
-    "Cavendish, Vermont, 13 September 1848. Phineas Gage, 25, was a railroad construction foreman, and his employers "
+    "Near Cavendish, Vermont, 13 September 1848. Phineas Gage, 25, was a railroad construction foreman, and his employers "
     "thought him the most efficient and capable foreman they had. His job: pack blasting powder into holes in the rock "
     "with a smooth iron tamping bar, 3 ft 7 in long and 13¼ lb (1.1 m, 6 kg).\n\n"
     "His men caught his attention, he looked over his shoulder, and the iron struck a spark on the rock. The powder "
@@ -44,8 +44,7 @@ DESCRIPTION = (
     "advice.\n\n"
     "More true medical stories: \"The Man With a Window Into His Stomach\" (linked above).")
 
-# comment challenge (plan/comment-challenges.md formats): "Your guess" sets up the long video + S2. DRAFT: needs the
-# user's OK and a score row in comment-challenges.md
+# comment challenge (plan/comment-challenges.md formats): "Your guess" sets up the long video + S2. Approved 2026-11-19
 CHALLENGE = ("\"No longer Gage.\" What do you think changed in him? Your guess 👇 (And did you spot Matt's glasses? 👓)")
 
 TIKTOK = """Phineas Gage, 1848: a 13-pound iron bar went through his head. Minutes later, he spoke.
@@ -79,10 +78,10 @@ def main():
     ep = json.load(open(p, encoding="utf-8"))
     ep["title"] = TITLE
     ep["publish"] = {
-        # DRAFT cover: Harlow's engraving (s6, the image people know); re-check after the full-size file replaces the
-        # 165 px stand-in. The title sits in the TOP band above the bar's end.
-        "cover": {"image": "proj:assets/images/keyframes/s6.png", "title": "Iron Through His Skull", "accent": ["SKULL"],
-                  "kicker": "VERMONT · 1848", "textY": 300, "scale": 1.0, "x": 0, "y": 0},
+        # cover (user 2026-11-19): the shot 1 blast frame at 0.45 s (cover_frame_hc002s1.py, no text layers): the bar
+        # flying against the sky, Gage's silhouette thrown back, the hat in the air. The title sits in the sky band.
+        "cover": {"image": "proj:assets/images/covers/s1-blast.png", "title": "Iron Through His Skull", "accent": ["SKULL"],
+                  "kicker": "VERMONT · 1848", "textY": 300, "scale": 1.12, "x": 0, "y": 6.5},
         "hook_card": HOOK_CARD,
         "youtube": {
             "title": TITLE, "description": DESCRIPTION, "sources": SOURCES,
