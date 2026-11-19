@@ -92,7 +92,7 @@ export interface Shot {
 }
 
 export type Overlay =
-  | { kind: "stamp"; text: string; start: number; end: number; y?: number; x?: number }
+  | { kind: "stamp"; text: string; start: number; end: number; y?: number; x?: number; size?: number }
   | { kind: "location"; text: string; sub?: string; start: number; end: number; y?: number }
   | { kind: "nameTag"; text: string; sub?: string; start: number; end: number; y?: number }
   | { kind: "counter"; to: number; label: string; start: number; end: number; countSeconds?: number; y?: number }
@@ -263,7 +263,8 @@ const fadeOut = (frame: number, dur: number) =>
   interpolate(frame, [dur - 6, dur], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
 // x = the stamp's centre (px of 1080, default the middle); the size shrinks with the text so it never leaves the frame
-const Stamp: React.FC<{ text: string; dur: number; y?: number; x?: number }> = ({ text, dur, y, x }) => {
+// size: the type size (px) when the stamp must fit BESIDE something (user 2026-11-19: "3 ft 7 in" beside the bar, not across it)
+const Stamp: React.FC<{ text: string; dur: number; y?: number; x?: number; size?: number }> = ({ text, dur, y, x, size }) => {
   const theme = React.useContext(ThemeFont);
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -276,7 +277,7 @@ const Stamp: React.FC<{ text: string; dur: number; y?: number; x?: number }> = (
         style={{
           fontFamily: theme.family,
           fontWeight: theme.weight,
-          fontSize: Math.min(210, Math.floor((SAFE.right - SAFE.left - 40) / (0.76 * text.length))) * theme.scale,
+          fontSize: (size ?? Math.min(210, Math.floor((SAFE.right - SAFE.left - 40) / (0.76 * text.length)))) * theme.scale,
           letterSpacing: 6,
           color: BONE,
           WebkitTextStroke: `10px ${OXBLOOD}`,
@@ -417,7 +418,7 @@ const OverlayLayer: React.FC<{ o: Overlay }> = ({ o }) => {
   const dur = Math.round((o.end - o.start) * FPS);
   switch (o.kind) {
     case "stamp":
-      return <Stamp text={o.text} dur={dur} y={o.y} x={o.x} />;
+      return <Stamp text={o.text} dur={dur} y={o.y} x={o.x} size={o.size} />;
     case "location":
       return <Location text={o.text} sub={o.sub} dur={dur} y={o.y} />;
     case "nameTag":

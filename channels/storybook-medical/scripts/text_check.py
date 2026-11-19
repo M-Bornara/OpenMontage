@@ -34,6 +34,8 @@ def _span(o: dict) -> tuple[float, float]:
 def _x_span(o: dict) -> tuple[float, float]:
     if o["kind"] == "stamp" and "x" in o:          # a single letter stamp (A / B) is narrow
         half = 60 + 45 * len(o.get("text", ""))
+        if "size" in o:                            # a sized stamp: ~0.7 em per character + the stroke
+            half = 20 + 0.35 * o["size"] * len(o.get("text", ""))
         return o["x"] - half, o["x"] + half
     return 65, 888
 

@@ -304,8 +304,19 @@ IRON3_T, TAMP3 = w("iron bar", "3"), w("13", "3")
 D3 = (-0.12, -0.993)
 C3 = along((0.42, 0.615), D3, 515)
 IN3, UP3 = along(C3, D3, 1250), along(C3, D3, 45)
+# user 2026-11-19: POUR, THEN BAR. The pour stops 0.75 s before "iron" (the last grains land ~0.33 s before), the flask
+# tips up and the hand + flask slide out to the right (hand_hc002s1.py cut them out of the still) while the bar slides in;
+# the hand is out of frame before the bar reaches the hole. No powder falls beside the bar.
+POUR_END = round(IRON3_T - 0.75, 2)
+H3 = {"w": 0.554, "x": 0.723, "y": 0.3}            # hand_hc002s1.py: the sprite at rest sits exactly on the painted hand
+HAND3 = {"id": "hand3", "sprites": SPR + "hand3/sprites.json", "w": H3["w"], "face": "keys", "depth": {"blur": 0},
+         "motionBlur": {"samples": 8, "shutter": 0.5},
+         "keys": [{"t": 0.0, "x": H3["x"], "y": H3["y"], "rot": 0, "state": "stand"},
+                  {"t": POUR_END, "x": H3["x"], "y": H3["y"], "rot": 0},
+                  {"t": round(IRON3_T - 0.6, 2), "x": H3["x"] + 0.01, "y": H3["y"] - 0.01, "rot": 7, "ease": "out"},   # tips up: the pour stops
+                  {"t": round(IRON3_T - 0.12, 2), "x": 1.45, "y": H3["y"] - 0.06, "rot": 10, "ease": "in"}]}         # out right
 IRON3 = iron([{"t": 0.0, "x": IN3[0], "y": IN3[1], "rot": -97, "state": "rod"},
-              {"t": round(IRON3_T - 0.32, 2), "x": IN3[0], "y": IN3[1], "rot": -97},
+              {"t": round(IRON3_T - 0.4, 2), "x": IN3[0], "y": IN3[1], "rot": -97},
               {"t": IRON3_T, "x": C3[0], "y": C3[1], "rot": -97, "ease": "out", "contact": {"squash": 0.04}},
               {"t": round(TAMP3 - 0.25, 2), "x": UP3[0], "y": UP3[1], "rot": -97, "ease": "out"},
               {"t": TAMP3, "x": C3[0], "y": C3[1], "rot": -97, "ease": "in", "contact": {"squash": 0.05}}], 1.0, spr="iron-thick")
@@ -349,8 +360,8 @@ ALIVE = {
                     "every": 0.45, "life": 3.2, "size": 300, "color": "205,200,190", "opacity": 0.2}]),
     "3": dict(motion={"type": "push", "from": 1.02, "to": 1.08, "x": 0.5, "y": -0.5},
               fx=[{"kind": "particles", "style": "grains", "x": 0.466, "y": 0.535, "tx": 0.425, "ty": 0.607, "spread": 0.012,
-                   "every": 0.034, "life": 0.42, "size": 7, "from": 0.05, "to": round(IRON3_T - 0.4, 2)}],
-              layers={"bg": f"proj:assets/images/keyframes/s3.png", "actors": [IRON3]}),
+                   "every": 0.034, "life": 0.42, "size": 7, "from": 0.05, "to": POUR_END}],
+              layers={"bg": f"proj:assets/images/keyframes/s3-nohand.png", "actors": [IRON3, HAND3]}),
     "5": dict(motion={"type": "push", "from": 1.03, "to": 1.1, "x": 0, "y": 1.0}, hit={"at": SPARK5, "strength": 3.4, "seconds": 0.6},
               captionY=LOW,
               fx=[{"kind": "spark", "x": 0.495, "y": 0.48, "r": 0.05, "from": STRUCK, "to": round(STRUCK + 0.3, 2)},
@@ -410,10 +421,10 @@ overlays = [
     # the place stamp on 2b, the wide of the cut (rough cut 1: on 2a it sat on Gage's hat or under the caption, and
     # text_check's caption box leaves no room above his raised hand); 2b's caption is LOW
     {"kind": "stamp", "start": starts["2b"] + 0.1, "end": starts["2b"] + 2.3, "text": "CAVENDISH, VERMONT · 1848", "y": TOP},
-    # the bar's size in two short stamps (one long stamp shrank to ~31 px type on the hand): the length when the bar slides
-    # in on "iron", the weight on "13 pounds"; y 1000 = the rock band under the flask (only the thin bar crosses it)
-    {"kind": "stamp", "start": starts["3"] + IRON3_T + 0.1, "end": starts["3"] + TAMP3 - 0.1, "text": "3 ft 7 in · 1.1 m", "y": 1000},
-    {"kind": "stamp", "start": starts["3"] + TAMP3, "end": starts["3"] + TAMP3 + 1.6, "text": "13¼ lb · 6 kg", "y": 1000},
+    # the bar's length, BESIDE the bar (user 2026-11-19: less text; the weight stamp is gone, the caption says 13 POUNDS;
+    # metric stays in the description). The bar runs up-left from the hole (x ~0.42): at y 640-760 it covers x ~330-440,
+    # the stamp sits right of it, inside the safe zone (x 65-888), on the wall the hand has left
+    {"kind": "stamp", "start": starts["3"] + IRON3_T + 0.1, "end": starts["3"] + TAMP3 + 1.0, "text": "3 ft 7 in", "y": 640, "x": 690, "size": 84},
     {"kind": "stamp", "start": starts["7"] + LANDED + 0.1, "end": starts["7"] + 1.9, "text": "≈ 80 ft (25 m)", "y": MID},
 ]
 # rough cut 1: a stamp never outlives its shot (the real narration made shot 7 1.62 s: "≈ 80 FT" ran into shot 8's silence)
@@ -427,7 +438,7 @@ SFX = [
     S_("whoosh", starts["1"] + 0.82, gain_db=-11),     # v3: on the whip up
     S_("metal-clank", starts["2a"] + 0.2, gain_db=-18), S_("crow-caw", starts["2a"] + 1.9, gain_db=-22),
     S_("metal-clank", starts["2b"] + 0.15, gain_db=-21), S_("metal-clank", starts["2b"] + 0.85, gain_db=-23),
-    S_("sand-pour", starts["3"] + 0.05, gain_db=-18, dur=round(IRON3_T - 0.35, 2), query="sand pouring"),
+    S_("sand-pour", starts["3"] + 0.05, gain_db=-18, dur=round(POUR_END + 0.3, 2), fade_out=0.25, query="sand pouring"),
     S_("stone-grind", starts["3"] + IRON3_T - 0.2, gain_db=-16, dur=0.5),
     S_("metal-clank", starts["3"] + TAMP3, gain_db=-16),
     S_("metal-clank", starts["5"] + STRUCK, gain_db=-12), S_("boom-low", starts["5"] + SPARK5, gain_db=-5),
