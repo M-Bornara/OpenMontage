@@ -58,6 +58,19 @@ def silhouette(name: str, out: str, flat: bool = False):
             dark = np.stack([8 + 24 * l2, 9 + 26 * l2, 13 + 29 * l2], axis=-1)        # shirt ~29, face ~18, trousers ~9: no features
             if flat:                                        # Rule 0b: one black shape, nothing inside it
                 dark = np.broadcast_to(np.array([8, 9, 12], np.float32), dark.shape)
+                # user 2026-11-19 (v3 approved with this fix): at the x2.8 zoom the keyed edge + the bright rim showed as a
+                # jagged light outline. Choke the matte ~3 px and smooth it (erode -> blur -> smoothstep = a clean
+                # anti-aliased curve), keep the black flat to the very edge, and only a SOFT warm rim on the blast side
+                # (the hole is beyond him, up-left in the frame): the black meets the dust cleanly.
+                al = Image.fromarray(a[..., 3].astype(np.uint8)).filter(ImageFilter.MinFilter(5)).filter(ImageFilter.GaussianBlur(1.6))
+                s_ = np.clip((np.array(al, np.float32) / 255 - 0.45) / 0.2, 0, 1)
+                al = s_ * s_ * (3 - 2 * s_)
+                band = np.clip(al - shifted(al, 6, 5), 0, 1) * al                # edges facing up-left only
+                band = np.array(Image.fromarray((band * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(2.5)), np.float32) / 255
+                warm = np.array([226, 186, 136], np.float32)
+                rgb = dark * (1 - 0.35 * band[..., None]) + warm * 0.35 * band[..., None]
+                Image.fromarray(np.dstack([rgb, al * 255]).clip(0, 255).astype(np.uint8), "RGBA").save(dst / f)
+                continue
             r = rim(a[..., 3], 7, 4)
             r = np.array(Image.fromarray((r * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(1.2))) / 255
             warm = np.array([250, 230, 190], np.float32)
@@ -105,8 +118,10 @@ if __name__ == "__main__":
     import sys
     if "--black-only" in sys.argv:
         silhouette("gage-s1", "gage-s1-black", flat=True)
+        silhouette("hat", "hat-black", flat=True)
         raise SystemExit
     lit_iron()
     silhouette("gage-s1", "gage-s1-sil")
     silhouette("hat", "hat-sil")
     silhouette("gage-s1", "gage-s1-black", flat=True)
+    silhouette("hat", "hat-black", flat=True)

@@ -227,7 +227,7 @@ TRAILS = [{**IRON, "id": f"iron-trail{i}", "opacity": op, "xfade": 0, "motionBlu
           for i, (lag, op) in enumerate(((0.04, 0.38), (0.08, 0.18)), 1)]
 FLASH1 = {"kind": "flash", "x": HEAD1[0], "y": HEAD1[1] - 0.01, "r": 0.13, "at": 0, "rise": 0.1, "dur": 0.46, "start": 0.6,
           "lift": 0.14}
-HAT = {"id": "hat", "sprites": SPR + "hat-sil/sprites.json", "w": 0.13, "face": "keys", "depth": {"blur": 0},
+HAT = {"id": "hat", "sprites": SPR + "hat-black/sprites.json", "w": 0.13, "face": "keys", "depth": {"blur": 0},
        "states": {"side": {}, "tumble": {}},
        "keys": [{"t": 0.0, "x": 0.475, "y": 0.632, "rot": -26, "state": "tumble"},   # already knocked off, clear of the exit point
                 {"t": 0.5, "x": 0.44, "y": 0.59, "rot": -70},
