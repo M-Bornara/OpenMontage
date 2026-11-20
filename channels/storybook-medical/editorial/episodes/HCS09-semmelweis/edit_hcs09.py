@@ -113,9 +113,13 @@ c.s("hands-washing", t + 0.2, query="hand washing")
 # lenses; now on the right lens's painted highlight (measured on s6b.png: lens x 0.57-0.65, highlight 0.59, 0.34)
 t = c.at("deaths fell")
 hundred = c.at("one in 100")
-c.shot(t, KF + "s6b.png", push(0.5, 0.5, 1.1), cap=LOW,
+# user 2026-11-20: the LOW captions covered the hands (they reached y ~1230 of the 1248 safe zone). The picture is raised
+# (fixed-framing keys, x1.22 -> x1.24, up 11-12 %) so the hands end ~y 1035-1050 (captionY max 1038) and the captions sit under the fingertips;
+# the 1 IN 100 stamp moves into the gap between Matt's glasses and the hands (it would land on the glasses at TOP).
+c.shot(t, KF + "s6b.png", {"type": "keys", "keys": [{"t": 0, "scale": 1.22, "x": 0, "y": -11},
+                                                    {"t": 3.0, "scale": 1.24, "x": 0, "y": -12, "ease": "linear"}]}, cap=1038,
        fx=[{"kind": "glint", "x": 0.59, "y": 0.34, "at": rel(hundred, t) + 0.8, "size": 26}])
-c.o("stamp", hundred, hundred + 1.2, text="1 IN 100", y=TOP); c.s("stamp-thud", hundred + 0.05)
+c.o("stamp", hundred, hundred + 1.2, text="1 IN 100", y=520); c.s("stamp-thud", hundred + 0.05)
 # s7a: the doctors refuse
 t = c.at("but many")
 c.shot(t, KF + "s7a.png", push(0.4, 0.4, 1.1), cap=TOP)
