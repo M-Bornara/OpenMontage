@@ -71,7 +71,7 @@ def check(pid: str, only: list[str] | None = None, verbose: bool = True) -> list
         m = match(a, b) if a is not None and b is not None else None
         return m[0] if m and m[0] >= MIN_INLIERS and m[1] >= MIN_FRAC else 0
 
-    out = []
+    out, notes = [], []
     for n in todo:
         me = img(kdir / f"{n}.png")
         for r in kfs[n].get("refs", []):
@@ -83,9 +83,14 @@ def check(pid: str, only: list[str] | None = None, verbose: bool = True) -> list
             if o == n or (o in todo and story.index(o) < story.index(n)):
                 continue
             if k := same(img(kdir / f"{o}.png"), me):
-                out.append(f"L56 {n}: the same view as {o} ({k} matching points): two shots, one background")
+                # back to back (keyframe order) = a jump cut; a later return to the place is allowed (user 2026-11-20)
+                if abs(story.index(o) - story.index(n)) == 1:
+                    out.append(f"L56 {n}: the same view as {o} ({k} matching points), back to back: a jump cut")
+                else:
+                    notes.append(f"  note {n}: the same view as {o} ({k} matching points), not adjacent: fine if the "
+                                 "return is on purpose")
     if verbose:
-        print(*(out or [f"view check {pid}: {len(todo)} shot(s), no copied backgrounds"]), sep="\n")
+        print(*(out or [f"view check {pid}: {len(todo)} shot(s), no copied backgrounds"]), *notes, sep="\n")
     return out
 
 

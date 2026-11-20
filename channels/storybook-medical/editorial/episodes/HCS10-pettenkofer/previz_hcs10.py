@@ -39,7 +39,7 @@ SHOTS = [
         ("grad", (150, 140, 120), (80, 70, 60)), ("rect", 0.0, 0.0, 0.22, 0.6, WIN),
         ("ellipse", 0.3, 0.3, 0.74, 0.62, SKIN), ("rect", 0.24, 0.6, 0.86, 1.0, COAT),
         ("ellipse", 0.38, 0.5, 0.64, 0.66, (190, 190, 190)), ("rect", 0.14, 0.34, 0.26, 0.5, GLASS, "flask"),
-        ("text", 0.52, 0.72, "Koch: grey beard, spectacles")]},
+        ("text", 0.52, 0.72, "Koch: dark beard, rimless specs")]},
     {"name": "3b", "zone": "TOP", "text": "caption · name tag Pettenkofer, 73", "shapes": [
         ("grad", (120, 100, 80), (70, 56, 44)), ("poly", [(0, 0.42), (1, 0.3), (1, 0.4), (0, 0.52)], WOOD),
         ("poly", [(0, 0.55), (1, 0.43), (1, 0.53), (0, 0.65)], WOOD), ("fig", 0.5, 1.02, 0.68, {}, "Pettenkofer, finger up"),
@@ -68,8 +68,8 @@ SHOTS = [
         ("poly", [(0.3, 0.62), (0.7, 0.58), (0.74, 0.7), (0.32, 0.74)], SKIN), ("text", 0.52, 0.8, "his hand grips the edge"),
         ("text", 0.5, 0.15, "high angle; face out of frame; colour drains")]},
     {"name": "8", "zone": "LOW", "text": "caption · stamp 1 WEEK TOP", "shapes": [
-        ("grad", PAPER, (200, 186, 156)), ("ellipse", 0.14, 0.3, 0.86, 0.7, (240, 236, 220)),
-        ("text", 0.5, 0.5, "Meyers plate c.1885: comma bacilli"), ("text", 0.5, 0.78, "a lens slides over it")]},
+        ("grad", PAPER, (200, 186, 156)), ("rect", 0.36, 0.06, 0.64, 0.94, (60, 56, 52), "Meyers c.1885: LEFT tube only"),
+        ("line", 0.5, 0.3, 0.5, 0.8, WHITE, 3), ("text", 0.5, 0.97, "tilt down the culture; glow on 'swarmed'")]},
     {"name": "9", "zone": "TOP", "text": "caption", "shapes": [
         ("grad", (210, 196, 160), WALL), ("rect", 0.0, 0.08, 0.14, 0.7, (240, 226, 190)), ("rect", 0.34, 0.04, 0.92, 0.62, WOOD, "bookcase"),
         ("rect", 0.1, 0.66, 0.9, 0.76, WOOD, "desk"), ("fig", 0.58, 0.8, 0.5, {"sitting": True}, "writing, a faint smile"),

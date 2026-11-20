@@ -219,3 +219,8 @@ Every generation round teaches us something. A lesson only counts once it's **en
   inliers; a shared prop / face scores 47–77) is shown to the user before the edit.
 - **Per episode:** a `backgrounds-v1.md` sheet (one written background per shot, from the set map, neighbours checked)
   goes on the approval page with the storyboard (HCS10 first).
+- **Refined (user 2026-11-20):** "no two shots share the same background" must still allow returning to a place on
+  purpose from a different camera. L55b now fails only BACK-TO-BACK shots with the same BACKGROUND, or a later shot with
+  the same camera (position + facing) and background; L36 compares position too. view_check L56: a copied reference or a
+  back-to-back same view fails; a same view later in the film is a note. Already-packaged Shorts: only back-to-back
+  jump cuts get fixed, free fixes only (reframe / crop / reorder); a paid re-roll needs the user's OK.

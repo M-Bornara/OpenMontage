@@ -222,9 +222,16 @@ good = {"aspect": "9:16", "refs": ["ref:sheet-x"], "prompt": prompt_kit.set_bloc
         + prompt_kit.camera("by the window", "east", "the long bench with flasks and a brass microscope, the shelves of jars behind")}
 twin = dict(good, prompt=good["prompt"].replace("MS,", "CU,").replace("SHOT: medium", "SHOT: close"))
 seq = prompt_kit.lint_sequence({"a": good, "b": twin})
+# a later return to the same place from ANOTHER camera passes (user 2026-11-20); the same camera later still fails
+other = {"aspect": "9:16", "refs": [], "prompt": prompt_kit.framing("LS", "eye level", "24 mm", "a street") + " "
+         + prompt_kit.camera("on the kerb", "south", "a row of brick houses with green doors and a gas lamp on the corner")}
+back = dict(good, prompt=good["prompt"].replace("standing by the window", "standing at the door").replace("facing east", "facing west"))
+ret_ok = not [m for m in prompt_kit.lint_sequence({"a": good, "x": other, "c": back}) if m.startswith(("L55b", "L36"))]
+ret_bad = any(m.startswith("L55b") for m in prompt_kit.lint_sequence({"a": good, "x": other, "c": twin}))
 ok55 = (has_code(l55_bad, "L55") and all(has_code(x, "L40") for x in l47c_bad)
-        and not [i for i in prompt_kit.lint("a", good) if re.match(r"L(37|40|47b|55)", i)] and any(m.startswith("L55b") for m in seq))
+        and not [i for i in prompt_kit.lint("a", good) if re.match(r"L(37|40|47b|55)", i)] and any(m.startswith("L55b") for m in seq)
+        and ret_ok and ret_bad)
 status = "PASS" if ok55 else "FAIL"
-print(f"{status} L55 thin setting (HCS09 s1b), L40 kf: reference without a set (HCS08 s2/s3), L55b shared background caught; full spec passes")
+print(f"{status} L55 thin setting (HCS09 s1b), L40 kf: reference without a set (HCS08 s2/s3), L55b back-to-back / same-camera background caught, a return from another camera passes; full spec passes")
 ok = ok and status == "PASS"
 sys.exit(0 if ok else 1)

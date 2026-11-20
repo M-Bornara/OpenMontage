@@ -148,7 +148,7 @@ def lint_sequence(keyframes: dict[str, dict]) -> list[str]:
     def cam(spec):
         m = re.search(r"camera: standing (.+?), facing (.+?)\. background \(exactly this, nothing else\): (.+?)\.",
                       spec.get("prompt", "").lower())
-        return (m.group(2), m.group(3)) if m else None
+        return (m.group(2), m.group(3), m.group(1)) if m else None   # facing, background, position
     names, out = list(keyframes), []
     for a, b in zip(names, names[1:]):
         (sa, za), (sb, zb) = key(keyframes[a]), key(keyframes[b])
@@ -164,16 +164,21 @@ def lint_sequence(keyframes: dict[str, dict]) -> list[str]:
             if not ca or not cb:
                 out.append(f"L36: {b if ca else a}: same set as {a if ca else b} ({sa}) without a camera() line "
                            "(position, facing, exact background)")
-            elif ca == cb:
-                out.append(f"L36: {b}: same set, facing and background as {a}; the two images will look the same")
-    # L55b: the same BACKGROUND text on two story frames, whatever their SET lines say (a shared constant pasted twice)
-    seen: dict[str, str] = {}
-    for n in story:
-        c = cam(keyframes[n])
-        if c and c[1] in seen:
-            out.append(f"L55b: {n}: the same BACKGROUND as {seen[c[1]]}; give each shot its own background from the map")
-        elif c:
-            seen[c[1]] = n
+            elif ca == cb:   # a return to the place from ANOTHER position or facing is allowed (user 2026-11-20)
+                out.append(f"L36: {b}: same set, camera position, facing and background as {a}; the two images will look the same")
+    # L55b: the same BACKGROUND text on two story frames, whatever their SET lines say (a shared constant pasted twice),
+    # fails when the two shots are BACK TO BACK (a jump cut) or share the camera (same position and facing). Returning
+    # to a place on purpose later, from a different camera, is fine (user 2026-11-20).
+    for i, a in enumerate(story):
+        for j in range(i + 1, len(story)):
+            b = story[j]
+            ca, cb = cam(keyframes[a]), cam(keyframes[b])
+            if not ca or not cb or ca[1] != cb[1]:
+                continue
+            if j == i + 1:
+                out.append(f"L55b: {b}: the same BACKGROUND as {a}, back to back: a jump cut; give it its own background")
+            elif (ca[0], ca[2]) == (cb[0], cb[2]):
+                out.append(f"L55b: {b}: the same camera and BACKGROUND as {a}; a return to a place needs another camera")
     return out
 
 
