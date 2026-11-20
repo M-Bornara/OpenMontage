@@ -40,7 +40,7 @@ SHEETS = {
     "pose-gage-s10": dict(out="gage-s10", names=["rest-0", "hand-0", "wave-0"], still="s10.png", match="hand",
                           box=(0.42, 0.35, 0.66, 0.60)),
     "pose-friend-s12": dict(out="friend-s12", names=["up-0", "lean-0"], still="s12.png", match="lean",
-                            box=(0.32, 0.27, 0.63, 0.99), skip=True),   # v1 (9:16) repainted the scene: re-roll asked
+                            box=(0.32, 0.27, 0.63, 0.99), skip=True),   # v1 (9:16) repainted the scene; user 2026-11-20: no re-roll, 12 stays a held beat
 }
 
 

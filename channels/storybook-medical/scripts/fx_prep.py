@@ -115,6 +115,22 @@ def _key_alpha(rgb: np.ndarray, key: np.ndarray, lo: float = 38, hi: float = 110
     return np.clip(fg, 0, 255).astype(np.uint8), a
 
 
+def _despill_edge(rgba: np.ndarray, key: np.ndarray, band: int = 5) -> np.ndarray:
+    """The key colour that survives in the opaque ink line next to the background (a dark outline reads as fully
+    opaque, so the unmixing leaves its green cast: a dark-green line round Gage's fingers). Within `band` px of the
+    transparent area, the key's dominant channel is clamped to the larger of the other two. Only the edge band, so a
+    green object's own colour inside the figure is kept."""
+    import cv2
+    k = int(np.argmax(key))
+    edge = cv2.dilate((rgba[..., 3] < 128).astype(np.uint8), np.ones((2 * band + 1,) * 2, np.uint8)).astype(bool)
+    out = rgba.copy()
+    others = np.delete(out[..., :3], k, axis=2).max(axis=2)
+    ch = out[..., k]
+    fix = edge & (ch > others)
+    ch[fix] = others[fix]
+    return out
+
+
 def sheet(image: str, names: list[str], out_dir: str | None = None, how: str = "key", align: str = "phase",
           pad: int = 24, anchor=(0.5, 0.5), min_area: float = 0.002) -> Path:
     """Cut a sprite sheet (one object, its states side by side on a flat background) or a pose sheet into frames.
@@ -171,6 +187,7 @@ def sheet(image: str, names: list[str], out_dir: str | None = None, how: str = "
         y0, y1, x0, x1 = ys.min(), ys.max() + 1, xs.min(), xs.max() + 1
         rgba = np.dstack([fg[y:y + h, x:x + w][y0:y1, x0:x1], alpha[y0:y1, x0:x1]])
         cuts.append(rgba)
+    cuts = [_despill_edge(c, key) for c in cuts]
     cw = max(c.shape[1] for c in cuts) + 2 * pad
     ch = max(c.shape[0] for c in cuts) + 2 * pad
     out = Path(out_dir) if out_dir else src.parent / src.stem
@@ -178,12 +195,14 @@ def sheet(image: str, names: list[str], out_dir: str | None = None, how: str = "
     frames: dict[str, list[str]] = {}
     ref = None
     placed = []
+    # work on a canvas with a wide margin M: the phase shift moves a frame towards the first one, and a raised arm then
+    # slid off a canvas sized for the unshifted cut-outs (HC002-S1 2a, user 2026-11-20: "the fingers of gage is cut out")
+    Mg = max(cw, ch) // 2
     for name, c in zip(names, cuts):
-        canvas = np.zeros((ch, cw, 4), np.uint8)
+        canvas = np.zeros((ch + 2 * Mg, cw + 2 * Mg, 4), np.uint8)
         h, w = c.shape[:2]
         ox, oy = (cw - w) // 2, (ch - h) // 2 if align != "bottom" else ch - pad - h
-        canvas[oy:oy + h, ox:ox + w] = c
-        state = name.rsplit("-", 1)[0]
+        canvas[Mg + oy:Mg + oy + h, Mg + ox:Mg + ox + w] = c
         if align == "phase":
             core = cv2.erode((canvas[..., 3] > 240).astype(np.float32), np.ones((3, 3), np.uint8))   # the solid body
             if ref is None:
@@ -191,10 +210,22 @@ def sheet(image: str, names: list[str], out_dir: str | None = None, how: str = "
             else:
                 (dx, dy), _ = cv2.phaseCorrelate(ref, core)
                 M = np.float32([[1, 0, -dx], [0, 1, -dy]])
-                canvas = cv2.warpAffine(canvas, M, (cw, ch), flags=cv2.INTER_LINEAR, borderValue=(0, 0, 0, 0))
-        Image.fromarray(canvas, "RGBA").save(out / f"{name}.png")
-        frames.setdefault(state, []).append(f"{name}.png")
+                canvas = cv2.warpAffine(canvas, M, canvas.shape[1::-1], flags=cv2.INTER_LINEAR, borderValue=(0, 0, 0, 0))
         placed.append(canvas)
+    # grow the canvas SYMMETRICALLY only as far as a shifted frame overflows it (+ pad): its centre stays the same
+    # body point, and sheets that never overflowed come out exactly as before
+    ys, xs = np.nonzero(np.max([p[..., 3] for p in placed], axis=0) > 8)
+    over_x = int(max(0, Mg - xs.min(), xs.max() + 1 - (Mg + cw)))
+    over_y = int(max(0, Mg - ys.min(), ys.max() + 1 - (Mg + ch)))
+    ex = over_x + pad if over_x else 0
+    ey = over_y + pad if over_y else 0
+    if ex or ey:
+        print(f"  {src.name}: a shifted frame overflowed the canvas by {over_x},{over_y} px: canvas grown")
+    placed = [p[Mg - ey:Mg + ch + ey, Mg - ex:Mg + cw + ex] for p in placed]
+    cw, ch = cw + 2 * ex, ch + 2 * ey
+    for name, canvas in zip(names, placed):
+        Image.fromarray(canvas, "RGBA").save(out / f"{name}.png")
+        frames.setdefault(name.rsplit("-", 1)[0], []).append(f"{name}.png")
     if anchor == "solid":
         core = cv2.erode((placed[0][..., 3] > 240).astype(np.uint8), np.ones((5, 5), np.uint8))
         ys, xs = np.nonzero(core)
