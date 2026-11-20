@@ -37,6 +37,8 @@ def _x_span(o: dict) -> tuple[float, float]:
         if "size" in o:                            # a sized stamp: ~0.7 em per character + the stroke
             half = 20 + 0.35 * o["size"] * len(o.get("text", ""))
         return o["x"] - half, o["x"] + half
+    if o["kind"] == "nameTag" and o.get("right"):   # right-aligned tag (Gage 2a: the raised hand is on the left)
+        return 888 - 600, 888                        # right edge at the Shorts safe zone (x 888)
     return 65, 888
 
 

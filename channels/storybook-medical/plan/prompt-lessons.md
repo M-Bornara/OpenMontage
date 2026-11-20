@@ -181,3 +181,13 @@ Every generation round teaches us something. A lesson only counts once it's **en
   the storyboard row says "same-camera cut intended". Free fix for Gage: 2a reframed as a tight MCU on a soft-background
   still (mcu2a_hc002s1.py), size ratio x0.37 = close -> wide.
 
+## L53: no animated pieces cut out of a still (HC002-S1 Gage, user 2026-11-19)
+- **Failure:** the 2a arm wave, the 2b hammer swings and the 0:43 head + hand lean (shot 12) were pieces cut out of the
+  still (`wag` / `nudge` over an inpainted plate). The edges and the filled holes showed: "do not just grab a piece of
+  picture and keep animating it". Also: 2a raised his LEFT hand, the 2b wide his RIGHT.
+- **Rule:** anything that moves is a separately generated prop / actor sprite (layered-shot skill), or the shot holds
+  still (camera + haze). A cut-out fx (`wag`, `shake`, `nudge`) passes only with `"cut": "approved"` after the user saw
+  the cut and called it perfect.
+- **Lint:** `layers.lint_cutouts`, run by `episode.py build` (fails; `"cutout_lint": "warn"` for old cuts).
+- **Continuity:** the same character raises the same hand across a cut (2a mirrored to match 2b).
+

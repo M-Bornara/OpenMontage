@@ -94,7 +94,7 @@ export interface Shot {
 export type Overlay =
   | { kind: "stamp"; text: string; start: number; end: number; y?: number; x?: number; size?: number }
   | { kind: "location"; text: string; sub?: string; start: number; end: number; y?: number }
-  | { kind: "nameTag"; text: string; sub?: string; start: number; end: number; y?: number }
+  | { kind: "nameTag"; text: string; sub?: string; start: number; end: number; y?: number; right?: boolean }
   | { kind: "counter"; to: number; label: string; start: number; end: number; countSeconds?: number; y?: number }
   | { kind: "verdict"; text: string; good: boolean; start: number; end: number }
   | { kind: "gauge"; to: number; unit: string; start: number; end: number; dropSeconds?: number }
@@ -292,13 +292,13 @@ const Stamp: React.FC<{ text: string; dur: number; y?: number; x?: number; size?
   );
 };
 
-const Card: React.FC<{ children: React.ReactNode; dur: number; top: number }> = ({ children, dur, top }) => {
+const Card: React.FC<{ children: React.ReactNode; dur: number; top: number; right?: boolean }> = ({ children, dur, top, right }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const s = spring({ frame, fps, config: { damping: 16, stiffness: 160 } });
-  const x = interpolate(s, [0, 1], [-120, 0]);
+  const x = interpolate(s, [0, 1], [right ? 120 : -120, 0]);
   return (
-    <div style={{ position: "absolute", left: 70, top, opacity: s * fadeOut(frame, dur), transform: `translateX(${x}px)` }}>
+    <div style={{ position: "absolute", ...(right ? { right: 192 } : { left: 70 }), top, opacity: s * fadeOut(frame, dur), transform: `translateX(${x}px)` }}>
       {children}
     </div>
   );
@@ -312,8 +312,8 @@ const Location: React.FC<{ text: string; sub?: string; dur: number; y?: number }
   </Card>
 );
 
-const NameTag: React.FC<{ text: string; sub?: string; dur: number; y?: number }> = ({ text, sub, dur, y }) => (
-  <Card dur={dur} top={y ?? 250}>
+const NameTag: React.FC<{ text: string; sub?: string; dur: number; y?: number; right?: boolean }> = ({ text, sub, dur, y, right }) => (
+  <Card dur={dur} top={y ?? 250} right={right}>
     <div
       style={{
         background: "rgba(34,38,42,0.82)",
@@ -422,7 +422,7 @@ const OverlayLayer: React.FC<{ o: Overlay }> = ({ o }) => {
     case "location":
       return <Location text={o.text} sub={o.sub} dur={dur} y={o.y} />;
     case "nameTag":
-      return <NameTag text={o.text} sub={o.sub} dur={dur} y={o.y} />;
+      return <NameTag text={o.text} sub={o.sub} dur={dur} y={o.y} right={o.right} />;
     case "counter":
       return <Counter to={o.to} label={o.label} dur={dur} countSeconds={o.countSeconds} y={o.y} />;
     case "verdict":

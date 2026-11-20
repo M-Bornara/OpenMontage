@@ -63,6 +63,21 @@ def lint_motion(shots: list[dict]) -> list[str]:
             for s in shots if not s.get("breath") and not moving_layers(s)]
 
 
+# L53 (user 2026-11-19, Gage S1: the 2a arm, the 2b hammers, the 0:43 head + hand): "do not just grab a piece of picture
+# and keep animating it". A wag / shake / nudge moves a piece CUT OUT OF THE STILL over an inpainted plate: the edge and the
+# filled hole show. Anything that moves is a separately generated prop / actor sprite (layered-shot skill), or the shot
+# holds still. A cut-out fx passes only with "cut": "approved" (the user saw the cut and called it perfect).
+CUTOUT_FX = {"wag", "shake", "nudge"}
+
+
+def lint_cutouts(shots: list[dict]) -> list[str]:
+    return [f"L53: shot {s['id']} fx {e['kind']} ({Path(str(e.get('mask', ''))).name}): a piece cut out of the still is "
+            f"animated; generate it as a separate prop / actor sprite, or drop the move (\"cut\": \"approved\" only after "
+            f"the user OKs the cut)"
+            for s in shots for e in s.get("fx", [])
+            if e.get("kind") in CUTOUT_FX and str(e.get("cut", "")).lower() != "approved"]
+
+
 HERO_MIN = 1 / 3   # user 2026-11-18: "in a HERO shot the moving subject fills at least 1/3 of the frame" (phone)
 
 

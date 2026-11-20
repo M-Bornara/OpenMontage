@@ -353,14 +353,14 @@ ALIVE = {
     # user 2026-11-19: s2a and s2b share the set plate's camera (a jump cut, the crew popping in). 2a is now a tight MCU on
     # Gage (hat, face, raised hand, chest) on s2a-dof.png (mcu2a_hc002s1.py: the cliff soft behind him), so 2a -> 2b
     # cuts close -> wide. The caption (TOP) and the name tag sit on the soft cliff above him; a slow push in.
-    "2a": dict(motion={"type": "keys", "keys": [cam(0.0, 2.8, 0.425, 0.36), cam(dur["2a"], 2.95, 0.425, 0.36, ease="linear")]},
-               source=KF + "s2a-dof.png",
-               fx=[wag("s2a-dof", "arm", [0.545, 0.39], 8, 0.55, 0.25, 0.25 + 2 * 0.55),
-                   {"kind": "particles", "style": "haze", "x": 0.7, "y": 0.62, "tx": 0.85, "ty": 0.55, "spread": 0.15,
+    # user 2026-11-19 (L53): no arm wave cut out of the still (not a clean cut); the MCU is MIRRORED so he raises the same
+    # (right) hand as in the 2b wide. Motion = the slow push + the dust haze.
+    "2a": dict(motion={"type": "keys", "keys": [cam(0.0, 2.8, 0.575, 0.36), cam(dur["2a"], 2.95, 0.575, 0.36, ease="linear")]},
+               source=KF + "s2a-dof-mirror.png",
+               fx=[{"kind": "particles", "style": "haze", "x": 0.3, "y": 0.62, "tx": 0.15, "ty": 0.55, "spread": 0.15,
                     "every": 0.4, "life": 3.0, "size": 260, "color": "214,196,160", "opacity": 0.22}]),
     "2b": dict(motion={"type": "slide", "from": 2.5, "to": -2.5, "scale": 1.1},
-               fx=[wag("s2b", "hammer1", [0.31, 0.678], 7, 0.7, 0.0), wag("s2b", "hammer2", [0.728, 0.757], 5, 0.7, 0.35),
-                   {"kind": "particles", "style": "haze", "x": 0.3, "y": 0.45, "tx": 0.5, "ty": 0.3, "spread": 0.2,
+               fx=[{"kind": "particles", "style": "haze", "x": 0.3, "y": 0.45, "tx": 0.5, "ty": 0.3, "spread": 0.2,
                     "every": 0.45, "life": 3.2, "size": 300, "color": "205,200,190", "opacity": 0.2}]),
     "3": dict(motion={"type": "push", "from": 1.02, "to": 1.08, "x": 0.5, "y": -0.5},
               fx=[{"kind": "particles", "style": "grains", "x": 0.466, "y": 0.535, "tx": 0.425, "ty": 0.607, "spread": 0.012,
@@ -379,21 +379,19 @@ ALIVE = {
                    "from": LANDED, "to": round(LANDED + 0.35, 2)}],
               layers={"bg": f"proj:assets/images/keyframes/s7.png", "actors": [IRON7]}),
     "9": dict(motion={"type": "slide", "from": -2.5, "to": 2.5, "scale": 1.1},
-              fx=[wag("s9", "ox1", [0.40, 0.53], 2.5, 1.0, 0.0), wag("s9", "ox2", [0.14, 0.52], 2.5, 1.15, 0.3),
-                  {"kind": "particles", "style": "haze", "x": 0.55, "y": 0.66, "tx": 0.75, "ty": 0.62, "spread": 0.12,
+              fx=[{"kind": "particles", "style": "haze", "x": 0.55, "y": 0.66, "tx": 0.75, "ty": 0.62, "spread": 0.12,
                    "every": 0.3, "life": 2.4, "size": 240, "color": "214,190,150", "opacity": 0.28}]),
     "10": dict(motion={"type": "push", "from": 1.02, "to": 1.035, "x": 0, "y": 0},
-               fx=[wag("s10", "hand", [0.47, 0.49], 7, 0.6, round(SAY10 - 0.1, 2), round(SAY10 - 0.1 + 2 * 0.6, 2)),
-                   {"kind": "glint", "x": 0.165, "y": 0.392, "at": round(BIZ + 0.1, 2), "size": 34}]),
+               breath=True,      # L53: the hand wag (a cut-out) is gone; a held beat (a generated hand prop would be the fix)
+               fx=[{"kind": "glint", "x": 0.165, "y": 0.392, "at": round(BIZ + 0.1, 2), "size": 34}]),
     "11": dict(motion={"type": "push", "from": 1.03, "to": 1.12, "x": -1.0, "y": 1.0},
                fx=[{"kind": "travel", "points": [[0.74, 0.185], [0.635, 0.40]], "at": round(KEPT - 0.1, 2), "dur": 0.35,
                     "colors": ["rgba(255,240,205,1)", "rgba(255,206,130,1)"], "width": 10},
                    {"kind": "travel", "points": [[0.595, 0.52], [0.385, 0.925]], "at": round(KEPT + 0.22, 2), "dur": 0.55,
                     "colors": ["rgba(255,240,205,1)", "rgba(255,206,130,1)"], "width": 10}]),
     "12": dict(motion={"type": "push", "from": 1.02, "to": 1.05, "x": 1.0, "y": 0}, grey={"from": SAID, "to": round(NO12 + 0.3, 2)},
-               fx=[{"kind": "nudge", "mask": FX + "s12-lean.mask.png", "bg": FX + "s12-lean.clean.png", "at": round(SAID - 0.2, 2),
-                    "dur": 1.2, "dx": 0.007, "dy": 0.003},
-                   {"kind": "spot", "at": round(NO12 - 0.1, 2), "dur": 10.0, "cx": 0.2, "cy": 0.36, "rx": 0.16, "ry": 0.17, "dim": 0.45}]),
+               breath=True,      # L53: the head + hand lean (a cut-out) is gone; the spot + greying carry the beat
+               fx=[{"kind": "spot", "at": round(NO12 - 0.1, 2), "dur": 10.0, "cx": 0.2, "cy": 0.36, "rx": 0.16, "ry": 0.17, "dim": 0.45}]),
 }
 
 # ── the shots ──────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -421,7 +419,7 @@ for i, (name, _secs, line, cap, *_r) in enumerate(PLAN):
     shots.append(s)
 
 overlays = [
-    {"kind": "nameTag", "start": starts["2a"] + 0.2, "end": starts["2a"] + 2.5, "text": "Phineas Gage", "sub": "railroad foreman, 25", "y": 600},   # 2a MCU: on the soft cliff above his hat (y 1000 = his face)
+    {"kind": "nameTag", "start": starts["2a"] + 0.2, "end": starts["2a"] + 2.5, "text": "Phineas Gage", "sub": "railroad foreman, 25", "y": 600, "right": True},   # mirrored MCU: his raised hand is on the left   # 2a MCU: on the soft cliff above his hat (y 1000 = his face)
     # the place stamp on 2b, the wide of the cut (rough cut 1: on 2a it sat on Gage's hat or under the caption, and
     # text_check's caption box leaves no room above his raised hand); 2b's caption is LOW
     {"kind": "stamp", "start": starts["2b"] + 0.1, "end": starts["2b"] + 2.3, "text": "CAVENDISH, VERMONT · 1848", "y": TOP},

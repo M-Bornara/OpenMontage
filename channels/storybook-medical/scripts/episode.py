@@ -697,6 +697,11 @@ def step_build(pid, *_):
         print("MOTION LINT:\n  " + "\n  ".join(motion))
         if ep.get("motion_lint", "fail") != "warn":
             raise SystemExit("motion lint failed (plan/layered-animation.md); fix the shots or mark breath=True")
+    cutouts = layers.lint_cutouts(ep["shots"])     # L53 (user 2026-11-19): no animated pieces cut out of a still
+    if cutouts:
+        print("CUT-OUT LINT:\n  " + "\n  ".join(cutouts))
+        if ep.get("cutout_lint", "fail") != "warn":
+            raise SystemExit("cut-out lint failed (L53); generate the moving thing as a separate prop or drop the move")
     # L52 (user 2026-11-19, Gage S1 2a -> 2b): two consecutive shots with the same camera at the same size = a jump cut.
     # Opt-out per cut: "same-camera cut intended" in the storyboard row (ep["storyboard"]) or the shot's "cut" field.
     import cut_check

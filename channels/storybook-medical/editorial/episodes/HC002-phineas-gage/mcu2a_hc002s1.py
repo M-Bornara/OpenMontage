@@ -40,4 +40,7 @@ m = cv2.GaussianBlur(cv2.erode(a, np.ones((3, 3), np.uint8)), (0, 0), 1.2)[..., 
 out = soft * (1 - m) + im * m
 cv2.imwrite(str(KF / "s2a-dof.png"), np.clip(out, 0, 255).astype(np.uint8))
 print("keyframes/s2a-dof.png")
-fx_prep.cut(str(KF / "s2a-dof.png"), "arm", ARM[0], how="rembg", grow=2, check=True, poly=ARM[1])
+# user 2026-11-19: no arm wave cut out of the still (the cut was not clean; L53). And continuity: in the 2b wide Gage
+# raises his RIGHT hand (screen left), so the MCU is mirrored to match (the soft cliff and his clothes read the same).
+cv2.imwrite(str(KF / "s2a-dof-mirror.png"), np.clip(out, 0, 255).astype(np.uint8)[:, ::-1])
+print("keyframes/s2a-dof-mirror.png")
