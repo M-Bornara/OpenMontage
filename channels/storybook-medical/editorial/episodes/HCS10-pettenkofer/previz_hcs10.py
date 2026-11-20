@@ -47,17 +47,17 @@ SHOTS = [
         ("text", 0.5, 0.2, "low angle, empty benches behind")]},
     {"name": "4", "zone": "TOP", "text": "caption", "shapes": [
         ("grad", WALL, DARK), ("rect", 0.0, 0.1, 0.16, 0.6, WIN), ("rect", 0.2, 0.62, 0.9, 0.7, WOOD, "bench"),
-        ("fig", 0.55, 0.66, 0.36, {}, "Pettenkofer: palm up on 'no'"), ("rect", 0.5, 0.58, 0.54, 0.62, GLASS),
+        ("fig", 0.55, 0.78, 0.56, {}, "Pettenkofer MS: palm up on 'no'"), ("rect", 0.5, 0.58, 0.54, 0.62, GLASS),
         ("fig", 0.86, 0.5, 0.16, {}, "MATT"), ("ellipse", -0.15, 0.62, 0.38, 1.12, COAT),
         ("ellipse", 0.62, 0.66, 1.15, 1.15, COAT), ("text", 0.5, 0.94, "two students' backs (soft)")]},
     {"name": "5a", "zone": "LOW", "text": "caption", "shapes": [
         ("grad", WOOD, (100, 70, 48)), ("ellipse", 0.28, 0.36, 0.72, 0.6, GLASS),
         ("line", 0.62, 0.3, 0.86, 0.12, (180, 180, 180), 10), ("rect", 0.08, 0.66, 0.3, 0.8, (200, 200, 200), "soda tin"),
-        ("text", 0.5, 0.48, "top-down: powder falls in"), ("ellipse", 0.78, 0.8, 1.05, 1.05, (150, 120, 60))]},
+        ("text", 0.5, 0.48, "powder -> faint cloud, NO fizz"), ("ellipse", 0.78, 0.8, 1.05, 1.05, (150, 120, 60))]},
     {"name": "5b", "zone": "MID", "text": "stamp LESS THAN A TEASPOON", "shapes": [
-        ("grad", (110, 100, 90), (60, 50, 44)), ("rect", 0.3, 0.52, 0.7, 0.98, GLASS, "glass (side, macro)"),
+        ("grad", (110, 100, 90), (60, 50, 44)), ("rect", 0.36, 0.66, 0.64, 0.98, GLASS, "small glass"),
         ("poly", [(0.62, 0.18), (0.86, 0.26), (0.62, 0.42), (0.5, 0.36)], GLASS), ("line", 0.54, 0.4, 0.5, 0.56, WHITE, 3),
-        ("text", 0.72, 0.14, "culture flask tips")]},
+        ("text", 0.72, 0.14, "culture flask tips"), ("rect", 0.04, 0.6, 0.22, 0.96, (170, 190, 196), "soda glass, EMPTY")]},
     {"name": "6", "zone": "LOW", "text": "caption · quote stamp MID", "shapes": [
         ("grad", WIN, (140, 150, 156)), ("ellipse", 0.3, 0.2, 0.7, 0.56, SKIN), ("rect", 0.22, 0.54, 0.84, 1.0, COAT),
         ("rect", 0.64, 0.3, 0.76, 0.46, GLASS, "glass"), ("text", 0.5, 0.62, "profile against the window"),
@@ -75,13 +75,14 @@ SHOTS = [
         ("rect", 0.1, 0.66, 0.9, 0.76, WOOD, "desk"), ("fig", 0.58, 0.8, 0.5, {"sitting": True}, "writing, a faint smile"),
         ("rect", 0.2, 0.6, 0.26, 0.66, GLASS), ("text", 0.5, 0.92, "morning sun rises")]},
     {"name": "10", "zone": "LOW", "text": "caption", "shapes": [
-        ("grad", (110, 96, 80), (60, 50, 42)), ("poly", [(0, 0.3), (1, 0.3), (1, 0.38), (0, 0.38)], WOOD),
-        ("poly", [(0, 0.5), (1, 0.5), (1, 0.58), (0, 0.58)], WOOD), *[("fig", 0.1 + 0.16 * i, 0.5, 0.12, {}) for i in range(6)],
-        ("fig", 0.5, 0.74, 0.22, {}, "a critic stands, points"), ("text", 0.5, 0.15, "high angle from the back rows")]},
+        ("grad", (60, 82, 64), (36, 44, 38)), ("rect", 0.08, 0.1, 0.3, 0.3, (150, 130, 100), "engraving"),
+        ("rect", 0.7, 0.04, 0.98, 0.5, (90, 40, 40), "curtained window"), ("ellipse", 0.42, 0.06, 0.58, 0.16, LAMP),
+        ("ellipse", 0.06, 0.56, 0.94, 0.9, (40, 90, 60), "green table"), ("fig", 0.22, 0.66, 0.3, {}),
+        ("fig", 0.5, 0.6, 0.3, {}, "taps the page"), ("fig", 0.78, 0.66, 0.3, {}), ("rect", 0.4, 0.66, 0.6, 0.74, PAPER, "journal"),
+        ("text", 0.5, 0.95, "3 critics at a table; heads shaking")]},
     {"name": "11", "zone": "TOP", "text": "caption", "shapes": [
         ("grad", (70, 52, 40), (40, 30, 24)), ("ellipse", 0.62, 0.12, 0.8, 0.26, LAMP), ("rect", 0.26, 0.3, 0.74, 0.96, GLASS, "glass (side, macro)"),
-        ("ellipse", 0.4, 0.5, 0.44, 0.54, WHITE), ("ellipse", 0.55, 0.62, 0.59, 0.66, WHITE),
-        ("ellipse", 0.47, 0.72, 0.5, 0.75, WHITE), ("text", 0.5, 0.2, "dark room + lamp behind; bubbles; green tint")]},
+        ("ellipse", 0.32, 0.55, 0.68, 0.8, (226, 230, 226)), ("text", 0.5, 0.2, "dark room + lamp; faint cloud; green tint")]},
     {"name": "12", "zone": "LOW", "text": "caption · END LINE", "shapes": [
         ("grad", (70, 60, 56), (40, 34, 32)), ("rect", 0.0, 0.1, 0.2, 0.56, (90, 100, 110)),
         ("rect", 0.3, 0.58, 0.78, 0.64, WOOD, "far bench"), ("ellipse", 0.6, 0.36, 0.76, 0.5, LAMP),

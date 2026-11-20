@@ -68,8 +68,12 @@ EPISODES = {
             ("meyers_cholera_bacilli_1885.png", "Cholera culture in gelatin, Meyers lexicon c. 1885", "Shot 8 uses only the LEFT tube (Koch's cholera bacillus, day 2); the middle and right tubes are other germs.", "Meyers Konversations-Lexikon, 4th ed., c. 1885 · Wikimedia Commons · public domain"),
         ],
         "extra": [EP / "HCS10-pettenkofer/backgrounds-v1.md"],
+        "hero_previz": [("1", "Shot 1 · the hook: his hand brings the small glass to his lips; the student's hand reaches in and stops short on \"drink\""),
+                        ("4", "Shot 4 · the refusal: MS, push in 1.0 → 1.18; ONE swap to the raised palm on \"no\"; rack focus; Matt's glint"),
+                        ("6", "Shot 6 · the gulp: the small glass at his lips; ONE swap, head back, on \"gulp\"; the window swells on \"purest water\""),
+                        ("7", "Shot 7 · the cramps: ≈ 30 cm of desk; flat hand → ONE swap to a white-knuckled fist on \"cramps\"; the colour drains")],
         "page_title": "Pettenkofer Storyboard",
-        "status": "storyboard v1 · backgrounds per shot · real refs in · 4 HERO (the 4th is the drink) · waiting for your OK",
+        "status": "storyboard + backgrounds APPROVED (4 fixes in) · HERO motion pre-viz · waiting for your OK",
     },
     "hc002s1": {
         "anchor": "gage-s1", "short": "Gage S1", "slot": "CASE 11 · Sun Nov 29 · 15:00 ET = 14:00 Alberta · ready by Wed Nov 25",
@@ -409,6 +413,27 @@ def web_preview(render: Path, dst: Path) -> bool:
     return True
 
 
+def hero_block(k: str, e: dict, out: Path, img: Path) -> str:
+    """Free HERO motion pre-viz on stand-in pieces (hero_previz_<ep>.py, before narration exists): per shot the preview
+    (a click marks each key word) and its start / key / end sheet."""
+    p, arts = e.get("project"), []
+    for sid, cap in e.get("hero_previz", []):
+        rev = p / "review/hero"
+        if not web_preview(rev / f"{sid}-preview.mp4", out / "video" / f"{p.name}-hero-{sid}.mp4"):
+            continue
+        sheet = rev / f"{sid}-sheet.jpg"
+        sh = (f'<img class="wide" src="img/{shrink(sheet, img / f"{k}-hero-{sid}-sheet", 1500)}" alt="Start, key and end '
+              f'frames of shot {sid}" loading="lazy">') if sheet.exists() else ""
+        arts.append(f'<article class="hero"><h4>{html.escape(cap)}</h4><video class="cut" controls playsinline loop '
+                    f'preload="metadata" src="video/{p.name}-hero-{sid}.mp4"></video>{sh}</article>')
+    if not arts:
+        return ""
+    return ('<div class="block"><h3>HERO motion pre-viz (free stand-in pieces, word times estimated)</h3><p class="legend">'
+            'Drawn stand-ins with the same names, states and sizes as the paid pieces (cm, L51). Green box = the moving piece at its key '
+            '(≥ 1/3 of the frame); dashed lines = the Shorts safe zone; a click marks each key word. Nothing paid.</p>'
+            + "".join(arts) + "</div>")
+
+
 def layered_block(k: str, e: dict, ep: dict, out: Path, img: Path) -> str:
     """Layered shots (user 2026-11-16, .claude/skills/layered-shot): per shot the 3 s preview with sound, the contact
     sheet, the layer plan, the free stand-in pieces and the prompts of the paid pieces (waiting for the user's OK)."""
@@ -643,7 +668,7 @@ def build(out: Path, keys: list[str]) -> Path:
                 stage = "rough cut · waiting for your OK"
                 stages[-1] = stage
         story = story_block(k, e, img)
-        layered = layered_block(k, e, ep, out, img)
+        layered = layered_block(k, e, ep, out, img) + hero_block(k, e, out, img)
         if layered:
             pilots.append(e["short"])
         if story:
