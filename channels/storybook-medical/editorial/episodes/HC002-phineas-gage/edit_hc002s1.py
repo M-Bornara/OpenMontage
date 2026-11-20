@@ -364,15 +364,15 @@ def figure(fid, piece, steps, xfade=0.05, breath=0.006):
             "keys": [{"t": round(t, 2), "x": a["x"], "y": a["y"], "state": st} for t, st in steps]}
 
 
-# 2a: the wave on "Phineas" (up, out, up, in, up, out, up), then he holds it
-GAGE2A = figure("gage", "pose-gage-s2a", [(0.0, "up"), (0.3, "out"), (0.55, "up"), (0.8, "in"), (1.05, "up"), (1.3, "out"),
-                                          (1.55, "up")])
+# 2a: he holds the raised hand (user 2026-11-20: the up/out/in wave "is not good, like glitch": three separate drawings
+# swapped every 0.25 s with no in-betweens stutter at MCU size). Motion = the push-in + haze; no pose swaps.
+GAGE2A = figure("gage", "pose-gage-s2a", [(0.0, "up")])
 # 2b: the driller strikes on "best" and "bosses" (raise <-> strike; the clank SFX on each strike)
 DRILL2B = figure("driller", "pose-crew-s2b", [(0.0, "raise"), (BEST, "strike"), (BEST + 0.4, "raise"), (BOSSES, "strike"),
                                               (BOSSES + 0.45, "raise")], xfade=0.04, breath=0)
-# 10: hands on his knee, the hand comes up on "Doctor, here", two small waves, then held through "business"
-GAGE10 = figure("gage", "pose-gage-s10", [(0.0, "rest"), (SAY10 - 0.15, "hand"), (SAY10 + 0.2, "wave"), (SAY10 + 0.45, "hand"),
-                                          (SAY10 + 0.7, "wave"), (SAY10 + 0.95, "hand")])
+# 10: hands on his knee, the hand comes up ONCE on "Doctor, here" and is held (user 2026-11-20: back-and-forth pose
+# swaps read as a glitch; one change on the word reads as the action)
+GAGE10 = figure("gage", "pose-gage-s10", [(0.0, "rest"), (SAY10 - 0.15, "hand")], xfade=0.08)
 KEPT = w("kept", "11")
 SAID, NO12 = w("said", "12"), w("no longer", "12")
 
