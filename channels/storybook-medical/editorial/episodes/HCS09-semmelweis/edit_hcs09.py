@@ -64,7 +64,13 @@ c.o("stamp", 0.2, 2.8, text="VIENNA · 1847", y=TOP)
 c.s("water-drip", c.at("wash"), query="water drop")
 # s1b: the professor's scorn
 t = c.at("they hated")
-c.shot(t, KF + "s1b.png", push(0.5, 0.35, 1.12, 1.0), cap=LOW)
+# user 2026-11-20 (L52): 1b and 2a share the corridor's camera (the professor vanished from the same hall). 1b is now a
+# CU on his face over s1b-dof.png (dof1b_hcs09.py: the hall soft behind him), so 1b -> 2a cuts close -> wide.
+# framed from frame 0 (push pans from the centre over the shot: on a x1.6 CU that read as a slide); only the zoom moves.
+# Face in the top third, the LOW caption on his collar.
+CU1B = {"x": -17.0, "y": 10.2}
+c.shot(t, KF + "s1b-dof.png", {"type": "keys", "keys": [{"t": 0, "scale": 1.62, **CU1B}, {"t": 2.0, "scale": 1.7, "ease": "linear", **CU1B}]},
+       cap=LOW)
 c.s("hit-suspense", t)
 # s2a: two wards (left door green at 0.40, 0.58; right door gold at 0.58, 0.58)
 t = c.at("vienna had")
