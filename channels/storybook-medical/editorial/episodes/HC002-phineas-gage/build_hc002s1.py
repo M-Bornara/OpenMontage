@@ -17,7 +17,7 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[5]
 sys.path.insert(0, str(REPO / "channels/storybook-medical/scripts"))
-from prompt_kit import (EMPTY_HANDS, FULL_BLEED, NO_TEXT, ONE_EACH, PERIOD, SAFE_FRAMING, camera, cast, crowd, framing, scale,  # noqa: E402
+from prompt_kit import (EMPTY_HANDS, FULL_BLEED, empty_plate, NO_TEXT, ONE_EACH, PERIOD, SAFE_FRAMING, camera, cast, crowd, framing, scale,  # noqa: E402
                         glasses_gag, lint_all, matt_beat, pose_sheet, set_block, sprite_sheet)
 
 PID = "hc002-s1"
@@ -178,6 +178,70 @@ REFERENCES.update({
                           "from ground level at his right side, close to his right shoulder; his face is never seen; no blood, no wound",
                           "his head, shoulders, chest and right arm with the hand, the body cut off straight at the waist, "
                           "the same size in all three")),
+})
+
+# ── ALIVE pieces v2 (user 2026-11-20: "do the few generate to make it better"; L53: nothing cut out of a still moves) ──
+# Each moving person is GENERATED on green (a pose sheet with exactly the poses the keys swap between) and each plate
+# is the approved still WITHOUT that person (empty_plate). 2a needs no plate: its soft cliff (mcu2a_hc002s1.py) is
+# already empty. Reference 1 = the approved shot, for identity, size and light only.
+SHOT_ID = ("Reference 1 is the approved shot this person is animated into: copy {who} EXACTLY (face, hair, hat, clothes, "
+           "build, painting style and light) but NOTHING else of the picture: not its background, not the other people, "
+           "not its frame. ")
+REFERENCES.update({
+    # 2a "Phineas Gage. Twenty-five. Railroad foreman.": a wave (pose 1 -> 2 -> 1 -> 3 -> 1) on the mirrored MCU.
+    "pose-gage-s2a": dict(aspect="16:9", refs=["kf:s2a-dof-mirror"], roles=SHOT_ID.format(who="PHINEAS GAGE (the man)"),
+        prompt=pose_sheet(GAGE, ["his RIGHT arm raised high (on the LEFT side of each drawing), elbow bent, the open palm "
+                                 "toward the viewer, fingers together; his left arm down at his side; looking up and off to "
+                                 "the left, confident",
+                                 "EXACTLY the same as drawing (1); ONLY the raised forearm and hand tilt outward, away from "
+                                 "his head (the first half of a wave)",
+                                 "EXACTLY the same as drawing (1); ONLY the raised forearm and hand tilt inward, toward his "
+                                 "hat (the other half of the wave)"],
+                          "2a: a medium close-up below a sunlit rock cut, the cliff soft behind him",
+                          "warm morning daylight as in reference 1", "from slightly below, straight on, as in reference 1",
+                          "from the top of his hat down to his belt, the raised hand included")),
+    # 2b "The best his bosses had.": the moustached driller (lower right) swings his sledge: up, strike, up, strike.
+    "plate-s2b-empty": dict(aspect="9:16", refs=["kf:s2b"], roles="",
+        prompt=empty_plate("the high wide view of the rock cut with Gage on the ledge, the contractor, and the crew below",
+                           "the heavy dark-moustached driller in the flat cap with the sledgehammer, lower right",
+                           "the grey rock floor of the cut and the stacked timber and rails behind where he stood")),
+    "pose-crew-s2b": dict(aspect="16:9", refs=["kf:s2b"],
+        roles=SHOT_ID.format(who="the heavy dark-moustached driller in the flat cap (lower right)"),
+        prompt=pose_sheet(CREW[2] + ", a white work shirt with rolled sleeves, dark braces, dark wool trousers, boots",
+                          ["the sledgehammer raised high over his RIGHT shoulder, both hands on the long handle, about to swing",
+                           "the sledgehammer swung down: its head at the ground in front of his feet, arms straight, "
+                           "knees bent, the strike"],
+                          "2b: a rock cut seen from high on the hillside", "soft daylight from the upper LEFT",
+                          "from high above and a little in front, as in reference 1",
+                          "the whole figure with the whole hammer, feet at the bottom of each drawing")),
+    # 10 "Doctor, here is business enough for you.": Gage, seated, raises his hand in greeting (pose 1 -> 2 <-> 3).
+    "plate-s10-empty": dict(aspect="9:16", refs=["kf:s10"], roles="",
+        prompt=empty_plate("the hotel piazza seen from the street behind the doctor, with Matt leaning on the post",
+                           "the bandaged young man sitting in the wooden chair on the piazza",
+                           "the same empty wooden chair, the white clapboard wall and the window behind it")),
+    "pose-gage-s10": dict(aspect="16:9", refs=["kf:s10", GA],
+        roles=SHOT_ID.format(who="PHINEAS GAGE (the bandaged man in the chair)") + "Reference 2 is his model sheet (identity only). ",
+        prompt=pose_sheet(GAGE_AFTER, ["sitting at ease, legs crossed, both hands resting on his knee, calm",
+                                       "EXACTLY the same; ONLY his RIGHT hand raised beside his head in greeting, the open palm toward the viewer",
+                                       "EXACTLY the same as drawing (2); ONLY the raised hand tilted a little outward (a small wave)"],
+                          "10: a hotel piazza in late daylight", "warm late daylight from the LEFT",
+                          "from the street, slightly below, three-quarter toward the viewer's left, as in reference 1",
+                          "the whole seated figure (the chair is NOT drawn: he sits on nothing), the same size in all three")),
+    # 12 "But his friends said… he was no longer Gage.": the bearded friend leans in to whisper on "said".
+    "plate-s12-empty": dict(aspect="9:16", refs=["kf:s12"], roles="",
+        prompt=empty_plate("two friends in a doorway, the street with Phineas Gage walking away behind them",
+                           "the lanky bearded friend in the cap (left of centre, in front)",
+                           "the stout friend in the brown waistcoat, whole and unchanged, the dark figures in the doorway "
+                           "behind, the door frame and the street")),
+    "pose-friend-s12": dict(aspect="9:16", refs=["kf:s12"],
+        roles=SHOT_ID.format(who="the lanky bearded friend in the cap (left of centre)"),
+        prompt=pose_sheet("a lanky man of about thirty with a short brown beard, a flat cap and a worn olive work jacket",
+                          ["standing upright, turned three-quarter to the right, hands down, glancing back over his "
+                           "shoulder toward the viewer, uneasy",
+                           "leaning in to the right, his head tilted, his left hand cupped beside his mouth as if "
+                           "whispering into a friend's ear, eyes sliding sideways"],
+                          "12: a doorway on a grey village street", "soft grey daylight from the LEFT",
+                          "eye level, as in reference 1", "from the cap down to the knees, the same size in both")),
 })
 
 # ── the story stills ─────────────────────────────────────────────────────────────────────────────────────────────────

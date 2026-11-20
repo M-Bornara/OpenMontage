@@ -12,6 +12,7 @@ sketch (breath). Positions are measured on the plates (frame fractions).
     python channels/storybook-medical/scripts/layer_review.py hc002-s1 s01 --from 0 --seconds 3
 """
 import json
+import os
 import re
 import subprocess
 from pathlib import Path
@@ -346,6 +347,11 @@ C7 = along(TIP7, D7, -0.45 * 1080 * 0.955 / 2)
 IRON7 = iron([{"t": 0.0, "x": 0.50, "y": -0.22, "rot": 80, "state": "rod"},
               {"t": LANDED, "x": C7[0], "y": C7[1], "rot": 95, "ease": "in", "contact": {"squash": 0.1, "bounce": 0.02}}], 0.45)
 SAY10, BIZ = w("doctor here", "10"), w("business", "10")
+BEST, BOSSES = w("best", "2b"), w("bosses", "2b")
+# ALIVE v2 (user 2026-11-20: generate the moving people as separate pieces). HC002_STANDIN=1 = the free motion pre-viz:
+# the old cut-outs stand in for the generated pose sheets (timing + camera only; L53 warns instead of failing).
+STANDIN = os.environ.get("HC002_STANDIN") == "1"
+SI = lambda *fx: list(fx) if STANDIN else []  # noqa: E731
 KEPT = w("kept", "11")
 SAID, NO12 = w("said", "12"), w("no longer", "12")
 
@@ -359,8 +365,13 @@ ALIVE = {
                source=KF + "s2a-dof-mirror.png",
                fx=[{"kind": "particles", "style": "haze", "x": 0.3, "y": 0.62, "tx": 0.15, "ty": 0.55, "spread": 0.15,
                     "every": 0.4, "life": 3.0, "size": 260, "color": "214,196,160", "opacity": 0.22}]),
-    "2b": dict(motion={"type": "slide", "from": 2.5, "to": -2.5, "scale": 1.1},
-               fx=[{"kind": "particles", "style": "haze", "x": 0.3, "y": 0.45, "tx": 0.5, "ty": 0.3, "spread": 0.2,
+    # v2: opens close on the moustached driller (his strike fills a third of the frame, HERO-size) and pulls back to the
+    # whole cut on "bosses": Gage on the ledge and the contractor revealed. Strikes on "best" and "bosses".
+    "2b": dict(motion={"type": "keys", "keys": [cam(0.0, 1.4, 0.63, 0.62), cam(round(BEST + 0.1, 2), 1.4, 0.63, 0.62),
+                                                cam(round(BOSSES + 0.35, 2), 1.06, 0.5, 0.5, ease="inOut"),
+                                                cam(dur["2b"], 1.04, 0.5, 0.5, ease="linear")]},
+               fx=[*SI(wag("s2b", "hammer2", [0.728, 0.757], 9, 0.7, 0.0)),
+                   {"kind": "particles", "style": "haze", "x": 0.3, "y": 0.45, "tx": 0.5, "ty": 0.3, "spread": 0.2,
                     "every": 0.45, "life": 3.2, "size": 300, "color": "205,200,190", "opacity": 0.2}]),
     "3": dict(motion={"type": "push", "from": 1.02, "to": 1.08, "x": 0.5, "y": -0.5},
               fx=[{"kind": "particles", "style": "grains", "x": 0.466, "y": 0.535, "tx": 0.425, "ty": 0.607, "spread": 0.012,
@@ -381,9 +392,13 @@ ALIVE = {
     "9": dict(motion={"type": "slide", "from": -2.5, "to": 2.5, "scale": 1.1},
               fx=[{"kind": "particles", "style": "haze", "x": 0.55, "y": 0.66, "tx": 0.75, "ty": 0.62, "spread": 0.12,
                    "every": 0.3, "life": 2.4, "size": 240, "color": "214,190,150", "opacity": 0.28}]),
-    "10": dict(motion={"type": "push", "from": 1.02, "to": 1.035, "x": 0, "y": 0},
-               breath=True,      # L53: the hand wag (a cut-out) is gone; a held beat (a generated hand prop would be the fix)
-               fx=[{"kind": "glint", "x": 0.165, "y": 0.392, "at": round(BIZ + 0.1, 2), "size": 34}]),
+    # v2: the camera pushes from the wide to a medium shot on Gage (x1.75, HERO-size) by "Doctor, here", when he raises his
+    # hand; Matt's glint comes early, while he is still in the frame.
+    "10": dict(motion={"type": "keys", "keys": [cam(0.0, 1.02, 0.5, 0.5), cam(round(SAY10 - 0.15, 2), 1.75, 0.53, 0.46, ease="inOut"),
+                                                cam(dur["10"], 1.8, 0.53, 0.46, ease="linear")]},
+               breath=not STANDIN,
+               fx=[*SI(wag("s10", "hand", [0.47, 0.49], 7, 0.6, round(SAY10 - 0.1, 2), round(SAY10 - 0.1 + 2 * 0.6, 2))),
+                   {"kind": "glint", "x": 0.165, "y": 0.392, "at": 0.5, "size": 34}]),
     "11": dict(motion={"type": "push", "from": 1.03, "to": 1.12, "x": -1.0, "y": 1.0},
                fx=[{"kind": "travel", "points": [[0.74, 0.185], [0.635, 0.40]], "at": round(KEPT - 0.1, 2), "dur": 0.35,
                     "colors": ["rgba(255,240,205,1)", "rgba(255,206,130,1)"], "width": 10},
@@ -391,7 +406,9 @@ ALIVE = {
                     "colors": ["rgba(255,240,205,1)", "rgba(255,206,130,1)"], "width": 10}]),
     "12": dict(motion={"type": "push", "from": 1.02, "to": 1.05, "x": 1.0, "y": 0}, grey={"from": SAID, "to": round(NO12 + 0.3, 2)},
                breath=True,      # L53: the head + hand lean (a cut-out) is gone; the spot + greying carry the beat
-               fx=[{"kind": "spot", "at": round(NO12 - 0.1, 2), "dur": 10.0, "cx": 0.2, "cy": 0.36, "rx": 0.16, "ry": 0.17, "dim": 0.45}]),
+               fx=[*SI({"kind": "nudge", "mask": FX + "s12-lean.mask.png", "bg": FX + "s12-lean.clean.png",
+                        "at": round(SAID - 0.35, 2), "dur": 1.2, "dx": 0.007, "dy": 0.003}),
+                   {"kind": "spot", "at": round(NO12 - 0.1, 2), "dur": 10.0, "cx": 0.2, "cy": 0.36, "rx": 0.16, "ry": 0.17, "dim": 0.45}]),
 }
 
 # ── the shots ──────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -457,7 +474,7 @@ SFX = [
 ep = json.load(open(P / "episode.json", encoding="utf-8"))
 ep.update({"title": "He Took an Iron Bar Through the Skull… and Spoke", "format": "short", "loop": True, "tail_seconds": 1.0,
            # rough cut 1: every shot is real now, so the full motion lint runs (the pre-viz ran it as "warn")
-           "motion_lint": "fail" if REAL else "warn",
+           "motion_lint": "fail" if REAL else "warn", **({"cutout_lint": "warn"} if STANDIN else {}),
            # L52 cut check (user 2026-11-19): its storyboard, for any row marked "same-camera cut intended"
            "storyboard": "channels/storybook-medical/editorial/episodes/HC002-phineas-gage/s1-storyboard-v1.md",
            "previz": "rough cut 1 (real narration)" if REAL else "scratch timeline 2026-11-18; replace with the real narration", "shots": shots, "overlays": overlays,
