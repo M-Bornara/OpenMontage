@@ -53,6 +53,23 @@ EPISODES = {
             ("quran_folio_950.jpg", "Handwriting of his time", "Angular cursive on paper: the look of his notebook pages (shot 7a).", "Quran folio, 950–1000 · The Met via Wikimedia Commons · public domain"),
         ],
     },
+    "hcs10": {
+        "anchor": "pettenkofer", "short": "Pettenkofer", "slot": "CASE 12 · Tue Dec 1 · 15:00 ET = 14:00 Alberta · ready by Fri Nov 27",
+        "storyboard": EP / "HCS10-pettenkofer/storyboard-v1.md",   # story-v1 is approved; the v2-revision block does not apply
+        "project": REPO / "projects/hcs10-pettenkofer", "previz": REPO / "projects/hcs10-pettenkofer/review/previz",
+        "maps": ["map-lab.png"], "refs_dir": REPO / "projects/hcs10-pettenkofer/refs",
+        "refs": [
+            ("pettenkofer_lenbach_1890s.png", "Max von Pettenkofer, 1890s (Lenbach)", "The portrait nearest 1892: the face we follow.", "Franz von Lenbach, 1890s · Wikimedia Commons · public domain"),
+            ("pettenkofer_c1898.jpg", "Pettenkofer, c. 1898", "A photo six years later: hair, whiskers, the old sunken face.", "Photo, c. 1898 · Wikimedia Commons · public domain"),
+            ("pettenkofer_1883.jpg", "Pettenkofer, 1883", "Nine years earlier, for comparison.", "Popular Science Monthly vol. 23, 1883 · Wikimedia Commons · public domain"),
+            ("koch_1890.jpg", "Robert Koch, December 1890", "Full grey beard, round spectacles (shot 3a).", "Photo, 1 Dec 1890 · Wikimedia Commons · public domain"),
+            ("hamburg_water_1892.jpg", "Hamburg 1892: the emergency water supply", "Water carts and queues in the epidemic (shot 2).", "Pincerno, 1892 · Wikimedia Commons · public domain"),
+            ("hamburg_disinfection_1892.gif", "Hamburg 1892: disinfection squad", "Period street, clothes and carts (shot 2).", "1892 · Wikimedia Commons · public domain"),
+            ("meyers_cholera_bacilli_1885.png", "Cholera bacilli, Meyers lexicon c. 1885", "Shot 8 uses this plate itself (free, a period document).", "Meyers Konversations-Lexikon, 4th ed., c. 1885 · Wikimedia Commons · public domain"),
+        ],
+        "page_title": "Pettenkofer Storyboard",
+        "status": "storyboard v1 + free sketches · waiting for your OK",
+    },
     "hc002s1": {
         "anchor": "gage-s1", "short": "Gage S1", "slot": "CASE 11 · Sun Nov 29 · 15:00 ET = 14:00 Alberta · ready by Wed Nov 25",
         "storyboard": EP / "HC002-phineas-gage/s1-storyboard-v1.md", "story": EP / "HC002-phineas-gage/s1-story-v2.md",
