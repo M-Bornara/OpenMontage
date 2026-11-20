@@ -233,7 +233,8 @@ REFERENCES.update({
                            "the lanky bearded friend in the cap (left of centre, in front)",
                            "the stout friend in the brown waistcoat, whole and unchanged, the dark figures in the doorway "
                            "behind, the door frame and the street")),
-    "pose-friend-s12": dict(aspect="9:16", refs=["kf:s12"],
+    # v2 (2026-11-20, L54): v1 was 9:16 and came back as the shot repainted (scene + green patches + a ghost head)
+    "pose-friend-s12": dict(aspect="16:9", refs=["kf:s12"],
         roles=SHOT_ID.format(who="the lanky bearded friend in the cap (left of centre)"),
         prompt=pose_sheet("a lanky man of about thirty with a short brown beard, a flat cap and a worn olive work jacket",
                           ["standing upright, turned three-quarter to the right, hands down, glancing back over his "

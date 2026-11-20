@@ -44,3 +44,7 @@ print("keyframes/s2a-dof.png")
 # raises his RIGHT hand (screen left), so the MCU is mirrored to match (the soft cliff and his clothes read the same).
 cv2.imwrite(str(KF / "s2a-dof-mirror.png"), np.clip(out, 0, 255).astype(np.uint8)[:, ::-1])
 print("keyframes/s2a-dof-mirror.png")
+# user 2026-11-20 (ALIVE v2): Gage is a generated pose-sheet figure; this is his background, the soft cliff with him gone
+# (inpainted, then blurred: the blur hides the fill), mirrored like the MCU.
+cv2.imwrite(str(KF / "s2a-soft-mirror.png"), np.clip(soft, 0, 255).astype(np.uint8)[:, ::-1])
+print("keyframes/s2a-soft-mirror.png")

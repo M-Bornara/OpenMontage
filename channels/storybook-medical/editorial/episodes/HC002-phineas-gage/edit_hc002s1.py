@@ -352,6 +352,27 @@ BEST, BOSSES = w("best", "2b"), w("bosses", "2b")
 # the old cut-outs stand in for the generated pose sheets (timing + camera only; L53 warns instead of failing).
 STANDIN = os.environ.get("HC002_STANDIN") == "1"
 SI = lambda *fx: list(fx) if STANDIN else []  # noqa: E731
+# the generated figures, placed by alive2_hc002s1.py on the approved stills (w / x / y of each sprite's anchor)
+A2 = json.load(open(P / "assets/images/keyframes/alive2.json", encoding="utf-8"))
+
+
+def figure(fid, piece, steps, xfade=0.05, breath=0.006):
+    """A generated pose-sheet figure that stays put and swaps poses: steps = [(t, state), ...]."""
+    a = A2[piece]
+    return {"id": fid, "sprites": a["sprites"], "w": a["w"], "face": "fixed", "xfade": xfade, "depth": {"blur": 0},
+            "motionBlur": False, **({"breath": {"amp": breath, "period": 3.2}} if breath else {}),
+            "keys": [{"t": round(t, 2), "x": a["x"], "y": a["y"], "state": st} for t, st in steps]}
+
+
+# 2a: the wave on "Phineas" (up, out, up, in, up, out, up), then he holds it
+GAGE2A = figure("gage", "pose-gage-s2a", [(0.0, "up"), (0.3, "out"), (0.55, "up"), (0.8, "in"), (1.05, "up"), (1.3, "out"),
+                                          (1.55, "up")])
+# 2b: the driller strikes on "best" and "bosses" (raise <-> strike; the clank SFX on each strike)
+DRILL2B = figure("driller", "pose-crew-s2b", [(0.0, "raise"), (BEST, "strike"), (BEST + 0.4, "raise"), (BOSSES, "strike"),
+                                              (BOSSES + 0.45, "raise")], xfade=0.04, breath=0)
+# 10: hands on his knee, the hand comes up on "Doctor, here", two small waves, then held through "business"
+GAGE10 = figure("gage", "pose-gage-s10", [(0.0, "rest"), (SAY10 - 0.15, "hand"), (SAY10 + 0.2, "wave"), (SAY10 + 0.45, "hand"),
+                                          (SAY10 + 0.7, "wave"), (SAY10 + 0.95, "hand")])
 KEPT = w("kept", "11")
 SAID, NO12 = w("said", "12"), w("no longer", "12")
 
@@ -361,8 +382,9 @@ ALIVE = {
     # cuts close -> wide. The caption (TOP) and the name tag sit on the soft cliff above him; a slow push in.
     # user 2026-11-19 (L53): no arm wave cut out of the still (not a clean cut); the MCU is MIRRORED so he raises the same
     # (right) hand as in the 2b wide. Motion = the slow push + the dust haze.
-    "2a": dict(motion={"type": "keys", "keys": [cam(0.0, 2.8, 0.575, 0.36), cam(dur["2a"], 2.95, 0.575, 0.36, ease="linear")]},
-               source=KF + "s2a-dof-mirror.png",
+    "2a": dict(motion={"type": "keys", "keys": [cam(0.0, 2.8, 0.55, 0.36), cam(dur["2a"], 2.95, 0.55, 0.36, ease="linear")]},
+               source=KF + "s2a-dof-mirror.png", breath=False,
+               layers={"bg": "proj:assets/images/keyframes/s2a-soft-mirror.png", "actors": [GAGE2A]},
                fx=[{"kind": "particles", "style": "haze", "x": 0.3, "y": 0.62, "tx": 0.15, "ty": 0.55, "spread": 0.15,
                     "every": 0.4, "life": 3.0, "size": 260, "color": "214,196,160", "opacity": 0.22}]),
     # v2: opens close on the moustached driller (his strike fills a third of the frame, HERO-size) and pulls back to the
@@ -370,8 +392,8 @@ ALIVE = {
     "2b": dict(motion={"type": "keys", "keys": [cam(0.0, 1.4, 0.63, 0.62), cam(round(BEST + 0.1, 2), 1.4, 0.63, 0.62),
                                                 cam(round(BOSSES + 0.35, 2), 1.06, 0.5, 0.5, ease="inOut"),
                                                 cam(dur["2b"], 1.04, 0.5, 0.5, ease="linear")]},
-               fx=[*SI(wag("s2b", "hammer2", [0.728, 0.757], 9, 0.7, 0.0)),
-                   {"kind": "particles", "style": "haze", "x": 0.3, "y": 0.45, "tx": 0.5, "ty": 0.3, "spread": 0.2,
+               layers={"bg": "proj:assets/images/keyframes/s2b-empty.png", "actors": [DRILL2B]},
+               fx=[{"kind": "particles", "style": "haze", "x": 0.3, "y": 0.45, "tx": 0.5, "ty": 0.3, "spread": 0.2,
                     "every": 0.45, "life": 3.2, "size": 300, "color": "205,200,190", "opacity": 0.2}]),
     "3": dict(motion={"type": "push", "from": 1.02, "to": 1.08, "x": 0.5, "y": -0.5},
               fx=[{"kind": "particles", "style": "grains", "x": 0.466, "y": 0.535, "tx": 0.425, "ty": 0.607, "spread": 0.012,
@@ -396,9 +418,8 @@ ALIVE = {
     # hand; Matt's glint comes early, while he is still in the frame.
     "10": dict(motion={"type": "keys", "keys": [cam(0.0, 1.02, 0.5, 0.5), cam(round(SAY10 - 0.15, 2), 1.75, 0.53, 0.46, ease="inOut"),
                                                 cam(dur["10"], 1.8, 0.53, 0.46, ease="linear")]},
-               breath=not STANDIN,
-               fx=[*SI(wag("s10", "hand", [0.47, 0.49], 7, 0.6, round(SAY10 - 0.1, 2), round(SAY10 - 0.1 + 2 * 0.6, 2))),
-                   {"kind": "glint", "x": 0.165, "y": 0.392, "at": 0.5, "size": 34}]),
+               breath=False, layers={"bg": "proj:assets/images/keyframes/s10-empty.png", "actors": [GAGE10]},
+               fx=[{"kind": "glint", "x": 0.165, "y": 0.392, "at": 0.5, "size": 34}]),
     "11": dict(motion={"type": "push", "from": 1.03, "to": 1.12, "x": -1.0, "y": 1.0},
                fx=[{"kind": "travel", "points": [[0.74, 0.185], [0.635, 0.40]], "at": round(KEPT - 0.1, 2), "dur": 0.35,
                     "colors": ["rgba(255,240,205,1)", "rgba(255,206,130,1)"], "width": 10},
@@ -456,7 +477,7 @@ S_ = lambda name, t, **k: {"name": name, "at": round(t, 2), **k}  # noqa: E731
 SFX = [
     S_("whoosh", starts["1"] + 0.82, gain_db=-11),     # v3: on the whip up
     S_("metal-clank", starts["2a"] + 0.2, gain_db=-18), S_("crow-caw", starts["2a"] + 1.9, gain_db=-22),
-    S_("metal-clank", starts["2b"] + 0.15, gain_db=-21), S_("metal-clank", starts["2b"] + 0.85, gain_db=-23),
+    S_("metal-clank", starts["2b"] + BEST, gain_db=-19), S_("metal-clank", starts["2b"] + BOSSES, gain_db=-19),   # on the strikes
     S_("sand-pour", starts["3"] + 0.05, gain_db=-18, dur=round(POUR_END + 0.3, 2), fade_out=0.25, query="sand pouring"),
     S_("stone-grind", starts["3"] + IRON3_T - 0.2, gain_db=-16, dur=0.5),
     S_("metal-clank", starts["3"] + TAMP3, gain_db=-16),

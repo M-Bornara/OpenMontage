@@ -193,4 +193,11 @@ ok47 = all(any(i.startswith("L47b") for i in x) for x in l47b_bad) and not any(i
 status = "PASS" if ok47 else "FAIL"
 print(f"{status} L47b full set plate reference caught (2 bad), detail crop / no plate / SAME_CAMERA pass (3 good)")
 ok = ok and status == "PASS"
+# L54 (HC002-S1 pose-friend-s12, 2026-11-20): a pose sheet must be 16:9
+ps = prompt_kit.pose_sheet("a man", ["standing", "leaning"], "12: a doorway", "daylight", "eye level")
+l54_bad = prompt_kit.lint("pose-friend-s12", {"aspect": "9:16", "refs": ["kf:s12"], "prompt": ps})
+l54_good = prompt_kit.lint("pose-friend-s12", {"aspect": "16:9", "refs": ["kf:s12"], "prompt": ps})
+status = "PASS" if any(i.startswith("L54") for i in l54_bad) and not any(i.startswith("L54") for i in l54_good) else "FAIL"
+print(f"{status} L54 9:16 pose sheet caught, 16:9 passes")
+ok = ok and status == "PASS"
 sys.exit(0 if ok else 1)

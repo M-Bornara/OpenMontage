@@ -365,6 +365,12 @@ def lint(name: str, spec: dict) -> list[str]:
                       "the hand; state every object's true size against the hand with scale()")
     if "spectacles" in p and "amber" not in p and "no spectacles" not in p:
         issues.append("L11: spectacles that aren't Matt's (confuses the spot-the-glasses game)")
+    # L54 (HC002-S1 pose-friend-s12, 2026-11-20): a 9:16 pose sheet with the approved shot as reference came back as that
+    # SHOT repainted (the scene, the other people half-keyed into green, a ghost head), not a sheet. The 16:9 sheets of the
+    # same batch, with the same kind of reference, came back clean. Sprite / pose sheets are always 16:9.
+    if ("pose sheet" in p or "sprite sheet" in p) and spec.get("aspect", "9:16") != "16:9":
+        issues.append("L54: sprite / pose sheet not 16:9: a tall sheet with the shot as reference repaints the shot; "
+                      "use aspect 16:9 (figures side by side)")
     return issues
 
 

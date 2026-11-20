@@ -191,3 +191,11 @@ Every generation round teaches us something. A lesson only counts once it's **en
 - **Lint:** `layers.lint_cutouts`, run by `episode.py build` (fails; `"cutout_lint": "warn"` for old cuts).
 - **Continuity:** the same character raises the same hand across a cut (2a mirrored to match 2b).
 
+## L54: sprite / pose sheets are always 16:9 (HC002-S1 pose-friend-s12, 2026-11-20)
+- **Failure:** the one 9:16 pose sheet of the ALIVE v2 batch (the whispering friend, with the approved shot s12 as
+  reference) came back as shot 12 repainted: the street, the other man half-keyed into green, Gage's ghost where the
+  friend's head should be. The three 16:9 sheets of the same batch, each with its shot as reference, came back clean.
+- **Rule + lint:** `lint()` L54 fails any sprite / pose sheet whose aspect isn't 16:9 (test in test_prompt_lint.py).
+- Also seen: "his RIGHT arm raised (on the LEFT of each drawing)" came back with the left arm up (the reference still
+  had it that way): a free horizontal flip fixed it (alive2_hc002s1.py `flip`).
+

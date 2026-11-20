@@ -626,3 +626,10 @@ time,project,item,usd,note
 2026-11-18 13:58:05,hc002-s1,keyframes16x9:s11:gemini-3-pro-image:google-batch,0.0670,
 2026-11-18 12:00:00,channel,subscription:elevenlabs-starter:monthly,6.0000,monthly from 2026-11-18 (40k characters; user option b)
 2026-11-18 14:17:12,hc002-s1,narration:all:elevenlabs-direct:740chars,0.0000,
+2026-11-20 01:13:12,hc002-s1,references:pose-gage-s2a:gemini-3-pro-image:google-batch,0.0670,
+2026-11-20 01:13:12,hc002-s1,references:plate-s2b-empty:gemini-3-pro-image:google-batch,0.0670,
+2026-11-20 01:13:12,hc002-s1,references:pose-crew-s2b:gemini-3-pro-image:google-batch,0.0670,
+2026-11-20 01:13:12,hc002-s1,references:plate-s10-empty:gemini-3-pro-image:google-batch,0.0670,
+2026-11-20 01:13:12,hc002-s1,references:pose-gage-s10:gemini-3-pro-image:google-batch,0.0670,
+2026-11-20 01:13:12,hc002-s1,references:plate-s12-empty:gemini-3-pro-image:google-batch,0.0670,
+2026-11-20 01:13:12,hc002-s1,references:pose-friend-s12:gemini-3-pro-image:google-batch,0.0670,
