@@ -109,11 +109,12 @@ c.s("door-swing", t + 0.1)
 t = c.at("so semmelweis")
 c.shot(t, KF + "s6a.png", {"type": "slide", "from": -2, "to": 2, "scale": 1.08}, cap=TOP)
 c.s("hands-washing", t + 0.2, query="hand washing")
-# s6b: hands in the basin (glasses measured at 0.55, 0.35)
+# s6b: hands in the basin. Glint: user 2026-11-20 "check the glasses glint at 0:29": 0.55, 0.35 was the BRIDGE between the
+# lenses; now on the right lens's painted highlight (measured on s6b.png: lens x 0.57-0.65, highlight 0.59, 0.34)
 t = c.at("deaths fell")
 hundred = c.at("one in 100")
 c.shot(t, KF + "s6b.png", push(0.5, 0.5, 1.1), cap=LOW,
-       fx=[{"kind": "glint", "x": 0.55, "y": 0.35, "at": rel(hundred, t) + 0.8, "size": 26}])
+       fx=[{"kind": "glint", "x": 0.59, "y": 0.34, "at": rel(hundred, t) + 0.8, "size": 26}])
 c.o("stamp", hundred, hundred + 1.2, text="1 IN 100", y=TOP); c.s("stamp-thud", hundred + 0.05)
 # s7a: the doctors refuse
 t = c.at("but many")
@@ -179,11 +180,13 @@ ep["packaging"] = {
    {
     "kind": "particles",
     "style": "bubbles",
-    "x": 0.4,
-    "y": 0.525,
-    "tx": 0.41,
-    "ty": 0.575,
-    "spread": 0.03,
+    # user 2026-11-20: the bubbles sat on his right WRIST (0.40) and fell to the basin rim; the lather is on the palms
+    # between his hands (measured on s1a.png: palms x 0.24-0.33, y 0.51-0.53): born there, floating a little up
+    "x": 0.285,
+    "y": 0.523,
+    "tx": 0.28,
+    "ty": 0.505,
+    "spread": 0.035,
     "every": 0.12,
     "life": 0.5,
     "size": 9,
