@@ -274,9 +274,21 @@ def gen_images(pid: str, section: str, out_dir: str, only: list[str]):
     # L29 (Matt cameo) is a whole-video rule: when only some shots are regenerated, judge it on all keyframes
     has_matt = any("cameo of matt" in s.get("prompt", "").lower() for s in ep.get("keyframes", {}).values())
     found = prompt_kit.lint_all({x: items[x] for x in names}, require_matt=not has_matt)
+    # same-view rules compare a re-rolled shot with EVERY keyframe of the episode, not only the ones in this run
+    if section == "keyframes":
+        for msg in prompt_kit.lint_sequence(items):
+            if any(re.search(rf"\b{re.escape(x)}\b", msg) for x in names) and msg not in sum(found.values(), []):
+                found.setdefault(next(x for x in names if re.search(rf"\b{re.escape(x)}\b", msg)), []).append(msg)
     for x, problems in found.items():
         for pr in problems:
             print(f"LINT {x}: {pr}")
+    # L47b/L55 (user 2026-11-20): the same-background rules can't be waved through with --lint-ok: a full scene as a
+    # reference wins over any words. Opt out per shot in the prompt (SAME_CAMERA) when that camera is the point.
+    hard = {x: [m for m in v if re.match(r"L(36|37|39|40|47b|55b?)\b", m)] for x, v in found.items()}
+    hard = {x: v for x, v in hard.items() if v}
+    if hard and not legacy:
+        raise SystemExit(f"SAME-BACKGROUND GATE: {len(hard)} item(s) would copy a reference's room or camera "
+                         "(L36/L37/L39/L40/L47b/L55; --lint-ok does not skip these)")
     if found and not lint_ok:
         raise SystemExit(f"prompt lint: {len(found)} item(s) need a fix (see plan/prompt-lessons.md), or re-run with --lint-ok")
     # PREVIZ GATE (user, 2026-11-09): no keyframe is paid for until the free pre-viz (scripts/previz.py: set map with
@@ -312,6 +324,11 @@ def gen_images(pid: str, section: str, out_dir: str, only: list[str]):
         if dual:
             run_wave([wide_spec(n) for n in wave if (out / f"{n}.png").exists()])
         pending = [n for n in pending if n not in wave]
+    # L56 (user 2026-11-20): catch a copied background NOW, before the edit (cut_check L52 only sees it in the cut)
+    if section == "keyframes" and names:
+        import view_check
+        if view_check.check(pid, names):
+            print("VIEW CHECK: the shots above copied a background. Show the user before editing; a re-roll needs their OK.")
 
 
 # ── steps ────────────────────────────────────────────────────────────────

@@ -199,3 +199,23 @@ Every generation round teaches us something. A lesson only counts once it's **en
 - Also seen: "his RIGHT arm raised (on the LEFT of each drawing)" came back with the left arm up (the reference still
   had it that way): a free horizontal flip fixed it (alive2_hc002s1.py `flip`).
 
+
+## L55 + L56 + L40 widened: the same background again and again (user 2026-11-20, audit of all episodes)
+- **User:** "make sure the backgrounds are not going to be similar again ... find out where the problem is".
+- **Not thin prompts.** `view_check.py` on every project: 28 stills in 9 episodes are the SAME picture as the set plate
+  they were given (ORB 133–1858 matching points). HCS05 s5a / s5b / s6 had long camera() lines facing west, south and
+  north and all three came back as plate-ward.png with a person painted in. The image model treats a full scene among
+  the references as the picture to EDIT; "style only" / "do not copy its camera" / camera() lose every time.
+- **Why it kept coming back:** every episode passed its set plate (or another keyframe, HCS08 kf:s1a x5) as Reference 1
+  on every shot; the kit's own L1 / L39 / L40 messages recommended "a people-free plate" / "the set plate" as the fix;
+  L36/L37 added more words against the picture; L40 only fired with a declared "set"; --lint-ok waved findings
+  through; and nothing compared the images until the edit (cut_check L52), after the spend and the user's review.
+  Thin settings made it worse where they existed (HCS09 s1b: "SET: the hospital, a corridor." and no camera line).
+- **Rules:** L40 now fires on any kf: reference (unless kf_same_view); L55 every story frame has its own set_block()
+  and a camera() BACKGROUND of >= 8 words; L55b no two story frames share a BACKGROUND; L1/L39/L40 messages point to
+  a cropped detail or no scene at all. `episode.py`: L36/L37/L39/L40/L47b/L55 are a hard gate (--lint-ok does not
+  skip them; --legacy only) and the sequence rules compare a re-roll with the whole episode. **L56** `view_check.py`
+  runs the moment keyframes come back: any still that matches its scene reference or another keyframe (>= 120 ORB
+  inliers; a shared prop / face scores 47–77) is shown to the user before the edit.
+- **Per episode:** a `backgrounds-v1.md` sheet (one written background per shot, from the set map, neighbours checked)
+  goes on the approval page with the storyboard (HCS10 first).

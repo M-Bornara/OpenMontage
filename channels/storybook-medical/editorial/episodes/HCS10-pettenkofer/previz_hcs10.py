@@ -71,7 +71,7 @@ SHOTS = [
         ("grad", PAPER, (200, 186, 156)), ("ellipse", 0.14, 0.3, 0.86, 0.7, (240, 236, 220)),
         ("text", 0.5, 0.5, "Meyers plate c.1885: comma bacilli"), ("text", 0.5, 0.78, "a lens slides over it")]},
     {"name": "9", "zone": "TOP", "text": "caption", "shapes": [
-        ("grad", (210, 196, 160), WALL), ("rect", 0.0, 0.08, 0.3, 0.7, (240, 226, 190)),
+        ("grad", (210, 196, 160), WALL), ("rect", 0.0, 0.08, 0.14, 0.7, (240, 226, 190)), ("rect", 0.34, 0.04, 0.92, 0.62, WOOD, "bookcase"),
         ("rect", 0.1, 0.66, 0.9, 0.76, WOOD, "desk"), ("fig", 0.58, 0.8, 0.5, {"sitting": True}, "writing, a faint smile"),
         ("rect", 0.2, 0.6, 0.26, 0.66, GLASS), ("text", 0.5, 0.92, "morning sun rises")]},
     {"name": "10", "zone": "LOW", "text": "caption", "shapes": [
@@ -79,9 +79,9 @@ SHOTS = [
         ("poly", [(0, 0.5), (1, 0.5), (1, 0.58), (0, 0.58)], WOOD), *[("fig", 0.1 + 0.16 * i, 0.5, 0.12, {}) for i in range(6)],
         ("fig", 0.5, 0.74, 0.22, {}, "a critic stands, points"), ("text", 0.5, 0.15, "high angle from the back rows")]},
     {"name": "11", "zone": "TOP", "text": "caption", "shapes": [
-        ("grad", WIN, (110, 120, 120)), ("rect", 0.26, 0.3, 0.74, 0.96, GLASS, "glass (side, macro)"),
+        ("grad", (70, 52, 40), (40, 30, 24)), ("ellipse", 0.62, 0.12, 0.8, 0.26, LAMP), ("rect", 0.26, 0.3, 0.74, 0.96, GLASS, "glass (side, macro)"),
         ("ellipse", 0.4, 0.5, 0.44, 0.54, WHITE), ("ellipse", 0.55, 0.62, 0.59, 0.66, WHITE),
-        ("ellipse", 0.47, 0.72, 0.5, 0.75, WHITE), ("text", 0.5, 0.2, "bubbles rise; a cold green tint")]},
+        ("ellipse", 0.47, 0.72, 0.5, 0.75, WHITE), ("text", 0.5, 0.2, "dark room + lamp behind; bubbles; green tint")]},
     {"name": "12", "zone": "LOW", "text": "caption · END LINE", "shapes": [
         ("grad", (70, 60, 56), (40, 34, 32)), ("rect", 0.0, 0.1, 0.2, 0.56, (90, 100, 110)),
         ("rect", 0.3, 0.58, 0.78, 0.64, WOOD, "far bench"), ("ellipse", 0.6, 0.36, 0.76, 0.5, LAMP),
@@ -101,7 +101,7 @@ LAB = {
         ("1", 500, 640, 0, 28, "CU, 85 mm"), ("4", 600, 820, 345, 50, "OTS over 2 students"),
         ("5a", 470, 560, 0, 20, "top-down over the glass"), ("5b", 760, 460, 270, 18, "side macro"),
         ("6", 430, 240, 270, 26, "profile, window behind"), ("7", 300, 120, 225, 40, "high angle on the hand"),
-        ("9", 470, 380, 300, 44, "MS at the desk"), ("11", 300, 280, 280, 14, "side macro, the glass"),
+        ("9", 470, 380, 315, 44, "MS, the bookcase corner"), ("11", 300, 280, 90, 14, "side macro, into the room"),
         ("12", 900, 700, 300, 50, "WS from the door, dusk"),
     ],
 }

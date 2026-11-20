@@ -67,8 +67,9 @@ EPISODES = {
             ("hamburg_disinfection_1892.gif", "Hamburg 1892: disinfection squad", "Period street, clothes and carts (shot 2).", "1892 · Wikimedia Commons · public domain"),
             ("meyers_cholera_bacilli_1885.png", "Cholera bacilli, Meyers lexicon c. 1885", "Shot 8 uses this plate itself (free, a period document).", "Meyers Konversations-Lexikon, 4th ed., c. 1885 · Wikimedia Commons · public domain"),
         ],
+        "extra": [EP / "HCS10-pettenkofer/backgrounds-v1.md"],
         "page_title": "Pettenkofer Storyboard",
-        "status": "storyboard v1 + free sketches · waiting for your OK",
+        "status": "storyboard v1 + one written background per shot · waiting for your OK",
     },
     "hc002s1": {
         "anchor": "gage-s1", "short": "Gage S1", "slot": "CASE 11 · Sun Nov 29 · 15:00 ET = 14:00 Alberta · ready by Wed Nov 25",

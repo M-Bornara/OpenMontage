@@ -166,6 +166,14 @@ def lint_sequence(keyframes: dict[str, dict]) -> list[str]:
                            "(position, facing, exact background)")
             elif ca == cb:
                 out.append(f"L36: {b}: same set, facing and background as {a}; the two images will look the same")
+    # L55b: the same BACKGROUND text on two story frames, whatever their SET lines say (a shared constant pasted twice)
+    seen: dict[str, str] = {}
+    for n in story:
+        c = cam(keyframes[n])
+        if c and c[1] in seen:
+            out.append(f"L55b: {n}: the same BACKGROUND as {seen[c[1]]}; give each shot its own background from the map")
+        elif c:
+            seen[c[1]] = n
     return out
 
 
@@ -239,7 +247,7 @@ def lint(name: str, spec: dict) -> list[str]:
     hero_in_shot = any("sheet-alexis" in r or "sheet-young-family" in r for r in refs)
     if STYLE_ANCHOR in refs and (people_free or not hero_in_shot):
         issues.append("L1: the style anchor (it shows the red-tuque voyageur) on a shot without that character: "
-                      "use a people-free episode plate as reference 1")
+                      "use a cropped DETAIL of a plate (texture/palette only, L47b) or no style image; never a full room")
     if STYLE_ANCHOR in refs and "style reference only" not in p and "style only" not in p:
         issues.append("L2: style anchor without the 'style only, never its man' note (ANCHOR_NOTE)")
     if spec.get("aspect") == "1:1" and "border" not in p:
@@ -302,14 +310,15 @@ def lint(name: str, spec: dict) -> list[str]:
     plates = [r.split("plate-", 1)[1] for r in refs if r.startswith("ref:plate-")]
     if "shot:" in p and plates and (not spec.get("set") or any(pl != spec["set"] for pl in plates)):
         issues.append(f"L39: plate reference {plates} on a shot whose set is {spec.get('set')!r}: a plate is a reference "
-                      "only for shots on its own set (declare \"set\"; elsewhere use the character sheets or a style-only "
-                      "plate from outside this film)")
+                      "only for shots on its own set (declare \"set\"; elsewhere use the character sheets or a cropped "
+                      "DETAIL for texture; a full room from any film is copied, L47b)")
     # L40 (HCS07 s4b v1, 2026-11-14): an earlier keyframe of the SAME set as reference for a different camera came back
     # as a copy of that keyframe (same view, Matt added). kf: references copy the camera; use them only for a closer
     # shot of the same view (e.g. CU after MS), never for a reverse or another angle.
-    if "shot:" in p and any(r.startswith("kf:") for r in refs) and spec.get("set") and spec.get("kf_same_view") is not True:
+    # 2026-11-20: fires with or without a declared "set" (HCS08 s2/s3 had none and took kf:s1a: s1a's street again)
+    if "shot:" in p and any(r.startswith("kf:") for r in refs) and spec.get("kf_same_view") is not True:
         issues.append("L40: an earlier keyframe as reference (it copies its camera): allowed only for a closer shot of "
-                      "the same view, marked \"kf_same_view\": true; otherwise use the set plate or an outside style plate")
+                      "the same view, marked \"kf_same_view\": true; otherwise the character sheets only (no full scene, L47b)")
     # L41 (HCS07 s1a v1): "faces above the frame" came back as headless bodies inside the frame.
     if re.search(r"(faces?|heads?) (are |is )?(above|out of|outside|cropped (off|by))( the)? frame", p):
         issues.append("L41: faces/heads 'out of frame' wording: the model paints headless bodies; frame the shot so heads "
@@ -352,6 +361,17 @@ def lint(name: str, spec: dict) -> list[str]:
         issues.append(f"L47b: full set plate as a reference ({', '.join(map(str, plate_refs))}): it carries its camera "
                       "whatever the prompt says (HC002-S1 2a/2b came back as the same camera = a jump cut). Pass a cropped "
                       "detail (file name with 'detail'/'crop') or no plate; or say SAME_CAMERA if that camera is the point")
+    # L55 (user 2026-11-20 "backgrounds keep looking the same"): every story frame carries ITS OWN setting: a SET line
+    # with the year (set_block) and a camera() BACKGROUND (L37) that names what fills the frame behind the action in at
+    # least 8 words. HCS09 s1b had only "SET: the Vienna General Hospital maternity clinics, 1847, a corridor." (the
+    # name is shared with three other shots, nothing about what is behind him) and came back as the corridor plate.
+    if "shot:" in p and not model_sheet and "empty plate" not in p and SAME_CAMERA.lower() not in p:
+        if "must not look like any other" not in p:
+            issues.append("L55: no set_block() of its own (place, year, what the place looks like): a one-line SET "
+                          "leaves the gap to the reference's room")
+        bg = re.search(r"background \(exactly this, nothing else\): (.+?)\.", p)
+        if bg and len(bg.group(1).split()) < 8:
+            issues.append(f"L55: background too thin ({bg.group(1)!r}): name at least 8 words of what is behind the action")
     # L46: a held prop with "no ... drawn" in brackets gets drawn anyway, as the wrong tool
     if "pose sheet" in p and re.search(r"\(no [a-z ]+ drawn\)", p):
         issues.append("L46: '(no X drawn)' for a held prop: the model draws a wrong tool; use EMPTY_HANDS, or give "

@@ -200,4 +200,31 @@ l54_good = prompt_kit.lint("pose-friend-s12", {"aspect": "16:9", "refs": ["kf:s1
 status = "PASS" if any(i.startswith("L54") for i in l54_bad) and not any(i.startswith("L54") for i in l54_good) else "FAIL"
 print(f"{status} L54 9:16 pose sheet caught, 16:9 passes")
 ok = ok and status == "PASS"
+# L40 (no set) / L55 / L55b (user 2026-11-20 "backgrounds keep looking the same"; view_check audit: 28 stills copied their plate)
+import importlib.util  # noqa: E402
+
+
+def _kf(rel):
+    f = REPO / "channels/storybook-medical/editorial/episodes" / rel
+    spec = importlib.util.spec_from_file_location(f.stem, f)
+    m = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(m)
+    return m.KEYFRAMES
+
+
+semm, snow = _kf("HCS09-semmelweis/build_hcs09.py"), _kf("HCS08-john-snow/build_hcs08.py")
+has_code = lambda iss, c: any(re.match(rf"{c}\b", i) for i in iss)  # noqa: E731
+import re  # noqa: E402
+l55_bad = prompt_kit.lint("s1b", semm["s1b"])                       # "SET: the hospital, a corridor." and no camera()
+l47c_bad = [prompt_kit.lint(n, snow[n]) for n in ("s2", "s3")]       # kf:s1a as a reference -> s1a's street
+good = {"aspect": "9:16", "refs": ["ref:sheet-x"], "prompt": prompt_kit.set_block("A hygiene laboratory", "1892", "wooden benches") + " "
+        + prompt_kit.framing("MS", "eye level", "50 mm", "he raises his palm") + " "
+        + prompt_kit.camera("by the window", "east", "the long bench with flasks and a brass microscope, the shelves of jars behind")}
+twin = dict(good, prompt=good["prompt"].replace("MS,", "CU,").replace("SHOT: medium", "SHOT: close"))
+seq = prompt_kit.lint_sequence({"a": good, "b": twin})
+ok55 = (has_code(l55_bad, "L55") and all(has_code(x, "L40") for x in l47c_bad)
+        and not [i for i in prompt_kit.lint("a", good) if re.match(r"L(37|40|47b|55)", i)] and any(m.startswith("L55b") for m in seq))
+status = "PASS" if ok55 else "FAIL"
+print(f"{status} L55 thin setting (HCS09 s1b), L40 kf: reference without a set (HCS08 s2/s3), L55b shared background caught; full spec passes")
+ok = ok and status == "PASS"
 sys.exit(0 if ok else 1)
