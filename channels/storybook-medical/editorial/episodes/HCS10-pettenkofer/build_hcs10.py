@@ -20,7 +20,7 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[5]
 sys.path.insert(0, str(REPO))
 sys.path.insert(0, str(REPO / "channels/storybook-medical/scripts"))
-from prompt_kit import (EMPTY_HANDS, FULL_BLEED, NO_TEXT, ONE_EACH, PERIOD, SAFE_FRAMING, WAVY_WRITING, camera, cast,  # noqa: E402
+from prompt_kit import (EMPTY_HANDS, NO_PEOPLE, crowd, real_spectacles, FULL_BLEED, NO_TEXT, ONE_EACH, PERIOD, SAFE_FRAMING, WAVY_WRITING, camera, cast,  # noqa: E402
                         framing, lint_all, OTS_FRAMING, matt_beat, pose_sheet, scale, set_block, sprite_sheet)
 
 PID = "hcs10-pettenkofer"
@@ -208,8 +208,177 @@ REROLL_V2 = ["pose-hand-s7", "plate-s4", "plate-s1"]
 HERO_PIECES = ["plate-s1", "sprite-hand-glass-s1", "sprite-student-hand-s1", "plate-s4", "pose-pettenkofer-s4",
                "plate-s6", "pose-pettenkofer-s6", "plate-s7", "pose-hand-s7"]
 
-# the 9 story stills (2, 3a, 3b, 5a, 5b, 9, 10, 11, 12) are added after the HERO pieces are approved on real art
-KEYFRAMES = {}
+# ── the 9 story stills (user 2026-11-20: HERO pieces v2 approved on real art, "go ahead with the 9 story stills") ─────
+# Root-cause rule (2026-11-20): no set plate and no keyframe is a reference. People shots take the cast sheet; the rest
+# take STYLE_D, a strip of three painted DETAILS cut from our own HCS10 pieces (coat cloth, desk oak, a glass): texture
+# and palette only, no room, no camera. Every background is backgrounds-v1.md word for word (camera()).
+STYLE_D = "proj:assets/images/style/style-details.png"
+STYLE_ROLE = ("Reference 1 is a strip of three small painted DETAILS from our film (cloth, wood, a glass), for the painting "
+              "style ONLY: ink line weight, brush texture, two-tone cel shading and palette; never copy or place these "
+              "objects. ")
+CAPTION_TOP = "The top fifth of the frame stays calm background with no face in it (a caption sits there)."
+HAMBURG = set_block("a cobbled harbour street in Hamburg", "late summer 1892, during the cholera epidemic",
+                    "tall narrow gabled brick houses with shuttered windows on both sides, wet grey cobbles, the river "
+                    "Elbe at the end of the street with ship masts in a pale haze; grey morning light, no sun")
+KOCH_LAB = set_block("Robert Koch's laboratory in Berlin", "1890",
+                     "a plain pale-green painted wall, a tall window with cool daylight, a wooden rack of glass test tubes, "
+                     "a brass microscope on a plain table; cool, clean, clinical")
+HALL = set_block("a university lecture hall in Munich", "1892",
+                 "curved rows of dark wooden benches rising steeply, tall arched windows high at the top, a wooden "
+                 "lectern at the front; dusty shafts of pale light")
+READING = set_block("a gentlemen's club reading room", "an evening in late 1892",
+                    "a round table covered with a green baize cloth, a hanging brass gas lamp above it, green-papered "
+                    "walls with two framed engravings, a heavy curtained window at night; warm lamplight, deep shadows")
+BENCH = set_block("the oak bench in Pettenkofer's Munich laboratory", "October 1892",
+                  "worn dark oak planks, glassware, brass; cold grey daylight from the window, amber lamplight far away")
+OLD_HAND = "the professor's old RIGHT hand (thin skin, visible veins, a dark frock-coat cuff over a white shirt cuff)"
+KOCH = ("ROBERT KOCH (47; a full dark-brown beard, a receding hairline with the hair combed back, "
+        + real_spectacles("small oval wire-rimmed spectacles") + ", a dark suit, a white shirt with a dark bow tie)")
+
+KEYFRAMES = {
+    # 2 · Hamburg: the toll told by an empty street + a number (0b: n/a)
+    "s2": dict(aspect="9:16", refs=[STYLE_D, "proj:refs/hamburg_water_1892.jpg"],
+        roles=(STYLE_ROLE + "Reference 2 is a period print of Hamburg in 1892 (the emergency boiled-water carts): take "
+               "the barrel cart, the horse and the people's clothes from it, painted in our style; NOT its crowd, its "
+               "lettering or its camera. "),
+        prompt=(f"{HAMBURG} "
+                + framing("LS", "high angle, looking down from an upper window", "28 mm",
+                          "the city is silent after cholera killed thousands: a few people queue for boiled water at a cart",
+                          "hushed, grieving, empty") + " "
+                + camera("at an upper-floor window on one side of the street, high above the cobbles", "down the street toward the river",
+                         "the cobbled street falling away between tall gabled brick houses with closed shutters, the Elbe and ship "
+                         "masts in grey haze at the far end", "only a thin strip of hazy sky above the roofs") + " "
+                "In the middle of the street, small: one horse-drawn cart carrying two large wooden barrels of boiled "
+                "water, stopped; the rest of the street is almost empty. "
+                + crowd("a short silent queue at the cart", [
+                    "a woman of about 40 in a dark shawl holding a wooden bucket",
+                    "a young woman in a grey dress with a white apron holding a tin jug",
+                    "an old man in a flat cap carrying a small wooden tub"],
+                    "Two or three more figures far away, small, seen from behind; nobody else.")
+                + f" No bodies, no coffins, nothing graphic: the toll is told by the empty street. {SAFE_FRAMING} {PERIOD} {NO_TEXT}")),
+    # 3a · Koch: the germ in the water
+    "s3a": dict(aspect="9:16", refs=[STYLE_D, "proj:refs/koch_1890.jpg"],
+        roles=(STYLE_ROLE + "Reference 2 is a portrait engraving of the real Robert Koch in 1890: paint THIS face "
+               "(receding hairline, hair combed back, the full dark beard, small oval wire-rimmed spectacles, the bow "
+               "tie) in our storybook style, never as an engraving, and do not copy its oval frame or its pose. "),
+        prompt=(f"{KOCH_LAB} "
+                + framing("MCU", "eye level", "50 mm, shallow focus",
+                          "Robert Koch holds a glass flask of water up to the window light and looks through it, sure the danger is a germ inside it",
+                          "certain, sharp, confident") + " "
+                + camera("beside his window, close to him", "along the window wall",
+                         "the plain pale-green painted wall behind him, the bright edge of the window at the LEFT edge of the frame, "
+                         "a wooden rack of glass test tubes on the table behind him, soft",
+                         "no wood panelling, no gas lamps, nothing of the Munich laboratory") + " "
+                + cast(KOCH + ", chest up, his RIGHT hand holding a round glass flask of clear water up at eye level in the "
+                       "window light, his eyes on it") + " "
+                + scale({"the glass flask": "about 6 in (15 cm) tall, round-bodied with a narrow neck, clear water inside"})
+                + f" {CAPTION_TOP} {ONE_EACH} {SAFE_FRAMING} {PERIOD} {NO_TEXT}")),
+    # 3b · Pettenkofer: the germ ALONE isn't enough (the finger painted up from the start, L53)
+    "s3b": dict(aspect="9:16", refs=[P], roles=P_ROLE,
+        prompt=(f"{HALL} "
+                + framing("MS", "low angle", "35 mm",
+                          "Max von Pettenkofer at the lectern defies the germ theory, one forefinger raised",
+                          "defiant, stubborn, proud") + " "
+                + camera("on the floor in front of the lectern, low", "up toward the rising benches",
+                         "curved rows of EMPTY dark wooden benches rising steeply behind him, tall arched windows high at the top "
+                         "with dusty shafts of pale light", "no laboratory bench, no flasks, no cabinets") + " "
+                + cast(PETTENKOFER + ", waist up behind a wooden lectern, his RIGHT forefinger raised at shoulder height, his "
+                       "LEFT hand flat on the lectern, his eyes on the empty benches") + " "
+                + f"{CAPTION_TOP} {ONE_EACH} {SAFE_FRAMING} {PERIOD} {NO_TEXT}")),
+    # 5a · baking soda first (top-down; grains are particles in the edit, NO bubbles, NO fizz: user 2026-11-20)
+    "s5a": dict(aspect="9:16", refs=[STYLE_D], roles=STYLE_ROLE,
+        prompt=(f"{BENCH} "
+                + framing("INSERT", "straight down from above", "50 mm",
+                          "his old hand tips a teaspoon of white baking soda into a glass of water, to calm his stomach acid first",
+                          "careful, methodical, calm") + " "
+                + camera("directly above the bench", "straight down",
+                         "worn dark oak planks filling the whole frame, the round brass foot of a microscope just at the top edge",
+                         "no wall, no window, no floor") + " "
+                "In the centre a tall drinking glass of clear water seen from above (its round rim); "
+                f"{OLD_HAND} comes in from the RIGHT edge holding a small teaspoon tilted over the glass, a few white "
+                "grains falling from it; beside the glass a small plain round tin of unmarked bare metal with its lid off, "
+                "white powder inside. Calm, still water: NO bubbles, NO fizz. "
+                + cast("only his old right hand and cuff; nobody else") + " "
+                + scale({"the water glass": "about 4 in (10 cm) tall and 2 3/4 in (7 cm) across",
+                         "the teaspoon": "about 5 in (13 cm) long", "the tin": "about 3 in (8 cm) tall",
+                         "the microscope foot": "about 5 in (12 cm) across"})
+                + f" {SAFE_FRAMING} {PERIOD} {NO_TEXT}")),
+    # 5b · then germs from Hamburg, less than a teaspoon (0b: object; the germs never drawn as matter)
+    "s5b": dict(aspect="9:16", refs=[STYLE_D], roles=STYLE_ROLE,
+        prompt=(f"{BENCH} "
+                + framing("ECU", "from the side, at the height of the glass rim", "100 mm macro, very shallow focus",
+                          "a little culture of cholera germs from Hamburg is poured from a small flask into a small empty glass: less than a teaspoon",
+                          "tense, quiet, deliberate") + " "
+                + camera("at the bench, level with the glass rim", "west toward the window",
+                         "the tall window behind, completely out of focus: a bright pale-grey blur with soft dark vertical mullion lines",
+                         "the shelves and lamps are NOT in view") + " "
+                "In sharp focus: a small round glass culture flask with a narrow neck, tilted by his old fingers at the "
+                "top of the frame, a THIN clear stream running from its lip into a small empty drinking glass standing "
+                "on the bench below it; a little clear liquid in the bottom of the small glass. Just behind it, soft: a "
+                "taller EMPTY water glass with a faint white film inside. The liquid is clear like water: nothing drawn "
+                "in it. "
+                + cast("only his old fingers holding the flask's neck (a dark frock-coat cuff); nobody else") + " "
+                + scale({"the culture flask": "about 3 in (8 cm) tall, its neck 1/2 in (1.5 cm) wide",
+                         "the small glass": "about 2 3/4 in (7 cm) tall", "the empty water glass": "about 4 in (10 cm) tall"})
+                + f" {CAPTION_TOP} {SAFE_FRAMING} {PERIOD} {NO_TEXT}")),
+    # 9 · it never turned deadly; he declared victory
+    "s9": dict(aspect="9:16", refs=[P], roles=P_ROLE,
+        prompt=(set_block("Pettenkofer's own writing desk in the corner of his Munich laboratory", "October 1892",
+                          "a heavy dark oak desk, worn and scratched, a few loose folio papers with faint grey wavy lines "
+                          "(no letters), a glass inkwell; warm morning sun") + " "
+                + framing("MS", "eye level", "35 mm", "well again, the old professor writes his report and declares victory",
+                          "quietly triumphant, satisfied") + " "
+                + camera("in front of his desk, a few steps back", "north-west into the corner of the room",
+                         "the corner of the north wall: a tall dark bookcase of bound journals behind the desk, the edge of a tall "
+                         "window at the LEFT edge throwing stripes of warm morning sun across the desk",
+                         "no laboratory bench, no cabinets of jars; only the edge of the window") + " "
+                + cast(PETTENKOFER + ", seated upright at the desk, waist up, writing with a dip pen on a sheet of paper, a "
+                       "faint satisfied smile") + " "
+                + f"On the desk: a glass inkwell and beside it the small EMPTY drinking glass. {WAVY_WRITING} "
+                + f"{CAPTION_TOP} {ONE_EACH} {SAFE_FRAMING} {PERIOD} {NO_TEXT}")),
+    # 10 · the critics: that WAS cholera, just a mild case (C26: written objections; seated, no hall, painted still)
+    "s10": dict(aspect="9:16", refs=[STYLE_D], roles=STYLE_ROLE,
+        prompt=(f"{READING} "
+                + framing("MS", "slightly high angle", "35 mm",
+                          "three doctors read his report in a journal and are not convinced: it was cholera, just a mild case",
+                          "sceptical, dry, unconvinced") + " "
+                + camera("beside the round table, a little above it", "across the table toward the wall",
+                         "a green-papered wall with two dark framed engravings (no readable picture), a heavy curtain drawn across "
+                         "a night window, the hanging gas lamp glowing warm over the green tablecloth",
+                         "no bookshelves, no laboratory cabinets, no hall, no lectern") + " "
+                + crowd("three doctors seated around the round table, an open journal lying in the middle", [
+                    "an old doctor with a white beard and pince-nez, tapping the open page with his forefinger",
+                    "a bald doctor of about 50 with a full dark beard, shaking his head",
+                    "a grey-haired doctor of about 60 with long side whiskers, leaning back with his arms folded"],
+                    "Nobody else in the room.")
+                + f" All three stay seated; nobody stands or points. {WAVY_WRITING} {SAFE_FRAMING} {PERIOD} {NO_TEXT}")),
+    # 11 · the baking soda helped the germs (facing EAST into the room: not 5a's top-down, not 5b's window)
+    "s11": dict(aspect="9:16", refs=[STYLE_D], roles=STYLE_ROLE,
+        prompt=(f"{BENCH} "
+                + framing("ECU", "eye level, from the side", "100 mm macro, very shallow focus",
+                          "the baking soda he drank first: the white cloud in the water that, it turned out, helped the germs",
+                          "quiet, ominous, ironic") + " "
+                + camera("at the bench, level with the glass", "east into the room, the window behind the camera",
+                         "the dark laboratory interior far behind, completely out of focus: the cabinets of jars as warm brown blur "
+                         "and one round amber lamp glow", "the window is behind the camera and NOT in view") + " "
+                "In sharp focus in the centre: a tall drinking glass of water with a faint white cloud hanging in it "
+                "(dissolved powder), lit from the LEFT side by cold window light, a bright edge along the glass. Still "
+                f"water: NO bubbles, NO fizz. {NO_PEOPLE} "
+                + sizes({"the glass": "about 4 in (10 cm) tall, 2 3/4 in (7 cm) across"})
+                + f" {CAPTION_TOP} {SAFE_FRAMING} {PERIOD} {NO_TEXT}")),
+    # 12 · he survived the bet but not the argument (BREATH: held, breath=True)
+    "s12": dict(aspect="9:16", refs=[P], roles=P_ROLE,
+        prompt=(f"{LAB} "
+                + framing("LS", "eye level", "35 mm",
+                          "he survived the bet but lost the argument: the old professor alone in the dark laboratory, looking down at the empty glass",
+                          "lonely, quiet, dignified defeat") + " "
+                + camera("in the doorway at the south-east corner of the laboratory", "north-west across the whole room",
+                         "the whole lab in blue dusk: the long dark bench running through the middle, the tall leaded windows dark "
+                         "blue on the far wall, the glass cabinets in shadow, one brass gas lamp lit over a desk in the far corner") + " "
+                + cast(PETTENKOFER + ", small, standing at the far end of the bench under the one lit lamp, his whole figure "
+                       "about a quarter of the frame height, head bowed, looking down at the small empty glass on the bench") + " "
+                + f"Everything else dark, still and empty. {ONE_EACH} {SAFE_FRAMING} {PERIOD} {NO_TEXT}")),
+}
 
 
 def main():

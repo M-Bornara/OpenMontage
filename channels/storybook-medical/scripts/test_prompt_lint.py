@@ -264,4 +264,11 @@ ok60 = (has_code(l("hb", hand_ball), "L58") and not has_code(l("ho", hand_ok), "
 status = "PASS" if ok60 else "FAIL"
 print(f"{status} L58b a crumpling prop never called 'a ball' (SCALE line), L60 OTS plate uses OTS_FRAMING, not SAFE_FRAMING (HCS10 s7 / s4)")
 ok = ok and status == "PASS"
+# L11b (HCS10 s3a): a real person's own clear spectacles pass; any other spectacles still fail L11
+koch_ok = {"aspect": "9:16", "refs": [], "prompt": "Robert Koch, " + prompt_kit.real_spectacles("small oval wire-rimmed spectacles")}
+koch_bad = {"aspect": "9:16", "refs": [], "prompt": "Robert Koch, small oval wire-rimmed spectacles"}
+ok11 = has_code(prompt_kit.lint("kb", koch_bad), "L11") and not has_code(prompt_kit.lint("ko", koch_ok), "L11")
+status = "PASS" if ok11 else "FAIL"
+print(f"{status} L11b a real person's own clear spectacles (Koch) pass, other spectacles still fail L11")
+ok = ok and status == "PASS"
 sys.exit(0 if ok else 1)

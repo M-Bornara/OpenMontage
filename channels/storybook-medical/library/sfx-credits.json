@@ -691,5 +691,32 @@
   "license": "http://creativecommons.org/publicdomain/zero/1.0/",
   "duration": 17.0769,
   "url": "https://freesound.org/s/193810/"
+ },
+ "cello-low": {
+  "file": "cello-low.mp3",
+  "freesound_id": 516188,
+  "title": "Low cello bass note",
+  "author": "aarrnnoo",
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "duration": 29.2292,
+  "url": "https://freesound.org/s/516188/"
+ },
+ "paper-crumple": {
+  "file": "paper-crumple.mp3",
+  "freesound_id": 496152,
+  "title": "Paper crumple",
+  "author": "Aiwha",
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "duration": 5.5,
+  "url": "https://freesound.org/s/496152/"
+ },
+ "swallow": {
+  "file": "swallow.mp3",
+  "freesound_id": 243036,
+  "title": "sip.wav",
+  "author": "testing_player",
+  "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+  "duration": 3.632,
+  "url": "https://freesound.org/s/243036/"
  }
 }

@@ -81,6 +81,11 @@ def crowd(where: str, faces: list[str], rest: str = "") -> str:
 # L10 · period accuracy slips (castle-like forts, modern maps).
 PERIOD = "Period-accurate only: nothing modern, no modern maps or borders, no anachronistic objects."
 # L11 · Matt's glasses: hide them as a small visual joke (brand-signature.md).
+# L11b (HCS10 s3a, 2026-11-20): a REAL person whose portraits show spectacles (Koch, 1890) keeps them (period-accurate
+# visuals): clear lenses, named as his own, so they never read as Matt's amber pair.
+def real_spectacles(desc: str) -> str:
+    return f"{desc} with CLEAR lenses (his own, as in his portrait; never tinted, not Matt's glasses)"
+
 def glasses_gag(gag: str) -> str:
     return (f"Hidden detail, small and easy to miss: a pair of round wire spectacles with amber-tinted lenses (exactly as "
             f"in the glasses reference) {gag}. It is a gentle visual joke, physically plausible, in the background or "
@@ -418,7 +423,7 @@ def lint(name: str, spec: dict) -> list[str]:
             and not re.search(r"\bno (?:people, no )?hands?\b", p) and "scale (true sizes" not in p):
         issues.append("L51: close-up with a hand and no SCALE line: the model paints toy-sized or giant objects next to "
                       "the hand; state every object's true size against the hand with scale()")
-    if "spectacles" in p and "amber" not in p and "no spectacles" not in p:
+    if "spectacles" in p and "amber" not in p and "no spectacles" not in p and "his own, as in his portrait" not in p:
         issues.append("L11: spectacles that aren't Matt's (confuses the spot-the-glasses game)")
     # L54 (HC002-S1 pose-friend-s12, 2026-11-20): a 9:16 pose sheet with the approved shot as reference came back as that
     # SHOT repainted (the scene, the other people half-keyed into green, a ghost head), not a sheet. The 16:9 sheets of the
