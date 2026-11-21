@@ -20,7 +20,7 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[5]
 sys.path.insert(0, str(REPO))
 sys.path.insert(0, str(REPO / "channels/storybook-medical/scripts"))
-from prompt_kit import (EMPTY_HANDS, NO_PEOPLE, crowd, real_spectacles, FULL_BLEED, NO_TEXT, ONE_EACH, PERIOD, SAFE_FRAMING, WAVY_WRITING, camera, cast,  # noqa: E402
+from prompt_kit import (EMPTY_HANDS, NO_PEOPLE, crowd, lint_lookalikes, real_spectacles, FULL_BLEED, NO_TEXT, ONE_EACH, PERIOD, SAFE_FRAMING, WAVY_WRITING, camera, cast,  # noqa: E402
                         framing, lint_all, OTS_FRAMING, matt_beat, pose_sheet, scale, set_block, sprite_sheet)
 
 PID = "hcs10-pettenkofer"
@@ -346,11 +346,13 @@ KEYFRAMES = {
                          "a green-papered wall with two dark framed engravings (no readable picture), a heavy curtain drawn across "
                          "a night window, the hanging gas lamp glowing warm over the green tablecloth",
                          "no bookshelves, no laboratory cabinets, no hall, no lectern") + " "
+                # v2 (user 2026-11-20, rough cut 1): v1 had "a white beard and pince-nez" (= Pettenkofer + glasses) and "a full
+                # dark beard" (= Koch): no critic may look like either (L61), nobody but Matt wears glasses (L11)
                 + crowd("three doctors seated around the round table, an open journal lying in the middle", [
-                    "an old doctor with a white beard and pince-nez, tapping the open page with his forefinger",
-                    "a bald doctor of about 50 with a full dark beard, shaking his head",
-                    "a grey-haired doctor of about 60 with long side whiskers, leaning back with his arms folded"],
-                    "Nobody else in the room.")
+                    "a bald, clean-shaven doctor of about 60 with a round face and heavy jowls, tapping the open page with his forefinger",
+                    "a doctor of about 65 with grey hair and long grey side-whiskers, his chin shaved, shaking his head",
+                    "a thin doctor of about 45 with dark hair, a neat moustache and no beard, leaning back with his arms folded"],
+                    "Nobody else in the room. None of them has a full beard, and none wears eyeglasses of any kind.")
                 + f" All three stay seated; nobody stands or points. {WAVY_WRITING} {SAFE_FRAMING} {PERIOD} {NO_TEXT}")),
     # 11 · the baking soda helped the germs (facing EAST into the room: not 5a's top-down, not 5b's window)
     "s11": dict(aspect="9:16", refs=[STYLE_D], roles=STYLE_ROLE,
@@ -381,6 +383,12 @@ KEYFRAMES = {
 }
 
 
+# L61: the leads' signature looks; no extra may carry one (checked here and by episode.py before any paid call)
+SIGNATURES = {"Pettenkofer": [r"white beard", r"\bfull white"],
+              "Koch": [r"\bfull(?:[\s-]+\w+){0,2}?[\s-]+beard", r"\bdark(?:[\s-]+\w+)?[\s-]+beard", r"spectacles|pince-nez|eyeglasses"]}
+REROLL_S10 = ["s10"]     # user 2026-11-20: approved re-roll ($0.067)
+
+
 def main():
     from lib.checkpoint import init_project
     p = REPO / "projects" / PID / "episode.json"
@@ -398,8 +406,11 @@ def main():
               previz_approved=("2026-11-20: user approved the HERO motion pre-viz of shots 1, 4, 6; shot 7 changed to the "
                                "fingers clutching and crumpling a loose sheet (not a fist, not the edge grip)"))
     ep["narration"]["v3_text"] = NARRATION
+    ep["signatures"] = SIGNATURES
     json.dump(ep, open(p, "w", encoding="utf-8"), indent=2, ensure_ascii=False)
     issues = lint_all({**REFERENCES, **KEYFRAMES})
+    for n, v in lint_lookalikes(KEYFRAMES, SIGNATURES).items():
+        issues.setdefault(n, []).extend(v)
     for n, v in issues.items():
         print(n, *v, sep="\n  ")
     print(f"{len(REFERENCES)} references, {len(KEYFRAMES)} keyframes -> {p}  ({len(issues)} with lint findings)")

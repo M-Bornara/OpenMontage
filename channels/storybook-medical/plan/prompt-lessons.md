@@ -258,3 +258,18 @@ Tests: test_prompt_lint.py (the v1 prompts fail, the v2 prompts pass).
   `fx_prep._bleed_edges` (every sheet cut now): alpha-0 pixels and magenta-shifted soft pixels take the nearest solid
   colour. `sheet(..., fill_holes=True)` for an object lying on paper: the fingers' grey-green shadows keyed as holes.
   Preview resizes are premultiplied (RGBa) as a browser does.
+
+## L61 + L11 pince-nez + the stamp rule (HCS10 rough cut 1 review, user 2026-11-20)
+
+- **L61**: the critics (s10 v1) came back as "a white beard and pince-nez" (= Pettenkofer + glasses) and "a full dark
+  beard" (= Koch). Extras never carry a lead's signature look. Each build declares `SIGNATURES` (lead -> regexes, stored
+  in episode.json "signatures"); `prompt_kit.lint_lookalikes` checks every crowd() card, in the build and before any paid
+  keyframe run. v2 cards (bald / grey side-whiskers / moustache only, "none wears eyeglasses") came back right first time.
+- **L11** now catches pince-nez, monocle and eyeglasses, not only "spectacles" (a negated "none wears eyeglasses" passes).
+  L11b: a real person's documented spectacles via `real_spectacles()` (Koch).
+- **Stamps** (not a prompt): a stamp adds a place, date or name, never the spoken words; a repeat may stay only if it lands
+  before the words. `scripts/stamp_lint.py`, run by `episode.py build`.
+- **L29** (Matt cameo) now also sees a HERO background in "references" (shot 4's plate), not only keyframes.
+- **Tool**: a transparent glass on a chroma-key sheet keeps the key's green (s6's mint glass); grade the glass box after
+  the cut (edit_hcs10.py `_clear_glass`). A pose pair cut with whole-body alignment can still jump at the swap when the
+  arm changes: align on the head + collar (s4's palm drawing was 48 px off).

@@ -120,6 +120,37 @@ if not S8.exists():
     Image.fromarray(np.clip(paper, 0, 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(0.6)).save(S8)
 M = lambda x, y: (round((M_LEFT + (x - M_X0) * MK) / 1080, 4), round((M_TOP + y * MK) / 1920, 4))  # noqa: E731
 
+# rough cut 1 review (user 2026-11-20): "shots 1 + 6: the liquid reads yellow-green (poison); grade it clear, slightly warm".
+# s1's liquid was painted yellow-green; s6's glass kept the green of the key background through its transparency. Inside
+# the glass box only, yellow..cyan pixels lose most of their colour and take a warm hue. Originals kept as *.orig.png.
+GLASS = {"hand-glass-s1": {"hold-0": (250, 560, 560, 980), "tilt-0": None},
+         "pettenkofer-s6": {"lips-0": (800, 450, 1010, 730), "back-0": (640, 180, 930, 420)}}
+
+
+def _clear_glass(im: Image.Image, box) -> Image.Image:
+    import cv2
+    a = np.array(im.convert("RGBA"))
+    rgb = np.ascontiguousarray(a[..., :3])
+    hsv = cv2.cvtColor(rgb, cv2.COLOR_RGB2HSV).astype(np.float32)
+    m = np.zeros(hsv.shape[:2], bool)
+    x0, y0, x1, y1 = box
+    m[y0:y1, x0:x1] = True
+    m &= (hsv[..., 0] >= 22) & (hsv[..., 0] <= 95) & (hsv[..., 1] > 18) & (a[..., 3] > 0)
+    hsv[..., 0] = np.where(m, 18, hsv[..., 0])                     # warm
+    hsv[..., 1] = np.where(m, hsv[..., 1] * 0.22, hsv[..., 1])     # nearly clear
+    out = cv2.cvtColor(np.clip(hsv, 0, 255).astype(np.uint8), cv2.COLOR_HSV2RGB)
+    return Image.fromarray(np.dstack([out, a[..., 3]]), "RGBA")
+
+
+for spr, frames in GLASS.items():
+    for fr, box in frames.items():
+        src, orig = SPRD / spr / f"{fr}.png", SPRD / spr / f"{fr}.orig.png"
+        if box is None or not src.exists():
+            continue
+        if not orig.exists():
+            shutil.copy(src, orig)
+        _clear_glass(Image.open(orig), box).save(src)
+
 
 # ── 4. HERO shots: the approved real-art previews, ported (hero_real_hcs10.build) ───────────────────────────────────────
 SPRITES = {"hand-glass": "hand-glass-s1", "student-hand": "student-hand-s1", "hand": "hand-s7-soft"}
@@ -177,7 +208,8 @@ ALIVE = {
     # 3a: window light glows through the flask; a glint crosses his spectacles on "water"
     "3a": dict(motion={"type": "push", "from": 1.02, "to": 1.08, "x": 0, "y": 0.5},
                fx=[{"kind": "glow", "x": 0.74, "y": 0.35, "r": 0.11, "at": 0.0, "dur": 0.9, "strength": 0.4, "color": "225,242,255"},
-                   {"kind": "glint", "x": 0.36, "y": 0.38, "at": round(WATER3, 2), "size": 26},
+                   # on his near (left) lens, not the temple arm (user 2026-11-20: rough cut 1 put it beside the rim)
+                   {"kind": "glint", "x": 0.421, "y": 0.381, "at": round(WATER3, 2), "size": 26},
                    {"kind": "particles", "style": "haze", "x": 0.06, "y": 0.3, "tx": 0.3, "ty": 0.42, "spread": 0.1,      # dust motes
                     "every": 0.4, "life": 3.0, "size": 110, "color": "236,246,252", "opacity": 0.16}]),
     # 3b: dust in the window shafts; push up the low angle
@@ -206,10 +238,11 @@ ALIVE = {
                   {"kind": "particles", "style": "haze", "x": 0.1, "y": 0.4, "tx": 0.45, "ty": 0.62, "spread": 0.12,
                    "every": 0.4, "life": 3.0, "size": 200, "color": "250,226,170", "opacity": 0.2}]),
     # 10: the gas lamp flickers; push toward the tapping finger, landing on "mild case"
+    # v2 still (critics re-cast): the lamp hangs at the top centre (0.5, 0.15), the bald critic's finger taps at (0.35, 0.64)
     "10": dict(motion={"type": "keys", "keys": [cam(0.0, 1.02, 0.5, 0.5), cam(round(MILD, 2), 1.28, 0.36, 0.6, ease="inOut"),
                                                 cam(dur["10"], 1.3, 0.36, 0.6, ease="linear")]},
-               fx=[{"kind": "glow", "x": 0.69, "y": 0.18, "r": 0.16, "at": 0.0, "dur": 0.5, "strength": 0.35, "color": "255,196,110"},
-                   {"kind": "particles", "style": "haze", "x": 0.69, "y": 0.2, "tx": 0.64, "ty": 0.04, "spread": 0.03,  # lamp heat / smoke
+               fx=[{"kind": "glow", "x": 0.5, "y": 0.15, "r": 0.16, "at": 0.0, "dur": 0.5, "strength": 0.35, "color": "255,196,110"},
+                   {"kind": "particles", "style": "haze", "x": 0.5, "y": 0.19, "tx": 0.47, "ty": 0.03, "spread": 0.03,  # lamp heat / smoke
                     "every": 0.45, "life": 3.2, "size": 150, "color": "222,204,172", "opacity": 0.14}]),
     # 11: a cold green tint creeps into the water (no bubbles); the amber lamp stays warm
     "11": dict(motion={"type": "push", "from": 1.03, "to": 1.1, "x": 0, "y": 0},
@@ -249,14 +282,14 @@ for j, (name, _lw, cap) in enumerate(PLAN):
     shots.append(s)
 
 A = lambda shot, t: round(starts[shot] + t, 2)  # noqa: E731
+# rough cut 1 review (user 2026-11-20): a stamp only adds what the narration doesn't say (place, date, name tag), never the
+# spoken words (stamp_lint.py, run by the build): "≈ 8,600", "LESS THAN A TEASPOON", "2 DAYS LATER" and the "purest water"
+# quote are gone; "1 WEEK" stays because it lands before Liam says "week". MUNICH moved off his hair to the dark wall at the
+# upper left (x 43-477, above his head top at y ~690).
 overlays = [
-    {"kind": "stamp", "start": 2.6, "end": round(starts["2"] - 0.1, 2), "text": "MUNICH · 1892", "y": 560},
-    {"kind": "stamp", "start": A("2", K8600), "end": round(starts["3a"] - 0.1, 2), "text": "≈ 8,600", "y": MID},
+    {"kind": "stamp", "start": 2.6, "end": round(starts["2"] - 0.1, 2), "text": "MUNICH · 1892", "y": 600, "x": 260, "size": 44},
     {"kind": "nameTag", "start": A("3a", 0.15), "end": round(starts["3b"] - 0.15, 2), "text": "Robert Koch", "sub": "Berlin", "y": 1060},
     {"kind": "nameTag", "start": A("3b", 0.15), "end": round(starts["4"] - 0.15, 2), "text": "Max von Pettenkofer", "sub": "Munich, 73", "y": 1060},
-    {"kind": "stamp", "start": A("5b", TEASPOON - 0.4), "end": round(starts["6"] - 0.1, 2), "text": "LESS THAN A TEASPOON", "y": MID},
-    {"kind": "stamp", "start": A("6", GULP + 0.6), "end": round(starts["7"] - 0.1, 2), "text": "“Like the purest water”", "y": MID},
-    {"kind": "stamp", "start": A("7", 0.2), "end": A("7", CRUMPLE - 0.2), "text": "2 DAYS LATER", "y": TOP},
     {"kind": "stamp", "start": A("8", 0.15), "end": round(starts["9"] - 0.1, 2), "text": "1 WEEK", "y": TOP},
 ]
 

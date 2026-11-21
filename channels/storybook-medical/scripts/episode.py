@@ -272,8 +272,12 @@ def gen_images(pid: str, section: str, out_dir: str, only: list[str]):
     # dependency waves: an item waits for any kf:/ref: it references that is still being generated
     # pre-flight: known prompt mistakes (plan/prompt-lessons.md) stop the run before any money is spent
     # L29 (Matt cameo) is a whole-video rule: when only some shots are regenerated, judge it on all keyframes
-    has_matt = any("cameo of matt" in s.get("prompt", "").lower() for s in ep.get("keyframes", {}).values())
+    # user 2026-11-20 (HCS10): the cameo may live in a HERO background (an empty plate in "references"), not only a keyframe
+    has_matt = any("cameo of matt" in s.get("prompt", "").lower()
+                   for s in [*ep.get("keyframes", {}).values(), *ep.get("references", {}).values()])
     found = prompt_kit.lint_all({x: items[x] for x in names}, require_matt=not has_matt)
+    for x, v in prompt_kit.lint_lookalikes({x: items[x] for x in names}, ep.get("signatures", {})).items():   # L61
+        found.setdefault(x, []).extend(v)
     # same-view rules compare a re-rolled shot with EVERY keyframe of the episode, not only the ones in this run
     if section == "keyframes":
         for msg in prompt_kit.lint_sequence(items):
@@ -794,6 +798,10 @@ def step_build(pid, *_):
                 and not 288 <= o["y"] <= (1128 if o["kind"] == "nameTag" else 1018)]
         if bad:
             raise SystemExit("SAFE ZONE: text under the platform UI (keep y 288-1248):\n  " + "\n  ".join(bad))
+        import stamp_lint      # user 2026-11-20 (HCS10): a stamp adds a place / date / name, never the spoken words
+        rep = stamp_lint.lint_stamps(ep["overlays"], ep["shots"], words_raw)
+        if rep:
+            raise SystemExit("\n".join(rep))
         props = {"totalSeconds": total, "shots": shots, "overlays": ep["overlays"], "words": words,
                  "wordsPerPage": 3, "captionY": 1030, "loopSeconds": loop_len(ep),
                  "captionFont": ep.get("theme", {}).get("font", "montserrat"),   # per-culture caption font

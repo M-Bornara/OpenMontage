@@ -271,4 +271,18 @@ ok11 = has_code(prompt_kit.lint("kb", koch_bad), "L11") and not has_code(prompt_
 status = "PASS" if ok11 else "FAIL"
 print(f"{status} L11b a real person's own clear spectacles (Koch) pass, other spectacles still fail L11")
 ok = ok and status == "PASS"
+# L61 + L11 pince-nez (HCS10 s10, 2026-11-20): v1 critics looked like Pettenkofer (white beard) and Koch (full dark beard),
+# one wore pince-nez; v2 cards (bald / side-whiskers / moustache only, "none wears eyeglasses") pass
+SIG = {"Pettenkofer": ["white beard"], "Koch": ["full dark beard", "pince-nez", "spectacles"]}
+crit_v1 = {"aspect": "9:16", "refs": [], "prompt": prompt_kit.crowd("three doctors", [
+    "an old doctor with a white beard and pince-nez", "a bald doctor with a full dark beard", "a grey doctor"])}
+crit_v2 = {"aspect": "9:16", "refs": [], "prompt": prompt_kit.crowd("three doctors", [
+    "a bald, clean-shaven doctor", "a doctor with grey side-whiskers", "a thin doctor with a neat moustache and no beard"],
+    "Nobody else. None of them has a full beard, and none wears eyeglasses of any kind.")}
+l61_v1 = prompt_kit.lint_lookalikes({"c": crit_v1}, SIG).get("c", [])
+ok61 = (len(l61_v1) >= 2 and not prompt_kit.lint_lookalikes({"c": crit_v2}, SIG)
+        and has_code(prompt_kit.lint("c1", crit_v1), "L11") and not has_code(prompt_kit.lint("c2", crit_v2), "L11"))
+status = "PASS" if ok61 else "FAIL"
+print(f"{status} L61 extras never look like a lead (white beard / full dark beard), L11 catches pince-nez (HCS10 s10)")
+ok = ok and status == "PASS"
 sys.exit(0 if ok else 1)

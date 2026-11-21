@@ -423,8 +423,12 @@ def lint(name: str, spec: dict) -> list[str]:
             and not re.search(r"\bno (?:people, no )?hands?\b", p) and "scale (true sizes" not in p):
         issues.append("L51: close-up with a hand and no SCALE line: the model paints toy-sized or giant objects next to "
                       "the hand; state every object's true size against the hand with scale()")
-    if "spectacles" in p and "amber" not in p and "no spectacles" not in p and "his own, as in his portrait" not in p:
-        issues.append("L11: spectacles that aren't Matt's (confuses the spot-the-glasses game)")
+    # L11 (+ HCS10 s10, 2026-11-20: "pince-nez" on a critic slipped past a rule that only knew the word "spectacles")
+    eyewear = re.sub(r"\b(?:none|nobody|no (?:one|critic|doctor|man|other))\b[^.]*?(?:spectacles|pince-nez|monocle|eyeglasses)[^.]*", "",
+                     p.replace("no spectacles", ""))
+    if (re.search(r"spectacles|pince-nez|monocle|eyeglasses", eyewear) and "amber" not in p
+            and "his own, as in his portrait" not in p):
+        issues.append("L11: spectacles / pince-nez / a monocle that aren't Matt's (confuses the spot-the-glasses game)")
     # L54 (HC002-S1 pose-friend-s12, 2026-11-20): a 9:16 pose sheet with the approved shot as reference came back as that
     # SHOT repainted (the scene, the other people half-keyed into green, a ghost head), not a sheet. The 16:9 sheets of the
     # same batch, with the same kind of reference, came back clean. Sprite / pose sheets are always 16:9.
@@ -432,6 +436,25 @@ def lint(name: str, spec: dict) -> list[str]:
         issues.append("L54: sprite / pose sheet not 16:9: a tall sheet with the shot as reference repaints the shot; "
                       "use aspect 16:9 (figures side by side)")
     return issues
+
+
+def lint_lookalikes(specs: dict[str, dict], signatures: dict[str, list[str]]) -> dict[str, list[str]]:
+    """L61 (user 2026-11-20, HCS10 s10): extras must never carry a named character's signature look. The critics came back
+    as 'a white beard' (= Pettenkofer) and 'a full dark beard' (= Koch). signatures = {name: [regex, ...]} per episode;
+    every crowd() card is checked (the cards sit between "(1)" and "No two of them")."""
+    out: dict[str, list[str]] = {}
+    for n, s in specs.items():
+        p = s.get("prompt", "")
+        m = re.search(r"CROWD:.*?(\(1\).*?)No two of them", p, re.S)
+        if not m:
+            continue
+        for card in re.split(r"\(\d\)", m.group(1))[1:]:
+            for who, pats in signatures.items():
+                hit = next((pt for pt in pats if re.search(pt, card, re.I)), None)
+                if hit:
+                    out.setdefault(n, []).append(f"L61: an extra looks like {who} ('{card.strip()[:60]}' matches {hit!r}); "
+                                                 "give extras a different signature (bald, side-whiskers, moustache only)")
+    return out
 
 
 def people_free_plate(p: str) -> bool:
