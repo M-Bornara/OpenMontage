@@ -107,4 +107,18 @@ reads and passes, so it stops re-flagging decided wording. A new or changed sent
 | HCS08 Snow | C14 | attacks falling before 8 Sept | "The outbreak was already fading." / stamp "ALREADY FADING" |
 | HCS08 Snow | C15 | Snow concluded it was the pump water | "John Snow blamed the water." |
 | HCS08 Snow | C16 | popularly reported as ending the outbreak | the user's line: "The story goes: in 1854, a doctor stopped a deadly outbreak… by taking the handle off a water pump." |
-| HCS08 Snow | C17 | founding event of epidemiology | "his map of those deaths is how we still hunt diseases today" (Claude's B call; no source says "still used": user to confirm) |
+| HCS08 Snow | C18 | spot maps still a standard outbreak tool (CDC Field Epidemiology Manual 2024; CDC Principles of Epidemiology L1) | "his map of those deaths is how we still hunt diseases today" (was a B call; user 2026-11-21: keep, sourced as C18) |
+| HC002 Gage long | C05 (+C04) | spoke within minutes; the bar through his skull | "He should be dead." (hook framing) |
+| HC002 Gage long | C01 | railroad foreman near Cavendish | "a railroad being cut through the hills of Vermont" |
+| HC002 Gage long | C23 | the blasting steps | "The work was simple. And dangerous." |
+| HC002 Gage long | C31 | his life in danger in the weeks after | "The real danger came in the weeks after." |
+| HC002 Gage long | C16 | the contractors "could not give him his place again" | "a second injury" (figure of speech); "couldn't give him his job back" |
+| HC002 Gage long | C09 | many retellings exaggerate | "the story you've probably heard", "many versions… end", "turns into a monster", "retold… in textbooks and popular books" |
+| HC002 Gage long | C15 | Harlow: "at Barnum's, with his iron" | "Barnum's museum" |
+| HC002 Gage long | C12 | portraits identified 2009 and 2010 | "two old photographs" |
+| HC002 Gage long | C10 | six-horse coaches, Valparaíso–Santiago | "A coach full of passengers. All in his hands."; "holding the reins" |
+| HC003 Dancing S1 | C21 | "The mania possessed Frau Troffea for between four and six days" | "She can't stop." / "She couldn't stop dancing." / title "The Woman Who Couldn't Stop Dancing" (Claude's B call; shown with the script) |
+| HC003 Dancing S1 | C04 | within days, more than thirty (attributed) | "Within days, more than thirty." (line 3's "the chronicles say" covers the story) |
+| HC003 Dancing S1 | C22 | the council listened to the physicians, then built stages | "So the city built stages… and paid musicians to play." |
+| HC002 Gage long | C42 | "the structure provided by the external circumstances of his work facilitated this result" | "And the daily routine of the job may have helped." |
+| HC002 Gage long | C08 | friends said "no longer Gage" (Harlow's notes, 1848-49) | "The people who knew him saw an early change: they said so." |

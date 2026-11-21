@@ -33,4 +33,4 @@ What the video shows: the hook card, stamps, name tags (name · subtitle), and t
 - The twist? [NF]
 - The outbreak was already fading. [C14]
 - Snow admitted it himself. [C08]
-- But his map of those deaths is how we still hunt diseases today. [C10 C17]
+- But his map of those deaths is how we still hunt diseases today. [C10 C18]
