@@ -46,6 +46,23 @@ This is a first-class workflow in OpenMontage.
 
 If a model misses this distinction, it will often fall back to plain search + guesswork. That is incorrect for OpenMontage.
 
+## Channel Entry Point — Oddly Matt / The Human Casebook (`channels/storybook-medical/`)
+
+Work on this channel (episodes HC0xx / HCSxx, Shorts, long videos, packages) follows the channel's own rules on top
+of this guide. Route by what is being produced:
+
+| Request | Load first | Gate before the user sees it |
+|---|---|---|
+| Publish package, captions, title, description, first / pinned comment | `oddly-matt-platform-captions` skill | claim-ID lint (`scripts/claim_tags.py`, in the publish script) + **fact gate** |
+| Script (Short or long), story, storyboard | `story-doctor` skill (storyboard: also `layered-shot`) | **fact gate** on the script / storyboard text |
+| Comments | `oddly-matt-comment-sweep` skill | replies use claims.csv only |
+| "How are we doing", weekly numbers | `oddly-matt-weekly-review` skill | — |
+
+**Fact gate** (`channels/storybook-medical/plan/fact-gate.md`, HARD RULE): before showing the user any script,
+caption set or package, a fresh sub-agent (`fact-gate`, `.claude/agents/fact-gate.md`) gets ONLY the episode's
+claims.csv + the text and returns sentence → claim ID → claim wording → PASS / STRONGER THAN CLAIM / NO CLAIM. Fix
+every flag, re-run until clean, and show the user its table with the text. The writer never grades their own facts.
+
 ## Rule Zero — All Production Goes Through a Pipeline
 
 **Every video production request MUST go through the pipeline system. No exceptions.**

@@ -14,13 +14,15 @@ import subprocess
 import sys
 from pathlib import Path
 
-REPO = Path(__file__).resolve().parents[5]
+HERE = Path(__file__).resolve().parent
+REPO = HERE.parents[4]
 SCRIPTS = REPO / "channels/storybook-medical/scripts"
 sys.path.insert(0, str(SCRIPTS))
+import claim_tags  # noqa: E402
 import publish_social  # noqa: E402
 
 PID = "hc002-s1"
-TITLE = "He Took an Iron Bar Through the Skull… and Spoke"    # title 1, approved 2026-11-18
+TITLE = "He Took an Iron Bar Through the Skull… and Spoke [C04 C05]"    # title 1, approved 2026-11-18
 YT_WHEN = "Sun Nov 29, 15:00 ET = 14:00 Alberta"
 SOCIAL_WHEN = "Mon Nov 30, 18:00 ET = 17:00 Alberta"
 
@@ -31,46 +33,49 @@ SOURCES = """SOURCES
 - "Phineas Gage", Wikipedia (with references). https://en.wikipedia.org/wiki/Phineas_Gage
 - Skull engraving: Harlow 1868, plate Fig. 2 (public domain), from the Internet Archive scan of the National Library of Medicine copy."""
 
+# Every public sentence ends with its claim tag (scripts/claim_tags.py; [NF] = no factual claim, added 2026-11-21).
+# claim_tags.strip() removes the tags before episode.json; fact-gate/package-s1.md is what the fact gate reads.
 DESCRIPTION = (
-    "Near Cavendish, Vermont, 13 September 1848. Phineas Gage, 25, was a railroad construction foreman, and his employers "
-    "thought him the most efficient and capable foreman they had. His job: pack blasting powder into holes in the rock "
-    "with a smooth iron tamping bar, 3 ft 7 in long and 13¼ lb (1.1 m, 6 kg).\n\n"
-    "His men caught his attention, he looked over his shoulder, and the iron struck a spark on the rock. The powder "
-    "exploded. The bar went in under his left cheekbone, passed behind his left eye and came out through the top of "
-    "his head. It landed about 80 feet (25 m) away.\n\n"
-    "Within minutes he spoke. He rode to his hotel sitting up in an ox cart, and Dr Edward Williams later remembered "
-    "his greeting: \"Doctor, here is business enough for you.\" He survived, and he kept the iron. But his friends said "
-    "he was \"no longer Gage\". What that really meant is a longer story. This is a history story, not medical "
-    "advice.\n\n"
-    "More true medical stories: \"The Man With a Window Into His Stomach\" (linked above).")
+    "Near Cavendish, Vermont, 13 September 1848. [C01] Phineas Gage, 25, was a railroad construction foreman, and his "
+    "employers thought him the most efficient and capable foreman they had. [C01 C18] His job: pack blasting powder into "
+    "holes in the rock with a smooth iron tamping bar, 3 ft 7 in long and 13¼ lb (1.1 m, 6 kg). [C23 C02]\n\n"
+    "His men caught his attention, he looked over his shoulder, and the iron struck a spark on the rock. [C03] The "
+    "powder exploded. [C03] The bar went in under his left cheekbone, passed behind his left eye and came out through "
+    "the top of his head. [C04] It landed about 80 feet (25 m) away. [C04]\n\n"
+    "Within minutes he spoke. [C05] He rode to his hotel sitting up in an ox cart, and Dr Edward Williams later "
+    "remembered his greeting: \"Doctor, here is business enough for you.\" [C05 C06] He survived, and he kept the "
+    "iron. [C32 C07] But his friends said he was \"no longer Gage\". [C08] What that really meant is a longer story. "
+    "[NF] This is a history story, not medical advice. [NF]\n\n"
+    "More true medical stories: \"The Man With a Window Into His Stomach\" (linked above). [NF]")
 
 # comment challenge (plan/comment-challenges.md formats): "Your guess" sets up the long video + S2. Approved 2026-11-19
-CHALLENGE = ("\"No longer Gage.\" What do you think changed in him? Your guess 👇 (And did you spot Matt's glasses? 👓)")
+CHALLENGE = ("\"No longer Gage.\" [C08] What do you think changed in him? [NF] Your guess 👇 (And did you spot Matt's "
+             "glasses? 👓) [NF]")
 
-TIKTOK = """Phineas Gage, 1848: a 13-pound iron bar went through his head. Minutes later, he spoke.
+TIKTOK = """Phineas Gage, 1848: a 13-pound iron bar went through his head. [C01 C02 C04] Minutes later, he spoke. [C05]
 
-His friends said he was "no longer Gage." More true stories on YouTube: Oddly Matt
+His friends said he was "no longer Gage." [C08] More true stories on YouTube: Oddly Matt
 
 #history #medicalhistory #phineasgage #neuroscience #oddlymatt"""
 
-INSTAGRAM = """1848, Vermont: a 13-pound iron bar went through Phineas Gage's head. Minutes later, he spoke.
+INSTAGRAM = """1848, Vermont: a 13-pound iron bar went through Phineas Gage's head. [C01 C02 C04] Minutes later, he spoke. [C05]
 
-He rode to his hotel sitting up in an ox cart, and he kept the iron.
-Source: Dr John Harlow's 1868 report.
+He rode to his hotel sitting up in an ox cart, and he kept the iron. [C05 C07]
+Source: Dr John Harlow's 1868 report. [C30]
 
 More true stories on YouTube (link in bio)
 
 #history #medicalhistory #phineasgage #neuroscience #oddlymatt"""
 
-FACEBOOK = """In 1848, a blast on a Vermont railroad sent an iron bar through a foreman's head. Minutes later, he was talking.
+FACEBOOK = """In 1848, a blast on a Vermont railroad sent an iron bar through a foreman's head. [C01 C03 C04] Minutes later, he was talking. [C05]
 
-Phineas Gage rode to his hotel sitting up in an ox cart and greeted the doctor with "Doctor, here is business enough for you." He survived and kept the iron. But his friends said he was "no longer Gage."
+Phineas Gage rode to his hotel sitting up in an ox cart and greeted the doctor with "Doctor, here is business enough for you." [C05 C06] He survived and kept the iron. [C32 C07] But his friends said he was "no longer Gage." [C08]
 
 More true stories on YouTube: oddlymatt.com
 
 #history #phineasgage"""
 
-HOOK_CARD = "An iron bar / through his *skull*."   # hook card A, approved 2026-11-18
+HOOK_CARD = "An iron bar / through his *skull*. [C04]"   # hook card A, approved 2026-11-18
 
 
 def main():
@@ -106,6 +111,14 @@ def main():
                      "when": SOCIAL_WHEN, "change_log": "C001",
                      "publish_at": {"date": "2026-11-30", "et": "18:00", "alberta": "17:00"}},
     }
+    tagged = ep["publish"]
+    claim_tags.check(tagged, HERE / "claims.csv")    # every public sentence has a claim ID that may be used
+    (HERE / "fact-gate").mkdir(exist_ok=True)
+    (HERE / "fact-gate/package-s1.md").write_text(claim_tags.gate_text(tagged, "HC002-S1 Gage package"),
+                                                  encoding="utf-8")
+    ep["publish"] = claim_tags.strip(tagged)
+    ep["title"] = claim_tags.strip(TITLE)
+    publish_social.check(ep["publish"])          # caption lint (CTA lines)
     json.dump(ep, open(p, "w", encoding="utf-8"), indent=2, ensure_ascii=False)
     if "--texts-only" in sys.argv:   # episode.json only: short.mp4 stays until the render is approved
         return

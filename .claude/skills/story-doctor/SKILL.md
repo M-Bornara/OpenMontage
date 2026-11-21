@@ -97,3 +97,7 @@ These are editorial ratings: say so; the real test is retention in YouTube Studi
 `story-v2.md`: spine · beat table (beat, time, line, fact ID, tension) · script with performance tags · shot plan
 (keep / fix / redo / new, each with its action verb, and `0b:` + the softening tool on every violent beat) · rhythm map · score v1 → v2 · cost of the changes.
 Nothing is generated until the user approves it on the page.
+**Fact gate (HARD RULE, 2026-11-21):** before the script or storyboard is shown, run the independent fact gate
+(`channels/storybook-medical/plan/fact-gate.md`): a fresh sub-agent gets ONLY the episode's claims.csv + the script
+text and returns sentence → claim ID → claim wording → PASS / STRONGER THAN CLAIM / NO CLAIM. Fix its flags, re-run
+until clean, and put its table on the page next to the script. You wrote the claims too, so your own check doesn't count.
