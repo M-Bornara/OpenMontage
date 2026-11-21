@@ -46,15 +46,17 @@ FIT = {"hand-glass-s1": ("h", "top"), "student-hand-s1": ("w", "left"), "pettenk
 # positions are re-set here; the TIMES stay the approved ones (warped onto Liam's words). Key lists match the
 # stand-in keys one by one. SIZE: a target piece height (frame fractions) where the plate's scale differs from the
 # stand-in's (s4: Pettenkofer behind the bench is as big as Matt, ≈ 0.24 of the frame, not the stand-in's MS).
-SIZE = {"pettenkofer-s4": 0.245}
+SIZE = {"pettenkofer-s4": 0.33}   # v2 plate (close OTS): waist on the bench's far edge, head top ≈ 0.16 (glass ≈ 7 cm = 0.03 H)
 REAL = {
-    "1": {"actors": {"hand-glass": [(0.38, 0.82), (0.42, 0.535)],                 # the glass rim rises to his mouth
-                     "student-hand": [(1.03, 0.80), (0.82, 0.78), (0.58, 0.77)]}},  # stops short of his wrist
-    "4": {"actors": {"pettenkofer": [(0.47, 0.487), (0.47, 0.487)]},              # behind the bench, the beaker between his hands
-          # crop in (the plate came back wide): centre (0.49, 0.42) at 1.7 -> (0.52, 0.40) at 2.0 on "no"
-          "cam": [(1.7, 1.7, 13.6), (2.0, -4.0, 20.0)], "glint": (0.87, 0.24)},
+    # v2 plate-s1 (2026-11-20): the head lower (hair top 0.36, under the hook card), his mouth at (0.63, 0.62)
+    "1": {"actors": {"hand-glass": [(0.60, 0.93), (0.63, 0.625)],                 # the glass rim rises to his lower lip
+                     "student-hand": [(1.05, 0.84), (0.86, 0.82), (0.76, 0.81)]}},  # reaches in, stops short of his wrist
+    # v2 plate-s4: a true over-the-shoulder; he stands behind the near bench in the gap between the two backs
+    "4": {"actors": {"pettenkofer": [(0.48, 0.49), (0.48, 0.49)]}, "glint": (0.814, 0.252)},
     "6": {"actors": {"pettenkofer": [(0.40, 1.02), (0.40, 1.02)]}},
-    "7": {"actors": {"hand": [(0.47, 0.64), (0.47, 0.64)]}},                      # on the bare wood, arm from lower right
+    "7": {"actors": {"hand": [(0.47, 0.64), (0.47, 0.64)]},                       # on the bare wood, arm from lower right
+          # v2 sheet: start at the 1.10 framing so the sleeve end and the sheet corner stay out of frame from frame 0
+          "cam": [(1.10, 0, -2), (1.16, 0, -2)]},
 }
 
 
@@ -94,9 +96,10 @@ def _anchor(im: Image.Image, rule: str):
     raise ValueError(rule)
 
 
-def _soften_writing(im: Image.Image) -> Image.Image:
+def _soften_writing(im: Image.Image, keep: float = 0.25) -> Image.Image:
     """Free fix (2026-11-20): pose-hand-s7 came back with "Lorem ipsum ..." on the sheet (L15 again, inside a pose sheet).
-    The ink strokes inside the paper are inpainted with the paper and 25 % of them blended back: faint marks, no letters."""
+    The ink strokes inside the paper are inpainted with the paper and `keep` of them blended back: faint marks, no letters.
+    v2 sheet (2026-11-20): the clutched sheet came back blank, so the flat one keeps only 10 % (no pop at the dissolve)."""
     import cv2
     rgba = np.array(im)
     rgb = np.ascontiguousarray(rgba[..., :3])
@@ -106,11 +109,27 @@ def _soften_writing(im: Image.Image) -> Image.Image:
     ink = (region > 0) & (paper == 0) & (hsv[..., 1] < 60) & (hsv[..., 2] < 170)
     ink = cv2.dilate(ink.astype(np.uint8), np.ones((3, 3), np.uint8))
     clean = cv2.inpaint(rgb, ink * 255, 5, cv2.INPAINT_TELEA)
-    out = np.where(ink[..., None] > 0, (0.75 * clean + 0.25 * rgb).astype(np.uint8), rgb)
+    out = np.where(ink[..., None] > 0, ((1 - keep) * clean + keep * rgb).astype(np.uint8), rgb)
     return Image.fromarray(np.dstack([out, rgba[..., 3]]), "RGBA")
 
 
-SOFTEN = {("hand-s7", "flat")}
+def _no_paper_s1(plate: Image.Image) -> Image.Image:
+    """Free fix (2026-11-20): plate-s1 v2 has the edge of a sheet of paper at the bottom right (x > 0.5, y > 0.9), against
+    "nothing lying in front of him": the light paper pixels there are inpainted from his dark coat."""
+    import cv2
+    rgba = np.array(plate)
+    rgb = np.ascontiguousarray(rgba[..., :3])
+    h, w = rgb.shape[:2]
+    v = cv2.cvtColor(rgb, cv2.COLOR_RGB2HSV)[..., 2]
+    m = np.zeros((h, w), np.uint8)
+    m[int(0.88 * h):, int(0.45 * w):] = (v[int(0.88 * h):, int(0.45 * w):] > 90).astype(np.uint8)
+    m = cv2.dilate(m, np.ones((15, 15), np.uint8))
+    out = cv2.inpaint(rgb, m * 255, 21, cv2.INPAINT_TELEA)
+    return Image.fromarray(np.dstack([out, rgba[..., 3]]), "RGBA")
+
+
+PLATE_FIX = {"1": _no_paper_s1}
+SOFTEN = {("hand-s7", "flat"): 0.10}
 
 
 def _real_piece(name: str, standin):
@@ -120,13 +139,16 @@ def _real_piece(name: str, standin):
     mode, rule = FIT[name]
     first_state = next(iter(frames_s))
     real = {s: Image.open(d / fs[0]).convert("RGBA") for s, fs in meta["frames"].items()}
-    real = {s: _soften_writing(im) if (name, s) in SOFTEN else im for s, im in real.items()}
+    real = {s: _soften_writing(im, SOFTEN[(name, s)]) if (name, s) in SOFTEN else im for s, im in real.items()}
     missing = set(frames_s) - set(real)
     if missing:
         raise SystemExit(f"{name}: the paid sheet has no state {missing} (cut it with these names)")
     target = SIZE[name] * H if name in SIZE else _bbox_fit(frames_s[first_state], mode)
     k = target / _bbox_fit(real[first_state], "h" if name in SIZE else mode)
-    real = {s: im.resize((max(1, round(im.width * k)), max(1, round(im.height * k))), Image.LANCZOS) for s, im in real.items()}
+    # premultiplied resize: fx_prep leaves stray colours (magenta, cyan) under alpha 0, and a straight LANCZOS resize
+    # bleeds them into the edge as a pink line (s7 v2, 2026-11-20); browsers (Remotion) already scale premultiplied
+    real = {s: im.convert("RGBa").resize((max(1, round(im.width * k)), max(1, round(im.height * k))), Image.LANCZOS)
+               .convert("RGBA") for s, im in real.items()}
     return real, _anchor(real[first_state], rule)
 
 
@@ -137,6 +159,8 @@ def build(n: str):
     warp, real_d = _warp_fn(shot, spec)
     plate = Image.open(P / "assets/images/refs" / f"{spec['piece']}.png").convert("RGBA").resize((W, H), Image.LANCZOS)
     pth = P / "review/hero" / f"_plate-{n}.png"
+    if n in PLATE_FIX:
+        plate = PLATE_FIX[n](plate)
     plate.save(pth)
     shot["plate"] = pth
     shot.pop("fg", None)                                   # the stand-in's drawn foreground; the real plate has its own
@@ -204,6 +228,40 @@ def render(n: str):
     return mp4
 
 
+def pieces_sheet() -> Path:
+    """review/hero/pieces.jpg: every paid piece on one contact sheet (the approval page shows it), name under each."""
+    from PIL import ImageDraw
+    refs = P / "assets/images/refs"
+    names = ["sheet-pettenkofer", "sheet-students", "plate-s1", "sprite-hand-glass-s1", "sprite-student-hand-s1",
+             "plate-s4", "pose-pettenkofer-s4", "plate-s6", "pose-pettenkofer-s6", "plate-s7", "pose-hand-s7"]
+    th = 420
+    tiles = []
+    for n in names:
+        im = Image.open(refs / f"{n}.png").convert("RGB")
+        im = im.resize((round(im.width * th / im.height), th), Image.LANCZOS)
+        t = Image.new("RGB", (im.width, th + 34), "white")
+        t.paste(im, (0, 0))
+        ImageDraw.Draw(t).text((6, th + 8), n + (" (v2)" if (refs / "v1" / f"{n}.png").exists() else ""), fill="black")
+        tiles.append(t)
+    rows, row, wmax = [], [], 2600
+    for t in tiles:
+        if row and sum(x.width + 10 for x in row) + t.width > wmax:
+            rows.append(row); row = []
+        row.append(t)
+    rows.append(row)
+    out = Image.new("RGB", (max(sum(x.width + 10 for x in r) for r in rows), len(rows) * (th + 44)), "white")
+    for i, r in enumerate(rows):
+        x = 0
+        for t in r:
+            out.paste(t, (x, i * (th + 44))); x += t.width + 10
+    path = P / "review/hero/pieces.jpg"
+    out.save(path, quality=85)
+    return path
+
+
 if __name__ == "__main__":
-    for k in (sys.argv[1:] or list(SHOT)):
+    args = sys.argv[1:] or list(SHOT)
+    if "pieces" in args:
+        print(pieces_sheet())
+    for k in [a for a in args if a != "pieces"]:
         print(render(k))

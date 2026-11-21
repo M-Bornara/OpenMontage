@@ -21,7 +21,7 @@ REPO = Path(__file__).resolve().parents[5]
 sys.path.insert(0, str(REPO))
 sys.path.insert(0, str(REPO / "channels/storybook-medical/scripts"))
 from prompt_kit import (EMPTY_HANDS, FULL_BLEED, NO_TEXT, ONE_EACH, PERIOD, SAFE_FRAMING, WAVY_WRITING, camera, cast,  # noqa: E402
-                        framing, lint_all, matt_beat, pose_sheet, scale, set_block, sprite_sheet)
+                        framing, lint_all, OTS_FRAMING, matt_beat, pose_sheet, scale, set_block, sprite_sheet)
 
 PID = "hcs10-pettenkofer"
 HC1 = "projects/hc001-window-into-his-stomach/assets/images/refs"
@@ -143,8 +143,8 @@ REFERENCES.update({
                 "the bench in the centre of the frame, where the professor will stand. "
                 + NOT_HERE.format(who="Max von Pettenkofer") + " "
                 + matt_beat("an 1890s student's dark suit", "small, at the far right edge by the cabinets at the back, away from the "
-                           "empty place in the centre, writing in his amber notebook")
-                + f" {cast('the two students seen from behind', 'MATT, small, at the back')} {ONE_EACH} {SAFE_FRAMING} {PERIOD} {NO_TEXT}")),
+                           "empty place in the centre, writing in his amber notebook; his whole figure only about 0.15 of the frame height")
+                + f" {cast('student 2 seen from behind, large in the lower left', 'student 3 seen from behind, large in the lower right', 'MATT, small, at the back')} {ONE_EACH} {OTS_FRAMING} {PERIOD} {NO_TEXT}")),
     "pose-pettenkofer-s4": dict(aspect="16:9", refs=[P], roles=P_ROLE,
         prompt=pose_sheet(PETTENKOFER,
                           ["standing square to the viewer behind a bench (the bench is NOT drawn: the drawing ends in a "
@@ -196,7 +196,7 @@ REFERENCES.update({
                           "s7: a desk top seen from above in cold light", S7_LIGHT, "from straight above, 50 mm",
                           "only the hand, wrist and forearm with the paper under it; no face, no body")
                + f" {WAVY_WRITING} "
-               + scale({"the loose sheet": "about 8 in (21 cm) wide when flat; crumpled, a ball of about 4 in (10 cm) in his hand",
+               + scale({"the loose sheet": "about 8 in (21 cm) wide when flat, and still about 8 in (21 cm) wide when clutched: only the strip under the fingers creases (never a ball)",
                         "the hand": "old and thin-skinned, about 7 1/2 in (19 cm) from wrist to fingertip"})),
 })
 

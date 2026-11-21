@@ -252,4 +252,16 @@ ok57 = (has_code(c1, "L57") and has_code(c1, "L58") and not has_code(c2, "L57") 
 status = "PASS" if ok57 else "FAIL"
 print(f"{status} L57 'handwriting' in a sheet (Lorem ipsum), L58 a crumpled prop keeps its full size, L59 Matt away from the empty place (HCS10 s7 / s4)")
 ok = ok and status == "PASS"
+# L58b / L60 (HCS10 2026-11-20, second round): the v2 hand sheet still said "crumpled, a ball of about 4 in" in its SCALE
+# line; the v1 OTS plate had SAFE_FRAMING and came back wide
+hand_ball = dict(hand_v2, prompt=hand_v2["prompt"] + " SCALE: the sheet 8 in wide; crumpled, a ball of about 4 in. Never a ball.")
+hand_ok = dict(hand_v2, prompt=hand_v2["prompt"] + " SCALE: the sheet 8 in wide, still 8 in wide when clutched (never a ball).")
+ots_v1 = {"aspect": "9:16", "refs": [], "prompt": "close over-the-shoulder framing, two backs large. " + prompt_kit.SAFE_FRAMING}
+ots_v2 = {"aspect": "9:16", "refs": [], "prompt": "close over-the-shoulder framing, two backs large. " + prompt_kit.OTS_FRAMING}
+l = prompt_kit.lint
+ok60 = (has_code(l("hb", hand_ball), "L58") and not has_code(l("ho", hand_ok), "L58")
+        and has_code(l("o1", ots_v1), "L60") and not has_code(l("o2", ots_v2), "L60") and not has_code(l("o2", ots_v2), "L17"))
+status = "PASS" if ok60 else "FAIL"
+print(f"{status} L58b a crumpling prop never called 'a ball' (SCALE line), L60 OTS plate uses OTS_FRAMING, not SAFE_FRAMING (HCS10 s7 / s4)")
+ok = ok and status == "PASS"
 sys.exit(0 if ok else 1)

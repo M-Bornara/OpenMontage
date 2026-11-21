@@ -244,3 +244,17 @@ Every generation round teaches us something. A lesson only counts once it's **en
   to 0.35 of the frame height"). plate-s1 "the top of his hair at about one third of the frame height" came back at
   0.17: ask for a lower number and say the upper third is only wall ("nothing of him in it").
 Tests: test_prompt_lint.py (the v1 prompts fail, the v2 prompts pass).
+
+## L58b + L60 + the cut-out edge (HCS10 Pettenkofer re-rolls, 2026-11-20)
+
+- **L58b**: the v2 hand sheet said "never a ball" in the pose text but its SCALE line still said "crumpled, a ball of about
+  4 in". The size line is read as a fact and wins. A crumpling prop gets its size as still spread ("still 8 in wide when
+  clutched, only the strip under the fingers creases"). Lint: `L58` also fails on "a ball" outside "never a ball".
+- **L60**: plate-s4 v1 asked for a CLOSE over-the-shoulder AND carried SAFE_FRAMING ("everything inside the central 70%,
+  room to zoom"); it came back wide with the students small in the middle. An OTS plate uses `OTS_FRAMING` (only the
+  subject in the central 70%, the foreground backs big and cut by the edges). v2 with it: a true OTS first time.
+- **Cut-out edges (fx_prep, not a prompt)**: the unmixing divides by a small alpha, so the soft outer edge of a cream sheet
+  came out PINK (173, 74, 77 at alpha 194) and alpha-0 pixels kept stray magenta/cyan that a straight resize bleeds in.
+  `fx_prep._bleed_edges` (every sheet cut now): alpha-0 pixels and magenta-shifted soft pixels take the nearest solid
+  colour. `sheet(..., fill_holes=True)` for an object lying on paper: the fingers' grey-green shadows keyed as holes.
+  Preview resizes are premultiplied (RGBa) as a browser does.

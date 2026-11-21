@@ -131,8 +131,48 @@ def _despill_edge(rgba: np.ndarray, key: np.ndarray, band: int = 5) -> np.ndarra
     return out
 
 
+def _bleed_edges(rgba: np.ndarray, ring: int = 2) -> np.ndarray:
+    """HCS10 s7 (2026-11-20): the unmixing in _key_alpha divides by a small alpha, so the soft outer edge came out pink
+    (173, 74, 77 at alpha 194 on a cream sheet) and alpha-0 pixels kept stray magenta / cyan that a straight resize
+    bleeds back in. Every alpha-0 pixel, and the soft edge within `ring` px of the solid body, takes the colour of the
+    nearest solid pixel. Beyond a thin ring only magenta-shifted pixels change, so translucent parts (a mosquito's wings) keep their colour."""
+    import cv2
+    a = rgba[..., 3]
+    solid = a >= 250
+    if not solid.any():
+        return rgba
+    dist, lab = cv2.distanceTransformWithLabels((~solid).astype(np.uint8), cv2.DIST_L2, 5, labelType=cv2.DIST_LABEL_PIXEL)
+    ys, xs = np.nonzero(solid)
+    order = np.zeros(lab.max() + 1, int)
+    order[lab[ys, xs]] = np.arange(len(ys))
+    near = rgba[..., :3][ys[order[lab]], xs[order[lab]]]
+    # the unmixing artefact is a MAGENTA shift (green pushed under red and blue): wherever the soft edge (up to ~17 px
+    # wide on a 2K sheet) is pinker than its nearest solid pixel, it takes that colour; a grey wing stays grey
+    px, nr = rgba[..., :3].astype(int), near.astype(int)
+    tint = lambda c: c[..., 0] + c[..., 2] - 2 * c[..., 1]
+    fix = (a == 0) | ((a < 250) & ((dist <= ring) | (tint(px) - tint(nr) > 24)))
+    out = rgba.copy()
+    out[..., :3] = np.where(fix[..., None], near, rgba[..., :3])
+    return out
+
+
+def _fill_holes(rgba: np.ndarray, inset: int = 12) -> np.ndarray:
+    import cv2
+    a = rgba[..., 3]
+    cs, _ = cv2.findContours((a > 40).astype(np.uint8), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+    if not cs:
+        return rgba
+    fill = np.zeros(a.shape, np.uint8)
+    cv2.drawContours(fill, [max(cs, key=cv2.contourArea)], -1, 1, -1)
+    holes = (cv2.distanceTransform(fill, cv2.DIST_L2, 5) > inset) & (a < 250)
+    out = rgba.copy()
+    out[..., 3][holes] = 255
+    out[..., :3][holes] = (out[..., :3][holes] * 0.85).astype(np.uint8)     # the key's grey reads as a shadow
+    return out
+
+
 def sheet(image: str, names: list[str], out_dir: str | None = None, how: str = "key", align: str = "phase",
-          pad: int = 24, anchor=(0.5, 0.5), min_area: float = 0.002) -> Path:
+          pad: int = 24, anchor=(0.5, 0.5), min_area: float = 0.002, fill_holes: bool = False) -> Path:
     """Cut a sprite sheet (one object, its states side by side on a flat background) or a pose sheet into frames.
 
     names: one per figure in reading order (rows top to bottom, left to right), "<state>-<n>", e.g.
@@ -145,7 +185,9 @@ def sheet(image: str, names: list[str], out_dir: str | None = None, how: str = "
            dominates, so wings / legs changing don't make it jump between states); "center" = bounding-box centres;
            "bottom" = bounding-box feet (characters standing).
     anchor: (ax, ay) fractions of the canvas, or "solid" = the centroid of the first frame's fully opaque core (an
-           insect's body, not its legs or wings): the point that rides the actor's path and that it turns around."""
+           insect's body, not its legs or wings): the point that rides the actor's path and that it turns around.
+    fill_holes: make every hole more than 12 px inside the outline opaque (HCS10 s7: the fingers' grey-green shadows
+           on the paper keyed as half-transparent holes). Off by default: a real gap (a handle loop) must stay open."""
     import cv2
     src = Path(image)
     im = np.array(Image.open(src).convert("RGB"))
@@ -224,7 +266,9 @@ def sheet(image: str, names: list[str], out_dir: str | None = None, how: str = "
     placed = [p[Mg - ey:Mg + ch + ey, Mg - ex:Mg + cw + ex] for p in placed]
     cw, ch = cw + 2 * ex, ch + 2 * ey
     for name, canvas in zip(names, placed):
-        Image.fromarray(canvas, "RGBA").save(out / f"{name}.png")
+        if fill_holes:
+            canvas = _fill_holes(canvas)
+        Image.fromarray(_bleed_edges(canvas), "RGBA").save(out / f"{name}.png")
         frames.setdefault(name.rsplit("-", 1)[0], []).append(f"{name}.png")
     if anchor == "solid":
         core = cv2.erode((placed[0][..., 3] > 240).astype(np.uint8), np.ones((5, 5), np.uint8))

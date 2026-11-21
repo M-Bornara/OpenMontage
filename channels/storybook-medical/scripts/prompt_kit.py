@@ -89,6 +89,12 @@ def glasses_gag(gag: str) -> str:
 def matt_beat(era_outfit: str, beat: str) -> str:
     return (f"Small background cameo of MATT (from the Matt reference): {era_outfit}, teal scarf, amber notebook; {beat}. "
             f"He is small in frame, never at the centre of the action, and must not draw attention on first viewing.")
+# L60 (HCS10 plate-s4, 2026-11-20): a CLOSE over-the-shoulder plate with SAFE_FRAMING ("everything inside the central 70%,
+# room to zoom") came back as a WIDE shot with the students small in the middle: the two lines fight and the wide wins.
+# An OTS plate keeps only its SUBJECT in the central 70%; the foreground backs are meant to be big and cut by the edges.
+OTS_FRAMING = ("FRAMING: the story subject sits inside the central 70% of the frame; the foreground backs of this "
+               "over-the-shoulder shot are MEANT to be large, soft and cut by the lower edges of the frame (a close shot, "
+               "not a wide one).")
 
 
 # L28 · decoupage (user review of the HCS02/HCS03 rough cuts): the same lab or valley in shot after shot, the same angle
@@ -361,11 +367,18 @@ def lint(name: str, spec: dict) -> list[str]:
     if model_sheet and re.search(r"crumpl|crush|\btears?\b|\btorn\b|\bfolds?\b", p) and "full size" not in p:
         issues.append("L58: a state that crumples / folds / tears a prop must keep it at its FULL SIZE in view (still mostly "
                       "spread, dragged into creases), or it jumps between the drawings")
+    if model_sheet and re.search(r"crumpl", p) and re.search(r"\ba ball\b", p.replace("never a ball", "")):
+        issues.append("L58: a crumpling prop is called 'a ball' somewhere (often the SCALE line): that wins over 'never a "
+                      "ball'; give its size as still spread")
     # L59 (HCS10 plate-s4, 2026-11-20): an empty plate with "the empty space behind the bench in the centre, where the
     # professor will stand" plus a Matt cameo came back with MATT standing in that empty place.
     if "is not in this picture" in p and "cameo of matt" in p and "away from the empty place" not in p:
         issues.append("L59: an empty plate with a Matt cameo: say where Matt is AND that he is away from the empty place "
                       "(the model fills the empty place with the cameo)")
+    # L60 (HCS10 plate-s4, 2026-11-20): SAFE_FRAMING on a close over-the-shoulder plate came back wide
+    if "over-the-shoulder" in p and "central 70% of the frame (not touching" in p:
+        issues.append("L60: a close over-the-shoulder plate with SAFE_FRAMING comes back WIDE: use OTS_FRAMING (only the "
+                      "subject in the central 70%, the foreground backs big and cut by the edges)")
     # L47 (HC002-S1 plate-s8 v3, 2026-11-18): an empty plate that names the missing person's body ("a man's shoulder and
     # hand are added there later, large") came back with a man's hand painted in. Describe only the empty place.
     if ("empty location plate" in p or "is not in this picture" in p) and re.search(
