@@ -106,10 +106,10 @@ REFERENCES.update({
                 f"{framing('CU', 'eye level, slightly low', '85 mm, shallow focus', 'the old professor looks down, calm and steady, at something small just below his chin (it is added later)', 'calm, certain, unafraid')} "
                 f"{camera('at the south side of the bench, close to him', 'north', 'the dark north wall far behind him, out of focus: one amber gas-lamp glow high on the left, dim shapes of glass flasks on a shelf, deep brown shadow', 'no windows, no daylight, no benches in view')} "
                 f"{cast(PETTENKOFER)} His head and shoulders fill the frame: his face is about 0.42 of the frame width, "
-                "the centre of his face at about half the frame height, the top of his white hair at about one third "
-                "of the frame height from the top; above his head only the dark, calm wall (a title is placed there "
-                "later). His mouth is just visible under the white moustache, lips closed. NO glass, NO cup and NO hands "
-                "anywhere in the picture; his arms are down out of frame. "
+                "his face centred left to right; the centre of his face at about 0.55 of the frame height and the TOP "
+                "of his white hair LOW, at about 0.35 of the frame height: the whole upper third of the frame is only the "
+                "dark, calm wall and the lamp glow, with nothing of him in it (a title is placed there later). His mouth is just visible under the white moustache, lips closed. NO glass, NO cup and NO hands "
+                "anywhere in the picture, and nothing held or lying in front of him; his arms are down out of frame. "
                 f"{sizes({'his face': 'about 6 in (15 cm) wide'})} {ONE_EACH} {PERIOD} {NO_TEXT}")),
     "sprite-hand-glass-s1": dict(aspect="16:9", refs=[P], roles=P_ROLE + "Only his HAND and coat sleeve are drawn here. ",
         prompt=sprite_sheet("old man's RIGHT hand holding a small drinking glass, the hand and the dark frock-coat sleeve "
@@ -136,12 +136,14 @@ REFERENCES.update({
         prompt=(f"{LAB} "
                 f"{framing('OTS', 'eye level', '50 mm, shallow focus', 'two of his students in the foreground step toward the empty place behind the bench, as if to volunteer', 'urgent, loyal')} "
                 f"{camera('at the south end of the long bench, behind two students', 'north-north-west', 'the long dark oak bench across the frame with a small glass on it, behind it the tall glass-fronted cabinets of stoppered jars along the north wall; the window light comes in from the left edge', 'the window itself and his desk are NOT in view')} "
-                "Two students in the foreground, seen from BEHIND only (backs of heads, shoulders, dark suits, soft focus), "
-                "at the far left and far right edges, framing the middle. In the middle distance: the bench top at about "
+                "CLOSE over-the-shoulder framing: two students in the foreground, seen from BEHIND only, so close to the "
+                "camera that their backs, shoulders and the backs of their heads are LARGE and soft, filling the lower left "
+                "and lower right corners up to about 0.35 of the frame height; just beyond them, the bench top at about "
                 "two thirds of the frame height, a small empty glass on it right of centre, and the empty space behind "
                 "the bench in the centre of the frame, where the professor will stand. "
                 + NOT_HERE.format(who="Max von Pettenkofer") + " "
-                + matt_beat("an 1890s student's dark suit", "by the cabinets at the back, right of centre, writing in his amber notebook")
+                + matt_beat("an 1890s student's dark suit", "small, at the far right edge by the cabinets at the back, away from the "
+                           "empty place in the centre, writing in his amber notebook")
                 + f" {cast('the two students seen from behind', 'MATT, small, at the back')} {ONE_EACH} {SAFE_FRAMING} {PERIOD} {NO_TEXT}")),
     "pose-pettenkofer-s4": dict(aspect="16:9", refs=[P], roles=P_ROLE,
         prompt=pose_sheet(PETTENKOFER,
@@ -183,18 +185,25 @@ REFERENCES.update({
     # no sheet reference (L45b: a standing model sheet prints as ghosts under a lying / flat pose); the hand in words
     "pose-hand-s7": dict(aspect="16:9", refs=[], roles="",
         prompt=pose_sheet("the old professor's RIGHT hand and forearm (dark frock-coat sleeve, white shirt cuff), seen "
-                          "straight from above, the forearm coming in from the LOWER LEFT, with a loose sheet of paper "
-                          "covered in faint wavy handwriting under the hand",
+                          "straight from above, the forearm coming in from the LOWER RIGHT corner of each drawing, with a loose "
+                          "sheet of paper with faint grey wavy lines (no letters) under the hand",
                           ["the hand lying flat and still on the flat sheet of paper",
-                           "EXACTLY the same forearm and wrist position; ONE change: the fingers curl and clutch the paper, "
-                           "crumpling it into the palm, the knuckles white, tendons standing up on the back of the hand "
-                           "(in pain, not anger: NOT a punching fist)"],
+                           "the forearm, sleeve, cuff and wrist EXACTLY where they are in drawing (1), not moved or "
+                           "turned; ONE change: the fingers curl and clutch the paper, the knuckles white, tendons standing "
+                           "up on the back of the hand (in pain, not anger: NOT a punching fist). The sheet is still at its "
+                           "full size, still mostly spread flat on the desk exactly where it was; only its part under the "
+                           "fingers is dragged into the palm in deep creases radiating from the fingers (never a ball)"],
                           "s7: a desk top seen from above in cold light", S7_LIGHT, "from straight above, 50 mm",
                           "only the hand, wrist and forearm with the paper under it; no face, no body")
                + f" {WAVY_WRITING} "
                + scale({"the loose sheet": "about 8 in (21 cm) wide when flat; crumpled, a ball of about 4 in (10 cm) in his hand",
                         "the hand": "old and thin-skinned, about 7 1/2 in (19 cm) from wrist to fingertip"})),
 })
+
+# v2 prompts (2026-11-20, after the first real pieces): pose-hand-s7 (L57 Lorem ipsum, L58 the sheet became a ball,
+# the wrist moved), plate-s4 (came back wide, Matt in the empty place, L59), plate-s1 (hair top at 0.17, under the card).
+# Re-rolls only after the user's OK ($0.067 each); the v1 images are what the real-art preview uses.
+REROLL_V2 = ["pose-hand-s7", "plate-s4", "plate-s1"]
 
 HERO_PIECES = ["plate-s1", "sprite-hand-glass-s1", "sprite-student-hand-s1", "plate-s4", "pose-pettenkofer-s4",
                "plate-s6", "pose-pettenkofer-s6", "plate-s7", "pose-hand-s7"]

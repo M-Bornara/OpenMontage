@@ -499,7 +499,7 @@ def _overlay(fr, shot, t, boxes, s):
     d.text((OW - 24, OH - 126), "10 cm (hand = 19 cm)", fill=(255, 255, 255, 230), font=f, anchor="rb")
     word = next((w for a, w in reversed(shot["words"]) if a <= t), "")
     d.rectangle([0, OH - 70, OW, OH], fill=(0, 0, 0, 170))
-    d.text((14, OH - 60), f"shot {shot['name']}  t={t:4.2f}s  (word times estimated)", fill=(200, 200, 200, 255), font=f)
+    d.text((14, OH - 60), f"shot {shot['name']}  t={t:4.2f}s  ({shot.get('timing', 'word times estimated')})", fill=(200, 200, 200, 255), font=f)
     d.text((14, OH - 36), word, fill=(255, 210, 120, 255) if word.isupper() else (255, 255, 255, 255), font=fb)
     if "glint" in shot and shot["glint"][2] <= t < shot["glint"][2] + 0.35:
         gx, gy = shot["glint"][0] * OW, shot["glint"][1] * OH

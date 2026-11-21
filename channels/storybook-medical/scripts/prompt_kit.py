@@ -349,6 +349,23 @@ def lint(name: str, spec: dict) -> list[str]:
     if "pose sheet" in p and any(str(r).startswith("ref:sheet-") for r in refs) and re.search(r"\blying\b", p):
         issues.append("L45b: lying pose sheet with a standing model sheet as reference: it prints as ghosts even with "
                       "REF_IDENTITY_ONLY; drop the sheet reference (describe the person in words)")
+    # L57 (HCS10 pose-hand-s7, 2026-11-20): the sheet's SUBJECT said "a loose sheet of paper covered in faint wavy
+    # handwriting" and the paper came back reading "Lorem ipsum dolor sit am..." although WAVY_WRITING was in the prompt:
+    # the word "handwriting" in the subject wins. In a sheet, write "faint grey wavy lines", never "handwriting".
+    if model_sheet and re.search(r"\bhandwrit(?:ing|ten)\b", p.replace(WAVY_WRITING.lower(), "")):
+        issues.append("L57: 'handwriting' in a sheet's subject brings real (Lorem ipsum) letters back: say 'faint grey wavy "
+                      "lines, no letters' (WAVY_WRITING) and nothing else about writing")
+    # L58 (HCS10 pose-hand-s7, 2026-11-20): "the fingers curl and clutch the paper, crumpling it" came back as a small paper
+    # ball in a fist: the flat 21 cm sheet vanished between the two drawings (a jump at the swap). A state that changes a
+    # prop's shape keeps the prop's full extent in view.
+    if model_sheet and re.search(r"crumpl|crush|\btears?\b|\btorn\b|\bfolds?\b", p) and "full size" not in p:
+        issues.append("L58: a state that crumples / folds / tears a prop must keep it at its FULL SIZE in view (still mostly "
+                      "spread, dragged into creases), or it jumps between the drawings")
+    # L59 (HCS10 plate-s4, 2026-11-20): an empty plate with "the empty space behind the bench in the centre, where the
+    # professor will stand" plus a Matt cameo came back with MATT standing in that empty place.
+    if "is not in this picture" in p and "cameo of matt" in p and "away from the empty place" not in p:
+        issues.append("L59: an empty plate with a Matt cameo: say where Matt is AND that he is away from the empty place "
+                      "(the model fills the empty place with the cameo)")
     # L47 (HC002-S1 plate-s8 v3, 2026-11-18): an empty plate that names the missing person's body ("a man's shoulder and
     # hand are added there later, large") came back with a man's hand painted in. Describe only the empty place.
     if ("empty location plate" in p or "is not in this picture" in p) and re.search(

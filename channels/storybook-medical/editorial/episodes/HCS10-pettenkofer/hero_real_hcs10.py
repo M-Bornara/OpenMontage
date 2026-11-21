@@ -41,7 +41,21 @@ SHOT = {
 PIECE = {("1", "hand-glass"): "hand-glass-s1", ("1", "student-hand"): "student-hand-s1", ("4", "pettenkofer"): "pettenkofer-s4",
          ("6", "pettenkofer"): "pettenkofer-s6", ("7", "hand"): "hand-s7"}
 FIT = {"hand-glass-s1": ("h", "top"), "student-hand-s1": ("w", "left"), "pettenkofer-s4": ("h", "bottom"),
-       "pettenkofer-s6": ("h", "bottom"), "hand-s7": ("m", "bottomleft")}
+       "pettenkofer-s6": ("h", "bottom"), "hand-s7": ("m", "center")}
+# the real plates put things in other places than the stand-ins (measured on a 0.1 grid, 2026-11-20), so the
+# positions are re-set here; the TIMES stay the approved ones (warped onto Liam's words). Key lists match the
+# stand-in keys one by one. SIZE: a target piece height (frame fractions) where the plate's scale differs from the
+# stand-in's (s4: Pettenkofer behind the bench is as big as Matt, ≈ 0.24 of the frame, not the stand-in's MS).
+SIZE = {"pettenkofer-s4": 0.245}
+REAL = {
+    "1": {"actors": {"hand-glass": [(0.38, 0.82), (0.42, 0.535)],                 # the glass rim rises to his mouth
+                     "student-hand": [(1.03, 0.80), (0.82, 0.78), (0.58, 0.77)]}},  # stops short of his wrist
+    "4": {"actors": {"pettenkofer": [(0.47, 0.487), (0.47, 0.487)]},              # behind the bench, the beaker between his hands
+          # crop in (the plate came back wide): centre (0.49, 0.42) at 1.7 -> (0.52, 0.40) at 2.0 on "no"
+          "cam": [(1.7, 1.7, 13.6), (2.0, -4.0, 20.0)], "glint": (0.87, 0.24)},
+    "6": {"actors": {"pettenkofer": [(0.40, 1.02), (0.40, 1.02)]}},
+    "7": {"actors": {"hand": [(0.47, 0.64), (0.47, 0.64)]}},                      # on the bare wood, arm from lower right
+}
 
 
 def _word_t(word: str, win) -> float:
@@ -75,10 +89,28 @@ def _anchor(im: Image.Image, rule: str):
         return x0 / im.width, ys[band].mean() / im.height
     if rule == "bottom":
         return (x0 + x1) / 2 / im.width, y1 / im.height
-    if rule == "bottomleft":     # where the forearm leaves the piece (it comes in from the lower left)
-        band = ys > y1 - 0.06 * (y1 - y0)
-        return xs[band].mean() / im.width, y1 / im.height
+    if rule == "center":
+        return (x0 + x1) / 2 / im.width, (y0 + y1) / 2 / im.height
     raise ValueError(rule)
+
+
+def _soften_writing(im: Image.Image) -> Image.Image:
+    """Free fix (2026-11-20): pose-hand-s7 came back with "Lorem ipsum ..." on the sheet (L15 again, inside a pose sheet).
+    The ink strokes inside the paper are inpainted with the paper and 25 % of them blended back: faint marks, no letters."""
+    import cv2
+    rgba = np.array(im)
+    rgb = np.ascontiguousarray(rgba[..., :3])
+    hsv = cv2.cvtColor(rgb, cv2.COLOR_RGB2HSV)
+    paper = ((hsv[..., 1] < 40) & (hsv[..., 2] > 170) & (rgba[..., 3] > 200)).astype(np.uint8)
+    region = cv2.morphologyEx(paper, cv2.MORPH_CLOSE, np.ones((25, 25), np.uint8))
+    ink = (region > 0) & (paper == 0) & (hsv[..., 1] < 60) & (hsv[..., 2] < 170)
+    ink = cv2.dilate(ink.astype(np.uint8), np.ones((3, 3), np.uint8))
+    clean = cv2.inpaint(rgb, ink * 255, 5, cv2.INPAINT_TELEA)
+    out = np.where(ink[..., None] > 0, (0.75 * clean + 0.25 * rgb).astype(np.uint8), rgb)
+    return Image.fromarray(np.dstack([out, rgba[..., 3]]), "RGBA")
+
+
+SOFTEN = {("hand-s7", "flat")}
 
 
 def _real_piece(name: str, standin):
@@ -88,21 +120,15 @@ def _real_piece(name: str, standin):
     mode, rule = FIT[name]
     first_state = next(iter(frames_s))
     real = {s: Image.open(d / fs[0]).convert("RGBA") for s, fs in meta["frames"].items()}
+    real = {s: _soften_writing(im) if (name, s) in SOFTEN else im for s, im in real.items()}
     missing = set(frames_s) - set(real)
     if missing:
         raise SystemExit(f"{name}: the paid sheet has no state {missing} (cut it with these names)")
-    k = _bbox_fit(frames_s[first_state], mode) / _bbox_fit(real[first_state], mode)
+    target = SIZE[name] * H if name in SIZE else _bbox_fit(frames_s[first_state], mode)
+    k = target / _bbox_fit(real[first_state], "h" if name in SIZE else mode)
     real = {s: im.resize((max(1, round(im.width * k)), max(1, round(im.height * k))), Image.LANCZOS) for s, im in real.items()}
     return real, _anchor(real[first_state], rule)
 
-
-def _standin_anchor_point(standin, rule):
-    """The stand-in's anchor is its own body point; the real anchor follows `rule`. Return the stand-in's point for the
-    same rule, as an offset (px) from its anchor, so the keys (written for the stand-in anchor) still put the body there."""
-    frames, anc = standin
-    im = next(iter(frames.values()))
-    ax, ay = _anchor(im, rule)
-    return (ax - anc[0]) * im.width, (ay - anc[1]) * im.height
 
 
 def build(n: str):
@@ -116,14 +142,15 @@ def build(n: str):
     shot.pop("fg", None)                                   # the stand-in's drawn foreground; the real plate has its own
     for a in shot["actors"]:
         name = PIECE[(n, a["id"])]
-        dx, dy = _standin_anchor_point(a["piece"], FIT[name][1])
         a["piece"] = _real_piece(name, a["piece"])
-        for k in a["keys"]:
-            k["t"] = warp(k["t"])
-            k["x"] += dx / W
-            k["y"] += dy / H
-    for c in shot["cam"]:
+        pos = REAL[n]["actors"][a["id"]]
+        assert len(pos) == len(a["keys"]), (n, a["id"])
+        for k, (x, y) in zip(a["keys"], pos):
+            k["t"], k["x"], k["y"] = warp(k["t"]), x, y
+    for i, c in enumerate(shot["cam"]):
         c["t"] = warp(c["t"])
+        if "cam" in REAL[n]:
+            c["scale"], c["x"], c["y"] = REAL[n]["cam"][i]
     for key in ("focus", "drain"):
         if key in shot:
             shot[key] = [(warp(t), v) for t, v in shot[key]]
@@ -131,7 +158,7 @@ def build(n: str):
         t0, d_, amt = shot["swell"]
         shot["swell"] = (warp(t0), d_, amt)
     if "glint" in shot:
-        shot["glint"] = (*shot["glint"][:2], warp(shot["glint"][2]))
+        shot["glint"] = (*REAL[n].get("glint", shot["glint"][:2]), warp(shot["glint"][2]))
     shot["hero_at"] = warp(shot["hero_at"])
     shot["crumple"] = [warp(t) for t in shot.get("crumple", [])]
     shot["clicks"] = []
@@ -139,6 +166,7 @@ def build(n: str):
     keyw = {w.lower() for _, w in spec["warp"]}
     shot["words"] = [(t, w.upper() if w.lower() in keyw else w) for t, w in shot["words"]]
     shot["dur"] = real_d
+    shot["timing"] = "Liam's real timing"
     return shot, spec
 
 

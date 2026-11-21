@@ -71,9 +71,14 @@ EPISODES = {
         "hero_previz": [("1", "Shot 1 · the hook: his hand brings the small glass to his lips; the student's hand reaches in and stops short on \"drink\""),
                         ("4", "Shot 4 · the refusal: MS, push in 1.0 → 1.18; ONE swap to the raised palm on \"no\"; rack focus; Matt's glint"),
                         ("6", "Shot 6 · the gulp: the small glass at his lips; ONE swap, head back, on \"gulp\"; the window swells on \"purest water\""),
-                        ("7", "Shot 7 · the cramps: ≈ 30 cm of desk; flat hand → ONE swap to a white-knuckled fist on \"cramps\"; the colour drains")],
+                        ("7", "Shot 7 · the cramps: ≈ 30 cm of desk; flat hand on a sheet → ONE swap: the fingers clutch and crumple it on \"cramps\" (your fix); the colour drains")],
+        "hero_real": [("1", "Shot 1 · real pieces, Liam's timing: the glass reaches his mouth on \"cholera\", the student's hand stops short on \"drink\". OPEN: the hook card (y 360–610) lies over his hair and forehead (the plate put his head higher than asked)"),
+                      ("4", "Shot 4 · real pieces: the plate came back wide (students walking, not over-the-shoulder), so the camera crops in 1.7 → 2.0 and lands on \"no\" (0.65 of the frame). OPEN: the crop makes Matt big beside him"),
+                      ("6", "Shot 6 · real pieces: head back on \"gulp\", the window brightens on \"purest water\" (0.86 of the frame)"),
+                      ("7", "Shot 7 · real pieces: the fingers clutch the sheet on \"cramps\" + crumple sound (0.75). Free fix in: the sheet's 'Lorem ipsum' faded to faint marks. OPEN: the flat sheet becomes a ball in one swap")],
+        "hero_pieces": REPO / "projects/hcs10-pettenkofer/review/hero/pieces.jpg",
         "page_title": "Pettenkofer Storyboard",
-        "status": "storyboard + backgrounds APPROVED (4 fixes in) · HERO motion pre-viz · waiting for your OK",
+        "status": "HERO pieces on real art (11 paid pieces, $0.74) · narration recorded · waiting for your OK on 3 open points",
     },
     "hc002s1": {
         "anchor": "gage-s1", "short": "Gage S1", "slot": "CASE 11 · Sun Nov 29 · 15:00 ET = 14:00 Alberta · ready by Wed Nov 25",
@@ -416,7 +421,24 @@ def web_preview(render: Path, dst: Path) -> bool:
 def hero_block(k: str, e: dict, out: Path, img: Path) -> str:
     """Free HERO motion pre-viz on stand-in pieces (hero_previz_<ep>.py, before narration exists): per shot the preview
     (a click marks each key word) and its start / key / end sheet."""
-    p, arts = e.get("project"), []
+    p, arts, real = e.get("project"), [], []
+    for sid, cap in e.get("hero_real", []):
+        rev = p / "review/hero"
+        if not web_preview(rev / f"{sid}-real.mp4", out / "video" / f"{p.name}-hero-{sid}-real.mp4"):
+            continue
+        sheet = rev / f"{sid}-real-sheet.jpg"
+        sh = (f'<img class="wide" src="img/{shrink(sheet, img / f"{k}-hero-{sid}-real-sheet", 1500)}" alt="Start, key and end '
+              f'frames of shot {sid} on the real pieces" loading="lazy">') if sheet.exists() else ""
+        real.append(f'<article class="hero"><h4>{html.escape(cap)}</h4><video class="cut" controls playsinline loop '
+                    f'preload="metadata" src="video/{p.name}-hero-{sid}-real.mp4"></video>{sh}</article>')
+    if real:
+        pcs = e.get("hero_pieces")
+        pimg = (f'<img class="wide" src="img/{shrink(pcs, img / f"{k}-hero-pieces", 1800)}" alt="The paid pieces: cast sheets, '
+                f'sprite and pose sheets, plates" loading="lazy">') if pcs and pcs.exists() else ""
+        real = ['<div class="block"><h3>HERO shots on the REAL pieces (the recorded narration, real word times)</h3><p class="legend">'
+                'The approved motion, unchanged, on the paid pieces: every key moved from the estimated word to the word Liam '
+                'says; the sound is the narration. Green box = the moving piece at its key (≥ 1/3); dashed lines = the safe zone.'
+                '</p>' + pimg] + real + ["</div>"]
     for sid, cap in e.get("hero_previz", []):
         rev = p / "review/hero"
         if not web_preview(rev / f"{sid}-preview.mp4", out / "video" / f"{p.name}-hero-{sid}.mp4"):
@@ -427,8 +449,8 @@ def hero_block(k: str, e: dict, out: Path, img: Path) -> str:
         arts.append(f'<article class="hero"><h4>{html.escape(cap)}</h4><video class="cut" controls playsinline loop '
                     f'preload="metadata" src="video/{p.name}-hero-{sid}.mp4"></video>{sh}</article>')
     if not arts:
-        return ""
-    return ('<div class="block"><h3>HERO motion pre-viz (free stand-in pieces, word times estimated)</h3><p class="legend">'
+        return "".join(real)
+    return "".join(real) + ('<div class="block"><h3>HERO motion pre-viz (free stand-in pieces, word times estimated)</h3><p class="legend">'
             'Drawn stand-ins with the same names, states and sizes as the paid pieces (cm, L51). Green box = the moving piece at its key '
             '(≥ 1/3 of the frame); dashed lines = the Shorts safe zone; a click marks each key word. Nothing paid.</p>'
             + "".join(arts) + "</div>")

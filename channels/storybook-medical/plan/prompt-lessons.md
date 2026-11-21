@@ -224,3 +224,23 @@ Every generation round teaches us something. A lesson only counts once it's **en
   the same camera (position + facing) and background; L36 compares position too. view_check L56: a copied reference or a
   back-to-back same view fails; a same view later in the film is a note. Already-packaged Shorts: only back-to-back
   jump cuts get fixed, free fixes only (reframe / crop / reorder); a paid re-roll needs the user's OK.
+
+## L57 + L58 + L59 (HCS10 Pettenkofer HERO pieces, 2026-11-20)
+
+- **L57 · "handwriting" in a sheet's subject brings real letters back.** pose-hand-s7 said "a loose sheet of paper
+  covered in faint wavy handwriting" and came back reading "Lorem ipsum dolor sit am…", although WAVY_WRITING was in
+  the prompt. In a sheet, say "faint grey wavy lines, no letters" and nothing else about writing. Lint L57. (Free fix
+  used on v1: hero_real_hcs10._soften_writing inpaints the ink strokes inside the paper and blends 25 % back.)
+- **L58 · a state that changes a prop's shape keeps the prop's full size.** "The fingers curl and clutch the paper,
+  crumpling it" came back as a small paper ball in a fist: the flat 21 cm sheet vanished between the drawings, so the
+  swap pops. Say: the sheet still at its full size, mostly spread, only the part under the fingers dragged into creases.
+  Lint L58. Also: "EXACTLY the same forearm and wrist" was not enough (the wrist moved); name every part that stays
+  (forearm, sleeve, cuff, wrist) and "not moved or turned".
+- **L59 · an empty plate + a Matt cameo: Matt fills the empty place.** plate-s4 asked for "the empty space behind the
+  bench in the centre, where the professor will stand" and painted Matt there. Say where Matt is AND "away from the
+  empty place". Lint L59.
+- **Not lintable, noted:** plate-s4 "OTS, students in the foreground at the edges" came back as a wide shot with the
+  students walking full-figure in the middle ground: give the foreground backs a size ("filling the lower corners up
+  to 0.35 of the frame height"). plate-s1 "the top of his hair at about one third of the frame height" came back at
+  0.17: ask for a lower number and say the upper third is only wall ("nothing of him in it").
+Tests: test_prompt_lint.py (the v1 prompts fail, the v2 prompts pass).

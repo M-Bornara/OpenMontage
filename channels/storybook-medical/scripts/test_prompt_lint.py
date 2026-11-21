@@ -234,4 +234,22 @@ ok55 = (has_code(l55_bad, "L55") and all(has_code(x, "L40") for x in l47c_bad)
 status = "PASS" if ok55 else "FAIL"
 print(f"{status} L55 thin setting (HCS09 s1b), L40 kf: reference without a set (HCS08 s2/s3), L55b back-to-back / same-camera background caught, a return from another camera passes; full spec passes")
 ok = ok and status == "PASS"
+# L57 / L58 / L59 (HCS10 2026-11-20): the first pose-hand-s7 and plate-s4 prompts, as they were sent
+hand_v1 = {"aspect": "16:9", "refs": [], "prompt": prompt_kit.pose_sheet(
+    "his RIGHT hand, seen from above, with a loose sheet of paper covered in faint wavy handwriting under the hand",
+    ["the hand lying flat on the sheet", "the fingers curl and clutch the paper, crumpling it into the palm"],
+    "s7", "grey light", "from above", "the hand only")}
+hand_v2 = {"aspect": "16:9", "refs": [], "prompt": prompt_kit.pose_sheet(
+    "his RIGHT hand, seen from above, with a loose sheet of paper with faint grey wavy lines, no letters, under the hand",
+    ["the hand lying flat on the sheet", "the fingers curl and clutch the paper, crumpling it: the sheet still at its full size, "
+     "mostly spread, its near half dragged into creases"], "s7", "grey light", "from above", "the hand only")}
+plate_v1 = {"aspect": "9:16", "refs": [], "prompt": "the empty space behind the bench. The professor is NOT in this picture. "
+            + prompt_kit.matt_beat("a suit", "by the cabinets, writing")}
+plate_v2 = dict(plate_v1, prompt=plate_v1["prompt"].replace("by the cabinets", "at the far right by the cabinets, away from the empty place"))
+c1, c2 = prompt_kit.lint("h1", hand_v1), prompt_kit.lint("h2", hand_v2)
+ok57 = (has_code(c1, "L57") and has_code(c1, "L58") and not has_code(c2, "L57") and not has_code(c2, "L58")
+        and has_code(prompt_kit.lint("p1", plate_v1), "L59") and not has_code(prompt_kit.lint("p2", plate_v2), "L59"))
+status = "PASS" if ok57 else "FAIL"
+print(f"{status} L57 'handwriting' in a sheet (Lorem ipsum), L58 a crumpled prop keeps its full size, L59 Matt away from the empty place (HCS10 s7 / s4)")
+ok = ok and status == "PASS"
 sys.exit(0 if ok else 1)
