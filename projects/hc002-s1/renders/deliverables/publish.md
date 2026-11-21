@@ -22,9 +22,9 @@ First comments can't be scheduled: post + pin them when each post goes live.
 ```
 Near Cavendish, Vermont, 13 September 1848. Phineas Gage, 25, was a railroad construction foreman, and his employers thought him the most efficient and capable foreman they had. His job: pack blasting powder into holes in the rock with a smooth iron tamping bar, 3 ft 7 in long and 13¼ lb (1.1 m, 6 kg).
 
-His men caught his attention, he looked over his shoulder, and the iron struck a spark on the rock. The powder exploded. The bar went in under his left cheekbone, passed behind his left eye and came out through the top of his head. It landed about 80 feet (25 m) away.
+His men caught his attention, he looked over his shoulder, and the iron struck a spark on the rock. The powder exploded. The bar went in under his left cheekbone, passed behind his left eye and came out through the top of his head. It landed about 80 feet (24 m) away.
 
-Within minutes he spoke. He rode to his hotel sitting up in an ox cart, and Dr Edward Williams later remembered his greeting: "Doctor, here is business enough for you." He survived, and he kept the iron. But his friends said he was "no longer Gage". What that really meant is a longer story. This is a history story, not medical advice.
+Within minutes he spoke. He rode to his hotel sitting up in an ox cart, and Dr Williams later remembered his greeting: "Doctor, here is business enough for you." He survived, and he kept the iron. But his friends said he was "no longer Gage". What that really meant is a longer story. This is a history story, not medical advice.
 
 More true medical stories: "The Man With a Window Into His Stomach" (linked above).
 
@@ -90,7 +90,7 @@ Educational historical content. Not medical advice.
 
 **Caption:**
 ```
-Phineas Gage, 1848: a 13-pound iron bar went through his head. Minutes later, he spoke.
+Phineas Gage, 1848: a 13¼-pound iron bar went through his head. Minutes later, he spoke.
 
 His friends said he was "no longer Gage." More true stories on YouTube: Oddly Matt
 
@@ -109,7 +109,7 @@ More true stories: search Oddly Matt on YouTube
 
 **Caption:**
 ```
-1848, Vermont: a 13-pound iron bar went through Phineas Gage's head. Minutes later, he spoke.
+1848, Vermont: a 13¼-pound iron bar went through Phineas Gage's head. Minutes later, he spoke.
 
 He rode to his hotel sitting up in an ox cart, and he kept the iron.
 Source: Dr John Harlow's 1868 report.
@@ -133,7 +133,7 @@ More true stories: link in bio
 ```
 In 1848, a blast on a Vermont railroad sent an iron bar through a foreman's head. Minutes later, he was talking.
 
-Phineas Gage rode to his hotel sitting up in an ox cart and greeted the doctor with "Doctor, here is business enough for you." He survived and kept the iron. But his friends said he was "no longer Gage."
+Phineas Gage rode to his hotel sitting up in an ox cart, and Dr Williams later remembered his greeting: "Doctor, here is business enough for you." He survived and kept the iron. But his friends said he was "no longer Gage."
 
 More true stories on YouTube: oddlymatt.com
 

@@ -16,21 +16,21 @@ hook_card: He drank *cholera*. / On purpose.
 First comments can't be scheduled: post + pin them when each post goes live.
 
 ## YouTube Shorts
-**Title:** He Drank Cholera to Prove His Rival Wrong
+**Title:** The Professor Who Drank Cholera at 73
 
 **Description:**
 ```
 Munich, 7 October 1892. Max von Pettenkofer, 73, drank a fresh culture of cholera germs in front of witnesses.
 
-Cholera had just killed about 8,600 people in Hamburg. Robert Koch blamed a germ carried in the drinking water. Pettenkofer believed the germ alone was not enough: the soil and the ground water had to be right too. Some of his students offered to take the risk in place of their old teacher. He refused.
+That year, cholera killed about 8,600 people in Hamburg. Robert Koch blamed a germ carried in the drinking water. Pettenkofer believed the germ alone was not enough: the soil and the ground water had to be right too. Some of his students offered to take the risk in place of their old teacher. He refused.
 
-First he drank a little bicarbonate of soda, to neutralise his stomach acid. Then one cubic centimetre of a broth culture made in Munich from cultures of the Hamburg outbreak, prepared by Georg Gaffky, Koch's former assistant. He wrote that it tasted like the purest water.
+First he drank a little bicarbonate of soda, to neutralise his stomach acid. Then one cubic centimetre of a broth culture made in Munich from Georg Gaffky's cultures of the Hamburg outbreak (Gaffky was Koch's former assistant). He wrote that it tasted like the purest water.
 
-Two days later came stomach cramps and diarrhoea, for about a week, and the lab found his gut swarming with cholera germs. But it never turned dangerous, and he declared victory. His critics said he had simply had a mild case of cholera, and most experts now think so too. Ten days after him, his pupil Rudolf Emmerich repeated the drink and got much sicker, but survived. And the irony: modern studies show that neutralising stomach acid makes cholera far easier to catch. The soda made his experiment more dangerous, not less.
+Two days later came stomach cramps and diarrhoea, for about a week, and the lab found his gut swarming with cholera germs. But he took no medicine, felt otherwise well, and declared victory. His critics said he had simply had a mild case of cholera, and most experts now think so too. Ten days after him, his pupil Rudolf Emmerich repeated the drink and got much sicker, but survived. And the irony: modern studies show that neutralising stomach acid makes cholera far easier to catch. The soda made his experiment more dangerous, not less.
 
 He lost the argument about the water. But his clean-water and sewer work did help Munich. This is a history story, not medical advice. Never try anything like this.
 
-Another doctor who drank his own germs: "The Doctor Who Drank Bacteria" (linked above).
+Another man who drank a culture of bacteria to test his own theory: "The Doctor Who Drank Bacteria" (linked above).
 
 SOURCES
 - Max von Pettenkofer's own account, English translation in the Journal of Hygiene obituary (1901).
@@ -97,7 +97,7 @@ Educational historical content. Not medical advice.
 **Caption:**
 ```
 A 73-year-old professor drank cholera on purpose. Munich, 1892.
-He wanted to prove his rival wrong. Two days later, the cramps began.
+His rival blamed a germ in the water. He said the germ alone wasn't enough. Two days later, the cramps began.
 
 More true stories on YouTube: Oddly Matt
 
@@ -116,7 +116,7 @@ More true stories: search Oddly Matt on YouTube
 
 **Caption:**
 ```
-1892: a 73-year-old professor drank cholera to win an argument.
+1892: a 73-year-old professor drank cholera in front of witnesses.
 
 Max von Pettenkofer said the germ alone wasn't enough. He survived the bet… but not the argument.
 (Source: British Medical Journal, 1892.)
@@ -138,9 +138,9 @@ More true stories: link in bio
 
 **Caption:**
 ```
-In 1892 a famous Munich professor, Max von Pettenkofer, drank a culture of cholera germs in front of witnesses.
+In 1892 a Munich professor, Max von Pettenkofer, 73, drank a culture of cholera germs in front of witnesses.
 
-Cholera had just killed about 8,600 people in Hamburg, and his rival Robert Koch blamed a germ in the water. Pettenkofer was sure the germ alone wasn't enough. He got sick for a week, survived, and declared victory. His critics said: that was cholera, just a mild case.
+That year, cholera killed about 8,600 people in Hamburg, and his rival Robert Koch blamed a germ in the water. Pettenkofer believed the germ alone wasn't enough. He was sick for about a week, and survived. His critics said: that was cholera, just a mild case.
 
 More true stories on YouTube: oddlymatt.com
 
