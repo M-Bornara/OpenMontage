@@ -13,8 +13,19 @@ missing from claims.csv or is UNKNOWN / REMOVE. `claim_tags.strip()` removes the
 `claim_tags.gate_text()` writes `editorial/episodes/<EP>/fact-gate/package*.md`, the input of step 2.
 A fact that is needed but not in claims.csv gets a claims row first (with its source), then the tag.
 
+## 1b. On-screen text (lint, free, every Short build; user 2026-11-21)
+The video carries facts too: the hook card, stamps, name tags (name · subtitle) and the narration, burned in as
+captions. `scripts/onscreen_text.py <pid>` exports them from `remotion/props.json` + `artifacts/word_timestamps.json`
+(narration split into sentences) and checks them against claims.csv; the tags live in
+`editorial/episodes/<EP>/fact-gate/onscreen-tags.json`, keyed by the exact on-screen text ("" = untagged = a finding).
+`episode.py build` runs it after props.json: it fails when the tags file exists and something is untagged / UNKNOWN /
+REMOVE, and a CHANGED text loses its tag (the 24 m stamp had to be re-tagged), so every edit is tagged again. It writes
+`fact-gate/onscreen.md`, which goes through the gate (step 2) like a package. Episodes without a claims.csv got one
+converted verbatim from their research.md table (HCS07, HCS08, HCS09).
+
 ## 2. Independent fact gate (a fresh sub-agent, before Mahdi sees the text)
-**When:** before showing Mahdi any script (Short or long), caption set or publish package, and again after every fix.
+**When:** before showing Mahdi any script (Short or long), caption set, publish package or rough cut (its
+`fact-gate/onscreen.md`), and again after every fix.
 **Input, and only this:** a new folder in the scratchpad with two files: `claims.csv` (copied from the episode) and
 `text.md` (the script, or `fact-gate/package*.md`). The agent is the `fact-gate` agent
 (`.claude/agents/fact-gate.md`, tools: Read only); if that type isn't loaded in the session, use a general-purpose

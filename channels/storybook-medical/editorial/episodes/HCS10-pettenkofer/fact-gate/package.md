@@ -4,7 +4,7 @@
 
 ## youtube.title
 ```
-The Professor Who Drank Cholera at 73 [C46 C01 C02]
+He Drank Cholera to Prove a Point [C01 C25]
 ```
 
 ## youtube.description

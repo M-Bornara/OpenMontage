@@ -16,7 +16,7 @@ hook_card: He drank *cholera*. / On purpose.
 First comments can't be scheduled: post + pin them when each post goes live.
 
 ## YouTube Shorts
-**Title:** The Professor Who Drank Cholera at 73
+**Title:** He Drank Cholera to Prove a Point
 
 **Description:**
 ```

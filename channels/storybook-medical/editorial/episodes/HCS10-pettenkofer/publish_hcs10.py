@@ -33,8 +33,8 @@ SOURCES = """SOURCES
 # Every public sentence ends with its claim tag (scripts/claim_tags.py; [NF] = no factual claim). claim_tags.strip()
 # removes the tags before episode.json; fact-gate/package.md is the tagged text the independent fact gate reads.
 # 2026-11-21 fact gate r1: title 1 ("to Prove His Rival Wrong") states a motive no claim records (research.md lists
-# "He proved Koch wrong" as a myth) -> title 2 from story-v1.md (the user's runner-up)
-TITLE = "The Professor Who Drank Cholera at 73 [C46 C01 C02]"
+# "He proved Koch wrong" as a myth) -> user 2026-11-21: "to Prove a Point" = his stated aim (C25), no personal motive
+TITLE = "He Drank Cholera to Prove a Point [C01 C25]"
 
 DESCRIPTION = (
     "Munich, 7 October 1892. [C01] Max von Pettenkofer, 73, drank a fresh culture of cholera germs in front of "

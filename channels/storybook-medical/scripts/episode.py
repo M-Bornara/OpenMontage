@@ -807,6 +807,9 @@ def step_build(pid, *_):
                  "captionFont": ep.get("theme", {}).get("font", "montserrat"),   # per-culture caption font
                  **ep.get("_v2", {})}                                            # hook, caseNo, endLine
     json.dump(props, open(rem / "props.json", "w", encoding="utf-8"), indent=1)
+    if not long:   # user 2026-11-21: hook card, stamps, name tags and narration carry claim IDs too (fact gate input)
+        import onscreen_text
+        onscreen_text.check(pid)
     gaps = [(a["id"], b["id"]) for a, b in zip(shots, shots[1:])
             if abs(a["end"] - b["start"]) > 0.02 and b["transitionIn"] != "dissolve"]
     edit = {

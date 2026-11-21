@@ -465,7 +465,7 @@ overlays = [
     # metric stays in the description). The bar runs up-left from the hole (x ~0.42): at y 640-760 it covers x ~330-440,
     # the stamp sits right of it, inside the safe zone (x 65-888), on the wall the hand has left
     {"kind": "stamp", "start": starts["3"] + IRON3_T + 0.1, "end": starts["3"] + TAMP3 + 1.0, "text": "3 ft 7 in", "y": 640, "x": 690, "size": 84},
-    {"kind": "stamp", "start": starts["7"] + LANDED + 0.1, "end": starts["7"] + 1.9, "text": "≈ 80 ft (25 m)", "y": MID},
+    {"kind": "stamp", "start": starts["7"] + LANDED + 0.1, "end": starts["7"] + 1.9, "text": "≈ 80 ft (24 m)", "y": MID},   # 24 m: 80 ft = 24.4 m (fact gate, 2026-11-21)
 ]
 # rough cut 1: a stamp never outlives its shot (the real narration made shot 7 1.62 s: "≈ 80 FT" ran into shot 8's silence)
 for o in overlays:

@@ -24,8 +24,11 @@ from pathlib import Path
 ID = r"(?:[A-Z0-9-]+:)?C\d+[a-z]?"
 TAG = re.compile(rf"\[(NF|{ID}(?:[ ,]+{ID})*)\]")
 STRIP = re.compile(rf"[ \t]*\[(?:NF|{ID}(?:[ ,]+{ID})*)\]")
-# a sentence boundary inside one tagged segment: . ! ? … (optionally closing quote / bracket), space, a capital
-BOUNDARY = re.compile(r"[.!?…][\"”')]?\s+(?=[\"“(]?[A-Z])")
+# a sentence boundary inside one tagged segment: . ! ? … (optionally closing quote / bracket), space, a capital;
+# not after an abbreviation ("Dr. Carlos Finlay", "a U.S. Army team")
+ABBR = ("Dr", "Mr", "Mrs", "St", "Prof", "U.S", "U.K")
+NOT_ABBR = "".join(rf"(?<!\b{re.escape(a)}\.)" for a in ABBR)        # for a position just after the period
+BOUNDARY = re.compile("".join(rf"(?<!\b{re.escape(a)})" for a in ABBR) + r"[.!?…][\"”')]?\s+(?=[\"“(]?[A-Z])")
 FIELDS = [("youtube", "title"), ("youtube", "description"), ("youtube", "pinned_comment"), (None, "hook_card")] + \
          [(p, f) for p in ("tiktok", "instagram", "facebook") for f in ("caption", "first_comment")]
 OK_STATUS = {"VERIFIED", "ATTRIBUTED", "DISPUTED"}
@@ -133,6 +136,7 @@ def _selftest() -> None:
     assert len(t("Fact. [C01] Then this.")) == 1                       # trailing untagged sentence
     assert t('He said: "Doctor, here is business." [C02]') == []      # a quote ending the sentence
     assert t('He said "no." [C02] More true stories on YouTube: Oddly Matt') == []   # CTA on the same line
+    assert t("Then, in 1900, a U.S. Army team led by Dr. Reed tested it. [C01]") == []  # abbreviations
     assert strip({"a": "He drank it. [C01] Then. [NF]\nNext [C01, C02]."}) == {"a": "He drank it. Then.\nNext."}
     print("claim-ID lint self-test PASS")
 
