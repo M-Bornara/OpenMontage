@@ -80,6 +80,24 @@ EPISODES = {
         "page_title": "Pettenkofer Storyboard",
         "status": "package re-checked by the fact gate (41 PASS): title is now 'The Professor Who Drank Cholera at 73', 12 caption/description fixes (HCS10 $1.64) · waiting for your OK, then you upload Tue Dec 1",
     },
+    "hc003s1": {
+        "anchor": "dancing-s1", "short": "Dancing S1", "slot": "CASE 14 · Sat Dec 5 · 15:00 ET = 14:00 Alberta · ready by Tue Dec 1",
+        "storyboard": EP / "HC003-dancing-plague/s1-storyboard-v1.md",   # s1-story-v3 approved 2026-11-21
+        "project": REPO / "projects/hc003-s1", "previz": REPO / "projects/hc003-s1/review/previz",
+        "maps": ["map-lane.png"], "refs_dir": REPO / "projects/hc003-s1/refs",
+        "refs": [
+            ("hondius_dancing_pilgrims_1642.jpg", "The dancing pilgrims (Hondius 1642, after Bruegel 1564)", "The image people know of the dancing mania: how the dancers move, the helpers holding them.", "Engraving, 1642 · Wikimedia Commons · public domain"),
+            ("durer_nuremberg_woman_dance_1500.jpg", "Nuremberg woman dressed for a dance (Dürer 1500)", "Gown, coif and shoes of the period: Troffea's sheet.", "Watercolour, 1500, Albertina · Wikimedia Commons · public domain"),
+            ("durer_dancing_peasants_1514.jpg", "The dancing peasant couple (Dürer 1514)", "A dance pose and dress of 1514.", "Engraving, 1514 · Wikimedia Commons · public domain"),
+            ("gersdorff_feldbuch_1517.jpg", "Gersdorff, Feldbuch der Wundarznei (Strasbourg 1517)", "A Strasbourg medical book of the year before: shot 12a.", "Woodcut, 1517 · Wikimedia Commons · public domain"),
+            ("merian_strasbourg_1644.jpg", "Strasbourg (Merian 1644)", "The city and the cathedral spire over the roofs.", "Engraving, 1644 · Wikimedia Commons · public domain"),
+            ("strasbourg_kammerzell.jpg", "Maison Kammerzell, Strasbourg", "Half-timbered fronts with overhanging storeys: the lane.", "Photo · Wikimedia Commons"),
+        ],
+        "extra": [EP / "HC003-dancing-plague/s1-refs.md", EP / "HC003-dancing-plague/s1-backgrounds-v1.md",
+                  EP / "HC003-dancing-plague/fact-gate/2026-11-21-script-s1-v3.md"],
+        "page_title": "Dancing Plague S1 Storyboard",
+        "status": "storyboard + backgrounds + free pre-viz · narration recorded (Liam, 54 s, $0) · waiting for your OK and the reference downloads; then the HERO pieces",
+    },
     "hc002s1": {
         "anchor": "gage-s1", "short": "Gage S1", "slot": "CASE 11 · Sun Nov 29 · 15:00 ET = 14:00 Alberta · ready by Wed Nov 25",
         "storyboard": EP / "HC002-phineas-gage/s1-storyboard-v1.md", "story": EP / "HC002-phineas-gage/s1-story-v2.md",

@@ -42,7 +42,7 @@ She danced for hours… until she collapsed.
 Next morning, she was up again. On swollen feet. Dancing.
 [quiet] Her husband begged her to stop. She didn't.
 [fast] By the third day, a crowd was watching.
-Then… others started dancing too.
+[pause] Then… others started dancing too.
 Within days, more than thirty.
 Frightened, the city sent her away in a wagon… to a saint's shrine.
 [pause] [whispers] But the dancing didn't leave with her.
