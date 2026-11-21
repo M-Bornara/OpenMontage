@@ -15,6 +15,9 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[4]
 SCRIPTS = REPO / "channels/storybook-medical/scripts"
+sys.path.insert(0, str(SCRIPTS))
+import publish_social  # noqa: E402
+
 PID = "hcs10-pettenkofer"
 P = REPO / "projects" / PID
 
@@ -45,27 +48,42 @@ DESCRIPTION = (
 
 HOOK_CARD = "He drank *cholera*. / On purpose."   # chosen 2026-11-18 (storyboard-v1.md: hook card A)
 
-# per-platform captions (oddly-matt-platform-captions rules: facts from claims.csv only, no gore words, Matt's voice,
-# 3-5 hashtags on TikTok / Instagram, 1-3 on Facebook) + the first comment for each platform
+# per-platform captions (captions skill v2: facts from claims.csv only, no gore words, Matt's voice, the platform's CTA
+# line, 3-5 hashtags on TikTok / Instagram, 1-3 on Facebook); publish_social.lint_captions checks the CTA lines.
+# 2026-11-21 (user): IG "germs alone couldn't make you sick" overstated C04 -> "the germ alone wasn't enough";
+# TikTok "It didn't go to plan" rested on C40 (UNKNOWN) -> C19 "Two days later, the cramps began."
 FIRST = "Who was braver: Pettenkofer or Marshall? 🧪 (Did you spot Matt's glasses? 👓)"
-CAPTIONS = {
-    "tiktok": ("A 73-year-old professor drank cholera on purpose. Munich, 1892.\n"
-               "He wanted to prove his rival wrong. It didn't go to plan.\n"
-               "#history #medicalhistory #cholera #oddlymatt\n\n"
-               f"First comment: {FIRST}"),
-    "instagram": ("1892: a 73-year-old professor drank cholera to win an argument.\n"
-                  "Max von Pettenkofer said germs alone couldn't make you sick. He survived the bet… but not the argument. "
-                  "(Source: his own account, BMJ 1892.)\n"
-                  "#history #medicalhistory #cholera #oddlymatt\n\n"
-                  f"First comment: {FIRST}"),
-    "facebook": ("In 1892 a famous Munich professor, Max von Pettenkofer, drank a culture of cholera germs in front of "
-                 "witnesses.\n"
-                 "Cholera had just killed about 8,600 people in Hamburg, and his rival Robert Koch blamed a germ in the "
-                 "water. Pettenkofer was sure the germ alone wasn't enough. He got sick for a week, survived, and declared "
-                 "victory. His critics said: that was cholera, just a mild case.\n"
-                 "#history #oddlymatt\n\n"
-                 f"First comment: {FIRST}"),
-}
+YT_WHEN = "Tue Dec 1, 15:00 ET = 14:00 Alberta"
+SOCIAL_WHEN = "Wed Dec 2, 18:00 ET = 17:00 Alberta"
+
+TIKTOK = """A 73-year-old professor drank cholera on purpose. Munich, 1892.
+He wanted to prove his rival wrong. Two days later, the cramps began.
+
+More true stories on YouTube: Oddly Matt
+
+#history #medicalhistory #cholera #oddlymatt"""
+
+INSTAGRAM = """1892: a 73-year-old professor drank cholera to win an argument.
+
+Max von Pettenkofer said the germ alone wasn't enough. He survived the bet… but not the argument.
+(Source: British Medical Journal, 1892.)
+
+More true stories on YouTube (link in bio)
+
+#history #medicalhistory #cholera #oddlymatt"""
+
+FACEBOOK = """In 1892 a famous Munich professor, Max von Pettenkofer, drank a culture of cholera germs in front of witnesses.
+
+Cholera had just killed about 8,600 people in Hamburg, and his rival Robert Koch blamed a germ in the water. Pettenkofer was sure the germ alone wasn't enough. He got sick for a week, survived, and declared victory. His critics said: that was cholera, just a mild case.
+
+More true stories on YouTube: oddlymatt.com
+
+#history #oddlymatt"""
+
+
+def social(caption: str, cta: str, playlist: str) -> dict:
+    return {"caption": caption, "first_comment": f"{FIRST}\n\n{cta}", "playlist": playlist, "when": SOCIAL_WHEN,
+            "change_log": "C001", "publish_at": {"date": "2026-12-02", "et": "18:00", "alberta": "17:00"}}
 
 
 def cover_source() -> str:
@@ -102,14 +120,20 @@ def main():
             "pinned_comment": FIRST,
             "related_video": "The Doctor Who Drank Bacteria",
             "playlists": "Season Zero + Crazy Science",
-            "schedule": "Tue Dec 1, 15:00 ET = 14:00 Alberta (socials Wed Dec 2, 18:00 ET = 17:00 Alberta)",
+            "schedule": YT_WHEN,
+            "publish_at": {"date": "2026-12-01", "et": "15:00", "alberta": "14:00"},
         },
-        **{plat: {"caption": cap} for plat, cap in CAPTIONS.items()},
+        "tiktok": social(TIKTOK, publish_social.COMMENT_CTA["tiktok"], "none"),
+        "instagram": social(INSTAGRAM, publish_social.COMMENT_CTA["instagram"], "none (Instagram has no playlists)"),
+        "facebook": social(FACEBOOK, publish_social.COMMENT_CTA["facebook"],
+                           "Crazy Science (one playlist only on Facebook; no cover needed)"),
     }
+    publish_social.check(ep["publish"])          # caption lint before anything is written
     json.dump(ep, open(p, "w", encoding="utf-8"), indent=2, ensure_ascii=False)
     if "--texts-only" in sys.argv:
         return
     subprocess.run([sys.executable, "episode.py", "publish", PID], cwd=SCRIPTS, check=True)
+    publish_social.finish(PID)
 
 
 if __name__ == "__main__":

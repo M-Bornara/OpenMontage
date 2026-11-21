@@ -4,6 +4,17 @@ Length 49.2s · 1080×1920 · -14 LUFS · loops seamlessly
 
 hook_card: He drank *cholera*. / On purpose.
 
+## Publish times
+
+| Platform | When | Scheduled in |
+|---|---|---|
+| YouTube Shorts | **Tue Dec 1, 15:00 ET = 14:00 Alberta** | YouTube Studio |
+| TikTok | **Wed Dec 2, 18:00 ET = 17:00 Alberta** | TikTok Studio (web) |
+| Instagram Reel | **Wed Dec 2, 18:00 ET = 17:00 Alberta** | Meta Business Suite → Planner |
+| Facebook Reel | **Wed Dec 2, 18:00 ET = 17:00 Alberta** | Meta Business Suite → Planner |
+
+First comments can't be scheduled: post + pin them when each post goes live.
+
 ## YouTube Shorts
 **Title:** He Drank Cholera to Prove His Rival Wrong
 
@@ -78,34 +89,72 @@ Educational historical content. Not medical advice.
 | Category | **Education** (change it from People & Blogs); Type "Concept overview" if offered, every other Education field None/empty |
 | Comments | On · Moderation Basic · Who can comment: Anyone · Sort by Top |
 | Show how many viewers like this video | on |
-| Visibility | upload as Private, watch it once, then **Schedule: Tue Dec 1, 15:00 ET = 14:00 Alberta (socials Wed Dec 2, 18:00 ET = 17:00 Alberta)** |
+| Visibility | upload as Private, watch it once, then **Schedule: Tue Dec 1, 15:00 ET = 14:00 Alberta** |
 
 ## Tiktok
+**Publish:** Wed Dec 2, 18:00 ET = 17:00 Alberta
+
+**Caption:**
 ```
 A 73-year-old professor drank cholera on purpose. Munich, 1892.
-He wanted to prove his rival wrong. It didn't go to plan.
-#history #medicalhistory #cholera #oddlymatt
+He wanted to prove his rival wrong. Two days later, the cramps began.
 
-First comment: Who was braver: Pettenkofer or Marshall? 🧪 (Did you spot Matt's glasses? 👓)
+More true stories on YouTube: Oddly Matt
+
+#history #medicalhistory #cholera #oddlymatt
 ```
+**First comment** (post it right after the post goes live, then pin it):
+```
+Who was braver: Pettenkofer or Marshall? 🧪 (Did you spot Matt's glasses? 👓)
+
+More true stories: search Oddly Matt on YouTube
+```
+**Playlist:** none
 
 ## Instagram
+**Publish:** Wed Dec 2, 18:00 ET = 17:00 Alberta
+
+**Caption:**
 ```
 1892: a 73-year-old professor drank cholera to win an argument.
-Max von Pettenkofer said germs alone couldn't make you sick. He survived the bet… but not the argument. (Source: his own account, BMJ 1892.)
-#history #medicalhistory #cholera #oddlymatt
 
-First comment: Who was braver: Pettenkofer or Marshall? 🧪 (Did you spot Matt's glasses? 👓)
+Max von Pettenkofer said the germ alone wasn't enough. He survived the bet… but not the argument.
+(Source: British Medical Journal, 1892.)
+
+More true stories on YouTube (link in bio)
+
+#history #medicalhistory #cholera #oddlymatt
 ```
+**First comment** (post it right after the post goes live, then pin it):
+```
+Who was braver: Pettenkofer or Marshall? 🧪 (Did you spot Matt's glasses? 👓)
+
+More true stories: link in bio
+```
+**Playlist:** none (Instagram has no playlists)
 
 ## Facebook
+**Publish:** Wed Dec 2, 18:00 ET = 17:00 Alberta
+
+**Caption:**
 ```
 In 1892 a famous Munich professor, Max von Pettenkofer, drank a culture of cholera germs in front of witnesses.
-Cholera had just killed about 8,600 people in Hamburg, and his rival Robert Koch blamed a germ in the water. Pettenkofer was sure the germ alone wasn't enough. He got sick for a week, survived, and declared victory. His critics said: that was cholera, just a mild case.
-#history #oddlymatt
 
-First comment: Who was braver: Pettenkofer or Marshall? 🧪 (Did you spot Matt's glasses? 👓)
+Cholera had just killed about 8,600 people in Hamburg, and his rival Robert Koch blamed a germ in the water. Pettenkofer was sure the germ alone wasn't enough. He got sick for a week, survived, and declared victory. His critics said: that was cholera, just a mild case.
+
+More true stories on YouTube: oddlymatt.com
+
+#history #oddlymatt
 ```
+**First comment** (post it right after the post goes live, then pin it):
+```
+Who was braver: Pettenkofer or Marshall? 🧪 (Did you spot Matt's glasses? 👓)
+
+More true stories on YouTube: https://www.youtube.com/@oddlymatt
+```
+**Playlist:** Crazy Science (one playlist only on Facebook; no cover needed)
+
+_Per-platform captions are change C001 in `channels/storybook-medical/plan/change-log.csv`._
 
 ## Upload checklist
 
