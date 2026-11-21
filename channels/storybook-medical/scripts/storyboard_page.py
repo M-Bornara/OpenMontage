@@ -98,6 +98,22 @@ EPISODES = {
         "page_title": "Dancing Plague S1 Storyboard",
         "status": "storyboard + backgrounds + free pre-viz · narration recorded (Liam, 54 s, $0) · waiting for your OK and the reference downloads; then the HERO pieces",
     },
+    "hc002l": {
+        "anchor": "gage-long", "short": "Gage long", "slot": "HC002-L · Sun Dec 13 · 11:00 ET = 10:00 Alberta · ready by Wed Dec 9",
+        "storyboard": EP / "HC002-phineas-gage/long-storyboard-v1.md",   # script-long-v1 + gate fixes approved 2026-11-21
+        "project": REPO / "projects/hc002-l", "previz": REPO / "projects/hc002-l/review/previz", "maps": [],
+        "refs_dir": REPO / "projects/hc002-s1/refs",
+        "refs": [
+            ("harlow_skull_1868_full.png", "Harlow 1868, the skull engraving", "Row 17: the bar's path draws itself on it; the only place the path is shown.", "Harlow 1868, fig. 2 · Internet Archive scan · public domain"),
+            ("gage_miller.jpg", "Phineas Gage, second portrait (likeness only)", "Rows 55 and 67 are re-illustrated from the portraits, never the photos themselves.", "Photograph, 1850s · Wikimedia Commons · public domain"),
+            ("cavendish_cut.jpg", "The rock cut at Cavendish today", "The cut's rock walls (cold open, row 32).", "Photo, 2009 · Wikimedia Commons · CC BY-SA 3.0"),
+        ],
+        "extra": [EP / "HC002-phineas-gage/long-refs.md", EP / "HC002-phineas-gage/long-backgrounds-v1.md",
+                  EP / "HC002-phineas-gage/fact-gate/2026-11-21-long-script.md",
+                  EP / "HC002-phineas-gage/fact-gate/2026-11-21-long-onscreen.md"],
+        "page_title": "Gage Long Storyboard",
+        "status": "storyboard + backgrounds (66 shots, real narration times) · narration recorded (Liam, 5:50, $0) · waiting for your OK and the reference downloads",
+    },
     "hc002s1": {
         "anchor": "gage-s1", "short": "Gage S1", "slot": "CASE 11 · Sun Nov 29 · 15:00 ET = 14:00 Alberta · ready by Wed Nov 25",
         "storyboard": EP / "HC002-phineas-gage/s1-storyboard-v1.md", "story": EP / "HC002-phineas-gage/s1-story-v2.md",
@@ -177,15 +193,17 @@ def inline(md: str) -> str:
 
 
 def table(lines: list[str], start_pat: str) -> list[list[str]]:
-    """Rows of the first markdown table whose header line matches start_pat."""
-    rows, on = [], False
+    """Rows of the first markdown table whose header line matches start_pat, plus every later table with the very same
+    header line (a long video's storyboard has one shot table per chapter, 2026-11-21)."""
+    rows, on, head = [], False, None
     for ln in lines:
-        if not on and ln.startswith("|") and re.search(start_pat, ln):
-            on = True
+        if not on and ln.startswith("|") and (re.search(start_pat, ln) if head is None else ln == head):
+            on, head = True, head or ln
             continue
         if on:
             if not ln.startswith("|"):
-                break
+                on = False
+                continue
             if re.match(r"^\|[-\s|]+\|$", ln):
                 continue
             rows.append([c.strip() for c in ln.strip().strip("|").split("|")])
@@ -216,7 +234,9 @@ def parse(md_path: Path) -> dict:
         notes.append(cur)
     notes = [n for n in notes if not n.startswith(("**Loop", "**Decoupage"))][:7]
     cost = re.search(r"\*\*Total ≈ (\$[\d.]+)\.\*\*", text)
-    secs = sum(float(r[1]) for r in shots if re.match(r"^[\d.]+$", r[1]))
+    timed = re.search(r"^\| # \| t \|", text, re.M)   # long storyboards give start times, not durations
+    secs = (max((float(r[1]) for r in shots if re.match(r"^[\d.]+$", r[1])), default=0.0) if timed else
+            sum(float(r[1]) for r in shots if re.match(r"^[\d.]+$", r[1])))
     return {"title": title, "script": script, "shots": shots, "cast": cast, "notes": notes,
             "cost": cost.group(1) if cost else "", "secs": secs}
 
