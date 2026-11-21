@@ -4,7 +4,7 @@
 For each HERO shot (1, 4, 6, 7) this draws the pieces the paid sheets will replace, with the SAME names, states and
 anchors (plan/layered-animation.md §7 step 3), sized in centimetres from the storyboard's L51 scale table:
     plates/s<n>-empty.free.png         the set without what moves
-    sprites/<name>/sprites.json        the moving piece in its states (the fx_prep.sheet format)
+    sprites/free/<name>/sprites.json   the moving piece in its states (the fx_prep.sheet format)
 and renders a preview with the keys in the edit's format (t, x, y = the anchor in frame fractions, state, ease):
     projects/hcs10-pettenkofer/review/hero/<shot>-preview.mp4    (540x960, a click on each key word)
     projects/hcs10-pettenkofer/review/hero/<shot>-sheet.jpg      start / key / end frames
@@ -72,7 +72,7 @@ def _save(im, rel):
 
 def _sheet(name, frames: dict, anchor, note):
     """Frames on one canvas + sprites.json (the format fx_prep.sheet writes for the paid sheets)."""
-    out = IMG / "sprites" / name
+    out = IMG / "sprites/free" / name          # the real cut-outs take sprites/<name> (the edit's path)
     out.mkdir(parents=True, exist_ok=True)
     spec = {"source": f"STAND-IN ({note}); the paid sheet replaces it with the same states",
             "canvas": list(next(iter(frames.values())).size), "anchor": list(anchor), "frames": {}}
@@ -122,6 +122,19 @@ def _hand(d, wx, wy, ang, cm, col=SKIN, state="open", cuff=COAT, fore=12):
         for k in range(3):                                                                                            # tendons up
             b = -2.2 + k * 2.2
             d.line([P_(1, b), P_(7, b)], fill=(170, 128, 104, 255), width=int(cm * 0.3))
+        return
+    if state == "clutch":                                                                                            # fingers curl, clutching
+        d.polygon([P_(0, -4.3), P_(8.8, -4.7), P_(8.8, 4.7), P_(0, 4.3)], fill=(*col, 255), outline=(*INK, 255), width=int(cm * 0.2))
+        for k in range(4):                                                                                            # curled fingers: short, bent down
+            b = -3.4 + k * 2.25
+            d.polygon([P_(8.4, b - 1), P_(12.0, b - 0.9), P_(12.6, b), P_(12.0, b + 0.9), P_(8.4, b + 1)],
+                      fill=(*col, 255), outline=(*INK, 255))                                               # along the hand
+            kx, ky_ = P_(8.8, b)
+            d.ellipse([kx - 0.9 * cm, ky_ - 0.9 * cm, kx + 0.9 * cm, ky_ + 0.9 * cm], fill=(240, 222, 210, 255), outline=(*INK, 255))  # white knuckle
+        for k in range(3):
+            b = -2.2 + k * 2.2
+            d.line([P_(1, b), P_(7.6, b)], fill=(170, 128, 104, 255), width=int(cm * 0.3))                           # tendons up
+        d.line([P_(2, -4.2), P_(7.5, -5.6)], fill=(*col, 255), width=int(cm * 2.0))                                   # thumb pressed in
         return
     d.polygon([P_(0.5, -4.2), P_(9.5, -4.4), P_(9.5, 4.4), P_(0.5, 4.2)], fill=(*col, 255), outline=(*INK, 255))    # palm
     spread = {"open": 0.6, "stopped": 1.6, "palm": 1.0}[state]
@@ -344,22 +357,37 @@ def shot7():
     plate = _save(im, "plates/s7-empty.free.png")
 
     poses = {}
-    for state in ("flat", "grip"):
+    for state in ("flat", "clutch"):
         c = Image.new("RGBA", (int(30 * CM7), int(40 * CM7)), (0, 0, 0, 0))     # wrist pinned at (0.25, 0.55)
-        _hand(ImageDraw.Draw(c), c.width * 0.25, c.height * 0.55, -35, CM7,
-              col=(206, 166, 140) if state == "flat" else (196, 160, 140), state="open" if state == "flat" else "grip", fore=30)
+        g = ImageDraw.Draw(c)
+        wx, wy, ca, sa = c.width * 0.25, c.height * 0.55, math.cos(math.radians(-35)), math.sin(math.radians(-35))
+        P_ = lambda a, b: (wx + ca * a * CM7 - sa * b * CM7, wy + sa * a * CM7 + ca * b * CM7)  # noqa: E731
+        if state == "flat":                                                                     # the loose top sheet, flat (21 cm wide)
+            g.polygon([P_(-1, -9), P_(21, -9), P_(21, 8.5), P_(-1, 8.5)], fill=(238, 230, 208, 255), outline=(160, 150, 130, 255))
+            for k in range(6):
+                g.line([P_(1.5 + k * 3.4, -7.5), P_(1.5 + k * 3.4, 7)], fill=(120, 116, 110, 255), width=3)                 # wavy lines, unreadable
+        else:                                                                                   # the same sheet bunched into his fingers
+            g.polygon([P_(3, -9), P_(9, -12), P_(15, -10), P_(17, -4), P_(18, 3), P_(15, 9.5), P_(9, 11), P_(3, 8.5), P_(5, 0)],
+                      fill=(226, 218, 196, 255), outline=(140, 130, 112, 255))
+            for a_, b_, a2, b2 in ((9, -11, 11, -5), (14, -9, 12, -3), (16.5, -1, 12.5, 0), (15, 8, 12, 3), (8, 10, 10.5, 4),
+                                   (4, 6, 8, 2), (5, -6, 8.5, -2), (16, 4, 13.5, 1.5)):
+                g.line([P_(a_, b_), P_(a2, b2)], fill=(150, 140, 120, 255), width=4)                  # creases toward the fist
+        _hand(g, wx, wy, -35, CM7, col=(206, 166, 140) if state == "flat" else (198, 160, 140),
+              state="open" if state == "flat" else "clutch", fore=30)
         poses[state] = c
-    hz = _sheet("hand-s7", poses, (0.25, 0.55), "his old hand on the desk: flat / clenched into a fist on the desk top (wrist fixed)")
+    hz = _sheet("hand-s7", poses, (0.25, 0.55),
+                "his old hand flat on a loose sheet / the fingers curled, clutching and crumpling the sheet, knuckles white (wrist fixed)")
     return {
         "name": "7", "dur": 4.2, "plate": plate, "cm": CM7,
         "words": [(0.0, "(pause)"), (1.0, "two"), (1.25, "days"), (1.55, "later…"), (2.6, "the"), (2.8, "CRAMPS"), (3.3, "began")],
-        "clicks": [2.8],
+        "clicks": [], "crumple": [2.8],
         "cam": [{"t": 0, "scale": 1.0, "x": 0, "y": 0}, {"t": 4.2, "scale": 1.1, "x": 0, "y": -2}],
         "drain": [(0.0, 1.0), (2.8, 0.75), (4.2, 0.25)],   # saturation over time: warm lab -> grey-green
-        # his forearm comes in from the bottom-left over the near edge; the hand lies flat, then on "cramps" ONE swap:
-        # the fingers clench into a fist on the desk top (knuckles white, tendons up); the wrist does not move
-        "actors": [{"id": "hand", "piece": hz, "xfade": 0.06, "hero": True,
-                    "keys": [{"t": 0, "x": 0.20, "y": 0.80, "state": "flat"}, {"t": 2.8, "x": 0.20, "y": 0.80, "state": "grip"}]}],
+        # his forearm comes in from the bottom-left over the near edge; the hand lies flat on a loose sheet, then on
+        # "cramps" ONE swap: the fingers curl and clutch the sheet, crumpling it, knuckles white; hold (user 2026-11-20:
+        # not a fist, which reads as anger); the wrist does not move; a paper crumple on "cramps"
+        "actors": [{"id": "hand", "piece": hz, "xfade": 0.10, "hero": True,
+                    "keys": [{"t": 0, "x": 0.20, "y": 0.80, "state": "flat"}, {"t": 2.8, "x": 0.20, "y": 0.80, "state": "clutch"}]}],
         "hero_at": 3.2,
     }
 
@@ -486,9 +514,11 @@ def render(shot):
     OUT.mkdir(parents=True, exist_ok=True)
     mp4 = OUT / f"{shot['name']}-preview.mp4"
     n = round(shot["dur"] * FPS)
-    clicks = "".join(f"sine=f=1320:d=0.06,adelay={int(c * 1000)}|{int(c * 1000)},apad=whole_dur={shot['dur']}[c{i}];"
-                     for i, c in enumerate(shot["clicks"]))
-    mix = "".join(f"[c{i}]" for i in range(len(shot["clicks"]))) + f"amix=inputs={len(shot['clicks'])}:normalize=0,volume=0.5[a]"
+    srcs = [f"sine=f=1320:d=0.06,adelay={int(c * 1000)}|{int(c * 1000)}" for c in shot["clicks"]]
+    srcs += [f"anoisesrc=d=0.45:c=pink:a=0.9,highpass=f=1800,tremolo=f=28:d=0.95,afade=t=in:d=0.03,afade=t=out:st=0.2:d=0.25,"
+             f"adelay={int(c * 1000)}|{int(c * 1000)}" for c in shot.get("crumple", [])]
+    clicks = "".join(f"{x},apad=whole_dur={shot['dur']}[c{i}];" for i, x in enumerate(srcs))
+    mix = "".join(f"[c{i}]" for i in range(len(srcs))) + f"amix=inputs={len(srcs)}:normalize=0,volume=0.5[a]"
     cmd = ["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{OW}x{OH}", "-r", str(FPS), "-i", "-",
            "-filter_complex", clicks + mix, "-map", "0:v", "-map", "[a]", "-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", "22",
            "-c:a", "aac", "-shortest", "-movflags", "+faststart", str(mp4)]
