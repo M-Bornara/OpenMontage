@@ -4,14 +4,14 @@
 
 ## youtube.title
 ```
-He Drank Cholera to Prove a Point [C01 C25]
+He Drank Cholera, Then Declared Victory [C01 C25]
 ```
 
 ## youtube.description
 ```
 Munich, 7 October 1892. [C01] Max von Pettenkofer, 73, drank a fresh culture of cholera germs in front of witnesses. [C01 C02 C08 C09]
 
-That year, cholera killed about 8,600 people in Hamburg. [C06] Robert Koch blamed a germ carried in the drinking water. [C05] Pettenkofer believed the germ alone was not enough: the soil and the ground water had to be right too. [C04] Some of his students offered to take the risk in place of their old teacher. [C18] He refused. [C18]
+That year, cholera killed about 8,600 people in Hamburg. [C06] Robert Koch blamed a germ carried in the drinking water. [C05] Pettenkofer believed the germ alone was not enough: the soil and the ground water had to be right too. [C04] Some of his students offered to take the risk in place of their old teacher, he wrote, and he refused. [C18]
 
 First he drank a little bicarbonate of soda, to neutralise his stomach acid. [C12] Then one cubic centimetre of a broth culture made in Munich from Georg Gaffky's cultures of the Hamburg outbreak (Gaffky was Koch's former assistant). [C14 C09 C10] He wrote that it tasted like the purest water. [C17]
 
@@ -19,7 +19,7 @@ Two days later came stomach cramps and diarrhoea, for about a week, and the lab 
 
 He lost the argument about the water. [C36] But his clean-water and sewer work did help Munich. [C36] This is a history story, not medical advice. [NF] Never try anything like this. [NF]
 
-Another man who drank a culture of bacteria to test his own theory: "The Doctor Who Drank Bacteria" (linked above). [C45]
+A doctor who drank a culture of bacteria to test his own theory: "The Doctor Who Drank Bacteria" (linked above). [C45]
 ```
 
 ## youtube.pinned_comment

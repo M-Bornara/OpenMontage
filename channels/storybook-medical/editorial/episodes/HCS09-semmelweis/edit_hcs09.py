@@ -81,9 +81,10 @@ c.shot(t, KF + "s2a.png", {"type": "push", "from": 1.02, "to": 1.1, "x": 0, "y":
 c.s("footsteps-hall", t, query="footsteps hallway")
 # s2b: the doctors' ward
 t = c.at("in the doctors")
+about1 = c.at("about one mother")   # the "≈" stamp lands on "about", before the number
 one = c.at("one mother")
 c.shot(t, KF + "s2b.png", push(0.5, 0.45, 1.1), cap=LOW)
-c.o("stamp", one, one + 1.8, text="1 IN 10", y=TOP); c.s("stamp-thud", one + 0.05)
+c.o("stamp", about1, one + 1.8, text="≈ 1 IN 10", y=TOP); c.s("stamp-thud", one + 0.05)   # lands on "about", before the number (stamp rule)
 # s3a: the midwives' ward
 t = c.at("in the midwives")
 c.shot(t, KF + "s3a.png", push(0.4, 0.45, 1.12), cap=TOP)
@@ -112,6 +113,7 @@ c.s("hands-washing", t + 0.2, query="hand washing")
 # s6b: hands in the basin. Glint: user 2026-11-20 "check the glasses glint at 0:29": 0.55, 0.35 was the BRIDGE between the
 # lenses; now on the right lens's painted highlight (measured on s6b.png: lens x 0.57-0.65, highlight 0.59, 0.34)
 t = c.at("deaths fell")
+about2 = c.at("about one in")
 hundred = c.at("one in 100")
 # user 2026-11-20: the LOW captions covered the hands (they reached y ~1230 of the 1248 safe zone). The picture is raised
 # (fixed-framing keys, x1.22 -> x1.24, up 11-12 %) so the hands end ~y 1035-1050 (captionY max 1038) and the captions sit under the fingertips;
@@ -119,7 +121,7 @@ hundred = c.at("one in 100")
 c.shot(t, KF + "s6b.png", {"type": "keys", "keys": [{"t": 0, "scale": 1.22, "x": 0, "y": -11},
                                                     {"t": 3.0, "scale": 1.24, "x": 0, "y": -12, "ease": "linear"}]}, cap=1038,
        fx=[{"kind": "glint", "x": 0.59, "y": 0.34, "at": rel(hundred, t) + 0.8, "size": 26}])
-c.o("stamp", hundred, hundred + 1.2, text="1 IN 100", y=520); c.s("stamp-thud", hundred + 0.05)
+c.o("stamp", about2, hundred + 1.2, text="≈ 1 IN 100", y=520); c.s("stamp-thud", hundred + 0.05)
 # s7a: the doctors refuse
 t = c.at("but many")
 c.shot(t, KF + "s7a.png", push(0.4, 0.4, 1.1), cap=TOP)

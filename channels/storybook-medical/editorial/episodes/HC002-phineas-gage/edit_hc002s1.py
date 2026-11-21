@@ -460,7 +460,7 @@ overlays = [
     {"kind": "nameTag", "start": starts["2a"] + 0.2, "end": starts["2a"] + 2.5, "text": "Phineas Gage", "sub": "railroad foreman, 25", "y": 600, "right": True},   # mirrored MCU: his raised hand is on the left   # 2a MCU: on the soft cliff above his hat (y 1000 = his face)
     # the place stamp on 2b, the wide of the cut (rough cut 1: on 2a it sat on Gage's hat or under the caption, and
     # text_check's caption box leaves no room above his raised hand); 2b's caption is LOW
-    {"kind": "stamp", "start": starts["2b"] + 0.1, "end": starts["2b"] + 2.3, "text": "CAVENDISH, VERMONT · 1848", "y": TOP},
+    {"kind": "stamp", "start": starts["2b"] + 0.1, "end": starts["2b"] + 2.3, "text": "NEAR CAVENDISH, VERMONT · 1848", "y": TOP},
     # the bar's length, BESIDE the bar (user 2026-11-19: less text; the weight stamp is gone, the caption says 13 POUNDS;
     # metric stays in the description). The bar runs up-left from the hole (x ~0.42): at y 640-760 it covers x ~330-440,
     # the stamp sits right of it, inside the safe zone (x 65-888), on the wall the hand has left

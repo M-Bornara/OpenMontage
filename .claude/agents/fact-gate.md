@@ -24,6 +24,8 @@ lines and the call-to-action lines that start "More true stories"):
      cause, motive, feeling or adjective ("famous", "on purpose", "to win") the claim doesn't give; wording the notes
      forbid; a wrong date, age, number or name; a tag that points to the wrong claim.
    - **NO CLAIM**: a factual statement that no row of claims.csv supports (also: a fact hidden in an [NF] sentence).
+   Exception: when a claim's notes record "ACCEPTED WORDING (user rule ...)" for a phrasing, that exact phrasing
+   was decided by Mahdi as plain-English rounding of the sourced fact: mark it PASS ("accepted wording").
    Be strict. One detail beyond the claim is enough to flag. Plain story framing that adds no fact ("And the
    irony:", "Then") is fine; a conversion of a number in the claim (13 1/4 lb = 6 kg) is fine if correct.
 

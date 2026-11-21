@@ -290,7 +290,7 @@ overlays = [
     {"kind": "stamp", "start": 2.6, "end": round(starts["2"] - 0.1, 2), "text": "MUNICH · 1892", "y": 600, "x": 260, "size": 44},
     {"kind": "nameTag", "start": A("3a", 0.15), "end": round(starts["3b"] - 0.15, 2), "text": "Robert Koch", "sub": "Berlin", "y": 1060},
     {"kind": "nameTag", "start": A("3b", 0.15), "end": round(starts["4"] - 0.15, 2), "text": "Max von Pettenkofer", "sub": "Munich, 73", "y": 1060},
-    {"kind": "stamp", "start": A("8", 0.15), "end": round(starts["9"] - 0.1, 2), "text": "1 WEEK", "y": TOP},
+    {"kind": "stamp", "start": A("8", 0.15), "end": round(starts["9"] - 0.1, 2), "text": "≈ 1 WEEK", "y": TOP},
 ]
 
 S_ = lambda name, t, **kw: {"name": name, "at": round(t, 2), **kw}  # noqa: E731

@@ -79,3 +79,32 @@ Scripts must use the **wording** column.
 | Treatment | heart-lung machine (bypass) | **Heart-lung machine** | Wide agreement; standard for the case | "warmed her blood with a heart-lung machine" |
 | Date | 20 May 1999 (one source) | **1999** | Only one source has the day | "1999" |
 | Her job | doctor in training · radiologist | **"a young doctor"** | Agreed level of detail | "a young doctor" |
+
+## Accepted wording: plain-English rounding (user rule, 2026-11-21)
+The on-screen fact gate sorts every flag into **A** misleads → fix it (re-record if needed), **B** plain-English
+rounding of a SOURCED fact → accept it here, **C** a gap in the claims log → add a sourced row. Each B line below is
+also written into its claim's `notes` as "ACCEPTED WORDING (user rule 2026-11-21 ...)", which the `fact-gate` agent
+reads and passes, so it stops re-flagging decided wording. A new or changed sentence is not covered: it is gated again.
+
+| Episode | Claim | Sourced fact | Accepted on-screen wording |
+|---|---|---|---|
+| HC002-S1 Gage | C02 | iron 13 1/4 lb | "with an iron bar, 13 pounds" |
+| HC002-S1 Gage | C04 | below the cheekbone, behind the eye, out the top | "an iron bar shot straight through a man's skull" |
+| HCS10 Pettenkofer | C06 | 1892: about 8,600 dead in Hamburg | "Cholera had just killed about 8,600 people in Hamburg." |
+| HCS10 Pettenkofer | C18 | some pupils offered to take the risk in his place | "His students offered to go first, he wrote." |
+| HCS10 Pettenkofer | C19 | ill until about 15 Oct | "For a week." |
+| HCS09 Semmelweis | C01 | two clinics at the Vienna General Hospital | "Vienna had two maternity wards." |
+| HCS09 Semmelweis | C04 | Kolletschka's autopsy showed a pathology like the mothers' | "died of the same fever" |
+| HCS09 Semmelweis | C05 | the doctors went from autopsies to deliveries | "went straight from the dead to the mothers" |
+| HCS09 Semmelweis | C07 | many doctors rejected his idea | "They hated him for it." |
+| HCS09 Semmelweis | C09 | rejecting new evidence that clashes with belief | "rejecting new evidence has a name, the Semmelweis reflex" |
+| HCS09 Semmelweis | C11 | he instituted washing in chlorinated lime | "a doctor told other doctors to wash"; "made them wash in chlorine" |
+| HCS07 Finlay | C02 | disbelief until 1900 | "spent 19 years trying to make anyone believe him" |
+| HCS07 Finlay | C12 | >20,000 deaths in Havana 1871-1900; miasma theory | "Yellow fever was killing thousands and nobody knew how it spread." |
+| HCS07 Finlay | C14 | Reed got much of the credit in history books | "Reed got most of the fame" |
+| HCS08 Snow | C08 | Snow WROTE the attacks had diminished | "Snow admitted it himself." |
+| HCS08 Snow | C12 | GRO death list + visits to the houses | "He went door to door, listing every death." |
+| HCS08 Snow | C14 | attacks falling before 8 Sept | "The outbreak was already fading." / stamp "ALREADY FADING" |
+| HCS08 Snow | C15 | Snow concluded it was the pump water | "John Snow blamed the water." |
+| HCS08 Snow | C16 | popularly reported as ending the outbreak | the user's line: "The story goes: in 1854, a doctor stopped a deadly outbreak… by taking the handle off a water pump." |
+| HCS08 Snow | C17 | founding event of epidemiology | "his map of those deaths is how we still hunt diseases today" (Claude's B call; no source says "still used": user to confirm) |

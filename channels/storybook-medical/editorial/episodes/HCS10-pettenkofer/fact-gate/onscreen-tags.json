@@ -1,9 +1,9 @@
 {
  "hook: He drank *cholera*. / On purpose.": "C01 C12 C18 C28",
  "stamp: MUNICH · 1892": "C01",
- "name: Robert Koch · Berlin": "C05",
+ "name: Robert Koch · Berlin": "C05 C47",
  "name: Max von Pettenkofer · Munich, 73": "C01 C02",
- "stamp: 1 WEEK": "C19",
+ "stamp: ≈ 1 WEEK": "C19",
  "say: Munich, 1892.": "C01",
  "say: A 73-year-old professor is about to drink cholera.": "C01 C02 C46",
  "say: Cholera had just killed about 8,600 people in Hamburg.": "C06",

@@ -37,6 +37,15 @@ fix for each flag. It checks "about", "said", "he wrote", ATTRIBUTED and DISPUTE
 all PASS (or a flag is consciously kept and said so), save the final table as
 `editorial/episodes/<EP>/fact-gate/<date>-<what>.md`, and show Mahdi the table with the text.
 
+## Sorting the flags (user rule, 2026-11-21)
+- **A: misleads** → fix it, re-record a narration line if needed.
+- **B: plain-English rounding of a SOURCED fact** ("about" dropped, 13 vs 13¼, "lost his job", "straight through",
+  "go first") → ACCEPT: one row in `editorial/claim-decisions.md` "Accepted wording" + the same phrase in the claim's
+  `notes` as "ACCEPTED WORDING (user rule ...)" (the gate reads notes and passes it; a new sentence is gated again).
+- **C: a gap in the claims log** (the fact is true, nobody logged it) → add a sourced row (read the sources the
+  episode's research.md lists; quote them), then tag it.
+Show Mahdi only the A flags that remain after the re-run.
+
 ## Routing
 AGENT_GUIDE.md "Channel entry point": publish package = `oddly-matt-platform-captions` + this gate; script /
 storyboard = `story-doctor` + this gate.

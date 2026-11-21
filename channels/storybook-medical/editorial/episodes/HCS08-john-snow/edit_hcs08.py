@@ -71,7 +71,7 @@ c.s("pump-creak", handle, query="old iron hand pump creak")
 t = c.at("london soho")
 killed = c.at("killed")
 c.shot(t, KF + "s2.png", push(0.45, 0.55, 1.1), cap=LOW)
-c.o("stamp", killed, killed + 2.4, text="500 DEAD · 10 DAYS", y=TOP)
+c.o("stamp", killed, killed + 2.4, text="500+ DEAD · 10 DAYS", y=TOP)
 c.s("night-wind", t, query=None)
 # s3: the miasma doctors in green fog
 t = c.at("most doctors")
@@ -92,7 +92,7 @@ t = c.at("they clustered")
 pump, broad = c.at("one pump"), c.at("broad street")
 c.shot(t, KF + "s5.png", {"type": "static"}, cap=MID,
        fx=[{"kind": "spot", "cx": 0.50, "cy": 0.60, "rx": 0.09, "ry": 0.08, "at": rel(pump, t), "dur": 2.4, "dim": 0.55}])
-c.o("stamp", broad, broad + 1.2, text="BROAD STREET", y=TOP)
+c.o("stamp", pump, broad + 1.2, text="BROAD STREET", y=TOP)   # lands before Liam says it (stamp rule, 2026-11-20)
 c.s("hit-suspense", pump, -14)
 # s6: the brewery (Matt's cameo)
 t = c.at("the brewery")
@@ -122,8 +122,8 @@ c.s("whoosh", t)
 # s9b: Snow admits it
 t = c.at("snow admitted")
 c.shot(t, KF + "s9b.png", push(0.5, 0.45, 1.08), cap=LOW)
-c.o("stamp", t + 0.4, t + 1.9, text="OVERSTATEMENT", y=TOP)
-c.s("quill-writing", t); c.s("stamp-thud", t + 0.45)
+c.o("stamp", t + 0.1, t + 1.5, text="ALREADY FADING", y=TOP)   # the v3 take makes this shot 1.9 s: clear of the cut
+c.s("quill-writing", t); c.s("stamp-thud", t + 0.15)
 # s10: the map (pump symbol measured at 0.58, 0.51)
 t = c.at("but his map")
 c.shot(t, KF + "s10.png", push(0.58, 0.51, 1.18), cap=TOP,

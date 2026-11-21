@@ -10,9 +10,9 @@ What the video shows: the hook card, stamps, name tags (name · subtitle), and t
 ## stamps + name tags
 
 - MUNICH · 1892 [C01]
-- Robert Koch · Berlin [C05]
+- Robert Koch · Berlin [C05 C47]
 - Max von Pettenkofer · Munich, 73 [C01 C02]
-- 1 WEEK [C19]
+- ≈ 1 WEEK [C19]
 
 ## narration (burned-in captions)
 

@@ -15,13 +15,15 @@ from prompt_kit import (NO_PEOPLE, NO_TEXT, PERIOD, SAFE_FRAMING, WAVY_WRITING, 
 PID = "hcs08-john-snow"
 HC1 = "projects/hc001-window-into-his-stomach/assets/images/refs"
 
-# script v2 (storyboard-v1.md): three small trims of the approved v1, facts unchanged
-NARRATION = """[curious] In 1854, a doctor stopped a deadly outbreak… by taking the handle off a water pump.
+# script v2 (storyboard-v1.md): three small trims of the approved v1, facts unchanged.
+# v3 (user 2026-11-21, on-screen fact gate): line 1 framed as the legend ("The story goes:"), the twist corrects it;
+# brewery line per Snow 1855 p.42 (no brewer's man died; none suffered "in a severe form", two "indisposed")
+NARRATION = """[curious] The story goes: in 1854, a doctor stopped a deadly outbreak… by taking the handle off a water pump.
 London, Soho. Cholera killed about five hundred people in ten days.
 Most doctors blamed bad air.
 John Snow blamed the water. He went door to door, listing every death.
 They clustered around one pump… on Broad Street.
-The brewery next door had no cases. The workers drank beer.
+At the brewery near the pump, nobody died. The workers drank beer.
 A widow miles away died too. She liked the taste of Broad Street water… and had it brought to her.
 On the eighth of September, they took the handle off.
 [mischievously] The twist? The outbreak was already fading. Snow admitted it himself.

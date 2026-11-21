@@ -33,15 +33,17 @@ SOURCES = """SOURCES
 # Every public sentence ends with its claim tag (scripts/claim_tags.py; [NF] = no factual claim). claim_tags.strip()
 # removes the tags before episode.json; fact-gate/package.md is the tagged text the independent fact gate reads.
 # 2026-11-21 fact gate r1: title 1 ("to Prove His Rival Wrong") states a motive no claim records (research.md lists
-# "He proved Koch wrong" as a myth) -> user 2026-11-21: "to Prove a Point" = his stated aim (C25), no personal motive
-TITLE = "He Drank Cholera to Prove a Point [C01 C25]"
+# "He proved Koch wrong" as a myth) -> user 2026-11-21: "to Prove a Point" only if his aim before the drink is in a
+# source; J Hyg 1901 pp.292-294 (read 2026-11-21) gives no stated aim ("considered ... the experiment confirmed his
+# views"; "Even if I were mistaken"), BMJ 1892 p.1132 unreachable (403) -> the user's fallback title
+TITLE = "He Drank Cholera, Then Declared Victory [C01 C25]"
 
 DESCRIPTION = (
     "Munich, 7 October 1892. [C01] Max von Pettenkofer, 73, drank a fresh culture of cholera germs in front of "
     "witnesses. [C01 C02 C08 C09]\n\n"
     "That year, cholera killed about 8,600 people in Hamburg. [C06] Robert Koch blamed a germ carried in the drinking "
     "water. [C05] Pettenkofer believed the germ alone was not enough: the soil and the ground water had to be right "
-    "too. [C04] Some of his students offered to take the risk in place of their old teacher. [C18] He refused. [C18]\n\n"
+    "too. [C04] Some of his students offered to take the risk in place of their old teacher, he wrote, and he refused. [C18]\n\n"
     "First he drank a little bicarbonate of soda, to neutralise his stomach acid. [C12] Then one cubic centimetre of a "
     "broth culture made in Munich from Georg Gaffky's cultures of the Hamburg outbreak (Gaffky was Koch's former "
     "assistant). [C14 C09 C10] He wrote that it tasted like the purest water. [C17]\n\n"
@@ -53,7 +55,7 @@ DESCRIPTION = (
     "not less. [C33]\n\n"
     "He lost the argument about the water. [C36] But his clean-water and sewer work did help Munich. [C36] "
     "This is a history story, not medical advice. [NF] Never try anything like this. [NF]\n\n"
-    "Another man who drank a culture of bacteria to test his own theory: \"The Doctor Who Drank Bacteria\" (linked "
+    "A doctor who drank a culture of bacteria to test his own theory: \"The Doctor Who Drank Bacteria\" (linked "
     "above). [C45]")
 
 # "On purpose": he refused to let his pupils take the risk (C18) and wrote he would face death for science (C28)

@@ -10,7 +10,7 @@ What the video shows: the hook card, stamps, name tags (name · subtitle), and t
 ## stamps + name tags
 
 - Phineas Gage · railroad foreman, 25 [C01]
-- CAVENDISH, VERMONT · 1848 [C01]
+- NEAR CAVENDISH, VERMONT · 1848 [C01]
 - 3 ft 7 in [C02]
 - ≈ 80 ft (24 m) [C04]
 

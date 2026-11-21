@@ -22,7 +22,7 @@ First comments can't be scheduled: post + pin them when each post goes live.
 ```
 1854, Soho, London. Cholera killed more than five hundred people within a few streets in about ten days. Most doctors blamed "miasma", bad air. The doctor John Snow suspected the water. He listed the deaths house by house, and they clustered around one public pump on Broad Street.
 
-The brewery next door had no cases: its workers had a beer allowance and didn't drink the pump water. A widow living miles away in Hampstead died too; she liked the taste of Broad Street water and had it brought to her. Snow showed the parish board on 7 September, and on 8 September the pump's handle was removed.
+At the brewery near the pump, nobody died: its workers had a beer allowance and didn't drink the pump water. A widow living miles away in Hampstead died too; she liked the taste of Broad Street water and had it brought to her. Snow showed the parish board on 7 September, and on 8 September the pump's handle was removed.
 
 The twist: the outbreak was already falling by then, and Snow said so himself in his 1855 book. Removing the handle didn't end the outbreak on its own. What lasted was his evidence, above all his map of the deaths, which is still how disease detectives work today. This is a history story, not medical advice.
 
