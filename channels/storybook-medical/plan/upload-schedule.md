@@ -55,6 +55,8 @@ to Sunday every 14 days).
 
 **Slate Nov 29 – Dec 15 (approved 2026-11-18):** see slate-nov29-dec11.md (CASE numbers, briefs, fallbacks). v2 same day: Gage long on Dec 13, Gage S1 before it as a teaser, S2 after it.
 
+**Weekend TikTok (C011, user 2026-11-21):** Sat/Sun TikTok posts at **12:00 ET = 10:00 Alberta**; weekdays and Instagram/Facebook stay 18:00 ET = 17:00 Alberta; YouTube unchanged.
+
 **Pace (user, 2026-11-17):** keep **1 Short every 2 days**; open slots must be filled, not skipped.
 
 **Mix rule (user, 2026-11-06):** at most **one story from outside Europe / North America per week**, never two

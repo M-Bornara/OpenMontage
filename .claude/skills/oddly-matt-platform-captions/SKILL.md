@@ -36,6 +36,16 @@ first caption line, cover and hook card; it stays in the description facts (user
 | Playlist | Season Zero + the cluster playlist | none | none | ONE playlist only |
 Tags: a few precise ones (YouTube says tags play a minimal role). Times in ET and Alberta.
 
+## Posting times
+| Platform | When |
+|---|---|
+| YouTube Shorts | the slot in upload-schedule.md, 15:00 ET = 14:00 Alberta |
+| TikTok | the next day: weekdays 18:00 ET = 17:00 Alberta; **Sat/Sun 12:00 ET = 10:00 Alberta** (change C011, user 2026-11-21) |
+| Instagram, Facebook | the next day, 18:00 ET = 17:00 Alberta, every day |
+`scripts/publish_social.py` applies the weekend TikTok slot itself (`c011_when`, `c011_publish_json`) to publish.md and
+publish.json on every build, so write the normal 18:00 slot in the publish script and let the build move it.
+Alberta = ET − 1 until Mar 14 2027, then ET − 2.
+
 ## Also in every package
 - `hook_card:` (v2.1: 4-8 words, max 2 lines, 1 amber word, no spoiler, nothing DISPUTED as fact), CASE chip
   number in release order, end line "More strange cases: follow Oddly Matt".

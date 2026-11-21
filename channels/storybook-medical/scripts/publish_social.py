@@ -25,6 +25,37 @@ COMMENT_CTA = {"tiktok": "More true stories: search Oddly Matt on YouTube",
                "facebook": "More true stories on YouTube: https://www.youtube.com/@oddlymatt"}
 
 
+# C011 (user, 2026-11-21): weekend (Sat/Sun) TikTok posts at 12:00 ET = 10:00 Alberta; weekdays and Instagram/Facebook
+# stay 18:00 ET = 17:00 Alberta; YouTube unchanged. Applied to every package (and every rebuild) in finish().
+WEEKEND_TIKTOK = "12:00 ET = 10:00 Alberta"
+TIKTOK_CHECKLIST_OLD = ("- When to post: the day after the YouTube Short, **18:00 ET** (TikTok shows your local time: "
+                        "winter 17:00 Alberta).")
+TIKTOK_CHECKLIST_NEW = ("- When to post: the day after the YouTube Short. Weekdays **18:00 ET** (17:00 Alberta); "
+                        "weekends **12:00 ET** (10:00 Alberta), change C011. TikTok shows your local time.")
+
+
+def c011_when(platform: str, when: str) -> str:
+    """Weekend TikTok slot (C011): 'Sun Nov 22, 18:00 ET = 17:00 Alberta' -> 'Sun Nov 22, 12:00 ET = 10:00 Alberta
+    (weekend TikTok test, C011)'. Other platforms and weekdays are returned unchanged."""
+    if platform != "tiktok" or not when.strip()[:3] in ("Sat", "Sun"):
+        return when
+    day = when.split(",")[0].strip()
+    return f"{day}, {WEEKEND_TIKTOK} (weekend TikTok test, C011)"
+
+
+def c011_publish_json(f: Path) -> None:
+    """C011 in publish.json: a weekend tiktok.publish_at {date, et, alberta} moves to 12:00 ET / 10:00 Alberta."""
+    import datetime as _dt
+    if not f.exists():
+        return
+    j = json.load(open(f, encoding="utf-8"))
+    pa = (j.get("tiktok") or {}).get("publish_at")
+    if isinstance(pa, dict) and pa.get("date"):
+        if _dt.date.fromisoformat(pa["date"]).weekday() >= 5 and pa.get("et") != "12:00":
+            pa["et"], pa["alberta"] = "12:00", "10:00"
+            f.write_text(json.dumps(j, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
 def lint_captions(pub: dict) -> list[str]:
     """Caption lint (user, 2026-11-21, HCS10): every TikTok / Instagram / Facebook caption carries its platform's CTA
     line, every first comment carries its own, and the first comment is not pasted into the caption."""
@@ -56,6 +87,8 @@ def finish(pid: str) -> Path:
     p = REPO / "projects" / pid
     pub = json.load(open(p / "episode.json", encoding="utf-8"))["publish"]
     check(pub)
+    if "tiktok" in pub:
+        pub["tiktok"]["when"] = c011_when("tiktok", pub["tiktok"]["when"])
     md_f = p / "renders/deliverables/publish.md"
     md = md_f.read_text(encoding="utf-8")
     yt_when = pub["youtube"]["schedule"]
@@ -78,7 +111,9 @@ def finish(pid: str) -> Path:
         md = md.replace(plain, rich, 1)
     md = md.replace("\n## Upload checklist", "\n_Per-platform captions are change C001 in "
                     "`channels/storybook-medical/plan/change-log.csv`._\n\n## Upload checklist", 1)
+    md = md.replace(TIKTOK_CHECKLIST_OLD, TIKTOK_CHECKLIST_NEW)
     md_f.write_text(md, encoding="utf-8")
+    c011_publish_json(p / "renders/deliverables/publish.json")
     print(f"publish.md: publish times + per-platform blocks -> {md_f}")
     return md_f
 
@@ -92,6 +127,12 @@ def _selftest() -> None:
     assert len(got) == 3 and all(g.startswith("tiktok") for g in got), got
     assert lint_captions({k: v for k, v in good.items() if k != "facebook"}) == ["facebook: no caption block"]
     print("caption lint self-test PASS")
+    assert c011_when("tiktok", "Sun Nov 22, 18:00 ET = 17:00 Alberta") == \
+        "Sun Nov 22, 12:00 ET = 10:00 Alberta (weekend TikTok test, C011)"
+    assert c011_when("tiktok", "Sat Nov 28, 18:00 ET = 17:00 Alberta").startswith("Sat Nov 28, 12:00 ET")
+    assert c011_when("tiktok", "Tue Nov 24, 18:00 ET = 17:00 Alberta") == "Tue Nov 24, 18:00 ET = 17:00 Alberta"
+    assert c011_when("instagram", "Sun Nov 22, 18:00 ET = 17:00 Alberta") == "Sun Nov 22, 18:00 ET = 17:00 Alberta"
+    print("C011 weekend TikTok self-test PASS")
 
 
 if __name__ == "__main__":

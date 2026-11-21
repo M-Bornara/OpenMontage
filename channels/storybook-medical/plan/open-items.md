@@ -3,6 +3,7 @@
 Updated 2026-11-16.
 
 ## Dancing Plague S1 (HC003-S1, YouTube Sat Dec 5, ready Tue Dec 1)
+- [ ] **Dancing Plague S2 angle (2026-11-21)**: S1 (Dec 5) now ends on the 'cure: more dancing' twist (user approved option A). S2 (January, after HC003-L) must be re-angled before scripting: the city's U-turn (music and public dancing banned, dancers sent to the St Vitus shrine, the ritual told for them), not the musicians reveal. Re-check its title 'The City Hired Musicians. It Made Things Worse.'
 - [ ] **Script v3 (story-doctor) + fact gate clean (2026-11-21), WAITING FOR THE USER'S OK:** editorial/episodes/HC003-dancing-plague/s1-story-v3.md (15 lines ≈ 49 s, score 2.9 -> 4.3; twist 'the cure: more dancing' brought forward from S2, Option B keeps it for S2), hook card A/B/C, title 1/2, new theme rhine-1518, ≈$1.70-2.00. Claims C16-C22 added from Pennant-Rea 2018 (PDR, quoted). Gate: fact-gate/2026-11-21-script-s1-v3.md (21 PASS). After OK: storyboard + backgrounds + previz on an approval page (one URL), then spend.
 
 ## Social media (2026-11-11)

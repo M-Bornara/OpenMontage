@@ -9,7 +9,7 @@ hook_card: doctors' *hands* / killing mothers?
 | Platform | When | Scheduled in |
 |---|---|---|
 | YouTube Shorts | **Fri Nov 27, 15:00 ET = 14:00 Alberta** | YouTube Studio |
-| TikTok | **Sat Nov 28, 18:00 ET = 17:00 Alberta** | TikTok Studio (web) |
+| TikTok | **Sat Nov 28, 12:00 ET = 10:00 Alberta** (weekend test C011) | TikTok Studio (web) |
 | Instagram Reel | **Sat Nov 28, 18:00 ET = 17:00 Alberta** | Meta Business Suite → Planner |
 | Facebook Reel | **Sat Nov 28, 18:00 ET = 17:00 Alberta** | Meta Business Suite → Planner |
 
@@ -83,7 +83,7 @@ Educational historical content. Not medical advice.
 | Visibility | upload as Private, watch it once, then **Schedule: Fri Nov 27, 15:00 ET = 14:00 Alberta** |
 
 ## Tiktok
-**Publish:** Sat Nov 28, 18:00 ET = 17:00 Alberta
+**Publish:** Sat Nov 28, 12:00 ET = 10:00 Alberta (weekend TikTok test, C011)
 
 **Caption:**
 ```
@@ -162,7 +162,7 @@ _Per-platform captions are change C001 in `channels/storybook-medical/plan/chang
 **TikTok**
 - Upload `short.mp4` (Web Studio, HD); Edit cover → upload `cover.jpg`; paste the TikTok caption. After it's live: post + pin the TikTok first comment.
 - Location: empty (a city tag pushes it to local viewers, not to the topic's audience).
-- When to post: the day after the YouTube Short, **18:00 ET** (TikTok shows your local time: winter 17:00 Alberta).
+- When to post: the day after the YouTube Short. Weekdays **18:00 ET** (17:00 Alberta); weekends **12:00 ET** (10:00 Alberta), change C011. TikTok shows your local time.
 - Who can see: Everyone. Allow comments, Duet and Stitch.
 - Disclose post content: off (no sponsor). **AI-generated content: on** (TikTok's label covers any AI-made visuals,
   unlike YouTube's question, which is only about realistic ones). Audience control (18+): off (the wound is blurred).
