@@ -78,7 +78,7 @@ EPISODES = {
                       ("7", "Shot 7 · NEW sheet (v2): the sheet stays full size and spread; on \"cramps\" the fingers clutch, creases only under them, the sleeve does not move; crumple sound; colour drains. Free fix: the faint lines on the flat sheet faded (the clutched one is blank)")],
         "hero_pieces": REPO / "projects/hcs10-pettenkofer/review/hero/pieces.jpg",
         "page_title": "Pettenkofer Storyboard",
-        "status": "HERO pieces v2 on real art (3 re-rolls, $0.20; HCS10 $0.94) · next: the 9 story stills + the edit",
+        "status": "rough cut 1 (9 story stills $0.60, music $0.03; HCS10 $1.57) · waiting for your OK",
     },
     "hc002s1": {
         "anchor": "gage-s1", "short": "Gage S1", "slot": "CASE 11 · Sun Nov 29 · 15:00 ET = 14:00 Alberta · ready by Wed Nov 25",

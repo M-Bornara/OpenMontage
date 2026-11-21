@@ -771,7 +771,7 @@ def step_build(pid, *_):
     words = []
     for w in words_raw:
         t = w["word"]
-        shown = "ST." if t.lower() == "st." else re.sub(r"[^\w'?$.-]|\.(?!\d)", "", t).strip("-")   # keep "stomach-lining", "13.7"
+        shown = "ST." if t.lower() == "st." else re.sub(r"(?<!\d),|,(?!\d)|[^\w'?$.,-]|\.(?!\d)", "", t).strip("-")   # keep "stomach-lining", "13.7", "8,600" (HCS10)
         shown = respell.get(shown.lower(), shown)   # narrator spelling (e.g. "Mackinaw") -> real spelling on screen
         words.append({"word": shown, "start": round(w["start"], 3), "end": round(w["end"], 3),
                       "punch": re.sub(r"\W", "", t.lower()) in punch,

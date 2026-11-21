@@ -34,6 +34,8 @@ KF = f"projects/{PID}/assets/images/keyframes/"
 REFS = P / "assets/images/refs"
 SPRD = P / "assets/images/sprites"
 TOP, MID, LOW = 360, 660, 1030
+# rough cut 1 text sheet (2026-11-20): captions moved off faces and off the HERO actions (s1 mouth + glass, s4 his face,
+# s6 his eyes, s7 the clutching hand; s2/s5a/s10/s12 people and the glass); the HAMBURG stamp dropped (the caption says it)
 norm = lambda s: re.sub(r"[^a-z0-9]", "", s.lower())  # noqa: E731
 
 # ── 1. caption spellings (Whisper: "Pettenkoffer", "73 -year -old", "8 ,600"); the raw transcript is kept once ─────────
@@ -55,10 +57,10 @@ while i < len(raw):
 json.dump(words, open(WT, "w", encoding="utf-8"), indent=1, ensure_ascii=False)
 
 # ── 2. the shots: (name, its first words, caption zone); HERO shots start at their approved preview windows ─────────────
-PLAN = [("1", "munich 1892", LOW), ("2", "cholera had", LOW), ("3a", "robert koch", TOP), ("3b", "max von", TOP),
-        ("4", "his students", TOP), ("5a", "baking soda", LOW), ("5b", "then germs", TOP), ("6", "one gulp", LOW),
-        ("7", "two days", LOW), ("8", "for a", LOW), ("9", "but it", TOP), ("10", "his critics", LOW),
-        ("11", "the baking", TOP), ("12", "he survived", LOW)]
+PLAN = [("1", "munich 1892", TOP), ("2", "cholera had", TOP), ("3a", "robert koch", TOP), ("3b", "max von", TOP),
+        ("4", "his students", LOW), ("5a", "baking soda", TOP), ("5b", "then germs", TOP), ("6", "one gulp", TOP),
+        ("7", "two days", 600), ("8", "for a", LOW), ("9", "but it", TOP), ("10", "his critics", TOP),
+        ("11", "the baking", TOP), ("12", "he survived", TOP)]
 HERO = {n: hr.SHOT[n]["win"][0] for n in hr.SHOT}           # {"1": 0.0, "4": 15.6, "6": 24.85, "7": 28.3}
 toks = [norm(w["word"]) for w in words]
 first, starts, k = {}, {}, 0
@@ -248,8 +250,7 @@ for j, (name, _lw, cap) in enumerate(PLAN):
 
 A = lambda shot, t: round(starts[shot] + t, 2)  # noqa: E731
 overlays = [
-    {"kind": "stamp", "start": 2.6, "end": round(starts["2"] - 0.1, 2), "text": "MUNICH · 1892", "y": TOP},
-    {"kind": "stamp", "start": A("2", 0.2), "end": A("2", K8600 - 0.1), "text": "HAMBURG · 1892", "y": TOP},
+    {"kind": "stamp", "start": 2.6, "end": round(starts["2"] - 0.1, 2), "text": "MUNICH · 1892", "y": 560},
     {"kind": "stamp", "start": A("2", K8600), "end": round(starts["3a"] - 0.1, 2), "text": "≈ 8,600", "y": MID},
     {"kind": "nameTag", "start": A("3a", 0.15), "end": round(starts["3b"] - 0.15, 2), "text": "Robert Koch", "sub": "Berlin", "y": 1060},
     {"kind": "nameTag", "start": A("3b", 0.15), "end": round(starts["4"] - 0.15, 2), "text": "Max von Pettenkofer", "sub": "Munich, 73", "y": 1060},
