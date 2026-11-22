@@ -122,3 +122,4 @@ reads and passes, so it stops re-flagging decided wording. A new or changed sent
 | HC003 Dancing S1 | C22 | the council listened to the physicians, then built stages | "So the city built stages… and paid musicians to play." |
 | HC002 Gage long | C42 | "the structure provided by the external circumstances of his work facilitated this result" | "And the daily routine of the job may have helped." |
 | HC002 Gage long | C08 | friends said "no longer Gage" (Harlow's notes, 1848-49) | "The people who knew him saw an early change: they said so." |
+| HC002 Gage long | C09 | many retellings exaggerate him | title card / title "The Story Everyone Gets Wrong" (user 2026-11-22: title/series idiom) |

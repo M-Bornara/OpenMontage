@@ -1,4 +1,4 @@
-# HC003-S1 — The Woman Who Couldn't Stop Dancing · storyboard v1 (script v3 approved 2026-11-21) · WAITING FOR THE USER'S OK
+# HC003-S1 — The Woman Who Couldn't Stop Dancing · storyboard v1 (script v3 approved 2026-11-21) · APPROVED 2026-11-22 (fix: shot 14 without the coif)
 
 Rules: story-craft.md Rule 0 + 0b, plan/layered-animation.md (§6 tricks, §7 levels), plan/packaging-v2-spec.md (hook card v2.1, CASE 14, end line), plan/production-v3.md (decoupage L28, Matt cameo L29, pre-viz L36/L37), the Shorts safe zone (text only in y 288–1248, captions start at y ≤ 1038). Facts: `claims.csv` (C01–C22). Format: 9:16 Short, 1080×1920, Liam. Slot: **Sat Dec 5**, YouTube 15:00 ET = 14:00 Alberta; socials Sun Dec 6 (TikTok 12:00 ET = 10:00 Alberta, C011; IG/FB 18:00 ET = 17:00 Alberta). Ready by **Tue Dec 1**.
 **Lessons built in (Gage S1, Pettenkofer):** nothing cut out of a still ever moves (L53): every move is a separately generated piece (pose sheet, prop sprite) or the camera / light / particles; **one pose change per gesture, on its word, then hold**; consecutive shots never share a camera at the same size (L52: the lane is in 8 shots, so each has its own camera on the lane map); **no set plate and no keyframe is ever a reference for a story shot** (L55: each shot's background is written in backgrounds-v1.md, word for word into its prompt); HERO subject ≥ 1/3 of the frame at its key moment; only Matt wears glasses (L61).
@@ -47,7 +47,7 @@ Text zones (safe zone): TOP y≈360 (under the CASE chip) · MID y≈660 · LOW 
 | 11 | 5.0 | [pause] But the dancing **didn't leave** with her. | WS · eye level · 35 mm (the climax hold) | **NEW**: the same lane from the wagon's departure point, now looking back: the wagon gone, wheel tracks in the dust; in the lane a dozen dancers still turning, silent, in grey evening light | **BREATH** · CAM almost still (`breath=True`) · music SILENT (faded over 1 s) | caption LOW | only the dancers' footsteps |
 | 12 | 4.6 | The city's **doctors** had a cure: more dancing. So the city built **stages**… and paid **musicians** to play. | 3 INSERTS, ~1.5 s each | **12a** ECU top-down: a physician's finger taps a page of a printed medical book (Gersdorff 1517 style woodcut on it, no legible text) · **12b** MS: two carpenters hammer the boards of a wooden stage in a market square · **12c** CU: a drummer's stick strikes a frame drum, a shawm player behind | **ALIVE** · 12a light pulse on the tap (17) · 12b sawdust (16) · 12c drum skin shake (camera hit) · whip between them | caption LOW (each) | quill tap, hammer, the band HITS back in (fade-in 1.5 s) |
 | 13 | 4.4 | One chronicle says that within a month, **four hundred** people had joined the dancing. | EWS · top-down high · 24 mm | **NEW**: the horse market from far above: the wooden stage in the middle with the band, a sea of tiny dancers around it filling the square, horses tied at the edge, the cathedral spire's shadow across it | **ALIVE** · the crowd sways (9) · CAM slow pull out (1) | counter `400*` MID with footnote `*one chronicle` (on "One chronicle", before "four hundred") · caption LOW | the band at full; a crowd roar |
-| 14 | 3.4 | And **nobody knows** why it started. | WS · low, from the cobbles · 28 mm | **NEW**: the empty lane at dawn, cold blue turning gold; Troffea's white coif lying alone on the stones in the foreground; the shutter from shot 1 hangs open above | **BREATH** · CAM slow pull out (1) · light rises (17) · hold | caption LOW · END LINE on the held frame | the lone fiddle resolves; one last footstep far away |
+| 14 | 3.4 | And **nobody knows** why it started. | WS · low, from the cobbles · 28 mm | **NEW**: the empty lane at dawn, cold blue turning gold; the wagon's two wheel tracks in the dust running away down the lane in the foreground; the shutter from shot 1 hangs open above; NO coif and nothing of hers (user 2026-11-22: an abandoned coif implies she died; her fate is unknown, deaths are DISPUTED C12) | **BREATH** · CAM slow pull out (1) · light rises (17) · hold | caption LOW · END LINE on the held frame | the lone fiddle resolves; one last footstep far away |
 
 ## Sets and cast
 
@@ -76,14 +76,14 @@ Text zones (safe zone): TOP y≈360 (under the CASE chip) · MID y≈660 · LOW 
 |---|---|
 | 1 | Troffea ≈ 160 cm tall, the coif ≈ 25 cm across; the lane ≈ 3.5 m wide; the shutter ≈ 60 × 90 cm; a neighbour's hand on it ≈ 18 cm |
 | 2 | her shoe ≈ 24 cm long, 9 cm wide; a cobblestone ≈ 12 × 15 cm; the gutter ≈ 25 cm wide |
-| 4 | the coif ≈ 25 cm across, lying in the foreground ≈ 1/4 of the frame width; her fallen figure ≈ 160 cm |
+| 4 | the coif ≈ 25 cm across, lying in the foreground ≈ 1/4 of the frame width; her fallen figure ≈ 160 cm (the coif appears ONLY in shot 4) |
 | 5 | her shoe ≈ 24 cm; the laces ≈ 0.5 cm thick; a cobblestone ≈ 12 × 15 cm |
 | 6 | the husband's hand ≈ 19 cm, reaching; her sleeve ≈ 12 cm across at the wrist; the door frame ≈ 90 cm wide |
 | 8 | a man's buckled shoe ≈ 27 cm; the buckle ≈ 4 cm; a cobblestone ≈ 12 × 15 cm |
 | 10 | the wagon bed ≈ 3 m long, wheels ≈ 1.2 m across; the men ≈ 175–185 cm; the horses ≈ 160 cm at the shoulder |
 | 12a | the finger ≈ 8 cm; the book page ≈ 28 × 40 cm (folio), the woodcut on it ≈ 15 × 20 cm |
 | 12c | the frame drum ≈ 45 cm across; the drumstick ≈ 35 cm; the drummer's hand ≈ 19 cm |
-| 14 | the coif ≈ 25 cm; a cobblestone ≈ 12 × 15 cm |
+| 14 | the wheel tracks ≈ 1.4 m apart (the wagon's axle), each ≈ 8 cm wide; a cobblestone ≈ 12 × 15 cm |
 
 The pre-viz draws every piece to these sizes (cm → frame fractions per shot), so the paid pieces must match them.
 

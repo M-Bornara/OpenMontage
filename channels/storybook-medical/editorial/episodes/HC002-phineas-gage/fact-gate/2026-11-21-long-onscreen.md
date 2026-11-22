@@ -9,7 +9,7 @@ Round 2 (the 4 changed items): 4 PASS.
 
 | # | field | text | claim ID(s) | verdict |
 |---|---|---|---|---|
-| 1 | title card | PHINEAS GAGE · THE STORY EVERYONE GETS WRONG | C09 | STRONGER (user's call) |
+| 1 | title card | PHINEAS GAGE · THE STORY EVERYONE GETS WRONG | C09 | PASS (accepted wording, user 2026-11-22) |
 | 2 | stamp, row 1 | NEAR CAVENDISH | C01 | PASS |
 | 3 | stamp, row 8 | GRAFTON COUNTY, N.H. · c. 1823 | C21 | PASS |
 | 4 | quote card, row 11 (Harlow, 1868) | "an iron will as well as an iron frame" | C22 | PASS |

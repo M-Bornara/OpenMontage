@@ -8,7 +8,7 @@ stills (their backgrounds are fixed); `view_check.py` compares every new image w
 | # | Set | Camera | Background, exactly (nothing else) | Not in view |
 |---|---|---|---|---|
 | 1 | the rock cut | REUSE S1 s3 16:9 | (S1's) | – |
-| 2 | the cut, the ledge | NEW 16:9 plate, MCU eye level facing the pit | grey rock wall of the cut, sharp drill marks, the far rim with autumn trees soft | the crew (out of frame) |
+| 2 | the cut, from the pit | NEW 16:9 plate, OTS from the pit floor behind two crewmen, facing up to the ledge | two crewmen's backs soft at the left and right edges, the rock ledge above with a drill hole and a small keg, wooded autumn hills and sky behind | Gage (his pose sprite) |
 | 3 | the cut | REUSE S1 s5 16:9 | (S1's) | – |
 | 4 | the cut floor | NEW 16:9 plate, WS low from the cut floor, facing up | the two rock walls rising left and right, a strip of pale sky between them, the drill hole's ledge in the middle | people (Gage is the sprite) |
 | 5 | the cut floor, after | NEW 16:9 plate, MS low | settling dust and smoke over grey rubble, light through the dust from the right | the rim, the sky |
@@ -22,7 +22,7 @@ stills (their backgrounds are fixed); `view_check.py` compares every new image w
 | 12 | 4 inserts | ECU | (a) bare grey rock and the drill; (b) the black drill hole and the flask; (c) the hole and a fuse; (d) the hole and the iron's end | anything above the rock |
 | 13 | a flat rock | INSERT side, low | a flat lichen-spotted rock top, morning sun from the left, blurred autumn trees far behind | people |
 | 14 | the same | INSERT (row 13's frame) | – (the stamp only) | – |
-| 15 | the pit | OTS from the pit floor looking up | the pit's rock wall rising, the ledge with Gage against a pale sky | the cut's far end |
+| 15 | the cut, lengthwise | WS from the far end of the cut, eye level | the cut running away between its two layered rock walls, the ledge along the left wall, the pit below on the right, autumn hills at the far open end | row 2's pit camera |
 | 16 | the cut | REUSE S1 s5 16:9, tighter crop | (S1's) | – |
 | 17 | document | flat | Harlow 1868 engraving on aged paper | – |
 | 18 | the cut floor | row 5's plate, 1.3× crop (closer) | – | – |

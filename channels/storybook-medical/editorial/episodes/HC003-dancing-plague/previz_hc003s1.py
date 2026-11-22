@@ -108,7 +108,9 @@ SHOTS = [
           for i in range(81) if not (3 <= i % 9 <= 5 and 3 <= i // 9 <= 4)],
         ("text", 0.5, 0.96, "top-down; spire shadow; pull out")]},
     {"name": "14", "zone": "LOW", "text": "caption · END LINE", "shapes": lane(DAWN, (110, 110, 120)) + [
-        ("rect", 0.08, 0.2, 0.22, 0.32, WOOD, "shutter open"), ("ellipse", 0.3, 0.84, 0.62, 0.96, COIF, "her coif"),
+        ("rect", 0.08, 0.2, 0.22, 0.32, WOOD, "shutter open"),
+        ("line", 0.38, 1.0, 0.47, 0.64, (90, 84, 76), 4), ("line", 0.62, 1.0, 0.53, 0.64, (90, 84, 76), 4),
+        ("text", 0.5, 0.9, "wheel tracks; NO coif"),
         ("text", 0.5, 0.1, "empty; blue -> gold; pull out")]},
 ]
 

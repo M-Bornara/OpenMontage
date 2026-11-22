@@ -273,3 +273,9 @@ Tests: test_prompt_lint.py (the v1 prompts fail, the v2 prompts pass).
 - **Tool**: a transparent glass on a chroma-key sheet keeps the key's green (s6's mint glass); grade the glass box after
   the cut (edit_hcs10.py `_clear_glass`). A pose pair cut with whole-body alignment can still jump at the swap when the
   arm changes: align on the head + collar (s4's palm drawing was 48 px off).
+
+## 2026-11-22 (HC003-S1, HC002-L HERO pieces)
+- **L45 again (sprite-coif-s4):** a prop sprite with the character's MODEL SHEET as reference (for the coif's look) came back with that sheet printed underneath as faint ghosts (faces, skirt hems), even with REF_IDENTITY_ONLY. Fix used: cut free (opaque, far-from-green pixels only, largest piece per box: cutouts_hc003s1.py). Rule to add: a PROP sprite takes no model sheet at all; describe the prop in words (lint: sprite_sheet + ref:sheet-* -> L45b warning).
+- **Pose direction (pose-gage-r49):** drawing 2 came back facing RIGHT although the prompt said 'profile facing LEFT' once, for the whole sheet. Fix used: mirrored in code (free). Rule to add: repeat the facing in EVERY pose line ('EXACTLY the same, facing LEFT; ONE change: ...').
+- **Episode lint L29 (Matt cameo) stops HERO-only batches** before the story stills exist: run HERO waves with --lint-ok after reading the finding (the cameo shot is a story still).
+

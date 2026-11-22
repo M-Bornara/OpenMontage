@@ -1,4 +1,4 @@
-## Backgrounds: one per shot, written before any prompt (L55) · HC003-S1 · WAITING FOR THE USER'S OK
+## Backgrounds: one per shot, written before any prompt (L55) · HC003-S1 · APPROVED 2026-11-22
 
 The lane is in 10 of the 14 shots, so (as for Pettenkofer's lab) **no set plate and no other keyframe is ever a
 reference for a story shot**: each shot's background is written here from the lane map (`review/previz/map-lane.png`)
@@ -23,7 +23,7 @@ south end opens onto a small square with an arched gate where the wagon waits.
 | 12b | the horse market | MS eye level | two carpenters hammering stage boards, horse rails and a gabled house front behind, sawdust in the sun | the lane, the spire | none |
 | 12c | the horse market stage | CU eye level | a drummer's stick on a frame drum, a shawm player soft behind, the crowd as warm blur | the lane | Dürer bagpiper 1514 (dress) |
 | 13 | the horse market from above | EWS top-down from a tower | the whole square: the stage in the middle, a sea of tiny dancers, horse rails at the edges, the long shadow of the spire across it | the lane | Merian 1644 (the square, the spire's shadow) |
-| 14 | the lane, dawn | WS low from the cobbles at the north end, facing SOUTH | the empty lane, cold blue turning gold, the open shutter high on the left wall, her white coif alone on the stones in the foreground | people, the wagon | none |
+| 14 | the lane, dawn | WS low from the cobbles at the north end, facing SOUTH | the empty lane, cold blue turning gold, the open shutter high on the left wall, two wagon-wheel tracks in the dust running away down the lane | people, the wagon, the coif or anything of hers (user 2026-11-22) | none |
 
 Neighbours checked (no two consecutive shots share a background): 1 house fronts + spire (N) → 2 cobbles + gutter (E,
 ground) → 3 ochre blur + green door (SW) → 4 dusk lane to the south sky, low → 5 gold cobbles + doorstep (E, ground) →

@@ -96,7 +96,13 @@ EPISODES = {
         "extra": [EP / "HC003-dancing-plague/s1-refs.md", EP / "HC003-dancing-plague/s1-backgrounds-v1.md",
                   EP / "HC003-dancing-plague/fact-gate/2026-11-21-script-s1-v3.md"],
         "page_title": "Dancing Plague S1 Storyboard",
-        "status": "storyboard + backgrounds + free pre-viz · narration recorded (Liam, 54 s, $0) · waiting for your OK and the reference downloads; then the HERO pieces",
+        "status": "HERO shots on real art (11 pieces, $0.74) · waiting for your OK, then the story stills",
+        "hero_pieces": REPO / "projects/hc003-s1/review/hero/pieces.jpg",
+        "hero_real": [
+            ("1", "Shot 1 · the hook (frame 1): Troffea mid-turn in the lane from frame 0, the shutter swings open above, the camera pushes in; ONE swap to the other turn on \"dance\"; hook card A in the bottom band (0–2.5 s). Liam's real timing"),
+            ("4", "Shot 4 · the collapse (Rule 0b): her pure black silhouette against the dusk lane; a hard cut to the fallen pose on \"collapsed\" and her coif drops into the foreground (the coif appears only here, your fix for shot 14). The coif sheet came back with ghosts of her sheet (L45): cut free, no re-roll"),
+            ("10", "Shot 10 · the wagon: the two city men lift her onto the tail of the wagon; ONE swap to seated on \"wagon\"; on \"shrine\" the wagon rolls out to the left with her on it (wheels turning), the men stay behind"),
+        ],
     },
     "hc002l": {
         "anchor": "gage-long", "short": "Gage long", "slot": "HC002-L · Sun Dec 13 · 11:00 ET = 10:00 Alberta · ready by Wed Dec 9",
@@ -112,7 +118,11 @@ EPISODES = {
                   EP / "HC002-phineas-gage/fact-gate/2026-11-21-long-script.md",
                   EP / "HC002-phineas-gage/fact-gate/2026-11-21-long-onscreen.md"],
         "page_title": "Gage Long Storyboard",
-        "status": "storyboard + backgrounds (66 shots, real narration times) · narration recorded (Liam, 5:50, $0) · waiting for your OK and the reference downloads",
+        "status": "cast + HERO pieces on real art (9 pieces, $0.60) · waiting for your OK, then the ~40 story stills",
+        "hero_pieces": REPO / "projects/hc002-l/review/hero/pieces.jpg",
+        "hero_real": [
+            ("49", "Row 49 · the coach (the long's own HERO): six horses at a looping trot pull the coach left along the mountain road, the wheels turn, Gage on the box lifts the reins on \"six\"; at \"Santiago\" the coach leaves the frame. Liam's real timing. The driver sheet's second drawing came back facing right: mirrored (free). Cold-open rows 2, 4, 5 reuse S1's approved keys and sprites on the three new 16:9 plates above; they are timed in the edit. Question for you: plate-r2 (before the blast) has haze in the pit: drilling dust, or a re-roll ($0.067)?"),
+        ],
     },
     "hc002s1": {
         "anchor": "gage-s1", "short": "Gage S1", "slot": "CASE 11 · Sun Nov 29 · 15:00 ET = 14:00 Alberta · ready by Wed Nov 25",
