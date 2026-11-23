@@ -137,6 +137,14 @@ EPISODES = {
                  "note": "$0.49 · 1920×1080 · 24 fps source, 10.9 MB after recompress (original 26.7 MB)."},
                 {"label": "B · Gemini Omni 1.2 Flash (fal, 720p)", "src": REPO / "projects/hc002-l/assets/video/row49-coach-omni-v1-web.mp4",
                  "note": "≈ $0.14 (fal $0.0273/s) · 1280×720 · 24 fps source, 3.2 MB muted copy (original 5.7 MB with synthesized audio)."},
+            ],
+            "images": [
+                {"id": "upscale", "src": REPO / "projects/hc002-l/review/omni-tests/upscale-compare.jpg",
+                 "label": "Free test: Omni 720p upscaled to 1080p and 2160p, next to a normal still of the long (s2b)",
+                 "note": "Lanczos + light unsharp + light grain. Top: the full frames. Bottom: 100% detail on the 2160 grid. Seen whole, the 1080p version holds; at 100% the Omni upscale is clearly softer than a still (soft ink lines, no fine face detail), and the grain adds weight (1080p 21 MB, 2160p 66 MB for 5 s at CRF 16). Different scenes: this compares sharpness, not content."},
+                {"id": "fps", "src": REPO / "projects/hc002-l/review/omni-tests/fps-ghost-check.jpg",
+                 "label": "Free test: 24 → 30 fps, three ways (same frame, crop at 160%)",
+                 "note": "Judder = unevenness of the background step per frame (source 24 fps: 0.06). Frame repeat 0.26 (every 5th frame is a copy), frame blend (ffmpeg framerate) 0.04 = smoothest, motion interpolation (minterpolate) 0.19 and it dropped 2 frames. No ghosting visible on the blend at this frame."},
             ]},
         "hero_real": [],   # v2 (2026-11-23): no HERO sprite plans for rows 2, 5, 49; row 4 stays C (S1 pieces)
     },
@@ -504,6 +512,10 @@ def clip_tests_block(k: str, e: dict, out: Path, img: Path) -> str:
             continue
         figs.append(f'<figure><video class="cut" controls playsinline loop preload="metadata" src="video/{dst.name}"></video>'
                     f'<figcaption><b>{html.escape(c["label"])}</b><span>{html.escape(c["note"])}</span></figcaption></figure>')
+    for c in tests.get("images", []):
+        if Path(c["src"]).exists():
+            figs.append(f'<figure class="wide2"><img src="img/{shrink(Path(c["src"]), img / (k + "-" + c["id"]), 2000)}" alt="{html.escape(c["label"])}" loading="lazy">'
+                        f'<figcaption><b>{html.escape(c["label"])}</b><span>{html.escape(c["note"])}</span></figcaption></figure>')
     return ('<div class="block"><h3>' + html.escape(tests["title"]) + '</h3><p class="legend">' + html.escape(tests["legend"]) + '</p>'
             '<div class="refs cliptests">' + "".join(figs) + '</div></div>')
 
@@ -711,7 +723,7 @@ details.prompt p{margin:6px 0 0;overflow-wrap:anywhere}.pmeta{font-family:var(--
 .refgen b{font-family:var(--display)}
 video.cut{width:min(360px,100%);aspect-ratio:9/16;border-radius:12px;background:#000;display:block}
 .ar16 video.cut{width:min(760px,100%);aspect-ratio:16/9}
-.cliptests{grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))}.cliptests figure img{aspect-ratio:16/9;object-fit:cover}.cliptests video.cut{width:100%}
+.cliptests{grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))}.cliptests figure img{aspect-ratio:16/9;object-fit:cover}.cliptests figure.wide2{grid-column:1/-1}.cliptests figure.wide2 img{aspect-ratio:auto;object-fit:contain}.cliptests video.cut{width:100%}
 .ar16 .shot{grid-template-columns:300px 1fr}.ar16 .shot img{width:300px;aspect-ratio:16/9}
 .ar16 .v2grid article{grid-template-columns:150px 1fr}.ar16 .v2grid img,.ar16 .newpic{width:150px;aspect-ratio:16/9}
 .story{background:var(--surface);border:2px solid var(--amber);border-radius:14px;padding:18px 20px}
