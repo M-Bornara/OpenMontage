@@ -174,6 +174,15 @@ REFERENCES.update({
                           "from the side, eye level, 35 mm, his profile facing LEFT", "the whole figure, seated")),
 })
 
+# plate-r2 re-roll (user 2026-11-23, one generation, $0.067): the first plate had haze in the pit before the blast. The
+# style reference's "settling smoke" is dropped from this plate's roles and the prompt says it outright. Own name: the
+# approved-in-use plate-r2.png is not overwritten; the user sees this one before it replaces anything.
+_r2 = REFERENCES["plate-r2"]
+REFERENCES["plate-r2-v2"] = {**_r2,
+    "roles": _r2["roles"].replace("settling smoke, ", ""),
+    "prompt": _r2["prompt"] + " Clear still air, no smoke, no haze, no mist, nothing smoking."}
+assert "smoke" not in REFERENCES["plate-r2-v2"]["roles"].replace("no smoke", "")
+
 HERO_PIECES = ["plate-r2", "plate-r4", "plate-r5", "plate-r49", "sprite-coach-r49", "sprite-horses-r49", "pose-gage-r49"]
 KEYFRAMES: dict = {}          # the ~40 story stills: written after the HERO shots are approved on real art
 

@@ -455,13 +455,19 @@ def image_cost(ep: dict) -> tuple[int, float]:
 
 
 def web_preview(render: Path, dst: Path) -> bool:
-    """A light 540x960 copy of the rough cut for the page (an Artifact file must stay under 15 MB)."""
+    """A light copy of the rough cut for the page (an Artifact file must stay under 15 MB): 540x960 for a Short,
+    960x540 for a long. The size follows the SOURCE orientation (user 2026-11-23: the Gage long coach rendered 16:9 but
+    this scale squashed it to 540x960, so the page looked like short mode)."""
     import subprocess
     if not render.exists():
         return False
     if not dst.exists() or dst.stat().st_mtime < render.stat().st_mtime:
         dst.parent.mkdir(parents=True, exist_ok=True)
-        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(render), "-vf", "scale=540:960", "-c:v", "libx264",
+        dims = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=width,height",
+                               "-of", "csv=p=0", str(render)], capture_output=True, text=True, check=True).stdout.strip().split(",")
+        w, h = int(dims[0]), int(dims[1])
+        size = "scale=960:540" if w > h else "scale=540:960"
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(render), "-vf", size, "-c:v", "libx264",
                         "-preset", "slow", "-crf", "26", "-maxrate", "1500k", "-bufsize", "3000k", "-pix_fmt", "yuv420p",
                         "-c:a", "aac", "-b:a", "96k", "-movflags", "+faststart", str(dst)], check=True)
     return True
@@ -544,7 +550,8 @@ def layered_block(k: str, e: dict, ep: dict, out: Path, img: Path) -> str:
             sp = a.get("sprites", "")
             f = (p / sp.split(":", 1)[-1]).parent / "check.png" if sp.startswith("proj:") else None
             if f and f.exists():
-                stand.append(f'<figure><img src="img/{shrink(f, img / f"{k}-{sid}-{a["id"]}-check", 1300)}" alt="Cut-outs over magenta" loading="lazy">'
+                chk_name = f"{k}-{sid}-{a['id']}-check"
+                stand.append(f'<figure><img src="img/{shrink(f, img / chk_name, 1300)}" alt="Cut-outs over magenta" loading="lazy">'
                              + (f'<figcaption><b>{html.escape(a["id"])}: cut-outs (free stand-in)</b><span>Every state over '
                                 f'magenta, and the onion skin: one body outline means it doesn’t jump when the wings fold.</span>'
                                 if "free" in sp else

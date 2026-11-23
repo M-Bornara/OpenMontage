@@ -931,6 +931,25 @@ def step_mix(pid, *_):
     print(f"mix.wav {li} LUFS, peak {lp} dBFS, {len(cues)} sfx cues")
 
 
+def video_size(path) -> tuple[int, int]:
+    w, h = subprocess.check_output(["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries",
+                                    "stream=width,height", "-of", "csv=s=x:p=0", str(path)]).decode().strip().strip("x").split("x")[:2]
+    return int(w), int(h)
+
+
+def check_render_size(path, fmt: str, preview: bool = False):
+    """user 2026-11-23: a long must be 16:9, a Short 1080x1920; anything else fails the render (a long once reached the
+    approval page as 540x960). Long finals are rendered with scale 2 (supersampled 3840x2160, see step_edit), so the
+    final accepts 1920x1080 or 3840x2160; a long preview is 1920x1080 exactly."""
+    ok = {"short": {(1080, 1920)}, "long": {(1920, 1080)} if preview else {(1920, 1080), (3840, 2160)}}[
+        "long" if fmt == "long" else "short"]
+    got = video_size(path)
+    if got not in ok:
+        raise SystemExit(f"RENDER SIZE FAIL: {Path(path).name} is {got[0]}x{got[1]}; a {fmt} must be "
+                         + " or ".join(f"{w}x{h}" for w, h in sorted(ok)))
+    return got
+
+
 def step_render(pid, *flags):
     """Render. `--preview`: long videos at 1080p into renders/preview.mp4 (about 4x faster) for the edit review."""
     p = proj(pid)
@@ -960,6 +979,8 @@ def step_render(pid, *flags):
     if r.success:
         li, lp = loudness(out)
         print(f"{out}  {duration(out):.2f}s  {li} LUFS  peak {lp} dBFS")
+        w, h = check_render_size(out, ep.get("format", "short"), preview="--preview" in flags)
+        print(f"size {w}x{h} OK")
         if ep.get("format") == "short":
             # user 2026-11-15: "re-evaluate the text placements after each change": collisions + review/text_sheet.jpg
             import text_check
