@@ -201,9 +201,19 @@ CLIP_HOLD = "ONE single action only; once it is done, everything holds completel
 # AI paints stills; we animate them (Stage.tsx <Actor>). A thing that moves is never painted into the plate.
 # Sheets come back on a flat chroma-key green so fx_prep.sheet() cuts them cleanly (the green is unmixed from smoky,
 # semi-transparent parts such as insect wings); their light and angle are the plate's, or they never sit in it.
-KEY_BG = ("BACKGROUND: one flat, solid, evenly lit chroma-key green (#00B140) from edge to edge: no shadow on it, no "
-          "floor line, no gradient, no texture, no vignette, no panels, frames or boxes behind the drawings, nothing "
-          "else on it.")
+# 2026-11-22 (HC003-S1): the key colour is chosen BEFORE the sheet is generated: `python scripts/key_check.py <model sheets>
+# <plate>` measures the drawing's palette against each key (green ate a blue dress and a dark teal wagon interior; magenta
+# stayed 0 %). sprite_sheet() / pose_sheet() take key="green" | "magenta" | "blue" | "orange".
+KEY_HEX = {"green": "#00B140", "magenta": "#FF00FF", "blue": "#0047BB", "orange": "#FF7800"}
+
+
+def key_bg(key: str = "green") -> str:
+    return (f"BACKGROUND: one flat, solid, evenly lit chroma-key {key} ({KEY_HEX[key]}) from edge to edge: no shadow on it, no "
+            "floor line, no gradient, no texture, no vignette, no panels, frames or boxes behind the drawings, nothing "
+            "else on it.")
+
+
+KEY_BG = key_bg("green")
 # L45 (HC002-S1 sprite-hat + pose-gage-s8, 2026-11-18): a sprite / pose sheet that takes a character MODEL SHEET as
 # reference came back with that sheet printed underneath as ghosts (five half-transparent bodies, extra legs, a
 # close-up head). REF_IDENTITY_ONLY goes in every sheet that has a ref:sheet-* reference (lint L45).
@@ -216,7 +226,7 @@ REF_IDENTITY_ONLY = ("The reference sheet is for IDENTITY ONLY (face, hair, buil
 EMPTY_HANDS = "His hands are EMPTY (open or loosely curled around nothing): no tool, bar, rod or handle is drawn."
 
 
-def sprite_sheet(obj: str, states: list[str], plate: str, light: str, angle: str, scale: str = "") -> str:
+def sprite_sheet(obj: str, states: list[str], plate: str, light: str, angle: str, scale: str = "", key: str = "green") -> str:
     """One object (an insect, a letter, a cup, a needle) in every state the shot needs, side by side.
     states: what each drawing shows, in order (["flying, wings raised", "flying, wings lowered", ...]).
     plate: the shot it goes into; light: where the light comes from there; angle: the camera's view of the object."""
@@ -226,10 +236,11 @@ def sprite_sheet(obj: str, states: list[str], plate: str, light: str, angle: str
             f"overlaps or leaves the picture): {cells} Every drawing is the identical design, the identical size and "
             f"scale, seen from the same angle: {angle}. LIGHT: as in the shot it will be animated into ({plate}): "
             f"{light}. {scale + ' ' if scale else ''}Ink outline, colours and brushwork of our film's painting style. "
-            f"Only the {obj}: no people, no hands, no props, no ground under it. {REF_IDENTITY_ONLY} {KEY_BG} {FULL_BLEED} {NO_TEXT}")
+            f"Only the {obj}: no people, no hands, no props, no ground under it. {REF_IDENTITY_ONLY} {key_bg(key)} {FULL_BLEED} {NO_TEXT}")
 
 
-def pose_sheet(person: str, poses: list[str], plate: str, light: str, angle: str, crop: str = "the whole figure") -> str:
+def pose_sheet(person: str, poses: list[str], plate: str, light: str, angle: str, crop: str = "the whole figure",
+               key: str = "green") -> str:
     """The same character in the 2-4 poses of ONE shot (reach, flinch, look up), for pose swaps + ACT on the plate.
     crop: how much of the person the shot shows (e.g. "head and shoulders", "from the waist up")."""
     cells = " ".join(f"({i}) {s}." for i, s in enumerate(poses, 1))
@@ -237,7 +248,7 @@ def pose_sheet(person: str, poses: list[str], plate: str, light: str, angle: str
             f"left to right, each drawing separate with wide empty space around it: {cells} Each drawing shows "
             f"{crop}, the identical size, costume, face and proportions, seen from the same camera: {angle}. LIGHT: as "
             f"in the shot ({plate}): {light}. The person appears only in these {len(poses)} poses; no other people, no "
-            f"furniture, no ground. Ink outline and painting style of our film. {REF_IDENTITY_ONLY} {KEY_BG} {FULL_BLEED} {NO_TEXT}")
+            f"furniture, no ground. Ink outline and painting style of our film. {REF_IDENTITY_ONLY} {key_bg(key)} {FULL_BLEED} {NO_TEXT}")
 
 
 def empty_plate(frame: str, remove: str, behind: str) -> str:
@@ -345,7 +356,7 @@ def lint(name: str, spec: dict) -> list[str]:
                       "use crowd(where, [up to 5 distinct faces]) or show the crowd only from behind")
     # L43 (layered shots, user 2026-11-16): a sprite / pose sheet must come back on the flat key colour, lit like the
     # plate it goes into; an empty plate must repaint the approved frame unchanged except for the removed thing.
-    if ("sprite sheet" in p or "pose sheet" in p) and ("chroma-key green" not in p or "light:" not in p):
+    if ("sprite sheet" in p or "pose sheet" in p) and ("chroma-key" not in p or "light:" not in p):
         issues.append("L43: sprite/pose sheet without KEY_BG and a LIGHT line matching its plate (use sprite_sheet() / "
                       "pose_sheet()): a busy or shaded background doesn't cut cleanly; a sprite lit from another side "
                       "never sits in the plate")

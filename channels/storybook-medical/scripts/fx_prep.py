@@ -121,9 +121,17 @@ def _despill_edge(rgba: np.ndarray, key: np.ndarray, band: int = 5) -> np.ndarra
     transparent area, the key's dominant channel is clamped to the larger of the other two. Only the edge band, so a
     green object's own colour inside the figure is kept."""
     import cv2
-    k = int(np.argmax(key))
     edge = cv2.dilate((rgba[..., 3] < 128).astype(np.uint8), np.ones((2 * band + 1,) * 2, np.uint8)).astype(bool)
     out = rgba.copy()
+    hot = [i for i in range(3) if key[i] > 128]
+    if len(hot) == 2:   # a magenta / yellow / cyan key: its two bright channels are clamped to the third (2026-11-22)
+        low = [i for i in range(3) if i not in hot][0]
+        for i in hot:
+            ch = out[..., i]
+            fix = edge & (ch > out[..., low])
+            ch[fix] = out[..., low][fix]
+        return out
+    k = int(np.argmax(key))
     others = np.delete(out[..., :3], k, axis=2).max(axis=2)
     ch = out[..., k]
     fix = edge & (ch > others)

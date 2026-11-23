@@ -14,16 +14,17 @@ from __future__ import annotations
 
 import json
 import math
+import os
 import subprocess
 import sys
 from pathlib import Path
 
 import numpy as np
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 REPO = Path(__file__).resolve().parents[5]
 P = REPO / "projects/hc003-s1"
-OUT = P / "review/hero"
+OUT = Path(os.environ["HERO_OUT"]) if os.environ.get("HERO_OUT") else P / "review/hero"   # HERO_OUT: render to a scratch folder
 W, H, FPS, OW, OH = 1080, 1920, 30, 540, 960
 WORDS = json.load(open(P / "artifacts/word_timestamps.json", encoding="utf-8"))
 NARR = P / "assets/audio/narration.wav"
@@ -86,12 +87,14 @@ def silhouette(im: Image.Image, rim=(255, 170, 90)) -> Image.Image:
 
 
 def load_piece(name: str, height: float, anchor: str = "bottom", sil: bool = False, ref: str | None = None,
-               states: list[str] | None = None, shared: bool = False):
+               states: list[str] | None = None, shared: bool = False, crop: bool = False):
     """The cut-out states of a paid sheet, scaled so the `ref` state's (default: the first) opaque height is `height`
     (frame fractions); `states` keeps only those (the wagon body and its wheel share one sheet and one canvas)."""
     d = P / "assets/images/sprites" / name
     meta = json.load(open(d / "sprites.json", encoding="utf-8"))
     frames = {s: Image.open(d / fs[0]).convert("RGBA") for s, fs in meta["frames"].items() if not states or s in states}
+    if crop:   # tight canvas: the pivot of a rotation is the CENTRE of the canvas, so a wheel must be cut to its own bbox
+        frames = {s: im.crop(im.getbbox()) for s, im in frames.items()}
     first = ref or next(iter(frames))
     bb = frames[first].getbbox()
     k = height * H / (bb[3] - bb[1])
@@ -109,6 +112,38 @@ def load_piece(name: str, height: float, anchor: str = "bottom", sil: bool = Fal
     return frames, per[first], (per if anchor == "bottom" and not shared else {})
 
 
+SPOKES = 12   # spokes of the wagon wheel (count them on sprite-wagon-s10 if the sheet is re-rolled)
+ROLL_LOG: list[float] = []
+
+
+def _spin(a, t):
+    """Wheel angle in degrees, counter-clockwise positive, from the distance the wagon has rolled left: d / r."""
+    keys = a["keys"]
+    x = interp(keys, t, "x") * W
+    x0 = keys[0]["x"] * W
+    return (x0 - x) / (a["roll"]["r"]) * 180 / math.pi
+
+
+def roll_sprite(spr, a, t):
+    """The wheel is a 3/4 view (an ellipse): stretch it to the true circle, turn the spokes about the hub, squash it back.
+    A plain 2D rotate would tilt the ellipse instead of turning the spokes. Anti-strobe: when one frame turns the wheel
+    by more than half a spoke gap (a spinning wheel then looks stopped or backwards) the frame averages the sub-steps
+    of the frame's own travel: real film motion blur."""
+    w, h = spr.size
+    ang, prev = _spin(a, t), _spin(a, t - 1 / FPS)
+    step = abs(ang - prev)
+    ROLL_LOG.append(step)
+    n = 1 if step <= 4 else min(24, math.ceil(step / 3))
+    circ = spr.convert("RGBa").resize((h, h), Image.LANCZOS)
+    acc = None
+    for i in range(n):
+        d = ang if n == 1 else prev + (ang - prev) * (i + 0.5) / n
+        r = np.asarray(circ.rotate(d, resample=Image.BICUBIC, expand=False), dtype=np.float32)
+        acc = r if acc is None else acc + r
+    out = Image.fromarray((acc / n).round().astype(np.uint8), "RGBa").resize((w, h), Image.LANCZOS)
+    return out.convert("RGBA")
+
+
 def world(shot, t):
     im = Image.open(shot["plate"]).convert("RGBA").resize((W, H), Image.LANCZOS)
     boxes = []
@@ -123,10 +158,19 @@ def world(shot, t):
         if prev and xf and t - since < xf and frames[prev].size == spr.size:   # different canvases: a clean swap
             spr = Image.blend(frames[prev], spr, (t - since) / xf)
         rot = interp(a["keys"], t, "rot", 0.0)
-        if rot:
+        if a.get("roll"):   # a wheel: the angle comes from the distance rolled (never from time), see roll_sprite
+            spr = roll_sprite(spr, a, t)
+        elif rot:
             spr = spr.rotate(rot, resample=Image.BICUBIC, expand=False)
         x, y = interp(a["keys"], t, "x") * W, interp(a["keys"], t, "y") * H
         ox, oy = int(x - anchor[0] * spr.width), int(y - anchor[1] * spr.height)
+        if a.get("shadow"):   # contact shadow on the ground line (feet / body bottom = the anchor y)
+            sw, sh_, al = a["shadow"]
+            bb0 = spr.getbbox() or (0, 0, spr.width, spr.height)
+            cx, gw = ox + (bb0[0] + bb0[2]) / 2, (bb0[2] - bb0[0]) * sw
+            sl = Image.new("RGBA", im.size, (0, 0, 0, 0))
+            ImageDraw.Draw(sl).ellipse([cx - gw / 2, y - sh_ * H / 2, cx + gw / 2, y + sh_ * H / 2], fill=(10, 8, 14, al))
+            im.alpha_composite(sl.filter(ImageFilter.GaussianBlur(10)))
         lay = Image.new("RGBA", im.size, (0, 0, 0, 0))
         lay.paste(spr, (ox, oy), spr)
         im.alpha_composite(lay)
@@ -196,6 +240,9 @@ def render(shot) -> Path:
             keep[i] = fr.copy()
     proc.stdin.close()
     proc.wait()
+    if ROLL_LOG:
+        print(f"wheel: max {max(ROLL_LOG):.1f} deg per frame (> {180 / SPOKES:.0f} = half a spoke gap: blurred by sub-steps)")
+        ROLL_LOG.clear()
     sheet = Image.new("RGB", (OW * 3 + 20, OH), "white")
     for j, fr in enumerate(keep.values()):
         sheet.paste(fr, (j * (OW + 10), 0))
@@ -257,12 +304,15 @@ def shot4():
     c = coll - win[0]
     return {"name": "4", "win": win, "plate": P / "assets/images/refs/plate-s4.png", "hero_at": c,
             "actors": [
-                {"id": "troffea", "hero": True, "piece": load_piece("troffea-s4", 0.50, "bottom", sil=True, ref="turning"),
+                {"id": "troffea", "hero": True, "piece": load_piece("troffea-s4", S4_H, "bottom", sil=True, ref="turning"),
+                 "shadow": (0.9, 0.022, 120),
                  "keys": [{"t": 0.0, "x": POS["4"]["troffea"][0], "y": POS["4"]["troffea"][1], "state": "turning"},
                           {"t": c, "state": "fallen"}], "xfade": 0},   # a fall is a hard cut (states have their own anchors)
-                {"id": "coif", "piece": load_piece("coif-s4", 0.11, "center"), "from": c,
-                 "keys": [{"t": c, "x": POS["4"]["coif"][0] + 0.05, "y": 0.55, "rot": -40, "state": "falling"},
-                          {"t": c + 0.55, "x": POS["4"]["coif"][0], "y": POS["4"]["coif"][1], "rot": 0, "state": "rest", "ease": "in"}],
+                {"id": "coif", "piece": load_piece("coif-s4", COIF_H, "center"), "from": c, "shadow": (0.9, 0.008, 110),
+                 "keys": [{"t": c, "x": POS["4"]["head"][0], "y": POS["4"]["head"][1], "rot": -40, "state": "falling"},
+                          {"t": c + 0.40, "x": POS["4"]["coif"][0], "y": POS["4"]["coif"][1], "rot": 25, "state": "rest", "ease": "in"},
+                          {"t": c + 0.52, "x": POS["4"]["coif"][0] - 0.012, "y": POS["4"]["coif"][1] - 0.012, "rot": 10, "ease": "out"},
+                          {"t": c + 0.64, "x": POS["4"]["coif"][0] - 0.02, "y": POS["4"]["coif"][1], "rot": 0, "ease": "in"}],
                  "xfade": 0.10}],
             "cam": [{"t": 0.0, "scale": 1.0, "x": 0, "y": 0}, {"t": win[1] - win[0], "scale": 1.0, "x": 0, "y": 0}]}
 
@@ -276,29 +326,40 @@ def shot10():
     wx, wy = POS["10"]["wagon"]
     gx, gy = POS["10"]["group"]
     dx = -0.95                                                      # the wagon rolls out of frame to the LEFT
-    group = load_piece("group-s10", 0.45, "bottom", ref="lifted", shared=True)
-    body = load_piece("wagon-s10", 0.26, "bottom", states=["body"])
-    wheel = load_piece("wagon-s10", 0.13, "center", states=["wheel"])
-    spin = abs(dx) * W / (math.pi * 0.13 * H) * 360                 # rolling without slipping: distance / circumference
+    group = load_piece("group-s10", S10_GROUP, "bottom", ref="lifted", shared=True)
+    body = load_piece("wagon-s10", S10_BODY, "bottom", states=["body"])
+    wheel = load_piece("wagon-s10", S10_WHEEL, "center", states=["wheel"], crop=True)   # cut to its own bbox: pivot = hub
+    r_px = S10_WHEEL * H / 2                                             # the wheel's true radius (its height is the circle's diameter)
     def path(x, y, **kw):
         return [{"t": 0.0, "x": x, "y": y, **kw}, {"t": b, "x": x, "y": y}, {"t": end, "x": x + dx, "y": y, "ease": "in"}]
-    wheels = [{"id": f"wheel{i}", "piece": wheel,
-               "keys": [dict(k, rot=(0 if k["t"] <= b else spin)) for k in path(wx + off, wy - 0.045, state="wheel")]}
+    wheels = [{"id": f"wheel{i}", "piece": wheel, "roll": {"r": r_px},
+               "keys": path(wx + off, wy - S10_WHEEL * 0.346, state="wheel")}
               for i, off in enumerate(POS["10"]["wheels"])]
     return {"name": "10", "win": win, "plate": P / "assets/images/refs/plate-s10.png", "hero_at": (a + b) / 2,
             "actors": [{"id": "wagon", "hero": True, "piece": body, "keys": path(wx, wy, state="body")}, *wheels,
+                       # depth, back to front: wagon + wheels, then HER (she rides the wagon), then the men (they stay):
+                       # as the wagon rolls out she passes BEHIND the men, never over them
+                       {"id": "troffea", "piece": group, "from": b, "keys": path(gx, gy, state="troffea")},
                        {"id": "group", "hero": True, "piece": group, "xfade": 0.10,
                         "keys": [{"t": 0.0, "x": gx, "y": gy, "state": "lifted"}, {"t": a, "state": "seated"},
-                                 {"t": b, "state": "men"}]},
-                       {"id": "troffea", "piece": group, "from": b, "keys": path(gx, gy, state="troffea")}],
+                                 {"t": b, "state": "men"}]}],
             "cam": [{"t": 0.0, "scale": 1.08, "x": 0, "y": 0}, {"t": b, "scale": 1.08, "x": 0, "y": 0},
                     {"t": end, "scale": 1.08, "x": 3.5, "y": 0, "ease": "inout"}]}
 
 
 # measured on the real plates (frame fractions; anchor points: feet for people, centre for the coif / shutter)
+# Shot 4 scale rule (L51): she is 1.6 m; the lit door at her depth is 2 m and 0.31 of the frame tall, so she is 0.25-0.27 of
+# the frame (not 0.50). The fallen pose is then 0.52 of the frame wide: the HERO 1/3 rule still holds. The coif is a
+# 25 cm prop: 0.04-0.05. It must stay between the lane floor and the safe line below.
+# Shot 10 scale (user 2026-11-22: "she sits on nothing, her body is bigger than the wagon"): the bed's floor must stand at
+# the men's hip height (about 0.52 of their height) so a seated woman sits ON it. Men 0.40 of the frame, so the bed floor
+# (half the body sprite's height above its feet) is 0.195 high: S10_BODY 0.39; the wheel is 0.5 of a man's height.
+S10_GROUP, S10_BODY, S10_WHEEL = 0.40, 0.39, 0.195
+S4_H, COIF_H = 0.28, 0.05   # closer to the camera (feet y 0.78): door-consistent 0.28 at that depth (perspective: the 0.30 door at y 0.73 -> 0.35 at 0.78, x 0.8)
+# Shot 1 stays as approved (user 2026-11-22: the door-scaled version lost the dance; only the silhouette shot 4 had the scale problem)
 POS = {"1": {"troffea": (0.50, 0.95), "shutter": (0.15, 0.27)},
-       "4": {"troffea": (0.52, 0.72), "coif": (0.20, 0.90)},
-       "10": {"wagon": (0.42, 0.86), "group": (0.66, 0.94), "wheels": (-0.20, 0.12)}}
+       "4": {"troffea": (0.52, 0.78), "head": (0.644, 0.666), "coif": (0.60, 0.815)},
+       "10": {"wagon": (0.19, 0.86), "group": (0.66, 0.94), "wheels": (-0.30, 0.18)}}
 SHOTS = {"1": shot1, "4": shot4, "10": shot10}
 PIECES = ["sheet-troffea", "sheet-townsfolk", "plate-s1", "pose-troffea-s1", "sprite-shutter-s1", "plate-s4",
           "pose-troffea-s4", "sprite-coif-s4", "plate-s10", "pose-s10", "sprite-wagon-s10"]

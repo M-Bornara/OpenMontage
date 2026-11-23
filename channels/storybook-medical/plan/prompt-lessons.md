@@ -279,3 +279,35 @@ Tests: test_prompt_lint.py (the v1 prompts fail, the v2 prompts pass).
 - **Pose direction (pose-gage-r49):** drawing 2 came back facing RIGHT although the prompt said 'profile facing LEFT' once, for the whole sheet. Fix used: mirrored in code (free). Rule to add: repeat the facing in EVERY pose line ('EXACTLY the same, facing LEFT; ONE change: ...').
 - **Episode lint L29 (Matt cameo) stops HERO-only batches** before the story stills exist: run HERO waves with --lint-ok after reading the finding (the cameo shot is a story still).
 
+
+## L62 + L63 + L64 + L65 (HC003-S1 shots 4 / 10 and the Gage long page, user review 2026-11-22)
+These are COMPOSITOR / PAGE rules (code), not prompts. Fixed in `hero_real_hc003s1.py` and `storyboard_page.py`.
+- **L62 · scale and ground: size the sprite from an object on the plate, anchor it on one ground line.** Shot 4 had Troffea at
+  0.50 of the frame beside a lit door 0.31 tall: she was twice door size and read as floating. Rule: sprite height = real height
+  x (door height in frame / 2 m) at the feet's depth (S4_H 0.27); both poses share the scale and the ground line (feet / lowest
+  body pixel on the same y); a soft contact shadow on that line. The HERO 1/3 rule is met by the WIDTH of a lying pose
+  (0.52), not by blowing the standing pose up. Prop sprites (coif) get their real size too (25 cm = 0.05).
+- **L63 · a falling prop lands in view, next to the body.** The coif came to rest at y 0.90 in the bottom band, 0.3 of the
+  frame away from her. Rule: start at the head, rest within 0.1 of the body, on the ground line, above the bottom band; one bounce.
+- **L64 · wheels: pivot, squash, distance, blur.** (1) PIL rotates about the CANVAS centre: the wheel sprite sat 250 px off-centre
+  on a 1530 px canvas, so it orbited; cut the wheel to its own bbox (`load_piece(crop=True)`). (2) The wheel is a 3/4 ellipse:
+  stretch to the circle, turn, squash back, or the ellipse tilts. (3) Angle = distance rolled / radius (never a time ramp: the
+  wagon eased in, the spin did not); moving left = counter-clockwise. (4) Anti-strobe: past half a spoke gap per frame
+  (180 / spokes deg; 12 spokes = 15) the wheel looks stopped or backwards, so the frame averages the sub-steps (film
+  motion blur). The render prints the max deg per frame (shot 10: 26).
+- **L65 · depth order is part of the plan: write it back to front.** Shot 10 drew the rider after the men, so she passed IN
+  FRONT of the man she was behind. Order now: wagon + wheels, her (rides with the wagon), then the men (stay). Any actor that
+  moves through a group sits in the plan's depth list, and the HERO storyboard row names it.
+- **Page · a long's previews are 16:9.** `storyboard_page.py` hard-coded `aspect-ratio: 9/16` for every video and still, so the
+  Gage long's 16:9 coach clip showed in a vertical box. Entries now carry `"aspect": "16:9"` (hc002l) and the section gets
+  class `ar16`. Rule: a long = 1920x1080 everywhere (composition, preview player, stills); `ffprobe` every render and fail if
+  the size is not 1920x1080 (long) or 1080x1920 (Short). Not yet a lint: add it to `episode.py build` when the long is built.
+- **Reminder to every HERO plan:** S1's 9:16 sprites do not carry to a 16:9 plate by size: re-measure scale and ground line on
+  each 16:9 plate (the long's cold open).
+- **L66 · a chroma key eats mid-blue clothes (HC003-S1 shot 10, user 2026-11-22).** The key (green 4/174/82, lo 38 / hi 110) left Troffea's blue dress at 70-85 % alpha, so the wagon cover showed through her. `cutouts_hc003s1.solidify_group()` makes every non-green pixel opaque (idempotent, free); do the same for any sprite whose clothes sit near the key hue, or key blue-grey figures on magenta. Check every cut-out over magenta, not over the plate.
+- **L62 again (shot 1):** the hook had her at 0.70 of the frame beside doors 0.26 tall. Door scale first (S1_H 0.26 at feet y 0.82), then reach the 1/3 rule with the camera push (start 1.25 -> 1.36), not with the sprite. A camera tilt may never show past the plate: |y| <= (scale - 1) / 2 x 100.
+- **L67 · check EVERY sprite over magenta, props and sets too (shot 10, user 2026-11-22 "still invisible areas").** The rider's dress was one hole (L66); the other was the WAGON: its dark covered opening, right behind her, keyed out semi-transparent, so the cobbles showed through behind her. `cutouts_hc003s1.solidify_wagon()` (above 78 % of the height; the ground shadow below stays soft). Rule: after every cut-out, composite each state over magenta and look; count semi-transparent pixels away from the edge. Door scale again (shot 4): 0.8 x the door at her depth (S4_H 0.23); a figure at exactly door height still reads as bigger. Shot 1 stays as approved (a door-scaled, small dancer lost the dance).
+- **L68 · pick the chroma key BEFORE the sheet is generated (user 2026-11-22).** Green (#00B140) sits within the key's 110 radius of dark teal, blue-grey and lamp-lit teal: it made Troffea's dress (shots 1, 4, 10) and the wagon's interior see-through. `scripts/key_check.py <model sheets> <the plate>` measures the drawing's palette against green / magenta / blue / orange (the fx_prep thresholds) and names the safest key; `prompt_kit.sprite_sheet(..., key="magenta")` / `pose_sheet(..., key=...)` ask for it; `fx_prep` reads the key from the sheet border, so nothing else changes (despill handles a two-channel key). Measured: HC003-S1 shot 10 palette green 2.3 % at risk, magenta 0 %; shot 4 palette green 21.6 %, magenta 0 %; Gage long palette green 0.9 %, magenta 0 %. Rule: run it for every sheet batch; above 1 % use the key it names. (The magenta in `check.png` is only fx_prep's inspection backdrop, never the key.)
+- **L69 · props and people share ONE metric scale (shot 10).** The wagon was half size next to the men, so she sat on nothing. Rule in every HERO plan: men = 1.75 m = their sprite height; a bed floor stands at hip height (about 0.52 of a man); a wheel is half a man; a woman seated on a tail sits at the bed floor. Scale each separately-generated prop from these, not from its own picture height (S10_GROUP 0.40 / S10_BODY 0.39 / S10_WHEEL 0.195). When the prop is wider than the frame, let it run off the frame on the side it leaves from.
+- **L66b · every figure sprite gets `solid_core` (cutouts_hc003s1.solid_core_all):** pixels more than 7 px inside the outline with any alpha become opaque; edge stays soft.
+- **L70 · contrast is a visibility bug too (shot 10, user 2026-11-23: "the woman is still invisible").** After the alpha fixes she was fully drawn, but her dark blue dress sat in front of the wagon's dark teal covered opening, so she read as part of the shadow. Rule: for every sprite that sits in front of another sprite or a shadow, compare their luminance at the seam (a figure needs about a 40 % luminance gap from what is behind it); fix the BACKGROUND piece first (`cutouts_hc003s1.warm_interior`: the opening is lit canvas, the sun comes through the cover), not the character. Ask the sheet prompt for it: "the inside of the wagon is lit warm canvas, never dark".

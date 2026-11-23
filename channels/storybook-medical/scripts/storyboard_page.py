@@ -105,6 +105,7 @@ EPISODES = {
         ],
     },
     "hc002l": {
+        "aspect": "16:9",   # long = 1920x1080: every preview video / still on this page is 16:9 (user 2026-11-22: it rendered in short mode)
         "anchor": "gage-long", "short": "Gage long", "slot": "HC002-L · Sun Dec 13 · 11:00 ET = 10:00 Alberta · ready by Wed Dec 9",
         "storyboard": EP / "HC002-phineas-gage/long-storyboard-v1.md",   # script-long-v1 + gate fixes approved 2026-11-21
         "project": REPO / "projects/hc002-l", "previz": REPO / "projects/hc002-l/review/previz", "maps": [],
@@ -667,6 +668,9 @@ details.prompt p{margin:6px 0 0;overflow-wrap:anywhere}.pmeta{font-family:var(--
 .refgen article{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:grid;gap:6px;min-width:0}
 .refgen b{font-family:var(--display)}
 video.cut{width:min(360px,100%);aspect-ratio:9/16;border-radius:12px;background:#000;display:block}
+.ar16 video.cut{width:min(760px,100%);aspect-ratio:16/9}
+.ar16 .shot{grid-template-columns:300px 1fr}.ar16 .shot img{width:300px;aspect-ratio:16/9}
+.ar16 .v2grid article{grid-template-columns:150px 1fr}.ar16 .v2grid img,.ar16 .newpic{width:150px;aspect-ratio:16/9}
 .story{background:var(--surface);border:2px solid var(--amber);border-radius:14px;padding:18px 20px}
 .story h3{margin-top:10px}
 .chart{display:grid;gap:6px}.key{display:flex;gap:16px;font-size:13px;color:var(--muted)}
@@ -806,7 +810,7 @@ def build(out: Path, keys: list[str]) -> Path:
                 f'<dt>Sound</dt><dd>{inline(sfx)}</dd></dl>{ptxt}</div></article>')
         notes = "".join(f"<p>{inline(n)}</p>" for n in p["notes"])
         body.append(f"""
-<section class="ep" id="{e['anchor']}">
+<section class="ep{" ar16" if e.get("aspect") == "16:9" else ""}" id="{e['anchor']}">
   <div class="kicker">{html.escape(k.upper())} · {html.escape(e['slot'])}</div>
   <h2>{html.escape(p['title'].split(' — ', 1)[-1])}</h2>
   <div class="meta"><span><b>{len(cards)}</b> shots</span><span>≈ <b>{p['secs']:.0f} s</b> of pictures</span>

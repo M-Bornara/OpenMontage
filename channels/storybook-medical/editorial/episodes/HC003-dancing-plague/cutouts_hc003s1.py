@@ -61,6 +61,90 @@ def split_seated():
                "frames": {"lifted": ["lifted-0.png"], "seated": ["seated-0.png"], "troffea": ["troffea-0.png"], "men": ["men-0.png"]}},
               open(out / "sprites.json", "w", encoding="utf-8"), indent=1)
     print("group-s10:", runs, "split at", cut)
+    solidify_group()
+    solidify_wagon()
+    warm_interior()
+    solid_core_all()
+
+
+def solidify_group(key=(4, 174, 82), far=75):
+    """The chroma key (lo 38 / hi 110 from the green) lets a mid-blue dress through at 70-85 % alpha: Troffea looked half
+    visible on the wagon (user 2026-11-22). Any pixel that is not clearly key-green (distance > `far`) and has any alpha
+    becomes fully opaque; the soft edge (near-green, anti-aliased) keeps its alpha. Idempotent, free."""
+    out = P / "sprites/group-s10"
+    for st in ("lifted", "seated", "troffea", "men"):
+        f = out / f"{st}-0.png"
+        im = np.array(Image.open(f).convert("RGBA"))
+        dist = np.sqrt(((im[..., :3].astype(int) - np.array(key)) ** 2).sum(-1))
+        a = im[..., 3]
+        lift = (a > 5) & (a < 255) & (dist > far)
+        im[..., 3] = np.where(lift, 255, a)
+        Image.fromarray(im).save(f)
+        print("solidify", st, int(lift.sum()), "px lifted to opaque")
+
+
+def solidify_wagon(key=(4, 174, 82), far=75, shadow_from=0.78):
+    """The wagon's dark covered opening (where Troffea sits) came out of the key semi-transparent: the cobbles showed through
+    BEHIND her (user 2026-11-22, "invisible areas"). Above `shadow_from` of the sprite's height every non-green pixel
+    with alpha becomes opaque; below it is the ground shadow, which must stay soft. Idempotent, free."""
+    f = P / "sprites/wagon-s10/body-0.png"
+    im = np.array(Image.open(f).convert("RGBA"))
+    ys, xs = np.nonzero(im[..., 3] > 5)
+    y0, y1 = ys.min(), ys.max()
+    dist = np.sqrt(((im[..., :3].astype(int) - np.array(key)) ** 2).sum(-1))
+    a = im[..., 3]
+    zone = np.zeros(a.shape, bool)
+    zone[: y0 + int(shadow_from * (y1 - y0))] = True
+    lift = zone & (a > 5) & (a < 255) & (dist > far)
+    im[..., 3] = np.where(lift, 255, a)
+    Image.fromarray(im).save(f)
+    print("solidify wagon body", int(lift.sum()), "px lifted to opaque")
+
+
+def warm_interior(tint=(214, 170, 120), keep_ink=30):
+    """Contrast, not alpha (user 2026-11-23, "the woman is still invisible"): Troffea's dark blue dress sat in front of the
+    wagon's dark teal covered opening, so she read as part of the shadow. The opening's dark pixels become warm lit canvas
+    (the sun comes through the cover): the original texture's brightness is kept, the ink line stays. Derived from
+    body-0.orig.png (the keyed, solidified sprite), so it can be run again."""
+    import shutil
+    f = P / "sprites/wagon-s10/body-0.png"
+    orig = f.with_name("body-0.orig.png")
+    if not orig.exists():
+        shutil.copy(f, orig)
+    im = np.array(Image.open(orig).convert("RGBA")).astype(np.float32)
+    a = im[..., 3]
+    ys, xs = np.nonzero(a > 5)
+    x0, x1, y0, y1 = xs.min(), xs.max(), ys.min(), ys.max()
+    zone = np.zeros(a.shape, bool)
+    zone[y0 + int(0.08 * (y1 - y0)): y0 + int(0.62 * (y1 - y0)), x0 + int(0.70 * (x1 - x0)): x1 + 1] = True   # the opening
+    lum = im[..., :3].mean(axis=2)
+    r, g, bl = im[..., 0], im[..., 1], im[..., 2]
+    cool = (bl > r + 6) | (g > r + 10)                    # the pale teal patch left in the opening is cool, canvas is warm
+    m = zone & (a > 200) & (lum > keep_ink) & ((lum < 105) | cool)
+    k = (0.55 + 0.6 * lum / 255.0)[..., None]
+    new = np.clip(np.array(tint, np.float32)[None, None, :] * k, 0, 255)
+    w = np.where(cool, 1.0, np.clip((105 - lum) / 40.0, 0, 1))[..., None] * m[..., None]
+    im[..., :3] = im[..., :3] * (1 - w) + new * w
+    Image.fromarray(im.round().astype(np.uint8)).save(f)
+    print("warm interior", int(m.sum()), "px")
+
+
+def solid_core_all(depth=7):
+    """Troffea's two dancer sprites (shot 1, shot 4) keyed with see-through blue dress / skirt (green key vs blue-teal).
+    Everything more than `depth` px inside the outline that has any alpha becomes opaque; the soft edge keeps its alpha;
+    real gaps (alpha ~ 0) stay open. Idempotent, free (user 2026-11-22: shot 1 'a bit invisible')."""
+    import cv2
+    for d in ("troffea-s1", "troffea-s4"):
+        meta = json.load(open(P / "sprites" / d / "sprites.json", encoding="utf-8"))
+        for st, fs in meta["frames"].items():
+            f = P / "sprites" / d / fs[0]
+            im = np.array(Image.open(f).convert("RGBA"))
+            a = im[..., 3]
+            dist = cv2.distanceTransform((a > 5).astype(np.uint8), cv2.DIST_L2, 5)
+            lift = (a > 5) & (a < 255) & (dist > depth)
+            im[..., 3] = np.where(lift, 255, a)
+            Image.fromarray(im).save(f)
+            print("solid core", d, st, int(lift.sum()), "px")
 
 
 def clean_coif():
