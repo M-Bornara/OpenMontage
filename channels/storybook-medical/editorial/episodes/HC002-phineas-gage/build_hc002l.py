@@ -185,6 +185,45 @@ assert "smoke" not in REFERENCES["plate-r2-v2"]["roles"].replace("no smoke", "")
 
 HERO_PIECES = ["plate-r2", "plate-r4", "plate-r5", "plate-r49", "sprite-coach-r49", "sprite-horses-r49", "pose-gage-r49"]
 KEYFRAMES: dict = {}          # the ~40 story stills: written after the HERO shots are approved on real art
+# Row 49 coach test still (user 2026-11-23, Tier A + the single Tier D test): ONE still of the coach and six horses.
+# L55: the background is WRITTEN (long-backgrounds-v1.md row 49), no set plate / keyframe is a reference: the Gage sheet
+# is for the person, concord_coach.jpg for the coach's shape only. The coach faces RIGHT (the clip trots left to right).
+KEYFRAMES["row49-coach-v1"] = dict(aspect="16:9", refs=["ref:sheet-gage-chile", "proj:refs/concord_coach.jpg"],
+    roles=("Reference 1 is PHINEAS GAGE's 1850s model sheet: outfit A (the coach driver): take only his face, hair, build and clothes "
+           "(do NOT copy its layout or other views). Reference 2 is a photograph of an 1852 Concord stagecoach: its SHAPE only (the "
+           "rounded body, the driver's box, the leather thoroughbraces, the roof rail), painted in our storybook style, dusty and well "
+           "used; never its lettering or the museum around it. "),
+    prompt=(f"{ROAD.replace('hard bright sun', 'soft neutral late-afternoon light')} {framing('LS', 'eye level, from the roadside, side view', '35 mm', 'a Concord stagecoach pulled by SIX horses trots along the mountain road to the RIGHT, dust rising behind it; PHINEAS GAGE sits on the driver box holding the reins', 'open, steady, free')} "
+            f"{camera('at the roadside on the downhill side', 'across the road toward the slope', 'a dusty pale road running level across the frame, the dry slope with cactus, thorny scrub and boulders behind it, the coastal range in hazy layers at the top; no sea, no town')} "
+            "WIDE 16:9 frame: the coach and its team run across the frame, together at least ONE THIRD of the frame width, the coach "
+            "facing RIGHT. EXACTLY SIX horses in three pairs, all bay and brown: each horse shows all four legs, its head and its ears, "
+            "clearly separate from its neighbours (no merged bodies, no extra or missing horse). The reins are visibly drawn running from "
+            "his hands to the horses. Gage is seated on the driver's box, small in the frame (a wide shot: no close-up, his face tiny), "
+            "his head BELOW the line of the horses' backs; "
+            "A trail of pale dust behind the coach. "
+            "LIGHT: even, neutral late-afternoon light, soft shadows, no strong colour cast. "
+            + sizes({"the road": "about 16 ft (5 m) wide", "the coach body": "about 10 ft (3 m) long", "a wheel": "about 5 ft (1.5 m) across",
+                     "each horse": "about 5 ft 3 in (1.6 m) at the shoulder", "the team": "about 33 ft (10 m) long"}) + " "
+            f"{ONE_EACH} {SAFE_FRAMING} {PERIOD} No modern objects. {NO_TEXT}"))
+# row49-coach-v2 (user 2026-11-23, ONE re-roll): v1 came back with 4 horses, a left-leading team, the sea. v2: THREE pairs in a
+# staggered line receding into the distance; a distant sea is allowed; no "head below the horses' line" rule (a real box sits
+# above); NO direction in the prompt: the image is mirrored afterwards (row49-coach-v2-flip.png) so the team leads RIGHT.
+KEYFRAMES["row49-coach-v2"] = dict(aspect="16:9", refs=["ref:sheet-gage-chile", "proj:refs/concord_coach.jpg"],
+    roles=KEYFRAMES["row49-coach-v1"]["roles"],
+    prompt=(f"{ROAD.replace('hard bright sun', 'soft neutral evening light')} {framing('LS', 'eye level, from the roadside, side view', '35 mm', 'a Concord stagecoach pulled by SIX horses trots along the mountain road, dust rising behind it; PHINEAS GAGE sits on the driver box holding the reins', 'open, steady, free')} "
+            f"{camera('at the roadside on the downhill side', 'across the road toward the slope', 'a dusty pale road along the dry slope with cactus, thorny scrub and boulders, the coastal range in hazy layers behind, a distant strip of sea far below is allowed; no town')} "
+            "WIDE 16:9 frame: the team and coach run across the frame, together at least ONE THIRD of the frame width. THE TEAM IS THREE "
+            "PAIRS OF HORSES, SIX HORSES IN ALL (count them: 1, 2, 3, 4, 5, 6), all bay and brown, harnessed in a staggered line "
+            "that recedes into the distance, the pairs one behind the other; every horse's head is visible and every pair's legs are "
+            "visible, each horse clearly separate from its neighbours (no merged bodies, no extra or missing horse); all trotting the same "
+            "way, the coach BEHIND them. The reins are visibly drawn running from his hands to the team. Gage sits on the Concord coach's "
+            "driver box, small in the frame (a wide shot: no close-up, his face tiny). A trail of pale dust behind the coach. "
+            "LIGHT: even, neutral evening light, soft shadows, no strong colour cast. "
+            + sizes({"the road": "about 16 ft (5 m) wide", "the coach body": "about 10 ft (3 m) long", "a wheel": "about 5 ft (1.5 m) across",
+                     "each horse": "about 5 ft 3 in (1.6 m) at the shoulder", "the team": "about 33 ft (10 m) long"}) + " "
+            f"{ONE_EACH} {SAFE_FRAMING} {PERIOD} No modern objects. {NO_TEXT}"))
+
+
 
 
 def main():
@@ -205,7 +244,7 @@ def main():
     ep = json.load(open(f, encoding="utf-8")) if f.exists() else {}
     ep.update({"title": "Phineas Gage: The Story Everyone Gets Wrong (HC002-L)", "playbook": "storybook-medical",
                "format": "long", "theme": {"culture": "new-england-1840s", "font": "montserrat"},
-               "image_resolution": "2K", "references": REFERENCES, "keyframes": KEYFRAMES,
+               "image_resolution": "2K", "dual_format": False, "references": REFERENCES, "keyframes": KEYFRAMES,
                "storyboard": "2026-11-22: long-storyboard-v1.md + long-backgrounds-v1.md; images approved (user 2026-11-22)",
                "previz_approved": "2026-11-22: user approved the long's images (~$3.50) once its refs were in; cast + HERO first"})
     ep.setdefault("narration", {})

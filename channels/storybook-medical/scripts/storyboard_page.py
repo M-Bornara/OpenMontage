@@ -107,7 +107,7 @@ EPISODES = {
     "hc002l": {
         "aspect": "16:9",   # long = 1920x1080: every preview video / still on this page is 16:9 (user 2026-11-22: it rendered in short mode)
         "anchor": "gage-long", "short": "Gage long", "slot": "HC002-L · Sun Dec 13 · 11:00 ET = 10:00 Alberta · ready by Wed Dec 9",
-        "storyboard": EP / "HC002-phineas-gage/long-storyboard-v1.md",   # script-long-v1 + gate fixes approved 2026-11-21
+        "storyboard": EP / "HC002-phineas-gage/long-storyboard-v2.md",   # v1 + motion budget v1 (tiers A/B/C/D, Mahdi 2026-11-23)
         "project": REPO / "projects/hc002-l", "previz": REPO / "projects/hc002-l/review/previz", "maps": [],
         "refs_dir": REPO / "projects/hc002-s1/refs",
         "refs": [
@@ -115,15 +115,19 @@ EPISODES = {
             ("gage_miller.jpg", "Phineas Gage, second portrait (likeness only)", "Rows 55 and 67 are re-illustrated from the portraits, never the photos themselves.", "Photograph, 1850s · Wikimedia Commons · public domain"),
             ("cavendish_cut.jpg", "The rock cut at Cavendish today", "The cut's rock walls (cold open, row 32).", "Photo, 2009 · Wikimedia Commons · CC BY-SA 3.0"),
         ],
-        "extra": [EP / "HC002-phineas-gage/long-refs.md", EP / "HC002-phineas-gage/long-backgrounds-v1.md",
+        "extra": [EP / "HC002-phineas-gage/long-motion-tiers-v1.md", EP / "HC002-phineas-gage/long-refs.md", EP / "HC002-phineas-gage/long-backgrounds-v1.md",
                   EP / "HC002-phineas-gage/fact-gate/2026-11-21-long-script.md",
                   EP / "HC002-phineas-gage/fact-gate/2026-11-21-long-onscreen.md"],
         "page_title": "Gage Long Storyboard",
-        "status": "cast + HERO pieces on real art (9 pieces, $0.60) · waiting for your OK, then the ~40 story stills",
+        "status": "storyboard v2: motion budget (A/B/C/D) · cost shown · waiting for your OK, nothing generated",
         "hero_pieces": REPO / "projects/hc002-l/review/hero/pieces.jpg",
-        "hero_real": [
-            ("49", "Row 49 · the coach (the long's own HERO): six horses at a looping trot pull the coach left along the mountain road, the wheels turn, Gage on the box lifts the reins on \"six\"; at \"Santiago\" the coach leaves the frame. Liam's real timing. The driver sheet's second drawing came back facing right: mirrored (free). Cold-open rows 2, 4, 5 reuse S1's approved keys and sprites on the three new 16:9 plates above; they are timed in the edit. Question for you: plate-r2 (before the blast) has haze in the pit: drilling dust, or a re-roll ($0.067)?"),
-        ],
+        "h1": "Gage long: storyboard v2, with the motion budget",
+        "lede": ("Your motion budget is applied (Tier A camera / parallax / grade for nearly every row, B for one simple overlay or a two-still swap, C for row 4 only, "
+                 "D for AI clips with row 49 as the single test). Rows 2, 5 and 49 lose their sprite plans. Nothing is generated. Tap any picture to enlarge it."),
+        "ask": ("<p><b>Cost (not spent):</b> 50 stills, 1 already paid (the pit plate for row 2) = 49 × $0.067 = <b>$3.28</b>; music ≈ $0.06; thumbnails ≈ $0.21; row 49's still $0.067 "
+                "(the approved test, made first) = <b>≈ $3.62</b>. Spent so far on the long: $0.67. Optional apart: the row-49 clip ≈ $0.49 (the other Tier D rows 19, 45, 65, 48, 26 are not planned; all six would be $2.94).</p>"
+                "<p><b>Held until your yes:</b> the 49 stills, the row-49 clip, and the Dancing stills.</p>"),
+        "hero_real": [],   # v2 (2026-11-23): no HERO sprite plans for rows 2, 5, 49; row 4 stays C (S1 pieces)
     },
     "hc002s1": {
         "anchor": "gage-s1", "short": "Gage S1", "slot": "CASE 11 · Sun Nov 29 · 15:00 ET = 14:00 Alberta · ready by Wed Nov 25",
