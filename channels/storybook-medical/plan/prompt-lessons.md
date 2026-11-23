@@ -314,3 +314,6 @@ These are COMPOSITOR / PAGE rules (code), not prompts. Fixed in `hero_real_hc003
 
 ## L71 · motion budget: no coupled parts as sprites (2026-11-23)
 Rigid cut-out sprites cannot carry parts that depend on each other: wheels on axles, ropes on horses, a driver on a box, a team of horses, hinged doors/lids/page stacks. Each coupling is its own hand-fixed bug and the fixes fight each other (HC003 wagon: five rounds). Set a tier per shot at storyboard time (A = camera/parallax/grade/particles/still-cuts; B = one free sprite, one action; C = full compositor, 1-2 per long). Show the cause or the result instead of the coupled motion. A shot that fails review twice drops one tier. See HC002-phineas-gage/long-motion-tiers-v1.md.
+
+## L72 · AI clips (Tier D): the start frame decides, count the horses first (2026-11-23)
+A good Tier D clip needs a start frame that already passes the checklist: the generator ignored "exactly SIX horses" once (four came back); a layout description (three pairs in a staggered line, every head visible) fixed it on the re-roll. Direction is free: mirror the still afterwards. Check the still before paying for the clip. Row 49 on Kling 2.1 pro passed six checks at $0.49.

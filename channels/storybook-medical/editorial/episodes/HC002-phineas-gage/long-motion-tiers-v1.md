@@ -40,3 +40,8 @@ Good for: wheels, horses, reins, water, smoke, fabric, crowds from behind. Targe
 Rules: start frame = our approved still (style match); 4-6 s; wide or back views only, no faces in motion; cut away before drift; put our grain/grade over it so it matches the stills; max 2 takes per shot, then fall back to Tier A (two-round rule); cost said and approved first.
 Pass checklist (row 49 test): six horses stay six; reins stay attached; wheels roll the right way; driver stays on the box and below the horses' line; no flashing or style drift; no new objects.
 Open: platform disclosure rules for AI-generated video (YouTube, TikTok, Instagram, Facebook) must be looked up with sources before the long is uploaded.
+
+## Tier D result · row 49 test (2026-11-23)
+Start frame row49-coach-v2-flip.png (six horses, 3 pairs, flipped to lead right). Model: Kling v2.1 pro on fal, $0.49 (live fal price $0.098/s), one take, 5 s, 1920x1080, 24 fps.
+Checks: six horses stay six YES; reins attached YES; driver stays on the box YES; no flashing (brightness step max 1.5) YES; no new objects YES; mild sky/sea drift (no style change); wheel direction: judged by Mahdi watching the clip: looks good.
+Decision: row 49 upgrade accepted. Next: same frame on Gemini Omni 1.2 Flash (~$0.07/s) to compare price/quality before using Tier D on more rows. Clips are large (26.7 MB / 5 s): recompress before the edit.
