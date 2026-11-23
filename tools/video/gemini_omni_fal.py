@@ -113,6 +113,9 @@ class GeminiOmniFalVideo(BaseTool):
         return ToolStatus.AVAILABLE if self._api_key() else ToolStatus.UNAVAILABLE
 
     def estimate_cost(self, inputs: dict[str, Any]) -> float:
+        if inputs.get("model_version") == "v1.2":
+            # fal live price 2026-11-23: $0.0273 per second (720p call); 1080p / 4k multipliers not published here
+            return round(0.0273 * int(inputs.get("duration", 8)), 2)
         return round(0.13 * int(inputs.get("duration", 8)), 2)
 
     def estimate_runtime(self, inputs: dict[str, Any]) -> float:
@@ -157,11 +160,18 @@ class GeminiOmniFalVideo(BaseTool):
                 error=f"{operation} does not accept reference images on fal.ai",
             )
         endpoint = endpoints[operation]
+        ver = inputs.get("model_version")   # opt-in "v1.1" / "v1.2": google/gemini-omni-flash/<ver>/<op>
+        if ver:
+            endpoint = "google/gemini-omni-flash/" + ver + "/" + {
+                "text_to_video": "text-to-video", "image_to_video": "image-to-video",
+                "reference_to_video": "reference-to-video", "edit_video": "edit"}[operation]
         payload: dict[str, Any] = {
             "prompt": inputs["prompt"],
             "aspect_ratio": inputs.get("aspect_ratio", "16:9"),
             "duration": int(inputs.get("duration", 8)),
         }
+        if inputs.get("resolution") and operation != "edit_video":
+            payload["resolution"] = inputs["resolution"]
         if operation == "image_to_video":
             payload["image_url"] = urls[0]
         elif operation == "reference_to_video":

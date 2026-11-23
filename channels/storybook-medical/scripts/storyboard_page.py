@@ -127,6 +127,17 @@ EPISODES = {
         "ask": ("<p><b>Cost (not spent):</b> 50 stills, 1 already paid (the pit plate for row 2) = 49 × $0.067 = <b>$3.28</b>; music ≈ $0.06; thumbnails ≈ $0.21; row 49's still $0.067 "
                 "(the approved test, made first) = <b>≈ $3.62</b>. Spent so far on the long: $0.67. Optional apart: the row-49 clip ≈ $0.49 (the other Tier D rows 19, 45, 65, 48, 26 are not planned; all six would be $2.94).</p>"
                 "<p><b>Held until your yes:</b> the 49 stills, the row-49 clip, and the Dancing stills.</p>"),
+        "clip_tests": {
+            "title": "Row 49 · Tier D test: the same start frame, two AI video models",
+            "legend": "Same still, same motion text, 5 s each, one take each. Nothing else was generated. Check: six horses stay six, reins attached, wheels roll the right way, driver stays on the box, no flashing or drift, no new objects. Audio is muted here.",
+            "still": REPO / "projects/hc002-l/assets/images/keyframes16x9/row49-coach-v2-flip.png",
+            "still_note": "row49-coach-v2-flip.png: the approved still ($0.067), mirrored so the team leads right.",
+            "clips": [
+                {"label": "A · Kling v2.1 pro (fal)", "src": REPO / "projects/hc002-l/assets/video/row49-coach-kling-v1-web.mp4",
+                 "note": "$0.49 · 1920×1080 · 24 fps source, 10.9 MB after recompress (original 26.7 MB)."},
+                {"label": "B · Gemini Omni 1.2 Flash (fal, 720p)", "src": REPO / "projects/hc002-l/assets/video/row49-coach-omni-v1-web.mp4",
+                 "note": "≈ $0.14 (fal $0.0273/s) · 1280×720 · 24 fps source, 3.2 MB muted copy (original 5.7 MB with synthesized audio)."},
+            ]},
         "hero_real": [],   # v2 (2026-11-23): no HERO sprite plans for rows 2, 5, 49; row 4 stays C (S1 pieces)
     },
     "hc002s1": {
@@ -477,6 +488,26 @@ def web_preview(render: Path, dst: Path) -> bool:
     return True
 
 
+def clip_tests_block(k: str, e: dict, out: Path, img: Path) -> str:
+    """Tier D test clips side by side (user 2026-11-23): the start still + one labelled clip per provider, with price and file size."""
+    tests = e.get("clip_tests")
+    if not tests:
+        return ""
+    p, figs = e.get("project"), []
+    st = tests.get("still")
+    if st and Path(st).exists():
+        figs.append(f'<figure><img src="img/{shrink(Path(st), img / f"{k}-clip-start", 1300)}" alt="Start frame for both clips" loading="lazy">'
+                    f'<figcaption><b>Start frame (both clips)</b><span>{html.escape(tests.get("still_note", ""))}</span></figcaption></figure>')
+    for i, c in enumerate(tests["clips"]):
+        dst = out / "video" / f"{p.name}-row49-clip-{i}.mp4"
+        if not web_preview(Path(c["src"]), dst):
+            continue
+        figs.append(f'<figure><video class="cut" controls playsinline loop preload="metadata" src="video/{dst.name}"></video>'
+                    f'<figcaption><b>{html.escape(c["label"])}</b><span>{html.escape(c["note"])}</span></figcaption></figure>')
+    return ('<div class="block"><h3>' + html.escape(tests["title"]) + '</h3><p class="legend">' + html.escape(tests["legend"]) + '</p>'
+            '<div class="refs cliptests">' + "".join(figs) + '</div></div>')
+
+
 def hero_block(k: str, e: dict, out: Path, img: Path) -> str:
     """Free HERO motion pre-viz on stand-in pieces (hero_previz_<ep>.py, before narration exists): per shot the preview
     (a click marks each key word) and its start / key / end sheet."""
@@ -680,6 +711,7 @@ details.prompt p{margin:6px 0 0;overflow-wrap:anywhere}.pmeta{font-family:var(--
 .refgen b{font-family:var(--display)}
 video.cut{width:min(360px,100%);aspect-ratio:9/16;border-radius:12px;background:#000;display:block}
 .ar16 video.cut{width:min(760px,100%);aspect-ratio:16/9}
+.cliptests{grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))}.cliptests figure img{aspect-ratio:16/9;object-fit:cover}.cliptests video.cut{width:100%}
 .ar16 .shot{grid-template-columns:300px 1fr}.ar16 .shot img{width:300px;aspect-ratio:16/9}
 .ar16 .v2grid article{grid-template-columns:150px 1fr}.ar16 .v2grid img,.ar16 .newpic{width:150px;aspect-ratio:16/9}
 .story{background:var(--surface);border:2px solid var(--amber);border-radius:14px;padding:18px 20px}
@@ -753,7 +785,7 @@ def build(out: Path, keys: list[str]) -> Path:
                 stage = "rough cut · waiting for your OK"
                 stages[-1] = stage
         story = story_block(k, e, img)
-        layered = layered_block(k, e, ep, out, img) + hero_block(k, e, out, img)
+        layered = layered_block(k, e, ep, out, img) + hero_block(k, e, out, img) + clip_tests_block(k, e, out, img)
         if layered:
             pilots.append(e["short"])
         if story:
