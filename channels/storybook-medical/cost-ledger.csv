@@ -701,3 +701,4 @@ time,project,item,usd,note
 2026-11-23 16:32:33,hc002-l,keyframes:row45-stable-v2:gemini-3-pro-image:google-batch,0.0670,
 2026-11-23 16:50:00,hc002-l,clip:row19-oxcart-omni-v1:gemini-omni-1.2-flash-fal-720p,0.1400,ESTIMATE 0.0273/s x 5 s; true up on fal usage page
 2026-11-23 16:50:30,hc002-l,clip:row45-stable-omni-v1:gemini-omni-1.2-flash-fal-720p,0.1400,ESTIMATE 0.0273/s x 5 s; true up on fal usage page
+2026-11-23 17:20:00,hc002-l,clip:row45-stable-omni-v2:gemini-omni-1.2-flash-fal-720p,0.1400,ESTIMATE 0.0273/s x 5 s; retake with minimal motion text; true up on fal usage page

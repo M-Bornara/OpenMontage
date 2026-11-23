@@ -141,6 +141,8 @@ EPISODES = {
                  "note": "Start frame s9-flip.png (rough paint fix, accepted for the test). ≈ $0.14 ESTIMATE · 720p, 5 s. Six people and two oxen stay the same, yoke and harness attached, cart drifts about 4% of the frame width left to right, light dust, camera locked (background moves under 3 px), no flashing. Wheel spin direction not confirmed by eye. Passing clip also made as 1080p 30 fps (frame blend + grain)."},
                 {"label": "D · Row 45 stable · Omni 1.2 Flash · FAIL (breath)", "src": REPO / "projects/hc002-l/assets/video/row45-stable-omni-v1-web.mp4",
                  "note": "Start frame row45-stable-v2.png. ≈ $0.14 ESTIMATE · 720p, 5 s. One man, one horse, brush stays in his hand, rope stays attached, horse nods once. But the small breath is drawn as hard white scratch marks drifting off the nostrils: a new object, so not upscaled."},
+                {"label": "E · Row 45 retake · minimal motion text · FAIL (second brush) → Tier A", "src": REPO / "projects/hc002-l/assets/video/row45-stable-omni-v2-web.mp4",
+                 "note": "Same start frame, ≈ $0.14 ESTIMATE · 720p, 5 s. Nostrils and mouth are clean and the horse nods once, but from about 0.8 s to 1.3 s a SECOND brush appears in his rope hand and the lead rope hangs free before it returns. Fails no new objects, brush in hand and rope attached. No more retakes: row 45 goes to Tier A (still + slow push + sound). Not upscaled."},
             ],
             "images": [
                 {"id": "upscale", "src": REPO / "projects/hc002-l/review/omni-tests/upscale-compare.jpg",

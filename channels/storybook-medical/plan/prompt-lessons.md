@@ -317,3 +317,7 @@ Rigid cut-out sprites cannot carry parts that depend on each other: wheels on ax
 
 ## L72 · AI clips (Tier D): the start frame decides, count the horses first (2026-11-23)
 A good Tier D clip needs a start frame that already passes the checklist: the generator ignored "exactly SIX horses" once (four came back); a layout description (three pairs in a staggered line, every head visible) fixed it on the re-roll. Direction is free: mirror the still afterwards. Check the still before paying for the clip. Row 49 on Kling 2.1 pro passed six checks at $0.49.
+
+## L73 · Tier D motion text: minimal, no extras (2026-11-23)
+Omni 1.2 Flash drew every extra the motion text named: "a small breath" came out as white scribble marks off the horse's nostrils (row 45 failed "no new objects"). Describe only the motion of things already in the still (strokes, a nod, a walk). No breath, steam, sparks, dust unless the dust is wanted and already in the still. A retake caused by OUR wording may be run once more on the same model; a failure caused by the model goes to the fallback, then Tier A. Rows 49 (Kling), 19 (Omni) passed on one take; row 45 (Omni) failed on one extra.
+Retake result: the minimal text removed the scribbles but the model then duplicated the brush into the other hand (the hand holding the lead rope) for about half a second. Two-handed gestures where each hand holds a different prop are a weak spot: Tier A (still + push + sound) for such shots, or a start frame where only one hand has a prop.
