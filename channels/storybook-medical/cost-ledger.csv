@@ -697,3 +697,7 @@ time,project,item,usd,note
 2026-11-23 03:12:15,hc002-l,keyframes:row49-coach-v2:gemini-3-pro-image:google-batch,0.0670,
 2026-11-23 03:24:20,hc002-l,clip:row49-coach-test-v1:kling-v2.1-pro,0.4900,
 2026-11-23 03:40:14,hc002-l,clip:row49-coach-omni-v1:gemini-omni-1.2-flash-fal-720p,0.1400,
+2026-11-23 04:23:11,hc002-l,keyframes:row45-stable-v1:gemini-3-pro-image:google-batch,0.0670,
+2026-11-23 16:32:33,hc002-l,keyframes:row45-stable-v2:gemini-3-pro-image:google-batch,0.0670,
+2026-11-23 16:50:00,hc002-l,clip:row19-oxcart-omni-v1:gemini-omni-1.2-flash-fal-720p,0.1400,ESTIMATE 0.0273/s x 5 s; true up on fal usage page
+2026-11-23 16:50:30,hc002-l,clip:row45-stable-omni-v1:gemini-omni-1.2-flash-fal-720p,0.1400,ESTIMATE 0.0273/s x 5 s; true up on fal usage page

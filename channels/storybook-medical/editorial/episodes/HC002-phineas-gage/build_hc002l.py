@@ -222,8 +222,37 @@ KEYFRAMES["row49-coach-v2"] = dict(aspect="16:9", refs=["ref:sheet-gage-chile", 
             + sizes({"the road": "about 16 ft (5 m) wide", "the coach body": "about 10 ft (3 m) long", "a wheel": "about 5 ft (1.5 m) across",
                      "each horse": "about 5 ft 3 in (1.6 m) at the shoulder", "the team": "about 33 ft (10 m) long"}) + " "
             f"{ONE_EACH} {SAFE_FRAMING} {PERIOD} No modern objects. {NO_TEXT}"))
+# row 45 start still for the Tier D test (user 2026-11-23): ONE man, ONE horse, a livery stable in Hanover, N.H. (1850s).
+# L55: the background is written here (long-backgrounds-v1.md row 45); the Gage sheet is for the person only.
+KEYFRAMES["row45-stable-v1"] = dict(aspect="16:9", refs=["ref:sheet-gage-chile"],
+    roles=("Reference 1 is PHINEAS GAGE's 1850s model sheet: take only his face, hair and build (older, thinner, clean-shaven, his left "
+           "eye closed); do NOT copy its layout, its other views or its outfits. "),
+    prompt=(f"{set_block('a livery stable in Hanover, New Hampshire', 'the 1850s', 'a weathered grey-brown plank stable with a wide open double door, straw on a packed-earth yard, a wooden water trough, soft overcast morning light')} "
+            f"{framing('MLS', 'eye level, from the yard, a little to the side', '35 mm', 'PHINEAS GAGE stands beside a bay horse he has just led out of the stable door; with a stiff-bristled grooming brush held in his right hand he brushes the neck of the horse, the lead rope loose over his other arm', 'calm, patient, at ease')} "
+            f"{camera('in the yard', 'the open stable door with the man and the horse in front of it', 'the plank wall and the open dark doorway of the stable behind them, straw on the ground, a wooden trough at the right edge; nothing else')} "
+            "WIDE-ish 16:9 frame: exactly ONE man and exactly ONE horse and nobody else. The horse is seen from the side, its whole head, "
+            "ears and neck clearly visible, all four legs on the ground; the man stands at its shoulder, small in the frame (his face small, "
+            "not a close-up), the grooming brush clearly in his hand against the horse's neck. He wears a plain work shirt, a waistcoat, "
+            "trousers and boots, no hat. No second horse, no extra people, no animals in the doorway. "
+            + sizes({"the horse": "about 5 ft 3 in (1.6 m) at the shoulder", "the stable door": "about 8 ft (2.4 m) high", "the brush": "about 9 in (23 cm) long"}) + " "
+            f"{ONE_EACH} {SAFE_FRAMING} {PERIOD} No modern objects. {NO_TEXT}"))
 
-
+# v2 (user 2026-11-23, ONE re-roll): v1 gave a grey-haired older stranger with both eyes open, dark moody light.
+KEYFRAMES["row45-stable-v2"] = dict(aspect="16:9", refs=["ref:sheet-gage-chile"],
+    roles=("Reference 1 is PHINEAS GAGE's 1850s model sheet (the Chile/Hanover look, clean-shaven): take ONLY his face, hair and clothes "
+           "from it; do NOT copy its layout, its other views or its poses. He is about 28, thick DARK brown hair, clean-shaven, strong square "
+           "jaw, his LEFT eye shut (a sunken, closed lid), a faint pale scar high on the left forehead. NOT grey-haired, NOT older, no beard. "),
+    prompt=(f"{set_block('a livery stable in Hanover, New Hampshire', 'the 1850s', 'a weathered grey-brown plank stable with a wide open double door, straw on a packed-earth yard, a wooden water trough, soft even overcast morning light, bright and open, not dark, not moody')} "
+            f"{framing('MLS', 'eye level, from the yard, a little to the side', '35 mm', 'PHINEAS GAGE, about 28, stands in three-quarter profile beside a bay horse he has just led out of the stable door; with a stiff-bristled grooming brush held in his raised right hand he brushes the neck of the horse, the lead rope loose over his other arm', 'calm, patient, at ease')} "
+            f"{camera('in the yard', 'the open stable door with the man and the horse in front of it', 'the plank wall and the open doorway of the stable behind them, straw on the ground, a wooden trough at the right edge; nothing else')} "
+            "WIDE-ish 16:9 frame: the man and the horse together fill only the middle third of the frame width. Exactly ONE man and exactly ONE "
+            "horse and nobody else. The horse is seen from the side, its whole head, ears, neck and front legs clearly visible; the man stands "
+            "at its shoulder, small in the frame, his face small and in three-quarter or profile view, thick dark hair, clean-shaven, strong "
+            "square jaw, his LEFT eye closed, a faint pale scar high on his left forehead; the stiff grooming brush clearly in his raised hand "
+            "against the horse's neck. He wears a plain work shirt, a waistcoat, trousers and boots, no hat. No second horse, no extra people, "
+            "no animals in the doorway. "
+            + sizes({"the horse": "about 5 ft 3 in (1.6 m) at the shoulder", "the stable door": "about 8 ft (2.4 m) high", "the brush": "about 9 in (23 cm) long"}) + " "
+            f"{ONE_EACH} {SAFE_FRAMING} {PERIOD} No modern objects. {NO_TEXT}"))
 
 
 def main():

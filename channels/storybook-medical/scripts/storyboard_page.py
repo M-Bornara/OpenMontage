@@ -128,7 +128,7 @@ EPISODES = {
                 "(the approved test, made first) = <b>≈ $3.62</b>. Spent so far on the long: $0.67. Optional apart: the row-49 clip ≈ $0.49 (the other Tier D rows 19, 45, 65, 48, 26 are not planned; all six would be $2.94).</p>"
                 "<p><b>Held until your yes:</b> the 49 stills, the row-49 clip, and the Dancing stills.</p>"),
         "clip_tests": {
-            "title": "Row 49 · Tier D test: the same start frame, two AI video models",
+            "title": "Tier D tests: row 49 (two models, same frame), then rows 19 and 45 (Omni 1.2 Flash)",
             "legend": "Same still, same motion text, 5 s each, one take each. Nothing else was generated. Check: six horses stay six, reins attached, wheels roll the right way, driver stays on the box, no flashing or drift, no new objects. Audio is muted here.",
             "still": REPO / "projects/hc002-l/assets/images/keyframes16x9/row49-coach-v2-flip.png",
             "still_note": "row49-coach-v2-flip.png: the approved still ($0.067), mirrored so the team leads right.",
@@ -137,6 +137,10 @@ EPISODES = {
                  "note": "$0.49 · 1920×1080 · 24 fps source, 10.9 MB after recompress (original 26.7 MB)."},
                 {"label": "B · Gemini Omni 1.2 Flash (fal, 720p)", "src": REPO / "projects/hc002-l/assets/video/row49-coach-omni-v1-web.mp4",
                  "note": "≈ $0.14 (fal $0.0273/s) · 1280×720 · 24 fps source, 3.2 MB muted copy (original 5.7 MB with synthesized audio)."},
+                {"label": "C · Row 19 ox cart · Omni 1.2 Flash · PASS (test only)", "src": REPO / "projects/hc002-l/assets/video/row19-oxcart-omni-v1-web.mp4",
+                 "note": "Start frame s9-flip.png (rough paint fix, accepted for the test). ≈ $0.14 ESTIMATE · 720p, 5 s. Six people and two oxen stay the same, yoke and harness attached, cart drifts about 4% of the frame width left to right, light dust, camera locked (background moves under 3 px), no flashing. Wheel spin direction not confirmed by eye. Passing clip also made as 1080p 30 fps (frame blend + grain)."},
+                {"label": "D · Row 45 stable · Omni 1.2 Flash · FAIL (breath)", "src": REPO / "projects/hc002-l/assets/video/row45-stable-omni-v1-web.mp4",
+                 "note": "Start frame row45-stable-v2.png. ≈ $0.14 ESTIMATE · 720p, 5 s. One man, one horse, brush stays in his hand, rope stays attached, horse nods once. But the small breath is drawn as hard white scratch marks drifting off the nostrils: a new object, so not upscaled."},
             ],
             "images": [
                 {"id": "upscale", "src": REPO / "projects/hc002-l/review/omni-tests/upscale-compare.jpg",
