@@ -23,7 +23,7 @@ REPO = HERE.parents[4]
 sys.path.insert(0, str(REPO))
 sys.path.insert(0, str(REPO / "channels/storybook-medical/scripts"))
 from prompt_kit import (EMPTY_HANDS, FULL_BLEED, KEY_BG, NO_TEXT, ONE_EACH, PERIOD, REF_IDENTITY_ONLY, SAFE_FRAMING, OTS_FRAMING,  # noqa: E402
-                        camera, cast, framing, lint_all, matt_beat, pose_sheet, scale, set_block, sprite_sheet)
+                        WAVY_WRITING, camera, cast, crowd, framing, lint_all, matt_beat, pose_sheet, scale, set_block, sprite_sheet)
 
 PID = "hc002-l"
 P = REPO / "projects" / PID
@@ -427,6 +427,291 @@ B2["row30-s12-v2"] = dict(aspect="16:9", refs=[f"{S1_16}/s12.orig.png", S1_GA],
             "No blood. " + NO_TEXT))
 
 KEYFRAMES.update(B2)
+
+# ── 2026-11-24 (user): row 55 v3 + BATCH 2a (22 stills, cap $1.60 in all) ──────────────────────────────────────────────────────
+# iron-ref.png (free): the rod cut out of gage_wilgus.jpg along its axis, only the two hand-free stretches, no face, on grey. It is
+# the SHAPE reference for every shot where the iron appears, together with the words (IRON_ROD2 adds: no collar / flare / cap, which
+# v2 of rows 41 and 55 both came back with).
+IRON_REF = "proj:refs/iron-ref.png"
+WILGUS = "proj:refs/gage_wilgus.jpg"
+IRON_ROD2 = (IRON_ROD + "; the blunt end is simply cut off flat at the same thickness as the rod: no collar, no flare, no cap, no ring")
+IRON_ROLE = ("Reference 3 is ONLY the SHAPE of the iron: a long, straight, perfectly round rod of one even thickness along its whole length "
+             "(thin, about as thick as a thumb and a half), no knob, no flared end; ignore its grey background and its blur. ")
+
+B2["row55-portrait-v3"] = dict(aspect="16:9", refs=[GCH2, WILGUS, IRON_REF],
+    roles=(R_CHILE2 + "Outfit B (the portrait outfit) is his clothes here. Reference 2 is a period photograph of the real Phineas Gage: take "
+           "ONLY his POSE and his EXPRESSION from it (facing the camera straight on, head straight, brows level, calm and confident, "
+           "the left lid shut, the right eye open, the iron held upright in front of him), and re-illustrate it as a NEW painting in our "
+           "storybook style with our colours and ink line: never the photograph itself, no black-and-white, no grain, no gilt frame "
+           "copied. " + IRON_ROLE),
+    prompt=(f"{set_block('a dark wood table in a quiet room', 'the 1850s', 'a dark wood table top, soft side light from the left, nothing else')} "
+            f"{framing('MCU', 'eye level, from above the table, looking at the portrait', '50 mm', 'an open dark leather daguerreotype case lies on the table; in its oval gilt mat is a painted portrait of PHINEAS GAGE seen straight on, in a dark frock coat, a waistcoat and a dark cravat, no hat, holding his tamping iron upright in front of him with his right hand', 'calm, confident, steady')} "
+            f"{camera('above the table', 'down at the open case', 'the dark wood table top around the open leather case, nothing else', 'no hands, no room')} "
+            f"{cast(GAGE_28 + ', shown only INSIDE the oval portrait, waist up')} "
+            "EXPRESSION AND POSE: head STRAIGHT (not tilted), shoulders level, both brows LEVEL at the same height, mouth closed and level, NO smile and NO smirk, "
+            "calm and confident. His LEFT eyelid (picture-right) is shut for good: a smooth, flat, closed lid, slightly sunken, with NO creases, NO squeezing, "
+            "no lifted cheek, so it does NOT read as a wink; his RIGHT eye (picture-left) is open and looks straight at the viewer. "
+            f"The portrait fills about 60% of the frame width. The tamping iron is {IRON_ROD2}, held upright, its full length visible and clearly longer than his torso. "
+            f"{ONE_EACH} {SAFE_FRAMING} {PERIOD} {NO_TEXT}"))
+KEYFRAMES.update({"row55-portrait-v3": B2["row55-portrait-v3"]})
+
+# ── BATCH 2a ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+# L55: every background is WRITTEN (long-backgrounds-v1.md) and goes in word for word; the only references are the sheets (face,
+# hair, clothes), a SMALL style detail (painting style only) and real period photographs used for ONE named thing each.
+# Gage: the only Gage appearances in 2a are row 5 (his face turned AWAY, 13 Sep 1848: clothes + hair from S1's 1848 sheet, because the
+# Chile sheet's hat, scarf and jacket are Chilean and wrong at the rock cut) and row 31 (a hand and a sleeve, no face), so v2 is not needed.
+B3 = {}
+NOBODY = "CAST: no people in the frame (nobody, no figures, no faces, no hands)."
+STYLE_REFS = [STYLE_DETAIL]
+HARLOW_OLD = ("DR JOHN MARTYN HARLOW at 48 in 1867: the same long oval face and high forehead, deep-set kind eyes, the hair and his full beard "
+              "now streaked with grey (grey-brown, not white); a dark frock coat, a dark waistcoat, a white shirt with a high collar and a black "
+              "neck-cloth")
+
+
+def S(name, sz, ang, lens, action, mood, sname, year, look, pos, facing, bg, lm, people, refs=None, roles="", extra="", size_line=""):
+    """One batch-2a still: the lines every story still needs, in the order of the shots already made."""
+    refs = refs if refs is not None else STYLE_REFS
+    roles = roles or (STYLE_ROLE if refs == STYLE_REFS else "")
+    sheet = any("sheet" in r for r in refs)
+    B3[name] = dict(aspect="16:9", refs=refs, roles=roles,
+        prompt=(f"{set_block(sname, year, look)} {framing(sz, ang, lens, action, mood)} {camera(pos, facing, bg, lm)} {people} "
+                + (extra + " " if extra else "") + (size_line + " " if size_line else "")
+                + (f"{ONE_EACH} " if sheet else "") + f"{SAFE_FRAMING} {PERIOD} {NO_TEXT}"))
+
+
+# row 5 ×2 (hard cut on "talking"): the cut floor after the blast; his face turned away; no blood (Rule 0b: smoke + framing)
+G5 = ("PHINEAS GAGE, 25, thick DARK hair, in a white shirt and dark braces covered in grey dust, no hat; his FACE is turned AWAY from the camera "
+      "(we see the back of his head, his neck and one shoulder only); no blood, no injury mark and no bandage visible anywhere")
+R5 = ("Reference 1 is PHINEAS GAGE's 1848 model sheet: take ONLY his hair and his clothes (white shirt, dark braces) from it; his face is turned "
+      "away in this picture; do NOT copy its layout, its other views or its poses. ")
+S("row5a-lying-v1", "LS", "low, from the rubble floor", "28 mm",
+  "PHINEAS GAGE lies on his side on the grey rubble in the settling dust, his face turned away from the camera, one arm out; a faint drift of smoke across him",
+  "stunned stillness, the quiet after the blast", "the floor of the Cavendish rock cut just after the blast", "13 September 1848",
+  "grey broken rock and rubble, drifting smoke and settling dust, pale light slanting through the dust from the right",
+  "low on the rubble floor of the cut, ten paces from him", "along the floor toward him and the foot of the rock wall",
+  "settling dust and drifting smoke over a floor of grey rubble, the foot of a layered rock wall faint behind him, shafts of pale light from the right",
+  "no sky, no rim of the cut, no kegs, no other person",
+  cast(G5), refs=[G1848], roles=R5)
+S("row5b-elbow-v1", "MS", "from beside him at ground level", "35 mm",
+  "PHINEAS GAGE pushes himself up on one elbow in the dust, his head lifting, his face still turned away from the camera toward the smoke",
+  "dazed, alive", "the floor of the Cavendish rock cut just after the blast", "13 September 1848",
+  "grey broken rock and rubble, drifting smoke and settling dust, pale light slanting through the dust from the right",
+  "right beside him at ground level, a body-length from his shoulder", "across him toward a close rock wall",
+  "a close wall of grey layered schist streaked with dust, a split iron drill steel and a broken plank lying in the rubble in front of it",
+  "no sky, no wide view of the cut, no other person",
+  cast(G5), refs=[G1848], roles=R5)
+
+# rows 6, 7: the modern textbook (modern on purpose: it is the "story you've heard")
+BOOK = ("a modern textbook: white matte pages, the printed text drawn ONLY as rows of soft grey wavy lines with no lettering, words or numbers")
+S("row6-textbook-v1", "INSERT", "directly above, looking straight down", "50 mm",
+  "a hand turns a page of an open textbook toward a small engraved diagram of a plain head in profile (an outline only, nothing inside it)",
+  "studious, ordinary", "a modern textbook spread", "present day",
+  f"{BOOK}; a small engraved head-in-profile diagram in the left margin; the shadowed gutter between the pages",
+  "directly above the open book", "straight down at the spread",
+  "a white matte page spread with a small engraved head diagram in the left margin and grey blurred text columns on both pages, the shadowed gutter in the middle",
+  "no room, no desk edge",
+  "CAST: no faces; only ONE adult hand and a plain shirt cuff entering at the lower right corner of the page.",
+  extra=WAVY_WRITING,
+  size_line=scale({"the open textbook": "each page about 24 cm (9 1/2 in) wide, a page as wide as a hand and a half", "the head diagram": "about 5 cm (2 in) tall, smaller than a thumb"}))
+S("row7-monster-v1", "CU", "directly above, closer, a little to the right", "85 mm",
+  "the same textbook page, closer: a crude cartoon scrawl of a snarling man with a single bold line across his head, and the page edges shadowing darker",
+  "lurid, sensational", "a modern textbook spread", "present day",
+  f"{BOOK}; a crude black pen cartoon of a snarling man with one bold line across his head",
+  "directly above the right-hand page, closer than before", "straight down at the cartoon",
+  "the crude cartoon drawing on a white page with a margin of grey wavy lines, the page corners falling into shadow",
+  "no hand, no room",
+  "CAST: no people in the frame (a drawing of a cartoon man is on the page; no real person, no hands).")
+
+# row 8: the birth farm
+S("row8-farm-v1", "LS", "eye level", "35 mm",
+  "a small boy, seen only from behind, carries a wooden bucket across a farmyard toward a barn; the grass moves in a light breeze",
+  "quiet, rural, a beginning", "a hill farm in Grafton County, New Hampshire", "summer, about 1823",
+  "rolling green hills, a grey clapboard farmhouse and barn, a stone wall, warm summer sunlight",
+  "in the farmyard at the edge of the field", "north across the yard toward the barn and the hills",
+  "rolling green hills, a grey clapboard farmhouse and a barn, a stone wall along the yard, a wide summer sky",
+  "no railroad, no rock cut, no road",
+  cast("a boy of about eight, seen only from BEHIND, in a patched shirt, short trousers and a straw hat, carrying a wooden bucket in both hands"))
+
+# rows 24, 25: the sickroom (Rule 0b: the patient is only a shape; the cloth and the candle carry it)
+S("row24-sickroom-v1", "LS", "eye level, from the corner", "35 mm",
+  "a woman wrings out a cloth over a basin on the washstand; beside her the bed holds only the shape of a body under a quilt; a candle burns low on the washstand",
+  "tense, hushed", "a narrow sickroom under the roof of a Vermont inn", "September 1848, night",
+  "a whitewashed plaster room, a sloped ceiling, a washstand with a basin, a bed, one candle, deep blue night in a small window",
+  "in the corner of the room by the door", "across the room toward the washstand and the bed",
+  "a narrow whitewashed room under a sloped ceiling, a washstand with a white basin, a bed under a quilt, a small window of deep blue night",
+  "no door in view, no doctor",
+  cast("a woman of about forty seen only from BEHIND at the washstand, in a dark dress and a white cap, wringing a cloth",
+       extra="The bed holds only the SHAPE of a body under a quilt: no head, no face, no hair, no hand visible; it is not a person in view."))
+S("row25-candle-v1", "CU", "low, at candle height", "85 mm",
+  "a candle burned low on a wooden bedside table; behind it the small window shows the sky between deep blue night and grey dawn",
+  "the hinge of the night, a held breath", "the same sickroom, close on the bedside table", "September 1848, before dawn",
+  "a low candle, a wooden table, a small window with the sky at the edge of dawn",
+  "close to the bedside table at candle height", "past the candle toward the small window",
+  "the stub of a candle with a soft flame on a plain wooden table, the small window behind it with a sky going from deep blue to grey dawn",
+  "no bed, no person, no hand",
+  "CAST: no people in the frame (nobody, no hands).")
+
+# row 28: Harlow writes (sheet-harlow)
+HR = ("Reference 1 is DR JOHN MARTYN HARLOW's model sheet: take ONLY his face, hair, short beard and clothes from it; do NOT copy its layout, "
+      "its other views or its poses. ")
+S("row28-desk-v1", "MS", "eye level, over the desk", "50 mm",
+  "DR HARLOW writes in a case book by lamplight, the quill moving across the page, his eyes on the page; his patient's case, noted day by day",
+  "patient, watchful, attentive", "Dr Harlow's desk in Cavendish, Vermont", "autumn 1848",
+  "a dark wooden desk, a case book open under an oil lamp, an ink pot, a dark bookcase, warm lamplight",
+  "across the desk from him", "at him and the open case book",
+  "the desk top with an open case book, an ink pot and the oil lamp, a dark bookcase of leather books behind him",
+  "no window",
+  cast(HARLOW + ', in shirtsleeves and a waistcoat, no spectacles, writing with a quill'),
+  refs=[HARLOW_REF], roles=HR, extra=WAVY_WRITING)
+
+# row 31: the contractor at the gate
+S("row31-gate-v1", "MS", "eye level", "35 mm",
+  "a contractor at a site gate closes his ledger with a snap and shakes his head slowly; at the lower right edge a man's hand slips down off the gate's top rail",
+  "regretful, firm; a door closing", "the gate of a railroad contractors' work site, Vermont", "winter 1849",
+  "a wooden gate in a split-rail fence, a plank site shed with a ledger table behind, the cut far behind in winter haze",
+  "at the gate, facing the contractor", "at him and the gate",
+  "a wooden gate in a split-rail fence, a plank site shed with a ledger table behind, the railroad cut far away in winter haze",
+  "no rim of the cut, no close rock",
+  cast("a stout, clean-shaven contractor of about fifty in a dark frock coat, a tall black hat and a heavy overcoat, a thick ledger in his hands",
+       extra="At the lower right edge ONLY a man's hand and wrist in a worn white shirt sleeve slide down off the gate's top rail: no face, no body, no other person."),
+  extra="The ledger's pages show only rows of soft grey wavy lines, no figures or lettering. " + WAVY_WRITING + "")
+
+# row 36 ×3: the drawing, each copy cruder (modern book objects on purpose)
+DRAW = "a pen drawing of a snarling man's head with one bold line across it"
+S("row36a-oldbook-v1", "INSERT", "from the side, at table height", "50 mm",
+  f"a heavy old leather-bound book lies open on a dark oak desk under a brass lamp; on its page {DRAW}, careful and neat",
+  "authoritative, old", "an old library desk", "present day",
+  "a dark oak desk, a brass lamp's warm pool, leather books on a shelf, the open book",
+  "at the side of the desk at table height", "along the desk at the open book",
+  "a dark oak desk with a brass lamp's warm pool and a shelf of leather books soft behind the open book",
+  "no hand, no person",
+  "CAST: no people in the frame (nobody, no hands).", extra=WAVY_WRITING)
+S("row36b-textbook-v1", "INSERT", "from above and to the left, at an angle", "50 mm",
+  f"a glossy textbook propped open on a pale classroom desk; on its page the same drawing, redrawn rougher and heavier",
+  "official, a little careless", "a school classroom desk", "present day",
+  "a pale classroom desk, a window of grey daylight, the propped-open textbook",
+  "above and to the left of the desk", "down at the propped textbook",
+  "a pale wooden classroom desk with a window of grey daylight and a blackboard edge soft behind the propped-open textbook",
+  "no hand, no person",
+  "CAST: no people in the frame (nobody, no hands).", extra=WAVY_WRITING)
+S("row36c-paperback-v1", "INSERT", "flat top-down", "35 mm",
+  "a cheap paperback with a cracked spine lies open on a worn table; on its page the drawing again, now a crude scrawl",
+  "sensational, careless", "a worn kitchen table", "present day",
+  "a worn wooden table, a pile of other paperbacks, a desk lamp",
+  "directly above the table", "straight down at the open paperback",
+  "a worn wooden table top with a pile of other battered paperbacks and the base of a desk lamp at the edge",
+  "no hand, no person",
+  "CAST: no people in the frame (nobody, no hands).", extra=WAVY_WRITING)
+
+# rows 37, 38: the reading room (Macmillan is a living person: hands only, never a face)
+S("row37-reports-v1", "CU", "directly above", "50 mm",
+  "two hands untie a ribbon round a bundle of old reports on a green baize table; dust drifts in the lamp light",
+  "patient, reverent", "a reading room table", "present day",
+  "a green baize table top, a bundle of old yellowed reports tied with a ribbon, a brass lamp's pool of light",
+  "directly above the table", "straight down at the bundle",
+  "a green baize table top with a bundle of old yellowed reports tied with a dark ribbon in a brass lamp's pool of light",
+  "no faces, no body",
+  "CAST: no faces and no bodies; only TWO adult hands in plain shirt cuffs (a living scholar: never a face).",
+  extra=WAVY_WRITING,
+  size_line=scale({"the bundle of reports": "about 30 cm (12 in) long and 8 cm (3 in) thick, the width of two hands", "the ribbon": "about 1.5 cm wide"}))
+S("row38-slips-v1", "INSERT", "from the side, low, at table level", "50 mm",
+  "a thick book lands open on the baize with a soft thump, paper slips sticking out of its pages like feathers; on each slip a tiny drawing of the same crude head, each darker than the last",
+  "weighty, damning", "the same reading room table", "present day",
+  "a green baize table, the brass lamp, a thick open book bristling with paper slips",
+  "at the table edge, low", "along the table at the book",
+  "a green baize table edge, the foot of a brass lamp and a thick open book bristling with paper slips, the dark room behind",
+  "no hands, no faces",
+  "CAST: no people in the frame (nobody, no hands).", extra=WAVY_WRITING)
+
+# row 46: the shut stable (row 45's set, wider, another camera)
+S("row46-stabledoors-v1", "LS", "eye level, from far across the yard", "28 mm",
+  "the tall plank stable doors are shut and barred, the yard in front of them empty; a few wisps of straw stir on the ground",
+  "empty, a closing, a decision made", "a livery stable in Hanover, New Hampshire", "1852",
+  "a weathered grey-brown plank stable, packed earth and straw, a wooden water trough, flat grey overcast light",
+  "far across the yard near the gate, a little to the right of the doors", "at the shut double doors and the roof line",
+  "two tall closed plank doors with a heavy wooden bar across them, the empty packed-earth yard in front with a few wisps of straw, a pale grey sky above the roof",
+  "no horse, no person, no open doorway",
+  "CAST: no people in the frame (nobody, no horse, no animal).")
+
+# row 48: Valparaiso (a real period lithograph for the bay, a real coach photograph for the coaches)
+S("row48-valparaiso-v1", "ELS", "high, from the hillside above the town", "24 mm",
+  "Valparaiso bay with sailing ships at anchor, the town of houses climbing the dry hills; in the foreground a coach yard where new coaches stand in a row",
+  "a new beginning, a wide horizon", "the harbour of Valparaiso, Chile", "1852",
+  "a bay of grey-green water with tall sailing ships, whitewashed houses climbing pale dry hills, a dirt coach yard with new coaches in the foreground, bright afternoon sun",
+  "high on the hillside above the coach yard", "down and out over the yard, the town and the bay",
+  "a dirt coach yard with a row of new dark-red coaches in the foreground, below it the town climbing pale dry hills to a bay of tall sailing ships",
+  "no mountain road, no close people",
+  "CAST: no people in the frame (the coaches stand unattended; no figures).",
+  refs=[STYLE_DETAIL, "proj:refs/valparaiso_1850s.jpg", "proj:refs/concord_coach.jpg"],
+  roles=(STYLE_ROLE + "Reference 2 is a period lithograph of Valparaiso bay, used ONLY for the shapes of the ships, the pale hills and the houses; "
+         "ignore its framing and composition. Reference 3 is a period photograph used ONLY for the shape of the coaches. "))
+
+# row 54 ×2: the case, closed then open (the picture inside not seen yet)
+S("row54a-caseclosed-v1", "MS", "eye level, at table height", "50 mm",
+  "a closed brown leather daguerreotype case stands on a dark wooden table, its little brass clasp catching the light",
+  "waiting, a held breath", "a quiet room with a dark table", "undated",
+  "a dark wooden table and a pale plaster wall, soft window light from the left",
+  "at the end of the table at table height", "along the table at the closed case",
+  "a closed brown leather daguerreotype case standing on a dark wooden table, a pale plaster wall softly out of focus behind it",
+  "no hands, no person, no open case",
+  "CAST: no people in the frame (nobody, no hands).")
+S("row54b-caseopen-v1", "CU", "above and in front, tilted down", "85 mm",
+  "the same leather case now lies open on the table, its velvet-lined lid raised; the plate inside is a dark mirror-like surface in shadow, nothing visible on it yet",
+  "a revelation about to happen", "a quiet room with a dark table", "undated",
+  "a dark wooden table, an open leather case with a velvet lid, soft window light from the left",
+  "above and in front of the case, close", "down and across at the open case",
+  "an open brown leather case with a plum velvet lid and a dark mirror-like plate in a gilt mat, the dark wood grain of the table around it",
+  "no hands, no person, no picture visible on the plate",
+  "CAST: no people in the frame (nobody, no hands).")
+
+# rows 59, 60: California, then the porch with the iron (Rule 0b: framing, no body)
+S("row59-field-v1", "LS", "eye level", "35 mm",
+  "a long-handled hoe stands upright in a furrow, left where it was dropped; the dry grass of the field bends in the wind",
+  "empty, unsettling quiet", "a farm field near Santa Clara, California", "February 1860",
+  "a dry golden field, a long dark furrow, low brown hills, a wide pale sky, a steady wind",
+  "at the edge of the field in the furrow line", "along the furrow toward the hoe and the low hills",
+  "a dry golden field with one long dark furrow running away, low brown hills behind and a wide pale windy sky",
+  "no building, no person",
+  "CAST: no people in the frame (nobody, no animal).")
+S("row60-porch-v1", "LS", "eye level", "35 mm",
+  "an empty wooden chair on a porch at evening; the tamping iron leans against the porch post beside it, its point up",
+  "still, an ending", "a farmhouse porch in California", "May 1860, evening",
+  "a worn wooden porch floor and a railing, a whitewashed wall, a golden evening sky, crickets",
+  "on the porch steps, low", "along the porch at the chair and the post",
+  "a worn wooden porch floor and railing, a whitewashed wall with a post, a golden evening sky beyond the rail",
+  "no person, no body",
+  "CAST: no people in the frame (nobody, no body, no hands).",
+  refs=[STYLE_DETAIL, IRON_REF], roles=STYLE_ROLE + "Reference 2 is ONLY the SHAPE of the iron: a long, straight, perfectly round rod of one even thickness, no knob, no flared end; ignore its grey background and its blur. ",
+  extra=f"The iron is {IRON_ROD2}.",
+  size_line=sizes({"the tamping iron leaning on the post": "109 cm long, thin as a broom handle, taller than the seat of the chair is high (the chair seat about 45 cm), reaching up to a man's hip",
+                   "the chair": "a plain wooden chair, seat about 45 cm high"}))
+
+# row 61: Harlow, older and grey (the older head of sheet-harlow)
+S("row61-letter-v1", "MS", "eye level, from the side", "50 mm",
+  "DR HARLOW, older and grey, reads a letter by a window in the grey daylight, the page held in both hands, a quiet, weighing look",
+  "thoughtful, a last request", "Dr Harlow's study, Woburn, Massachusetts", "1867",
+  "a window with a lace curtain and grey daylight, a writing desk with an inkwell, a dark wood floor",
+  "at the side of the desk by the window", "at him and the window",
+  "a tall window with a lace curtain and grey daylight beside a writing desk with an inkwell and a dark wood floor",
+  "no 1848 room, no lamp",
+  cast(HARLOW_OLD + ', waist up, reading the letter, no spectacles'),
+  refs=[HARLOW_REF],
+  roles=("Reference 1 is DR JOHN MARTYN HARLOW's model sheet: take his face from it, and for his hair and beard use its OLDER head close-up (48 "
+         "in 1867, grey-streaked); do NOT copy its layout, its other views or its poses. "),
+  extra=WAVY_WRITING)
+
+# row 64: the lecture (casting cards; the rest from behind)
+S("row64-lecture-v1", "LS", "eye level, from the back of the room", "28 mm",
+  "a lecturer points his wooden pointer at the FRONT part of a plain skull outline on the blackboard while the listeners lean in and some nod",
+  "attentive, a lesson landing", "a medical college lecture theatre", "the 1870s",
+  "a raked lecture theatre, curved wooden benches, tall windows, a blackboard with a drawn skull outline in side view, gaslight",
+  "at the back of the raked theatre", "down the room toward the blackboard",
+  "rows of curved wooden benches full of listeners seen from behind, a blackboard at the front with a plain skull outline in side view, tall arched windows either side",
+  "no bar drawn in the skull, no Boston room",
+  cast("a tall gaunt lecturer of about fifty in a black frock coat with a long grey moustache and no beard, pointing with a wooden pointer",
+       extra=crowd("the listeners on the benches", ["a young man in the front row, clean-shaven, nodding", "a heavy man with grey mutton-chop whiskers, arms folded", "a thin man with a high bald head, leaning forward"])))
+
+KEYFRAMES.update(B3)
 
 
 def main():
