@@ -152,6 +152,36 @@ EPISODES = {
                  "label": "Free test: 24 → 30 fps, three ways (same frame, crop at 160%)",
                  "note": "Judder = unevenness of the background step per frame (source 24 fps: 0.06). Frame repeat 0.26 (every 5th frame is a copy), frame blend (ffmpeg framerate) 0.04 = smoothest, motion interpolation (minterpolate) 0.19 and it dropped 2 frames. No ghosting visible on the blend at this frame."},
             ]},
+        "batch1": {
+            "title": "Batch 1 · ten story stills (waiting for your OK)",
+            "legend": "Rows 2, 11, 23, 26, 29, 41, 52, 53, 55, 58. Actual cost $0.67 (10 × $0.067, Gemini Batch). Rows 2 and 11 are BEFORE the accident, so he has both eyes open and no scar (S1's 1848 sheet); the others use the Chile sheet (left eye shut). Each card says what passed and what did not. Batch 2 not started.",
+            "items": [
+                {"name": "row2-glance-v1", "title": "Row 2 · MCU, he glances over his shoulder (1848, before the accident)",
+                 "report": "Likeness: thick dark hair yes, clean-shaven yes, about 25 yes, both eyes open yes (correct, it is before the accident), no scar yes. People 1. Hands and iron not in view. Rock wall, drill hole, autumn hills as written. No text, nothing modern. PASS."},
+                {"name": "row11-keg-v1", "title": "Row 11 · MCU, he lifts the powder keg onto his shoulder (before the accident)",
+                 "report": "Likeness: dark hair, clean-shaven, both eyes open, no scar. People 3 (Gage, a red-haired freckled youth, a dark-moustached man in a flat cap). Scale: the keg is about forearm length (about 40 cm), plain wood with hoops, no lettering. Drift: his hat came out as a rounded bowler, not the wide-brimmed felt of the sheet. No text. PASS with the hat drift."},
+                {"name": "row23-harlow-v1", "title": "Row 23 · Harlow rolls up his cuffs by the lamp",
+                 "report": "Harlow (sheet-harlow): dark-brown hair, short trimmed dark beard, about 29, no spectacles, frock coat hung on the chair. People 1. Open black bag with instruments, lamp, medicine bottles on a shelf, as written. No text. PASS."},
+                {"name": "row26-farmhouse-v1", "title": "Row 26 · WS, thinner, out of the farmhouse into the late-autumn yard (Tier D start frame candidate)",
+                 "report": "Likeness: thick dark hair, clean-shaven, no bandage, no hat, thinner. Left eye: NOT clear (both eyes narrowed in a squint); the scar is not visible. People 1, hands EMPTY (fine for Tier D under L73). He stands beside the open door, not stepping out of it. Extras: a shovel against the wall, a wall lantern (period). No text. PASS on the scene, UNCLEAR on the shut eye."},
+                {"name": "row29-doorway-v1", "title": "Row 29 · MS, Gage argues in a doorway",
+                 "report": "Likeness: dark hair, clean-shaven, about 28. The shut eye is his RIGHT eye (wrong side: the Chile sheet's close-ups draw it that way) and the faint scar lines sit on his right forehead. The mirrored copy fixes both. People 2 (the second: a bald man with grey side-whiskers, palm raised). No blows. No text. FAIL as drawn, PASS mirrored."},
+                {"name": "row41-boston-v1", "title": "Row 41 · Boston lecture room, with the Matt cameo",
+                 "report": "People 5 as asked: Gage; a white-haired doctor with long side whiskers; a bald clean-shaven doctor with arms folded; a young dark-haired doctor, no spectacles; MATT at the back right with amber round glasses, teal scarf and amber notebook. Gage: dark hair, clean-shaven, but both lids look lowered, not a clean left-eye-only closure. SCALE FAIL: the iron on the table is a short club with a knob (about 45 cm), not a 109 cm thin rod. Blackboard blank, no text. FAIL on the iron and the eyes: a re-roll candidate."},
+                {"name": "row52-innyard-v1", "title": "Row 52 · MS, the inn yard, he hands a bag down",
+                 "report": "Likeness: older and thinner, dark hair, clean-shaven. The shut eye is his RIGHT (wrong side). The mirrored copy fixes it. People 1 plus a passenger arm only (no face). Bag about 55 cm. Coach side, adobe wall, gate as written. No text. FAIL as drawn, PASS mirrored."},
+                {"name": "row53-innhearth-v1", "title": "Row 53 · MS, he tells a story at the inn table",
+                 "report": "Likeness: older and thinner, dark hair, clean-shaven, profile. The shut eye is the near one, his RIGHT (wrong side). The mirrored copy fixes it. People 4 (Gage and three distinct children: braids girl, fair-haired boy, small boy with a missing tooth). Hands open and empty. Fire, jug, beams as written. No text. FAIL as drawn, PASS mirrored."},
+                {"name": "row55-portrait-v1", "title": "Row 55 · the re-illustrated portrait in its case (likeness test)",
+                 "report": "Painted in our style, not a copy of the photo: dark hair, clean-shaven, about 30, LEFT eye shut and right eye open (the one face that came out on the right side). People 1. The iron is a long smooth rod with a point, upright, longer than his torso. Open leather case with a brass oval mat on dark wood. Drift: the wood and leather look a little photographic. No text. PASS."},
+                {"name": "row58-deck-v1", "title": "Row 58 · MS, the ship deck, health failing",
+                 "report": "FAIL on the face: his skin came out sickly green-grey, a bright red scar mark sits on his RIGHT forehead (it reads as a wound, against 'no wound, no blood'), and the shut eye is his RIGHT. Mirroring fixes the side but not the skin or the red mark. The rest is right: People 1, the carpet bag and a cloth-wrapped bundle about 1 m long, grey-green sea, no land, no text. Re-roll candidate."},
+            ],
+            "images": [
+                {"id": "s10s12", "src": REPO / "projects/hc002-l/review/s10-s12-bandage-attempt.jpg",
+                 "label": "Free fix, rows 21 and 30: S1's 16:9 s10 and s12 brow paint (before left, after right)",
+                 "note": "NOT CLEAN. The band is gone over his right brow, but the repaint leaves a flat skin patch on the forehead (s10) and a smeared face (s12, where he is tiny). So the originals are back in place and the attempts are kept as s10.fix-attempt.png and s12.fix-attempt.png. Proposal: a re-roll of s10 and s12 as new 16:9 stills with the bandage over the left eye only, $0.067 each (not started)."},
+            ]},
         "hero_real": [],   # v2 (2026-11-23): no HERO sprite plans for rows 2, 5, 49; row 4 stays C (S1 pieces)
     },
     "hc002s1": {
@@ -526,6 +556,34 @@ def clip_tests_block(k: str, e: dict, out: Path, img: Path) -> str:
             '<div class="refs cliptests">' + "".join(figs) + '</div></div>')
 
 
+def batch1_block(k: str, e: dict, ep: dict, out: Path, img: Path) -> str:
+    """Gage long, story stills batch 1 (user 2026-11-23): each still with its check report, a mirrored copy where the closed eye is on
+    the wrong side, the prompt, and the free S1 brow-fix attempts."""
+    b = e.get("batch1")
+    if not b:
+        return ""
+    kf = e["project"] / "assets/images/keyframes16x9"
+    figs = []
+    for it in b["items"]:
+        src = kf / f'{it["name"]}.png'
+        if not src.exists():
+            continue
+        pics = f'<img src="img/{shrink(src, img / (k + "-b1-" + it["name"]), 1500)}" alt="{html.escape(it["title"])}" loading="lazy">'
+        flip = kf / f'{it["name"]}-flip.png'
+        if flip.exists():
+            pics += (f'<img src="img/{shrink(flip, img / (k + "-b1-" + it["name"] + "-flip"), 1500)}" alt="Mirrored copy" loading="lazy">'
+                     '<small>the same still mirrored: the shut eye is now his LEFT (use this one)</small>')
+        spec = ep.get("keyframes", {}).get(it["name"])
+        figs.append(f'<figure class="wide2"><div class="pics">{pics}</div><figcaption><b>{html.escape(it["title"])}</b>'
+                    f'<span>{html.escape(it["report"])}</span>{prompt_html(spec) if spec else ""}</figcaption></figure>')
+    for c in b.get("images", []):
+        if Path(c["src"]).exists():
+            figs.append(f'<figure class="wide2"><img src="img/{shrink(Path(c["src"]), img / (k + "-b1-" + c["id"]), 2000)}" alt="{html.escape(c["label"])}" loading="lazy">'
+                        f'<figcaption><b>{html.escape(c["label"])}</b><span>{html.escape(c["note"])}</span></figcaption></figure>')
+    return ('<div class="block"><h3>' + html.escape(b["title"]) + '</h3><p class="legend">' + html.escape(b["legend"]) + '</p>'
+            '<div class="refs cliptests">' + "".join(figs) + '</div></div>')
+
+
 def hero_block(k: str, e: dict, out: Path, img: Path) -> str:
     """Free HERO motion pre-viz on stand-in pieces (hero_previz_<ep>.py, before narration exists): per shot the preview
     (a click marks each key word) and its start / key / end sheet."""
@@ -729,7 +787,7 @@ details.prompt p{margin:6px 0 0;overflow-wrap:anywhere}.pmeta{font-family:var(--
 .refgen b{font-family:var(--display)}
 video.cut{width:min(360px,100%);aspect-ratio:9/16;border-radius:12px;background:#000;display:block}
 .ar16 video.cut{width:min(760px,100%);aspect-ratio:16/9}
-.cliptests{grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))}.cliptests figure img{aspect-ratio:16/9;object-fit:cover}.cliptests figure.wide2{grid-column:1/-1}.cliptests figure.wide2 img{aspect-ratio:auto;object-fit:contain}.cliptests video.cut{width:100%}
+.cliptests{grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))}.cliptests figure img{aspect-ratio:16/9;object-fit:cover}.cliptests figure.wide2{grid-column:1/-1}.cliptests figure.wide2 img{aspect-ratio:auto;object-fit:contain}.cliptests video.cut{width:100%}.cliptests .pics{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:8px}.cliptests .pics img{width:100%;height:auto;aspect-ratio:16/9;object-fit:contain}.cliptests .pics small{grid-column:1/-1}
 .ar16 .shot{grid-template-columns:300px 1fr}.ar16 .shot img{width:300px;aspect-ratio:16/9}
 .ar16 .v2grid article{grid-template-columns:150px 1fr}.ar16 .v2grid img,.ar16 .newpic{width:150px;aspect-ratio:16/9}
 .story{background:var(--surface);border:2px solid var(--amber);border-radius:14px;padding:18px 20px}
@@ -803,7 +861,7 @@ def build(out: Path, keys: list[str]) -> Path:
                 stage = "rough cut · waiting for your OK"
                 stages[-1] = stage
         story = story_block(k, e, img)
-        layered = layered_block(k, e, ep, out, img) + hero_block(k, e, out, img) + clip_tests_block(k, e, out, img)
+        layered = layered_block(k, e, ep, out, img) + hero_block(k, e, out, img) + clip_tests_block(k, e, out, img) + batch1_block(k, e, ep, out, img)
         if layered:
             pilots.append(e["short"])
         if story:

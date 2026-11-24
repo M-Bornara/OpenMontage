@@ -23,7 +23,7 @@ REPO = HERE.parents[4]
 sys.path.insert(0, str(REPO))
 sys.path.insert(0, str(REPO / "channels/storybook-medical/scripts"))
 from prompt_kit import (EMPTY_HANDS, FULL_BLEED, KEY_BG, NO_TEXT, ONE_EACH, PERIOD, REF_IDENTITY_ONLY, SAFE_FRAMING, OTS_FRAMING,  # noqa: E402
-                        camera, cast, framing, lint_all, pose_sheet, set_block, sprite_sheet)
+                        camera, cast, framing, lint_all, matt_beat, pose_sheet, scale, set_block, sprite_sheet)
 
 PID = "hc002-l"
 P = REPO / "projects" / PID
@@ -253,6 +253,107 @@ KEYFRAMES["row45-stable-v2"] = dict(aspect="16:9", refs=["ref:sheet-gage-chile"]
             "no animals in the doorway. "
             + sizes({"the horse": "about 5 ft 3 in (1.6 m) at the shoulder", "the stable door": "about 8 ft (2.4 m) high", "the brush": "about 9 in (23 cm) long"}) + " "
             f"{ONE_EACH} {SAFE_FRAMING} {PERIOD} No modern objects. {NO_TEXT}"))
+
+# ── BATCH 1 (user 2026-11-23, Mahdi approved: rows 2, 11, 23, 26, 29, 41, 52, 53, 55, 58; ten stills, ~$0.67) ──────────────
+# L55: every background is WRITTEN (long-backgrounds-v1.md), no set plate / keyframe is a reference; the sheets are for the
+# person only (face, hair, clothes). Face wording from row45-stable-v2. TIMELINE: rows 2 and 11 are BEFORE the accident
+# (13 Sep 1848): both eyes open, no scar, so they use S1's 1848 sheet; rows 26, 29, 41, 52, 53, 55, 58 are after it: the
+# Chile sheet, LEFT eye closed (L48), scar. Rows 52, 53, 58: older and thinner.
+FACE_ONLY = ("take ONLY his face, hair and clothes from it; do NOT copy its layout, its other views or its poses. ")
+GAGE_28 = ("PHINEAS GAGE, about 28: thick DARK hair, clean-shaven, a strong square jaw, his LEFT eye closed (a sunken, shut lid; L48: "
+           "in a front view that is on the RIGHT side of the picture, in a profile facing right it is the far eye), a faint pale scar "
+           "high on the left side of his forehead under the hair; NOT grey-haired, NOT older, no beard; no bandage, no wound, no blood")
+GAGE_OLDER = ("PHINEAS GAGE, about 32: the same face but older and thinner (hollower cheeks, leaner build), thick DARK hair, "
+              "clean-shaven, a strong square jaw, his LEFT eye closed (a sunken, shut lid; L48: in a front view that is on the RIGHT "
+              "side of the picture), a faint pale scar high on the left side of his forehead under the hair; NOT grey-haired, no "
+              "beard; no bandage, no wound, no blood")
+GAGE_1848 = ("PHINEAS GAGE, 25, on 13 September 1848 BEFORE the accident: thick DARK hair, clean-shaven, a strong square jaw, BOTH "
+             "eyes open, no scar, no bandage, no wound")
+R_CHILE = "Reference 1 is PHINEAS GAGE's 1850s model sheet (the Chile / Hanover look, clean-shaven): " + FACE_ONLY
+R_1848 = "Reference 1 is PHINEAS GAGE's 1848 model sheet (before the accident, both eyes open): " + FACE_ONLY
+B1 = {}
+
+B1["row2-glance-v1"] = dict(aspect="16:9", refs=[G1848], roles=R_1848,
+    prompt=(f"{CUT} {framing('MCU', 'eye level, from in front of him on the ledge, a little to his left', '50 mm, shallow focus', 'PHINEAS GAGE stands on the rock ledge and turns his head to look back over his own shoulder toward his men calling from below; his hands and the iron are not in the picture', 'alert, just distracted, about to go wrong')} "
+            f"{camera('on the ledge in front of him', 'at his face', 'the grey layered schist wall behind his head with one drill hole, wooded hills in early autumn colour soft at the far edge, a pale sky above', 'no iron bar, no powder, no other person in view')} "
+            f"{cast(GAGE_1848 + ', in his low-crowned dark felt hat, a white shirt and dark braces, chest up, his face a medium-size part of the frame (not tiny, not huge)')} "
+            f"{ONE_EACH} {SAFE_FRAMING} {PERIOD} No blood. {NO_TEXT}"))
+
+B1["row11-keg-v1"] = dict(aspect="16:9", refs=[G1848], roles=R_1848 + "The two crewmen are NOT from the reference. ",
+    prompt=(f"{set_block('the powder store beside the Cavendish rock cut', 'summer 1848', 'a rough plank powder shed with kegs stacked inside, soft overcast daylight')} "
+            f"{framing('MCU', 'eye level', '50 mm', 'PHINEAS GAGE lifts a small wooden powder keg onto his right shoulder without effort, a calm easy half-smile; two crewmen behind him grin', 'easy strength, good humour')} "
+            f"{camera('in front of the shed door', 'at Gage and the shed wall', 'a wooden shed wall of rough boards with kegs stacked behind them, the two crewmen soft behind his shoulders')} "
+            f"{cast(GAGE_1848 + ', in the low-crowned dark felt hat, white shirt with sleeves rolled, dark braces, chest up, the keg on his shoulder', 'a red-haired freckled youth of about seventeen, thin, no hat, grinning, soft, behind his left side', 'a heavy dark-moustached man in his thirties with a round face and a flat cap, grinning, soft, behind his right side')} "
+            + scale({"the powder keg": "plain wood, no lettering, about 40 cm (16 in) tall and 30 cm (12 in) across, as tall as his forearm and hand together, on his shoulder"}) + " "
+            f"{ONE_EACH} {SAFE_FRAMING} {PERIOD} No blood. {NO_TEXT}"))
+
+B1["row23-harlow-v1"] = dict(aspect="16:9", refs=[HARLOW_REF],
+    roles="Reference 1 is DR JOHN MARTYN HARLOW's model sheet (29 in 1848): take ONLY his face, hair, short beard and clothes from it; do NOT copy its layout, its other views or its poses. ",
+    prompt=(f"{set_block('the country doctor Harlow room in Cavendish, Vermont', 'September 1848', 'a plain plaster room, a shelf of medicine bottles, an oil lamp, warm lamplight against a dim room')} "
+            f"{framing('MS', 'eye level', '50 mm', 'DR HARLOW rolls up his shirt cuffs beside the lamp, his black medical bag open on the table, ready for a hard case', 'calm, focused, kind')} "
+            f"{camera('across the table from him', 'at him', 'a plain plaster wall, a shelf of medicine bottles above his shoulder, the oil lamp warm pool on the table with the open black bag', 'no window in view')} "
+            f"{cast(HARLOW + ', waist up, in shirtsleeves and waistcoat (the frock coat hung on the chair), no spectacles')} "
+            f"{ONE_EACH} {SAFE_FRAMING} {PERIOD} {NO_TEXT}"))
+
+B1["row26-farmhouse-v1"] = dict(aspect="16:9", refs=[GCH], roles=R_CHILE,
+    prompt=(f"{set_block('a farmhouse yard in Lebanon, New Hampshire', 'late November 1848', 'a weathered clapboard farmhouse door opening onto a yard of bare trees, fallen brown leaves, a wood pile, thin cold light')} "
+            f"{framing('LS', 'eye level', '35 mm', 'PHINEAS GAGE, thinner and slow, steps out of the farmhouse door into the yard and squints at the low sun; his hands hang EMPTY at his sides', 'weak, careful, alive')} "
+            f"{camera('in the yard, facing the farmhouse door', 'toward the door', 'the farmhouse door and a strip of its clapboard wall, a yard of bare late-autumn trees, fallen leaves, a wood pile, low sun from the left', 'no sickroom, no bed')} "
+            f"{cast(GAGE_28 + ', thinner than before, no bandage, no hat, a short dark wool jacket over a white shirt, small in the frame (a wide shot, his face small), full figure, hands empty')} "
+            f"{ONE_EACH} {SAFE_FRAMING} {PERIOD} No blood. {NO_TEXT}"))
+
+B1["row29-doorway-v1"] = dict(aspect="16:9", refs=[GCH], roles=R_CHILE + "The other man is NOT from the reference. ",
+    prompt=(f"{set_block('a plain village doorway in New England', 'winter 1848-49', 'a dark plank door and frame, a room beyond in cold grey light, muted colours')} "
+            f"{framing('MS', 'eye level', '35 mm', 'PHINEAS GAGE argues in a doorway, mouth open mid-sentence, one hand slicing the air, while an older man steps back from him with a raised palm; an argument only: no blows, no raised fists', 'fitful, irreverent, impatient of restraint')} "
+            f"{camera('in the room facing the doorway', 'at the door', 'a dark plank door and its frame, a room beyond in grey light', 'no street, no sky')} "
+            f"{cast(GAGE_28 + ', in a white shirt, dark braces and a waistcoat, no hat, in the doorway, waist up, hands EMPTY', 'a stout bald man in his fifties with grey side-whiskers and a brown coat, no spectacles, stepping back, his palm raised')} "
+            f"{ONE_EACH} {SAFE_FRAMING} {PERIOD} No blood. {NO_TEXT}"))
+
+B1["row41-boston-v1"] = dict(aspect="16:9", refs=[GCH, "kit:matt-sheet.jpg"],
+    roles=R_CHILE + "Reference 2 is MATT: copy his face, amber round spectacles, teal scarf and amber notebook only; his clothes are of 1849. ",
+    prompt=(f"{set_block('a small lecture room of the Boston Society for Medical Improvement', '1849', 'a small raked room, curved wooden benches, a demonstration table, a tall window with cold winter light, a blackboard')} "
+            f"{framing('LS', 'eye level, from the side benches', '35 mm', 'PHINEAS GAGE stands by the demonstration table with the tamping iron laid on it, resting one hand beside it; three doctors lean forward to look at him', 'serious, curious, a little theatre')} "
+            f"{camera('on the side benches of the lecture room', 'across the room toward the table and the tall window', 'the curved wooden benches, the demonstration table, a tall window with winter light, a blackboard with no writing', 'no museum cases, no skull drawing')} "
+            f"{cast(GAGE_28 + ', in a dark frock coat and waistcoat with a white shirt, no hat, small in the frame, his face small, the closed left eye visible', 'a white-haired doctor of sixty with long side whiskers, no spectacles, leaning forward', 'a bald clean-shaven doctor of fifty, no spectacles, arms folded', 'a young dark-haired doctor of about twenty-five, clean-shaven, no spectacles', 'MATT')} "
+            f"{matt_beat('a dark frock coat and a brown waistcoat of 1849', 'on the back row of the benches at the far side, writing in his amber notebook with the amber round spectacles on his nose')} "
+            + sizes({"the tamping iron lying on the table": "about 3 ft 7 in (109 cm) long and 1 1/4 in (3.2 cm) thick, smooth and round, tapering to a point", "the table": "about 3 ft (90 cm) high"}) + " "
+            f"{ONE_EACH} {SAFE_FRAMING} {PERIOD} No blood. {NO_TEXT}"))
+
+B1["row52-innyard-v1"] = dict(aspect="16:9", refs=[GCH], roles=R_CHILE + "Outfit A (the coach driver) is his clothes here. ",
+    prompt=(f"{set_block('the yard of a coaching inn on the Valparaiso to Santiago road, Chile', 'the 1850s', 'a whitewashed adobe inn wall with a wooden gate, dusty ground, the side of a dark-red coach, warm afternoon light')} "
+            f"{framing('MS', 'eye level', '50 mm', 'PHINEAS GAGE, standing by the coach, hands a leather travel bag down to a passenger, a small kind smile', 'warm, steady, a little proud')} "
+            f"{camera('in the inn yard beside the coach', 'at Gage and the inn wall', 'a whitewashed adobe inn wall, the side of the coach at his back, a passenger arm reaching up from the lower right edge for the bag', 'no road, no mountains')} "
+            f"{cast(GAGE_OLDER + ', as a coach driver: a short dark wool jacket over a white shirt, a cotton scarf loose at the neck, a broad-brimmed low felt hat, waist up, three-quarter view so both the shut left eye and the open right eye show')} "
+            "The passenger is only an arm in a sleeve and a hand at the lower right edge (no face, no body, no second person). "
+            + sizes({"the leather travel bag": "about 22 in (55 cm) long, held by its handle in one hand"}) + " "
+            f"{ONE_EACH} {SAFE_FRAMING} {PERIOD} {NO_TEXT}"))
+
+B1["row53-innhearth-v1"] = dict(aspect="16:9", refs=[GCH], roles=R_CHILE + "The children are NOT from the reference. ",
+    prompt=(f"{set_block('the common room of a coaching inn in Chile', 'the 1850s', 'a low whitewashed room with dark beams, a wooden table by a stone fireplace, a clay jug, warm firelight')} "
+            f"{framing('MS', 'eye level', '35 mm', 'PHINEAS GAGE sits at the inn table telling a story with both open hands, children leaning in wide-eyed', 'warm, playful, spellbound listeners')} "
+            f"{camera('across the table from him', 'at him and the fire', 'an inn table by a stone fireplace, a clay jug on the table, the children faces leaning in on both sides, warm light', 'no yard, no coach')} "
+            f"{cast(GAGE_OLDER + ', in shirtsleeves and a waistcoat, no hat, at the table, both hands open and empty in the air as he tells a story, waist up, three-quarter view so both eyes show', 'a girl of about eight with two dark braids, wide-eyed', 'a boy of about ten with messy fair hair, grinning', 'a small boy of about five with a round face and a missing front tooth, mouth open')} "
+            f"{ONE_EACH} {SAFE_FRAMING} {PERIOD} {NO_TEXT}"))
+
+B1["row55-portrait-v1"] = dict(aspect="16:9", refs=[GCH],
+    roles=R_CHILE + "Outfit B (the portrait outfit) is his clothes here. This is a NEW painting in our storybook style, never a photograph or a copy of one. ",
+    prompt=(f"{set_block('a dark wood table in a quiet room', 'the 1850s', 'a dark wood table top, soft side light from the left, nothing else')} "
+            f"{framing('MCU', 'eye level, from above the table, looking at the portrait', '50 mm', 'an open dark leather daguerreotype case lies on the table; in its oval gilt mat is a painted portrait of PHINEAS GAGE standing in a dark frock coat, a waistcoat and a dark cravat, no hat, holding his tamping iron upright in his right hand at his side', 'proud, steady, serious')} "
+            f"{camera('above the table', 'down at the open case', 'the dark wood table top around the open leather case, nothing else', 'no hands, no room')} "
+            f"{cast(GAGE_28 + ', shown only INSIDE the oval portrait, waist up, his LEFT eye shut, the right eye open')} "
+            "The portrait fills about 60% of the frame width. The tamping iron in the portrait is a smooth, perfectly straight, round iron rod about 3 ft 7 in (109 cm) long, "
+            "tapering over its last foot to a point, held upright beside him, its full length visible and clearly longer than his torso. "
+            f"{ONE_EACH} {SAFE_FRAMING} {PERIOD} {NO_TEXT}"))
+
+B1["row58-deck-v1"] = dict(aspect="16:9", refs=[GCH], roles=R_CHILE,
+    prompt=(f"{set_block('the deck of a sailing ship bound from Valparaiso to San Francisco', '1859', 'a worn wooden deck and rail, rigging and canvas, a grey-green sea and a pale grey sky, steady cold light')} "
+            f"{framing('MS', 'eye level', '35 mm', 'PHINEAS GAGE stands at the ship rail, one hand on it, coat buttoned, looking out to sea, his health failing; beside him lean a carpet bag and a long bundle wrapped in cloth', 'tired, quiet, far away')} "
+            f"{camera('on the deck beside him', 'at him and the sea', 'the wooden rail, rigging lines, a grey-green sea and pale sky', 'no land in view')} "
+            f"{cast(GAGE_OLDER + ', thinner and tired, in a dark wool coat buttoned to the neck, a low felt hat, waist up, three-quarter view so both eyes show')} "
+            + sizes({"the cloth-wrapped bundle (the tamping iron)": "about 3 ft 7 in (109 cm) long and slim, leaning against the rail", "the carpet bag": "about 20 in (50 cm) wide"}) + " "
+            f"{ONE_EACH} {SAFE_FRAMING} {PERIOD} {NO_TEXT}"))
+
+KEYFRAMES.update(B1)
 
 
 def main():
