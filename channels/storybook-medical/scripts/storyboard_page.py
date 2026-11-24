@@ -182,6 +182,29 @@ EPISODES = {
                  "label": "Free fix, rows 21 and 30: S1's 16:9 s10 and s12 brow paint (before left, after right)",
                  "note": "NOT CLEAN. The band is gone over his right brow, but the repaint leaves a flat skin patch on the forehead (s10) and a smeared face (s12, where he is tiny). So the originals are back in place and the attempts are kept as s10.fix-attempt.png and s12.fix-attempt.png. Proposal: a re-roll of s10 and s12 as new 16:9 stills with the bandage over the left eye only, $0.067 each (not started)."},
             ]},
+        "batch2": {
+            "title": "Re-rolls of 2026-11-24 · rows 41, 55, 58 and S1's s10 / s12 (one take each, waiting for your OK)",
+            "legend": "Actual cost $0.335 (5 × $0.067, Gemini Batch); hc002-l total $2.99. Free first: sheet-gage-chile-v2 (the panels whose shut eye was on the wrong side are mirrored; the two bottom heads were already right, so they stay). New stills use v2. Result: s10 and s12 pass, row 41 passes once mirrored (free copy), rows 55 and 58 do NOT pass: no further take without your yes and a cost.",
+            "items": [
+                {"name": "row41-boston-v2", "title": "Row 41 · Boston lecture room, re-roll (iron, young doctor)",
+                 "report": "Fixed: the young doctor is a thin man with RED-BROWN hair and ginger side whiskers, nothing like Gage (dark hair, square jaw). The three doctors are distinct (white-haired with long whiskers; bald and clean-shaven, arms folded; the young ginger one), no spectacles on any. MATT sits in the back row with amber round glasses, teal scarf and an amber notebook. Gage stands by the table, hand beside the iron on the table. No text on the blackboard. Iron: now long (it spans most of the table) with a point, but the blunt end has a flared head (a small knob) and it is thicker than 3 cm: PARTIAL. Eyes as drawn: his RIGHT eye (picture-left) is shut and the left one is lowered but open: wrong side again. The mirrored copy has the LEFT eye shut and the right one looking down: use the mirrored copy."},
+                {"name": "row58-deck-v2", "title": "Row 58 · MS, the ship deck, re-roll (skin, scar)",
+                 "report": "Fixed: normal healthy skin, no green; older and thinner; the shut eye is his LEFT (the near eye, squeezed shut); one person; carpet bag and a cloth-wrapped bundle about 1 m long; no text. NOT fixed: the scar is a thin RED line on his RIGHT forehead (above the open eye), not a faint pale line on the left. FAIL on the scar (side and colour). Mirroring does not help (it would move the shut eye to the wrong side too)."},
+                {"name": "row55-portrait-v2", "title": "Row 55 · the portrait in its case, re-roll (not a wink)",
+                 "report": "Left lid shut (picture-right), right eye open, scar on his left forehead, our painted style, one person. NOT fixed: it still reads as a WINK: the shut lid is squeezed with the brow lowered and the head tilted, with a faint smirk. The iron is upright and long with a point, but its blunt end has a flared lip. FAIL on the expression."},
+                {"name": "row21-s10-v2", "title": "Row 21 · S1 s10, new 16:9 (bandage over the left eye only)",
+                 "report": "PASS. Same scene and cast (hotel piazza, Gage waving, Dr Williams from behind with the bag, Matt on the post, carriage). The bandage wraps the crown and passes diagonally over his LEFT eye (picture-right); his RIGHT eye and eyebrow are bare skin. Nothing over the right brow. Compare the heads below."},
+                {"name": "row30-s12-v2", "title": "Row 30 · S1 s12, new 16:9 (bandage over the left eye only)",
+                 "report": "PASS at the size he is shown (about 40 px): same street, doorway, whispering friends. A diagonal bandage over the crown and one eye, no flat band across both brows. His face is soft, as in the original."},
+            ],
+            "images": [
+                {"id": "sheet", "src": REPO / "projects/hc002-l/review/sheet-chile-v1-v2.jpg",
+                 "label": "Free: sheet-gage-chile (left) and sheet-gage-chile-v2 (right)",
+                 "note": "In v1 the shut eye was on picture-left (his right) in the three full-body views and the top-right head. v2 mirrors those panels, so in every view his LEFT eye is the shut one. The two bottom heads were already right and are untouched; the top-left bust has both lids lowered and is untouched. The first attempt (mirroring all four heads) broke the two bottom heads; caught by comparing before and after."},
+                {"id": "heads", "src": REPO / "projects/hc002-l/review/s10-s12-bandage-reroll-heads.jpg",
+                 "label": "Heads at 6-8×: s10 new, s10 old, s12 new, s12 old",
+                 "note": "Old: a flat band across both brows. New: the bandage crosses diagonally over his left eye only."},
+            ]},
         "hero_real": [],   # v2 (2026-11-23): no HERO sprite plans for rows 2, 5, 49; row 4 stays C (S1 pieces)
     },
     "hc002s1": {
@@ -559,29 +582,32 @@ def clip_tests_block(k: str, e: dict, out: Path, img: Path) -> str:
 def batch1_block(k: str, e: dict, ep: dict, out: Path, img: Path) -> str:
     """Gage long, story stills batch 1 (user 2026-11-23): each still with its check report, a mirrored copy where the closed eye is on
     the wrong side, the prompt, and the free S1 brow-fix attempts."""
-    b = e.get("batch1")
-    if not b:
-        return ""
     kf = e["project"] / "assets/images/keyframes16x9"
-    figs = []
-    for it in b["items"]:
-        src = kf / f'{it["name"]}.png'
-        if not src.exists():
+    blocks = []
+    for bk, tag in (("batch1", "b1"), ("batch2", "b2")):   # batch2 = the 2026-11-24 re-rolls
+        b = e.get(bk)
+        if not b:
             continue
-        pics = f'<img src="img/{shrink(src, img / (k + "-b1-" + it["name"]), 1500)}" alt="{html.escape(it["title"])}" loading="lazy">'
-        flip = kf / f'{it["name"]}-flip.png'
-        if flip.exists():
-            pics += (f'<img src="img/{shrink(flip, img / (k + "-b1-" + it["name"] + "-flip"), 1500)}" alt="Mirrored copy" loading="lazy">'
-                     '<small>the same still mirrored: the shut eye is now his LEFT (use this one)</small>')
-        spec = ep.get("keyframes", {}).get(it["name"])
-        figs.append(f'<figure class="wide2"><div class="pics">{pics}</div><figcaption><b>{html.escape(it["title"])}</b>'
-                    f'<span>{html.escape(it["report"])}</span>{prompt_html(spec) if spec else ""}</figcaption></figure>')
-    for c in b.get("images", []):
-        if Path(c["src"]).exists():
-            figs.append(f'<figure class="wide2"><img src="img/{shrink(Path(c["src"]), img / (k + "-b1-" + c["id"]), 2000)}" alt="{html.escape(c["label"])}" loading="lazy">'
-                        f'<figcaption><b>{html.escape(c["label"])}</b><span>{html.escape(c["note"])}</span></figcaption></figure>')
-    return ('<div class="block"><h3>' + html.escape(b["title"]) + '</h3><p class="legend">' + html.escape(b["legend"]) + '</p>'
-            '<div class="refs cliptests">' + "".join(figs) + '</div></div>')
+        figs = []
+        for it in b["items"]:
+            src = kf / f'{it["name"]}.png'
+            if not src.exists():
+                continue
+            pics = f'<img src="img/{shrink(src, img / (k + "-" + tag + "-" + it["name"]), 1500)}" alt="{html.escape(it["title"])}" loading="lazy">'
+            flip = kf / f'{it["name"]}-flip.png'
+            if flip.exists():
+                pics += (f'<img src="img/{shrink(flip, img / (k + "-" + tag + "-" + it["name"] + "-flip"), 1500)}" alt="Mirrored copy" loading="lazy">'
+                         '<small>the same still mirrored: the shut eye is now his LEFT (use this one)</small>')
+            spec = ep.get("keyframes", {}).get(it["name"])
+            figs.append(f'<figure class="wide2"><div class="pics">{pics}</div><figcaption><b>{html.escape(it["title"])}</b>'
+                        f'<span>{html.escape(it["report"])}</span>{prompt_html(spec) if spec else ""}</figcaption></figure>')
+        for c in b.get("images", []):
+            if Path(c["src"]).exists():
+                figs.append(f'<figure class="wide2"><img src="img/{shrink(Path(c["src"]), img / (k + "-" + tag + "-" + c["id"]), 2000)}" alt="{html.escape(c["label"])}" loading="lazy">'
+                            f'<figcaption><b>{html.escape(c["label"])}</b><span>{html.escape(c["note"])}</span></figcaption></figure>')
+        blocks.append('<div class="block"><h3>' + html.escape(b["title"]) + '</h3><p class="legend">' + html.escape(b["legend"]) + '</p>'
+                      '<div class="refs cliptests">' + "".join(figs) + '</div></div>')
+    return "".join(blocks)
 
 
 def hero_block(k: str, e: dict, out: Path, img: Path) -> str:

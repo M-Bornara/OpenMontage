@@ -231,6 +231,10 @@ ret_bad = any(m.startswith("L55b") for m in prompt_kit.lint_sequence({"a": good,
 ok55 = (has_code(l55_bad, "L55") and all(has_code(x, "L40") for x in l47c_bad)
         and not [i for i in prompt_kit.lint("a", good) if re.match(r"L(37|40|47b|55)", i)] and any(m.startswith("L55b") for m in seq)
         and ret_ok and ret_bad)
+# a re-roll replaces its v1: "x-v1" vs "x-v2" (same camera) passes; "x-v2" vs a different shot on the same camera still fails
+rr = prompt_kit.lint_sequence({"row1-v1": good, "row1-v2": twin})
+rr_bad = prompt_kit.lint_sequence({"row1-v1": good, "row1-v2": twin, "row2-v1": twin})
+ok55 = ok55 and not rr and any(m.startswith("L55b") for m in rr_bad)
 status = "PASS" if ok55 else "FAIL"
 print(f"{status} L55 thin setting (HCS09 s1b), L40 kf: reference without a set (HCS08 s2/s3), L55b back-to-back / same-camera background caught, a return from another camera passes; full spec passes")
 ok = ok and status == "PASS"

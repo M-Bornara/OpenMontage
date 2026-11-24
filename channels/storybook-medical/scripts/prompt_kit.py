@@ -160,7 +160,12 @@ def lint_sequence(keyframes: dict[str, dict]) -> list[str]:
         m = re.search(r"camera: standing (.+?), facing (.+?)\. background \(exactly this, nothing else\): (.+?)\.",
                       spec.get("prompt", "").lower())
         return (m.group(2), m.group(3), m.group(1)) if m else None   # facing, background, position
-    names, out = list(keyframes), []
+    # a re-roll REPLACES its earlier take (user 2026-11-24, HC002-L row 41/55/58 v2): "<stem>-v1" is not a live shot once
+    # "<stem>-v2" exists, so the two are never compared (the same shot, same camera, is the whole point of a re-roll)
+    def superseded(n):
+        m = re.fullmatch(r"(.+-v)(\d+)", n)
+        return bool(m) and f"{m.group(1)}{int(m.group(2)) + 1}" in keyframes
+    names, out = [n for n in keyframes if not superseded(n)], []
     for a, b in zip(names, names[1:]):
         (sa, za), (sb, zb) = key(keyframes[a]), key(keyframes[b])
         if sa and sa == sb and za and za == zb:

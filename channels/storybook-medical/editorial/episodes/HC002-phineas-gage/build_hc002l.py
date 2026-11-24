@@ -355,6 +355,79 @@ B1["row58-deck-v1"] = dict(aspect="16:9", refs=[GCH], roles=R_CHILE,
 
 KEYFRAMES.update(B1)
 
+# ── BATCH 1 RE-ROLLS (user 2026-11-24, Mahdi approved: rows 41, 58, 55 and S1's 16:9 s10 / s12 for rows 21 and 30; one take each,
+# $0.067 each, ~$0.34 with the free steps) ─────────────────────────────────────────────────────────────────────────────────────
+# FREE (done): sheet-gage-chile-v2.png = the panels whose SHUT eye was on the wrong side mirrored (the three full-body views and the
+# top-right head; the two bottom heads already shut his LEFT eye, so they stay): every NEW spec uses GCH2. The first ten (B1) were
+# made with the v1 sheet and stay recorded as such. Rows 29, 52, 53: the mirrored copies (-flip.png) are the ones used.
+GCH2 = "ref:sheet-gage-chile-v2"
+USE_MIRRORED = ["row29-doorway-v1-flip", "row52-innyard-v1-flip", "row53-innhearth-v1-flip"]
+R_CHILE2 = ("Reference 1 is PHINEAS GAGE's 1850s model sheet (clean-shaven; in EVERY view his LEFT eye is the shut one, on the RIGHT "
+            "side of the picture in a front view): " + FACE_ONLY + "Do NOT copy the sheet's smiles or winks. ")
+# L75 (this re-roll): ONE description of the iron, used by every shot that shows it (the Warren museum photo in refs/ is of his SKULL,
+# not the rod, so there is NO photo reference for the iron: its shape is written).
+IRON_ROD = ("a smooth, perfectly round iron rod, 3 ft 7 in (109 cm) long and 1 1/4 in (3.2 cm) thick, dull dark grey, tapering over its "
+            "last foot to a point and plain and blunt at the other end; no knob, no handle, no pommel, no crossbar, no hook, no bend")
+B2 = {}
+
+B2["row41-boston-v2"] = dict(aspect="16:9", refs=[GCH2, "kit:matt-sheet.jpg"],
+    roles=R_CHILE2 + "Reference 2 is MATT: copy his face, amber round spectacles, teal scarf and amber notebook only; his clothes are of 1849. ",
+    prompt=(f"{set_block('a small lecture room of the Boston Society for Medical Improvement', '1849', 'a small raked room, curved wooden benches, a demonstration table, a tall window with cold winter light, a blackboard')} "
+            f"{framing('LS', 'eye level, from the side benches', '35 mm', 'PHINEAS GAGE stands by the demonstration table with his tamping iron laid lengthwise ON the table beside his resting hand; three doctors lean forward to look at him', 'serious, curious, a little theatre')} "
+            f"{camera('on the side benches of the lecture room', 'across the room toward the table and the tall window', 'the curved wooden benches, the demonstration table, a tall window with winter light, a blackboard with no writing', 'no museum cases, no skull drawing')} "
+            f"{cast(GAGE_28 + ', in a dark frock coat and waistcoat with a white shirt, no hat, standing three-quarter toward the doctors so his shut LEFT eye (picture-right) and open right eye both show, his face small but his shut left lid clear', 'a white-haired doctor of sixty with long white side whiskers, no spectacles, leaning forward', 'a bald clean-shaven doctor of fifty, no spectacles, arms folded', 'a thin young doctor of about twenty-five with RED-BROWN hair and GINGER side whiskers, a narrow pale freckled face and a soft chin, no spectacles, clearly NOT like Gage (no dark hair, no square jaw)', 'MATT')} "
+            f"{matt_beat('a dark frock coat and a brown waistcoat of 1849', 'in the BACK row of the benches at the far side, writing in his amber notebook with the amber round spectacles on his nose')} "
+            f"The tamping iron is {IRON_ROD}. "
+            + sizes({"the tamping iron lying on the table": "109 cm long, it lies along the table top and spans almost the whole table's length, much longer than a man's forearm, as thin as a broom handle",
+                     "the table": "about 3 ft (90 cm) high and 4 ft (120 cm) long"}) + " "
+            f"{ONE_EACH} {SAFE_FRAMING} {PERIOD} No blood. {NO_TEXT}"))
+
+B2["row58-deck-v2"] = dict(aspect="16:9", refs=[GCH2], roles=R_CHILE2,
+    prompt=(f"{set_block('the deck of a sailing ship bound from Valparaiso to San Francisco', '1859', 'a worn wooden deck and rail, rigging and canvas, a grey-green sea and a pale grey sky, steady cold light')} "
+            f"{framing('MS', 'eye level', '35 mm', 'PHINEAS GAGE stands at the ship rail, one hand on it, coat buttoned, looking out to sea, quiet and tired; beside him lean a carpet bag and a long bundle wrapped in cloth', 'tired, quiet, far away')} "
+            f"{camera('on the deck beside him', 'at him and the sea', 'the wooden rail, rigging lines, a grey-green sea and pale sky', 'no land in view')} "
+            f"{cast(GAGE_OLDER + ', thinner and older, in a dark wool coat buttoned to the neck, a low felt hat, waist up, facing the camera turned a little toward the left of the picture so both eyes show: his shut LEFT eye is on the RIGHT side of the picture')} "
+            "SKIN AND SCAR: his skin is a normal, healthy, warm natural skin tone, exactly like the reference (NOT green, NOT grey, NOT pale-sick); "
+            "the scar is one faint, thin, PALE line high on his LEFT forehead (picture-right), lighter than the skin, NOT red, no blood, no wound. "
+            "The cold sea light does not tint his face. "
+            + sizes({"the cloth-wrapped bundle (the tamping iron)": "109 cm (3 ft 7 in) long and slim, leaning against the rail", "the carpet bag": "about 20 in (50 cm) wide"}) + " "
+            f"{ONE_EACH} {SAFE_FRAMING} {PERIOD} {NO_TEXT}"))
+
+B2["row55-portrait-v2"] = dict(aspect="16:9", refs=[GCH2],
+    roles=R_CHILE2 + "Outfit B (the portrait outfit) is his clothes here. This is a NEW painting in our storybook style, never a photograph or a copy of one. ",
+    prompt=(f"{set_block('a dark wood table in a quiet room', 'the 1850s', 'a dark wood table top, soft side light from the left, nothing else')} "
+            f"{framing('MCU', 'eye level, from above the table, looking at the portrait', '50 mm', 'an open dark leather daguerreotype case lies on the table; in its oval gilt mat is a painted portrait of PHINEAS GAGE standing in a dark frock coat, a waistcoat and a dark cravat, no hat, holding his tamping iron upright in his right hand at his side', 'proud, steady, serious')} "
+            f"{camera('above the table', 'down at the open case', 'the dark wood table top around the open leather case, nothing else', 'no hands, no room')} "
+            f"{cast(GAGE_28 + ', shown only INSIDE the oval portrait, waist up')} "
+            "EXPRESSION: calm and neutral, lips closed and level, NO smile, NO smirk, cheeks relaxed. His LEFT eyelid (picture-right) is shut for good: "
+            "smooth, flat and slightly sunken, the way an old injury leaves it, NOT a wink (no squeeze, no lifted cheek, no creases fanning out); "
+            "his RIGHT eye (picture-left) is open and looks steadily at the viewer. "
+            f"The portrait fills about 60% of the frame width. The tamping iron in the portrait is {IRON_ROD}, held upright beside him, its full length visible and clearly longer than his torso. "
+            f"{ONE_EACH} {SAFE_FRAMING} {PERIOD} {NO_TEXT}"))
+
+# rows 21 and 30: S1's 16:9 s10 / s12 came back with the bandage as a flat band across BOTH brows. These are EDITS of those frames
+# (the same scene and cast are the point, so the frame is the reference and SAME_CAMERA says so): only Gage's head changes.
+S1_16 = "projects/hc002-s1/assets/images/keyframes16x9"
+S1_GA = "projects/hc002-s1/assets/images/refs/sheet-gage-after.png"
+BANDAGE_FIX = ("Reference 1 is the approved film frame: keep EVERYTHING in it exactly the same (the place, the camera, every person and "
+               "object, the light, the colours, the composition) EXCEPT the bandage on PHINEAS GAGE's head. Reference 2 is Gage's bandaged "
+               "model sheet. His bandage wraps over the CROWN of his head and passes diagonally down over his LEFT eye ONLY (on the RIGHT "
+               "side of the picture); it does NOT cross his right brow or his forehead on the left side of the picture: his RIGHT eye, his "
+               "right eyebrow and the skin and hair above them are bare and visible. ")
+B2["row21-s10-v2"] = dict(aspect="16:9", refs=[f"{S1_16}/s10.orig.png", S1_GA],
+    roles=BANDAGE_FIX + "Same camera as the set plate (intended). ",
+    prompt=("Edit the approved frame: Gage on the hotel piazza in Cavendish, Vermont, September 1848 raises one hand in greeting to Dr Williams "
+            "stepping down from his carriage; Matt leans on the piazza post. Change ONLY Gage's bandage as described; everything else "
+            "stays pixel-for-pixel the same. Exactly ONE bandage, over his left eye (picture-right) only. No blood. " + NO_TEXT))
+B2["row30-s12-v2"] = dict(aspect="16:9", refs=[f"{S1_16}/s12.orig.png", S1_GA],
+    roles=BANDAGE_FIX + "Same camera as the set plate (intended). ",
+    prompt=("Edit the approved frame: two friends whisper in a doorway on a village street in Vermont, 1849, and Phineas Gage walks away far "
+            "down the dirt street, small and a little out of focus. Change ONLY Gage's bandage as described (at this distance a small white "
+            "wrap over the crown and ONE eye, on the picture-right side of his face only); everything else stays pixel-for-pixel the same. "
+            "No blood. " + NO_TEXT))
+
+KEYFRAMES.update(B2)
+
 
 def main():
     chs = chapters()
@@ -375,6 +448,7 @@ def main():
     ep.update({"title": "Phineas Gage: The Story Everyone Gets Wrong (HC002-L)", "playbook": "storybook-medical",
                "format": "long", "theme": {"culture": "new-england-1840s", "font": "montserrat"},
                "image_resolution": "2K", "dual_format": False, "references": REFERENCES, "keyframes": KEYFRAMES,
+               "use_mirrored": USE_MIRRORED,   # user 2026-11-24: these mirrored copies are the stills used (originals kept)
                "storyboard": "2026-11-22: long-storyboard-v1.md + long-backgrounds-v1.md; images approved (user 2026-11-22)",
                "previz_approved": "2026-11-22: user approved the long's images (~$3.50) once its refs were in; cast + HERO first"})
     ep.setdefault("narration", {})
