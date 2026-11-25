@@ -11,6 +11,7 @@ Episode keys are in EPISODES below; add a new episode there (storyboard, previz 
 from __future__ import annotations
 
 import html
+import json
 import re
 import shutil
 import sys
@@ -365,6 +366,33 @@ EPISODES = {
                  "label": "Row 42: before (left) and after the scar paint-out (right), at 6×",
                  "note": "The scar is gone; a small soft notch in the hairline shows only at this zoom."},
             ]},
+        "preview_cut": {
+            "src": REPO / "projects/hc002-l/renders/preview.mp4",
+            "title": "FIRST FULL CUT of the long · 1080p preview, no music (waiting for your OK)",
+            "legend": "6 min 11 s, 1920×1080, 30 fps, -14 LUFS, rendered through the pipeline (size check passed 1920×1080; its own final review found nothing). All 66 rows in order on Liam's recorded narration; the chapter cards, title (after the sting), stamps, name tags and quote cards start on their key words; rows 49 (Kling) and 19 (Omni) are the two passing clips, frame-blended to 30 fps; row 65 is a free evening grade of the row-49 clip (mirrored, 1.25× crop); rows 45, 48 and 26 are Tier A stills; row 13 is the 1:34 redraw; row 55 is v4paint; the Gage stills use the Chile v3 sheet. The sound is Liam plus 70 FREE placeholder effects from the channel library (not tuned); there is NO music. Shown here in nine chapter segments (a page file must stay under 15 MB); the full 1080p file is projects/hc002-l/renders/preview.mp4 (627 MB).",
+            "labels": ["Cold open · sting · title", "1 · The Foreman", "2 · What Happened", "3 · No Longer Gage", "4 · The Myth", "5 · The Evidence",
+                       "6 · The Other Side of the World", "7 · The Ending", "8 · Why It Matters · end screen"],
+            "notes": [
+                "Row 4 (11.8 s): the narration says the bar shoots up through his head; the picture is the empty rock-cut plate with smoke, a white flash and a shake. No Gage, iron or hat: the Tier C pieces are not in this cut.",
+                "Row 17 (84.9 s): the narration walks the iron's path (cheekbone, eye, top of the head); the picture is Harlow's engraving held still, with no path drawn on. Chapter card 2 is hard to read over its white page.",
+                "Row 25 (123.4 s): 'it looked like the iron might win': the candle still has no night-to-dawn grade yet.",
+                "Row 33 (165.7 s): 'many versions end': a dissolve to the row-6 textbook page, not a freeze and sepia of row 32.",
+                "Rows 39 and 40: the four stamps do not fade out and the drawing does not tear; row 40 is a push on the cropped drawing of 36b.",
+                "Row 47 (231.9 s): the map holds only 1.4 s; the route is a schematic sea route round Cape Horn, not a sourced one, and its label collides with the caption.",
+                "Row 56 (272.1 s): the monster drawing does not slide in beside the portrait; the portrait holds and the word 'exploded' appears as a card.",
+                "Row 57 (278.9 s): 12.4 s on one split still (grey doorway left, coach right); the left does not grey and the right does not warm, so it is the longest hold in the cut.",
+                "Quote cards sit in the middle of the frame and cover faces in rows 11, 22 and 29 (and the stamps on row 35 sit on the cartoon face): the card position is fixed in the component.",
+                "Long single-picture stretches (tempo): row 13 (10.3 s), row 29 (8.0 s), row 1 (7.7 s), row 53 (7.7 s), row 17 (7.0 s), row 52 (7.0 s), row 59 (6.9 s), row 39 (6.8 s), row 56 (6.8 s).",
+                "Clips: rows 19, 49 and 65 run 5 s and then hold their last frame for 0.9 to 1.1 s.",
+                "Pictures you already accepted with flaws show as they are: row 44 (spearhead tip, foot of the bed), row 50 (seven reins, passenger faces), row 60 (flared foot), row 62 (the bundle is a short sack), row 64 (five faces), row 36b (a soft crop).",
+            ],
+            "gaps": [
+                "Tier A layers: every still has only a camera push, pull or slide (the motion lint lists all 83 shots as camera-only); the parallax, dust, flicker, candle and grade layers the storyboard promised are not built.",
+                "Row 13's measure line and glint, row 17's amber path, row 25's night-to-dawn grade, row 40's tear, the stamp fades of row 39, and row 4's Tier C hero shot.",
+                "Sound: the placeholders are one-shot library files placed on the rows; no tuning, no music. The end screen is the generic brand end screen.",
+                "4K master: the stills are 2752 px wide, so the final 3840 px render is soft (the pipeline warns); this preview is 1080p.",
+            ],
+        },
         "hero_real": [],   # v2 (2026-11-23): no HERO sprite plans for rows 2, 5, 49; row 4 stays C (S1 pieces)
     },
     "hc002s1": {
@@ -739,6 +767,41 @@ def clip_tests_block(k: str, e: dict, out: Path, img: Path) -> str:
             '<div class="refs cliptests">' + "".join(figs) + '</div></div>')
 
 
+def preview_block(k: str, e: dict, out: Path) -> str:
+    """The first full cut of the long (user 2026-11-25): the 1080p preview split at the chapter starts into web segments (an Artifact
+    file must stay under 15 MB), the picture/narration notes, and what is not built yet."""
+    pv = e.get("preview_cut")
+    if not pv or not Path(pv["src"]).exists():
+        return ""
+    import subprocess
+    src, p = Path(pv["src"]), e["project"]
+    chap = json.load(open(p / "artifacts/chapters.json", encoding="utf-8"))
+    total = float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", str(src)],
+                                 capture_output=True, text=True, check=True).stdout.strip())
+    starts = [0.0] + [c["start"] for c in chap[1:]]
+    ends = starts[1:] + [total]
+    figs = []
+    for i, (a, b) in enumerate(zip(starts, ends)):
+        dst = out / "video" / f"{p.name}-cut-{i}.mp4"
+        if not dst.exists() or dst.stat().st_mtime < src.stat().st_mtime:
+            dst.parent.mkdir(parents=True, exist_ok=True)
+            subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{a:.2f}", "-to", f"{b:.2f}", "-i", str(src), "-vf", "scale=960:540",
+                            "-c:v", "libx264", "-preset", "slow", "-crf", "29", "-maxrate", "850k", "-bufsize", "1700k", "-pix_fmt", "yuv420p",
+                            "-c:a", "aac", "-b:a", "64k", "-movflags", "+faststart", str(dst)], check=True)
+        mb = dst.stat().st_size / 1e6
+        if mb > 14.5:
+            raise SystemExit(f"{dst.name} is {mb:.1f} MB: over the Artifact file limit")
+        label = pv["labels"][i]
+        figs.append(f'<figure><video class="cut" controls playsinline preload="metadata" src="video/{dst.name}"></video>'
+                    f'<figcaption><b>{html.escape(label)}</b><span>{a:.0f}s to {b:.0f}s · {mb:.1f} MB</span></figcaption></figure>')
+    notes = "".join(f"<li>{html.escape(n)}</li>" for n in pv["notes"])
+    gaps = "".join(f"<li>{html.escape(n)}</li>" for n in pv["gaps"])
+    return ('<div class="block"><h3>' + html.escape(pv["title"]) + '</h3><p class="legend">' + html.escape(pv["legend"]) + '</p>'
+            '<div class="refs cliptests">' + "".join(figs) + '</div>'
+            '<p class="legend"><b>Rows where the narration and the picture disagree, or the picture is not what the storyboard asked for:</b></p><ul class="legend">'
+            + notes + '</ul><p class="legend"><b>Not built into this cut (it is a preview):</b></p><ul class="legend">' + gaps + '</ul></div>')
+
+
 def batch1_block(k: str, e: dict, ep: dict, out: Path, img: Path) -> str:
     """Gage long, story stills batch 1 (user 2026-11-23): each still with its check report, a mirrored copy where the closed eye is on
     the wrong side, the prompt, and the free S1 brow-fix attempts."""
@@ -1047,7 +1110,7 @@ def build(out: Path, keys: list[str]) -> Path:
                 stage = "rough cut · waiting for your OK"
                 stages[-1] = stage
         story = story_block(k, e, img)
-        layered = layered_block(k, e, ep, out, img) + hero_block(k, e, out, img) + clip_tests_block(k, e, out, img) + batch1_block(k, e, ep, out, img)
+        layered = preview_block(k, e, out) + layered_block(k, e, ep, out, img) + hero_block(k, e, out, img) + clip_tests_block(k, e, out, img) + batch1_block(k, e, ep, out, img)
         if layered:
             pilots.append(e["short"])
         if story:
