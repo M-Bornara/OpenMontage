@@ -114,8 +114,10 @@ class GeminiOmniFalVideo(BaseTool):
 
     def estimate_cost(self, inputs: dict[str, Any]) -> float:
         if inputs.get("model_version") == "v1.2":
-            # fal live price 2026-11-23: $0.0273 per second (720p call); 1080p / 4k multipliers not published here
-            return round(0.0273 * int(inputs.get("duration", 8)), 2)
+            # fal page (read 2026-11-25): per second of output, 360p $0.0273, 720p $0.0819, 1080p $0.1229, 4k $0.2457 (default 720p).
+            # The $0.0273 used before 2026-11-25 was the 360p rate: 720p estimates were 3x too low.
+            rate = {"360p": 0.0273, "720p": 0.0819, "1080p": 0.1229, "4k": 0.2457}.get(str(inputs.get("resolution", "720p")).lower(), 0.0819)
+            return round(rate * int(inputs.get("duration", 8)), 2)
         return round(0.13 * int(inputs.get("duration", 8)), 2)
 
     def estimate_runtime(self, inputs: dict[str, Any]) -> float:

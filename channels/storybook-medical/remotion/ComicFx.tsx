@@ -81,13 +81,17 @@ const Filters: React.FC<{ split: number; boilSeed: number; boil: number; palette
         </feComponentTransfer>
       </filter>
       {/* cyan + magenta plates printed slightly off register */}
+      {/* cyan + magenta: a tritone (shadow ink-violet, midtone TRUE magenta, highlight TRUE cyan), then the red plate slides off register */}
       <filter id="cfx-cm" x="-3%" y="-3%" width="106%" height="106%" colorInterpolationFilters="sRGB">
-        <feColorMatrix in="SourceGraphic" type="matrix" values="0.4 0.4 0.4 0 0  0.4 0.4 0.4 0 0  0.4 0.4 0.4 0 0  0 0 0 1 0" result="lum" />
-        <feComponentTransfer in="lum" result="cy"><feFuncR type="linear" slope="0.15" /><feFuncG type="linear" slope="1.25" intercept="0.02" /><feFuncB type="linear" slope="1.3" /></feComponentTransfer>
-        <feComponentTransfer in="lum" result="mg"><feFuncR type="linear" slope="1.25" intercept="0.02" /><feFuncG type="linear" slope="0.12" /><feFuncB type="linear" slope="0.95" /></feComponentTransfer>
-        <feOffset in="mg" dx={7} dy={4} result="mg2" />
-        <feOffset in="cy" dx={-5} dy={-3} result="cy2" />
-        <feBlend in="cy2" in2="mg2" mode="screen" />
+        <feColorMatrix in="SourceGraphic" type="matrix" values="0.33 0.33 0.33 0 0  0.33 0.33 0.33 0 0  0.33 0.33 0.33 0 0  0 0 0 1 0" result="lum" />
+        <feComponentTransfer in="lum" result="lum2"><feFuncR type="linear" slope="2.1" intercept="-0.52" /><feFuncG type="linear" slope="2.1" intercept="-0.52" /><feFuncB type="linear" slope="2.1" intercept="-0.52" /></feComponentTransfer>
+        <feComponentTransfer in="lum2" result="tri">
+          <feFuncR type="table" tableValues="0.05 0.55 0.95 0.10 0.80" /><feFuncG type="table" tableValues="0.02 0.03 0.08 0.80 1.0" /><feFuncB type="table" tableValues="0.14 0.50 0.62 1.0 1.0" />
+        </feComponentTransfer>
+        <feColorMatrix in="tri" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="plateR" />
+        <feColorMatrix in="tri" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" result="plateGB" />
+        <feOffset in="plateR" dx={7} dy={4} result="plateR2" />
+        <feBlend in="plateR2" in2="plateGB" mode="screen" />
       </filter>
     </defs>
   </svg>
@@ -118,9 +122,11 @@ export const FxStage: React.FC<{ events: FxEvent[]; children: React.ReactNode }>
       blur += 4 * (1 - u);
     } else if (e.preset === "whip_pan" && active(e, t, 0.5)) {
       // the cut sits at the middle of the event (put the next shot's start there): out in the first half, in during the second
-      const d = e.dur ?? 0.5, u = (t - e.at) / d, dir = e.dir ?? 1, px = e.px ?? 1500;
-      if (u < 0.5) { const k = Easing.in(Easing.cubic)(u * 2); tx += -dir * px * k; whipBlur = Math.max(whipBlur, 70 * k); }
-      else { const k = 1 - Easing.out(Easing.cubic)((u - 0.5) * 2); tx += dir * px * k; whipBlur = Math.max(whipBlur, 70 * k); }
+      // OVERSCAN: the picture is scaled up just enough that the slide never shows the edge (scale >= 1 + |tx| / 960 at the widest point)
+      const d = e.dur ?? 0.5, u = (t - e.at) / d, dir = e.dir ?? 1, px = e.px ?? 300;
+      const k = u < 0.5 ? Easing.in(Easing.cubic)(u * 2) : 1 - Easing.out(Easing.cubic)((u - 0.5) * 2);
+      tx += (u < 0.5 ? -dir : dir) * px * k; whipBlur = Math.max(whipBlur, 70 * k);
+      scale *= 1 + (px * k) / 960 * 1.04;
     } else if (e.preset === "halftone_flashback" && active(e, t, e.dur)) {
       look = e.palette ?? "amber"; dot = e.dot ?? 9;
     } else if (e.preset === "line_boil" && active(e, t, e.dur)) {
@@ -145,7 +151,7 @@ export const FxStage: React.FC<{ events: FxEvent[]; children: React.ReactNode }>
 
 // benday dots over the picture: a rotated dot grid, multiplied in; the dot size grows toward the frame edge for a printed look
 const Benday: React.FC<{ dot: number; palette: Palette }> = ({ dot, palette }) => {
-  const c = palette === "amber" ? "rgba(58,28,8,0.55)" : palette === "cyan_magenta" ? "rgba(20,10,60,0.5)" : "rgba(0,0,0,0.5)";
+  const c = palette === "amber" ? "rgba(58,28,8,0.55)" : palette === "cyan_magenta" ? "rgba(40,0,50,0.45)" : "rgba(0,0,0,0.5)";
   return (
     <AbsoluteFill style={{ overflow: "hidden", pointerEvents: "none" }}>
       <div style={{ position: "absolute", left: "-25%", top: "-25%", width: "150%", height: "150%", transform: "rotate(22deg)", mixBlendMode: "multiply",

@@ -965,6 +965,119 @@ S5("row12d-tamp-v1", "MLS", "from behind and above him", "35 mm",
    size_line=sizes({"the tamping iron": "109 cm long and 3.2 cm thick (34 times longer than it is thick), a thin pole as tall as his chest when he kneels", "the drill hole": "about 5 cm across"}))
 
 
+# ── 2026-11-25 (Mahdi, cap $1.20 for stills + clips): the cold-open pieces. 9 stills, one take each, lint first, Google batch (half price).
+# Gage = S1's 1848 sheet (both eyes open, no scar); NO blood anywhere (Rule 0b); the iron is the slender iron (iron_role).
+CREW_A = "a grey-bearded driller in a flat cap and a dark waistcoat"
+CREW_B = "a heavy, dark-moustached man in a billed cap and rolled sleeves"
+ROCK = "grey layered schist"
+S5("cold-r1-pour-v1", "CU", "low, close to the rock, looking slightly up along the surface", "85 mm",
+   f"a hand in a worn work glove tips a small iron flask and a thin stream of black powder runs down into a round drilled hole in flat {ROCK}; the iron bar lies on the rock beside the hole",
+   "quiet, careful, a held breath", "the Cavendish rock cut", "13 September 1848",
+   f"flat {ROCK} with one round black drill hole, soft out-of-focus rock beyond, clear low light from the left",
+   "very low beside the hole, close to the rock", "along the rock surface at the hole, the spout and the iron bar",
+   f"{ROCK} only, filling the frame and falling out of focus (shallow focus) behind the hole",
+   "no sky, no face, no body, no other tools",
+   "CAST: no faces and no bodies; only ONE hand and wrist in a worn work glove and a rolled shirt cuff, entering from the right; nothing of him but the hand is in the shot.",
+   refs=[STYLE_DETAIL, IRON_REF2], roles=R_IRON2(2),
+   extra=f"The iron bar lying beside the hole is {IRON3}: a thin straight pole, plain.",
+   size_line=scale({"the powder flask": "a small iron flask about 20 cm tall, held in the fist", "the drill hole": "a round hole about 5 cm across, a little wider than two fingers",
+                    "the iron bar": "109 cm long and 3.2 cm thick, a thin pole as thin as a broom handle; only a part of it is in the frame"}))
+
+S5("cold-b1-tip-v1", "ECU", "dead level, a pure side view, very close", "100 mm",
+   f"the pointed tip of the tamping iron rests at the mouth of a round drill hole in {ROCK}, a few grains of black powder scattered on the rock around it",
+   "tense stillness, the instant before", "the Cavendish rock cut", "13 September 1848",
+   f"flat {ROCK} with a round black drill hole, soft rock beyond, clear low light from the left",
+   "right at the hole, level with the rock surface", "along the rock surface at the iron's tip and the hole",
+   f"{ROCK} only, soft and out of focus behind the tip",
+   "no sky, no person, no hand, no other tool",
+   NOBODY,
+   refs=[STYLE_DETAIL, IRON_REF2], roles=R_IRON2(2),
+   extra=f"Only the POINTED end of the iron is in the frame (the tamping iron is {IRON3}); it rests tip-down at the hole's mouth. A few grains of black powder lie on the rock.",
+   size_line=sizes({"the iron's tip": "about 3 cm across where it meets the hole, a thin rod", "the drill hole": "about 5 cm across"}))
+
+S5("cold-b2-ledge-v1", "LS", "from the bottom of the pit, looking up", "24 mm",
+   "PHINEAS GAGE stands small on a rock ledge high above holding the tamping iron upright; two crewmen down in the pit look up at him, one with a hand shading his eyes; a drill hole is visible in the ledge's flat top",
+   "a calm ordinary moment just before", "the pit of the Cavendish rock cut", "13 September 1848",
+   f"a fresh rock cut, a layered {ROCK} wall rising to a ledge, a pale autumn sky above, loose rubble in the pit",
+   "in the pit at the foot of the wall, low", "up the wall at the ledge",
+   f"the layered {ROCK} wall rising to the ledge, loose rubble and a coiled rope in the pit, a strip of pale sky above the ledge",
+   "no far end of the cut, no kegs, no close rock",
+   cast(GAGE_1848 + ", small in the frame (a wide shot, his face tiny), in a low-crowned dark felt hat, white shirt, dark braces, on the ledge at the LEFT of the frame, the iron held upright beside him",
+        f"{CREW_A}, down in the pit, seen from below, looking up",
+        f"{CREW_B}, down in the pit, a hand shading his eyes, looking up"),
+   refs=[G1848, IRON_REF2], roles=R_1848 + "The two crewmen are NOT from the reference. " + iron_role(2),
+   extra=f"The iron he holds is {IRON3}. A round drill hole is visible in the ledge's flat top near his feet.",
+   size_line=sizes({"the tamping iron": "109 cm long and 3.2 cm thick, a thin pole about as tall as his chin, held upright"}))
+
+S5("cold-b3-rod-v1", "ELS", "very low from the pit, looking steeply up", "20 mm",
+   "a small puff of grey smoke at the edge of a rock ledge and a thin dark iron rod already in the air above it, tilted, against a bright sky",
+   "sudden, silent, something has gone wrong", "the pit of the Cavendish rock cut", "13 September 1848",
+   f"the dark edge of a {ROCK} ledge at the lower part of the frame, a bright pale sky filling the rest",
+   "in the pit, flat on the rubble, looking up", "up past the ledge edge into the sky",
+   f"the edge of a {ROCK} ledge at the bottom of the frame and a bright pale sky above it",
+   "no people, no faces, no hands, no kegs",
+   NOBODY,
+   refs=[STYLE_DETAIL, IRON_REF2], roles=R_IRON2(2),
+   extra=f"A thin dark rod, {IRON3}, hangs in the air above the ledge, TILTED about 20 degrees from upright, small in the frame; a small soft puff of grey smoke at the ledge edge. No people, no blood.",
+   size_line=sizes({"the rod in the air": "109 cm long and 3.2 cm thick, a thin pole, small against the sky", "the smoke puff": "about 1 m across"}))
+
+S5("cold-b5-dust-v1", "LS", "slightly high, from the pit side", "28 mm",
+   "on the ledge in settling dust PHINEAS GAGE lies on his back, his face turned away from the camera, his hat on the rocks beside him, while two crewmen run toward him",
+   "stunned stillness, the quiet after", "the ledge of the Cavendish rock cut just after the blast", "13 September 1848",
+   f"a flat {ROCK} ledge with rubble, drifting smoke and settling dust, pale light slanting through the dust from the right",
+   "on the ledge a little way back, slightly above", "across the ledge toward him",
+   f"settling dust and smoke over a {ROCK} ledge with scattered rubble, the layered rock wall faint behind, shafts of pale light from the right",
+   "no sky, no kegs, no blood",
+   cast("PHINEAS GAGE, 25, thick DARK hair, in a white shirt and dark braces covered in grey dust, lying on his back, his FACE turned AWAY from the camera (we see the side of his head from behind); no blood, no injury mark and no bandage visible anywhere; his low-crowned dark felt hat lies on the rocks beside him",
+        f"{CREW_A}, running toward him, mouth open",
+        f"{CREW_B}, running toward him, one arm out"),
+   refs=[G1848], roles=R5 + "The two crewmen are NOT from the reference. ",
+   extra="No blood anywhere in the picture.")
+
+S5("row5-dazed-v1", "MS", "eye level, a little to the side", "50 mm",
+   "PHINEAS GAGE sits up on the rubble, dazed, soot and dust on his face and shirt, a grey cloth held to the left side of his head with one hand; two crewmen kneel beside him",
+   "dazed, alive, the world swimming", "the floor of the Cavendish rock cut just after the blast", "13 September 1848",
+   f"grey broken {ROCK} rubble, drifting smoke and settling dust, pale light slanting through the dust from the right",
+   "kneeling in the rubble a few paces from him", "at his face and the two men beside him",
+   f"a close wall of layered {ROCK} streaked with dust behind the three men, smoke drifting",
+   "no sky, no wide view of the cut, no kegs",
+   cast(GAGE_1848 + ", sitting up, soot and grey dust on his face and white shirt, NO hat, his eyes wide and unfocused (dazed), his right hand holds a grey cloth to the LEFT side of his head (picture-right in a front view); a dark stain on the CLOTH ONLY, no blood on his skin or hair",
+        f"{CREW_A}, kneeling at his side, a hand on his shoulder",
+        f"{CREW_B}, kneeling on his other side, leaning in"),
+   refs=[G1848], roles=R_1848 + "The two crewmen are NOT from the reference. ",
+   extra="No blood on any face, skin, hair or clothes: only a soft dark stain on the grey cloth.")
+
+S5("row9-hilltop-v1", "ELS", "high, from the hilltop above the cut's far end, a diagonal", "24 mm",
+   "small crews work along a long fresh rock cut running away below, tiny figures with hand drills, carts and kegs among autumn hills",
+   "ordinary work in a big landscape", "the Cavendish rock cut seen from the hilltop", "September 1848",
+   f"a long fresh rock cut with layered {ROCK} walls cutting through autumn hills, orange and red maples, a pale sky",
+   "on the hillside above the cut's far end, high", "down the cut diagonally from the upper right to the lower left",
+   f"the long cut running diagonally down through autumn hills, tiny crews and carts along it, the layered {ROCK} walls catching light",
+   "no close people, no faces, no ledge close up",
+   cast("the crews are only TINY dark figures with no faces at all: no detail, no one near the camera"),
+   extra="The cut runs on a DIAGONAL across the frame from the upper right to the lower left; it is NOT a straight-on view of a wall.")
+
+S5("row43b-shelf-v2", "MCU", "eye level on the shelf, a little to the left", "50 mm",
+   "a clean empty wooden museum shelf behind glass with one small handwritten card propped on it, and nothing else",
+   "empty, kept, quiet", "the museum of Harvard Medical College", "1850s",
+   "a glass-fronted wooden cabinet shelf, soft warm light, rows of jars soft and out of focus far behind",
+   "in front of the cabinet, level with the shelf", "straight at the empty shelf and the card",
+   "a plain wooden shelf with nothing on it but a small card, soft pale wood and glass, dark soft shapes far behind",
+   "no iron, no objects, no jars on the shelf, no people",
+   NOBODY,
+   extra="The card is small, propped upright at the front, its handwriting drawn ONLY as soft wavy ink lines. " + WAVY_WRITING,
+   size_line=sizes({"the card": "about 8 cm by 4 cm", "the shelf": "about 1.2 m wide, completely empty"}))
+
+S5("title-bg-v1", "ELS", "wide, from the far side of the cut, a diagonal view", "24 mm",
+   "an empty raw rock cut at dusk under a bruised purple sky, nobody anywhere, still and cold",
+   "dusk, foreboding, a title waiting", "the Cavendish rock cut", "September 1848, dusk",
+   f"a raw fresh rock cut with layered {ROCK} walls, a bruised purple and violet sky with a thin band of orange at the horizon, long cold shadows",
+   "at the far end of the cut at ground level, a little to the left", "along the cut on a diagonal toward the far wall and the sky",
+   f"a raw fresh rock cut, layered {ROCK} walls on both sides in cold shadow, a bruised purple sky above, loose rubble on the floor",
+   "no people, no figures, no kegs, no carts, no tools",
+   NOBODY)
+
+
 def main():
     chs = chapters()
     assert [c["id"] for c in chs] == [f"ch{i}" for i in range(9)], [c["id"] for c in chs]

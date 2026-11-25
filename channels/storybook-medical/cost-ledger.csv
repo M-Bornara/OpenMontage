@@ -760,3 +760,13 @@ time,project,item,usd,note
 2026-11-24 23:27:37,hc002-l,keyframes:row12d-tamp-v1:gemini-3-pro-image:google-batch,0.0670,
 2026-11-24 23:32:09,hc002-l,clip:row48-harbour-omni-v1:gemini-omni-1.2-flash-fal-720p,0.1400,ESTIMATE 0.0273/s x 5 s (live fal price checked 2026-11-24); true up on fal usage page
 2026-11-24 23:32:09,hc002-l,clip:row26-farmhouse-omni-v1:gemini-omni-1.2-flash-fal-720p,0.1400,ESTIMATE 0.0273/s x 5 s (live fal price checked 2026-11-24); true up on fal usage page
+2026-11-25 09:28:21,hc002-l,keyframes:cold-r1-pour-v1:gemini-3-pro-image:google-batch,0.0670,
+2026-11-25 09:28:21,hc002-l,keyframes:cold-b1-tip-v1:gemini-3-pro-image:google-batch,0.0670,
+2026-11-25 09:28:21,hc002-l,keyframes:cold-b2-ledge-v1:gemini-3-pro-image:google-batch,0.0670,
+2026-11-25 09:28:21,hc002-l,keyframes:cold-b3-rod-v1:gemini-3-pro-image:google-batch,0.0670,
+2026-11-25 09:28:21,hc002-l,keyframes:cold-b5-dust-v1:gemini-3-pro-image:google-batch,0.0670,
+2026-11-25 09:28:21,hc002-l,keyframes:row5-dazed-v1:gemini-3-pro-image:google-batch,0.0670,
+2026-11-25 09:28:21,hc002-l,keyframes:row9-hilltop-v1:gemini-3-pro-image:google-batch,0.0670,
+2026-11-25 09:28:21,hc002-l,keyframes:row43b-shelf-v2:gemini-3-pro-image:google-batch,0.0670,
+2026-11-25 09:28:21,hc002-l,keyframes:title-bg-v1:gemini-3-pro-image:google-batch,0.0670,
+2026-11-25 09:40:00,hc002-l,CORRECTION: fal prices Omni 1.2 per second by resolution (360p 0.0273; 720p 0.0819; 1080p 0.1229). Earlier Omni rows at 0.1400 used the 360p rate; if called at 720p each was about 0.41. Check fal usage page,0.0000,correction note only

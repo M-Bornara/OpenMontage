@@ -50,7 +50,8 @@ FX = [
 ]
 
 
-def main() -> Path:
+def main(name: str = "comic-demo", shots_in=None, fx_in=None, end_in=None, extra_cues=None) -> Path:
+    shots_in = shots_in or SHOTS; fx = fx_in or FX; end = end_in or END
     rem = P / "remotion"
     if rem.exists():
         shutil.rmtree(rem)
@@ -58,7 +59,7 @@ def main() -> Path:
     (rem / "public/img").mkdir(parents=True, exist_ok=True)
     (rem / "public/vid").mkdir(parents=True, exist_ok=True)
     shots = []
-    for sid, a, b, src, motion in SHOTS:
+    for sid, a, b, src, motion in shots_in:
         if src.suffix == ".mp4":
             shutil.copy(src, rem / f"public/vid/{sid}.mp4")
             kind, rel = "video", f"vid/{sid}.mp4"
@@ -66,18 +67,18 @@ def main() -> Path:
             episode.fit_frame(src, rem / f"public/img/{sid}.jpg", (3840, 2160))
             kind, rel = "image", f"img/{sid}.jpg"
         shots.append({"id": sid, "src": rel, "kind": kind, "start": a, "end": b, "inPoint": 0, "motion": motion, "transitionIn": "cut", "darken": 0})
-    props = {"totalSeconds": END, "shots": shots, "overlays": [], "words": [], "captions": False, "fx": FX}
+    props = {"totalSeconds": end, "shots": shots, "overlays": [], "words": [], "captions": False, "fx": fx}
     json.dump(props, open(rem / "props.json", "w", encoding="utf-8"))
     composer = REPO / "remotion-composer"
     entry = episode.tools()["video_compose"]._stage_atelier_project((rem / "index.tsx").resolve(), composer.resolve())
     out = P / "renders"
     out.mkdir(parents=True, exist_ok=True)
-    silent = out / "comic-demo-silent.mp4"
+    silent = out / f"{name}-silent.mp4"
     subprocess.run(["npx", "remotion", "render", str(entry), "StorybookLong", str(silent), f"--props={(rem / 'props.json').resolve()}",
                     f"--public-dir={(rem / 'public').resolve()}", "--log=error"], cwd=composer, check=True, shell=sys.platform == "win32")
     # sound: the hooks from the events + a few free library cues on the scene (spark, riser, cart)
-    cues = comic_fx.sfx_for(FX) + [{"name": "riser-drone", "at": 0.3, "gain_db": -22.0, "dur": 2.7}, {"name": "metal-clank", "at": 2.32, "gain_db": -16.0},
-                                    {"name": "horse-carriage", "at": 8.6, "gain_db": -24.0, "dur": 5.0}]
+    cues = comic_fx.sfx_for(fx) + (extra_cues if extra_cues is not None else [{"name": "riser-drone", "at": 0.3, "gain_db": -22.0, "dur": 2.7}, {"name": "metal-clank", "at": 2.32, "gain_db": -16.0},
+                                    {"name": "horse-carriage", "at": 8.6, "gain_db": -24.0, "dur": 5.0}])
     lib = KIT / "library/sfx"
     ins, chains = [], []
     for i, c in enumerate(cues):
@@ -87,9 +88,9 @@ def main() -> Path:
         chains.append(f"[{i}:a]{trim}asetpts=PTS-STARTPTS,aformat=sample_rates=48000:channel_layouts=stereo,volume={c['gain_db']}dB,"
                       f"adelay={int(c['at'] * 1000)}|{int(c['at'] * 1000)}[a{i}]")
     mix = "".join(f"[a{i}]" for i in range(len(cues)))
-    final = out / "comic-demo.mp4"
+    final = out / f"{name}.mp4"
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(silent), *ins, "-filter_complex",
-                    ";".join(chains) + f";{mix}amix=inputs={len(cues)}:normalize=0,atrim=0:{END},loudnorm=I=-14:TP=-1.5[m]",
+                    ";".join(chains) + f";{mix}amix=inputs={len(cues)}:normalize=0,atrim=0:{end},loudnorm=I=-14:TP=-1.5[m]",
                     "-map", "0:v", "-map", "[m]", "-c:v", "copy", "-c:a", "aac", "-b:a", "160k", "-shortest", str(final)], check=True)
     print(final, f"{episode.duration(final):.2f}s", "cues:", [(c["name"], c["at"]) for c in cues])
     return final
