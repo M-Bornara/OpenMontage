@@ -51,3 +51,17 @@ Decision: row 49 upgrade accepted. Omni 1.2 Flash was then tested on the same fr
 ## Tier D results, rows 19 and 45 (2026-11-23, Omni 1.2 Flash, ~$0.137 each, estimates)
 Row 19 ox cart: PASS (counts, yoke, no flashing, no new objects); cart travels ~4% of the frame width in 5 s, camera locked; wheel direction to be judged by eye. Row 45 stable: FAIL on "no new objects" (breath drawn as white scratch marks), caused by our motion text. Retake with minimal motion text (L73) once, same model.
 Row 45 retake (minimal text, no breath, ~$0.137 est., 5 s, 720p): FAIL again. Nostrils and mouth are clean (no scribbles), horse nods once, but from about 0.8 s to 1.3 s a SECOND brush appears in his other hand (the rope hand), the lead rope hangs free for a moment, then the rope is back in his hand. Fails "no new objects", "brush stays in his hand" and "rope attached". Decision (Mahdi): no more retakes; row 45 goes to Tier A (still + slow push + snort/hooves sound). Two takes spent, ~$0.27 + 2 stills $0.13.
+
+## Tier D results, rows 48 and 26 (2026-11-24, Omni 1.2 Flash, ~$0.137 each, estimates) and the FINAL TALLY (Mahdi, 2026-11-25)
+Row 48 harbour (prompt: "Ships sway gently and the water ripples. Locked camera. No cuts."): FAIL on "no new objects": the model added about seven seagulls that are in neither the still nor the prompt (the empty sky is filled). Ships, coaches, houses held; camera locked; no flashing (max brightness step 0.26).
+Row 26 farmhouse (prompt: "Gage walks slowly forward a few steps. Locked camera. No cuts."): FAIL on style drift and new objects: Gage's face was REDRAWN as he walked toward the camera (a squint at the start, both eyes wide open at the end, more shading), which breaks the shut-left-eye rule, and a few leaves drifted down that were not moving in the still. Counts, hands, props and the locked camera held; no flashing (max step 0.29).
+**Final Tier D tally (decided with Mahdi, 2026-11-25):**
+| Row | Result | Used as |
+|---|---|---|
+| 49 coach | Kling v2.1 pro PASS (Omni 1.2 also held) | the clip (Kling, 5 s) |
+| 19 ox cart | Omni 1.2 Flash PASS | the clip (frame-blended to 30 fps) |
+| 45 stable | FAIL twice (breath scratches; a second brush) | Tier A: still + slow push + hooves and a snort in the sound |
+| 48 harbour | FAIL (gulls added) | Tier A: still + slow pan + gulls and flags in the SOUND only |
+| 26 farmhouse | FAIL (face redrawn, leaves) | Tier A: still + slow push + wind in the sound |
+| 65 evening coach | not generated | a free evening GRADE of the row-49 clip (a wider crop) |
+Causes, for the rule: wide shots with a locked sky and no moving faces are the safe Tier D candidates (rows 49, 19). An empty sky gets gulls; a face that walks toward the camera is re-rendered; a hand with a tool gets a second tool. No Tier D clip in the long is ever used unchecked; the failed clips are kept on disk and not used. Total Tier D spend on the long: about $1.09 (Kling $0.49 + five Omni takes at ~$0.14, estimates).

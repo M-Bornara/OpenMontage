@@ -358,3 +358,10 @@ Retake result: the minimal text removed the scribbles but the model then duplica
 3. Sheet check (v2): the scar was on the RIGHT forehead in the top-left bust (never mirrored) and the top-right head (a second line), so mirroring was NOT the only cause: repaint the sheet, not just the shots (v3 = scar on his left).
 4. Tier D on Omni 1.2 Flash, rows 48 and 26 (one take each, about $0.137): row 48 invented seven gulls although the prompt never mentioned them (the sky is empty in the still and the model fills it); row 26 re-rendered Gage's face while he walked toward the camera (both eyes open) and dropped leaves. Wide shots with a LOCKED sky and no faces in motion are the safe Tier D candidates; a walking face and an empty sky are not. Both go to Tier A (still + push + sound) unless Mahdi wants a second take.
 5. fal's live price can be read with the account key: GET api.fal.ai/v1/models/pricing?endpoint_id=... (loaded by importing tools.base_tool); checked $0.0273/s on 2026-11-24.
+
+## L80 (2026-11-25): final Tier D tally and what it teaches
+1. Tier D passes only on WIDE shots with a LOCKED sky and NO face in motion: row 49 (coach, Kling pass) and row 19 (ox cart, Omni pass). Rows 45, 48 and 26 are Tier A (still, slow push or pan, sound).
+2. Row 48 failed because the model ADDED seven gulls to an empty sky although the prompt never named them; do not hope the model leaves a sky empty, and put gulls and flags in the SOUND only.
+3. Row 26 failed because Gage's FACE was redrawn when he walked toward the camera (eyes opened, shading changed) and leaves fell that were still in the still; any shot where the face grows larger or turns re-renders it. Keep a face still, or keep it small and moving across the frame.
+4. Row 45 failed twice (breath scratches, then a second brush): small things held in hands (brush, rope) are not safe in Tier D.
+5. Row 65 needs no clip: the row-49 clip with an evening grade and a wider crop is free and passes by construction.
