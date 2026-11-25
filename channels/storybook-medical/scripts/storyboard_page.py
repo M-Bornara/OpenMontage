@@ -269,6 +269,27 @@ EPISODES = {
                  "label": "Row 55 v3 face (left) against the Wilgus face (right), at 3×",
                  "note": "The photograph's closed lid is flat and sunken with no creases. Ours is smoother than v2 but is still drawn with a lash curve and a lifted cheek."},
             ]},
+        "batch4": {
+            "title": "2026-11-25 · rows 36b, 36c, 55 (free) and row 13, the iron on its own ($0.067)",
+            "legend": "Actual cost $0.067 (one still, Gemini Batch); hc002-l total $4.60. Free: 36b is a tight crop of 36a's drawing, 36c is a cruder, higher-contrast ink version of row 7's page, row 55 has its shut lid and mouth paint-fixed (v3 kept). Paid: row 13, the iron alone on a flat rock. Rows 54a, 31, 28 and 61 are accepted as they are. Held: rows 60 and 64 re-rolls, the other 11 stills of batch 2b, all clips, the Dancing stills.",
+            "items": [
+                {"name": "row36b-textbook-v2crop", "title": "Row 36b · the textbook's head drawing (free: a crop of 36a)",
+                 "report": "A 1000 px wide crop of 36a's open-book drawing (an older man's snarling head with the bold line across it), scaled to the 2752 x 1536 frame with light sharpening. It is a crop of an existing image, so it is soft at 100% (about 2.75x enlargement), fine at film scale. One drawing, the same one as 36a, no text. PASS."},
+                {"name": "row36c-paperback-v2ink", "title": "Row 36c · the paperback's cruder cartoon (free: row 7's page, as rough ink)",
+                 "report": "Made from row 7's cartoon head: local threshold, warped and broken lines for a rougher hand, then a sepia ink on warm paper with a soft vignette (no colour from the original). It reads as the same monster head drawn more crudely and with more contrast; the page's wavy text lines are kept as scratchy marks. No readable text. PASS."},
+                {"name": "row55-portrait-v4paint", "title": "Row 55 · v3 with the shut lid and mouth paint-fixed (free; v3 kept)",
+                 "report": "Lid: the lash curve and the lifted cheek under the shut left eye were painted out and one flat, slightly sunken lid line put in; mouth: the corner curl painted out and one level line drawn. Does it still read as a wink? No longer a squeeze or a lash flick, so it reads as a shut lid; but the retouch is visible at 4x (a ruled lid line, and the mouth shows a faint double line) and the brow still slightly lifts on that side. At film scale it is acceptable; a clean fix would need a re-roll, not more painting."},
+                {"name": "row13-iron-v1", "title": "Row 13 · the tamping iron alone on a flat rock, side view (paid, one take)",
+                 "report": "Pointed at ONE end only: YES (the right end; the left is not pointed). Blunt and cut flat at the other end: YES (flat-cut face, a very slightly softened corner, no collar or knob). Straight: YES, perfectly horizontal. No text, no inscription, no hand, no person: YES. It fills the width (about 6% to 96%). Where it differs from the real iron: it is thicker than 1 1/4 in (about 1:21 thick to length, the real one is about 1:34), and its taper is short (about the last 10% of the length, not the last foot, which is a quarter). The rock ledge and morning light came out as asked."},
+            ],
+            "images": [
+                {"id": "lid", "src": REPO / "projects/hc002-l/review/row55_lid_before_after.png",
+                 "label": "Free: row 55, v3 (left) and the paint-fixed v4 (right), face at 4x",
+                 "note": "Left: the shut lid has a lash curve that flicks up at the outer end, a lifted cheek bulge and a curled mouth. Right: one flat lid line, the cheek smoothed, a level mouth."},
+                {"id": "ironref2", "src": REPO / "projects/hc002-l/refs/iron-ref-v2.png",
+                 "label": "iron-ref-v2.png, cut from row 13: the iron reference for every later iron shot",
+                 "note": "The rod strip cut from row 13 (it passed the four checks). Note its two differences from the real iron: a little thick, and a short taper. The written description stays with it."},
+            ]},
         "hero_real": [],   # v2 (2026-11-23): no HERO sprite plans for rows 2, 5, 49; row 4 stays C (S1 pieces)
     },
     "hc002s1": {
@@ -648,7 +669,7 @@ def batch1_block(k: str, e: dict, ep: dict, out: Path, img: Path) -> str:
     the wrong side, the prompt, and the free S1 brow-fix attempts."""
     kf = e["project"] / "assets/images/keyframes16x9"
     blocks = []
-    for bk, tag in (("batch1", "b1"), ("batch2", "b2"), ("batch3", "b3")):   # batch2 = the 2026-11-24 re-rolls, batch3 = row 55 v3 + batch 2a
+    for bk, tag in (("batch1", "b1"), ("batch2", "b2"), ("batch3", "b3"), ("batch4", "b4")):   # batch4 = 2026-11-25: free crops + row 13; batch2 = the 2026-11-24 re-rolls, batch3 = row 55 v3 + batch 2a
         b = e.get(bk)
         if not b:
             continue

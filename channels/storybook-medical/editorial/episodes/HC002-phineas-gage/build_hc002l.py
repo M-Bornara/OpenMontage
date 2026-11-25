@@ -713,6 +713,21 @@ S("row64-lecture-v1", "LS", "eye level, from the back of the room", "28 mm",
 
 KEYFRAMES.update(B3)
 
+# ── 2026-11-25 (user): row 13, ONE still ($0.067): the iron alone, a candidate for iron-ref-v2.png ─────────────────────────────
+B4 = {}
+B4["row13-iron-v1"] = dict(aspect="16:9", refs=[STYLE_DETAIL, IRON_REF],
+    roles=(STYLE_ROLE + "Reference 2 is ONLY the PROPORTION and straightness of the iron: a long, straight, perfectly round rod of one even "
+           "thickness along its whole length, pointed at ONE end only; ignore its grey background and its blur. "),
+    prompt=(f"{set_block('a flat grey rock ledge in the open air', 'September 1848', 'a flat grey rock surface, clear low morning light from the left, a soft pale sky blur behind, nothing else')} "
+            f"{framing('MS', 'dead level with the rock, a pure side view', '50 mm', 'the tamping iron lies alone on a flat rock, perfectly horizontal, its full length filling the width of the frame from the left edge to the right edge', 'quiet, plain, a small heavy object')} "
+            f"{camera('beside the rock at its own height, square on to the iron', 'straight at the side of the iron', 'a flat grey rock surface and a soft pale morning sky blur behind', 'no person, no hand, no other object')} "
+            f"{NOBODY} The iron is {IRON_ROD2}. Draw it as ONE straight rod with the POINTED end at the RIGHT and the BLUNT, flat-cut end at the LEFT: "
+            "the thickness stays the same along the whole rod until the last foot at the right, where it narrows smoothly to a point; the LEFT end is cut flat and is NOT pointed, "
+            "NOT rounded, NOT flared. A smooth dull dark-grey surface with a soft highlight along the top; no inscription, no marks and no writing anywhere on it. "
+            + sizes({"the tamping iron": "109 cm long and 3.2 cm thick, as thin as a broom handle, lying on a flat rock ledge"})
+            + f" {SAFE_FRAMING} {PERIOD} {NO_TEXT}"))
+KEYFRAMES.update(B4)
+
 
 def main():
     chs = chapters()

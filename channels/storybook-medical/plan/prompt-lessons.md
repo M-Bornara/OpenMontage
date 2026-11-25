@@ -338,3 +338,8 @@ Retake result: the minimal text removed the scribbles but the model then duplica
 3. `iron-ref.png` (cut from the Wilgus daguerreotype along the rod's axis, hand-free stretches only) is low-resolution: it carries proportion and straightness, not the point. It fixed the flared head and collar on row 55 and row 60.
 4. The row-58 scar was above the SHUT eye (his left forehead), the correct side; only the colour was wrong. Check which side a mark sits on from the crop, not from a downscaled view.
 5. Row 55 v3 (Wilgus as pose and expression): head straight and brows level worked; the shut lid still carries a lash curve and a lifted cheek (a mild wink). Open: a paint fix of the lid.
+
+## L77 (2026-11-25): free crops beat re-rolls for "the same drawing"; the lone iron
+1. Rows 36b/36c failed twice for the same reason (the model invents the drawing). Free fix, no spend: 36b = a crop of 36a's drawing; 36c = row 7's cartoon through threshold, warp, grain and a sepia ink grade (`make_free_stills_0b.py`). When a shot is "the same picture as another shot", derive it from that image.
+2. Row 55 v3 paint fix: inpaint a TIGHT mask (the lid ellipse, never touching the brow rows, else the brow's black bleeds into a smear), then draw one flat lid line. Colour tuples in OpenCV are BGR (a "brown" given as RGB came out purple). A retouched mouth shows a faint double line at 4x.
+3. Row 13, the iron alone on a flat rock (one take, `row13-iron-v1`): one point, one flat blunt end, straight, no text, fills the width. Remaining differences from the real rod: about 1.6x too thick (1:21 against 1:34) and a short taper (last 10% against a quarter). Saved as `refs/iron-ref-v2.png`; keep the written description with it.
