@@ -83,26 +83,72 @@ CHAPTERS = {"ch1": "The Foreman", "ch2": "What Happened", "ch3": "No Longer Gage
 for i in range(1, 9):
     ov("chapter", ch(f"ch{i}") + 0.1, ch(f"ch{i}") + 2.8, n=i, text=CHAPTERS[f"ch{i}"])
 
-# ── 0 · cold open ──
-shot("r01", 0.0, S1("s3"), push(1.04, 1.18)); fx("sand-pour", 0.8, -24, dur=2.5)
-shot("r02a", rs(2), REF("plate-r2-v2"), push(1.04, 1.12)); fx("crowd-murmur", rs(2), -26, dur=1.5)
+def callback(sid, t, palette):
+    """C3's first 1.2 s again (natural speed, the next shot starts 1.2 s later) under a halftone grade and a 2-frame impact flash."""
+    shot(sid, t, VID("cold-c3-1080p30"), static, fx_flash=True)      # fx_flash: the 2-frame impact flash is declared to the cut audit
+    cfx(preset="impact_frame", at=t, frames=2, x=50, y=60)
+    cfx(preset="halftone_flashback", at=t, dur=1.2, palette=palette, dot=9)
+    cfx(preset="zoom_punch", at=t + 0.05, dur=0.3, amount=0.06)
+    fx("whoosh", t, -16)
+
+
+# ── 0 · cold open (rebuilt 2026-11-25, Mahdi): pour -> tip -> glance -> C1 spark -> C2 blast -> C3 rod -> C4 aftermath -> dazed ──
+# Clips at natural speed and length, never frozen or stretched: C2 (Omni, 4.0 s) is shown for as long as the narration needs (it ends before Gage
+# stands, at 2.5 s); C3 (Omni) only its first 1.2 s (from 1.3 s the rod turns into a cross: failed take, not retaken); C1 and C4 are Tier A (a still
+# with comic-kit effects and free-library sound). comic_fx events (ComicFx.tsx) go to episode.json "comic_fx".
+comic = []
+
+
+def cfx(**kw):
+    comic.append({k: (round(v, 2) if isinstance(v, float) else v) for k, v in kw.items()})
+
+
+T1 = round(W(3, "spark") - 1.3, 2)          # C1: the strike (1.3 s into the shot) lands on "spark"
+T2 = round(W(4, "shoots") - 0.30, 2)        # C2: the blast starts 0.30 s into the clip and lands on "shoots"
+T3 = W(4, "top", lead=0.08)                 # C3: the rod flies "out the top of his skull"
+T4 = round(T3 + 1.2, 2)                     # C4: the aftermath, until "talking"
+T5 = W(5, "talking")
+shot("r01", 0.0, K("cold-r1-pour-v1"), push(1.04, 1.18)); fx("sand-pour", W(1, "powder", lead=0.2), -22, dur=2.5)
+shot("r01b", W(1, "bar", lead=0.15), K("cold-b1-tip-v1"), push(1.0, 1.05))
+shot("r02a", rs(2) - 0.5, REF("plate-r2-v2"), push(1.04, 1.12)); fx("crowd-murmur", rs(2), -26, dur=1.5)
 shot("r02b", W(2, "glances"), K("row2-glance-v1"), push(1.06, 1.16))
-shot("r03", rs(3), S1("s5"), push(1.08, 1.2), transition="flash", hit={"at": 0.15, "strength": 3, "seconds": 0.5}); fx("metal-clank", rs(3) + 0.15, -14)
-shot("r04", rs(4), REF("plate-r4"), pull(1.25, 1.05), transition="flash", hit={"at": 0.1, "strength": 4, "seconds": 0.7}); fx("boom-low", rs(4) + 0.1, -10)
-shot("r05a", rs(5), K("row5a-lying-v1"), push(1.04, 1.12))
-shot("r05b", W(5, "talking"), K("row5b-elbow-v1"), push(1.04, 1.14)); fx("gasp", rs(5) + 0.4, -26)
+# C1 (Tier A): the same still as the tip, a much tighter crop on the hole (zoom ratio > 1.5 to the tip shot), the spark on the strike
+shot("c1", T1, K("cold-b1-tip-v1"), keys(0.68, 0.49, 1.62, 1.78, T2 - T1))
+cfx(preset="zoom_punch", at=T1 + 1.3, dur=0.3, amount=0.06)
+cfx(preset="comic_burst", at=T1 + 1.32, dur=0.5, x=50, y=50, w=16, h=22, color="#FFE066", rot=-8, points=9)
+cfx(preset="onomatopoeia", at=T1 + 1.34, dur=0.6, text="TCK!", x=58, y=30, size=120, rot=-9, color="#FFFFFF")
+cfx(preset="rgb_split", at=T1 + 1.32, dur=0.35, px=9)
+cfx(preset="screen_shake", at=T1 + 1.32, dur=0.3, strength=6)
+fx("metal-clank", T1 + 1.3, -12)
+# C2 (Omni 1.2 clip, natural speed): impact frame, comic burst over the blast, BOOM, shake
+shot("c2", T2, VID("cold-c2-1080p30"), static)
+B2 = T2 + 0.30
+cfx(preset="impact_frame", at=B2, frames=3, x=32, y=24)
+cfx(preset="comic_burst", at=B2 + 0.1, dur=1.3, x=31, y=24, w=34, h=46, color="#FFC43D", rot=-6)
+cfx(preset="onomatopoeia", at=B2 + 0.1, dur=1.3, text="BOOM!", x=36, y=34, size=300, rot=-7, color="#E2352B")
+cfx(preset="screen_shake", at=B2 + 0.2, dur=0.5, strength=10)
+fx("boom-low", B2, -8); fx("stamp-thud", B2 + 0.02, -10)
+# C3 (Omni 1.2 clip): only its first 1.2 s at natural speed
+shot("c3", T3, VID("cold-c3-1080p30"), static)
+cfx(preset="zoom_punch", at=T3, dur=0.3, amount=0.1)
+fx("whoosh", T3, -14)
+# C4 (Tier A): the beat-5 still, slow push, dust, ringing ears, wind and running steps
+shot("c4", T4, K("cold-b5-dust-v1"), keys(0.5, 0.54, 1.12, 1.24, T5 - T4))
+cfx(preset="dust", at=T4, dur=T5 - T4, count=90, x=50, y=55, w=100, h=80, size=9, drift=55)
+fx("ear-ring", T4, -22, dur=2.5); fx("desert-wind", T4, -20, dur=round(T5 - T4, 2)); fx("running-footsteps", T4 + 0.4, -20, dur=2.2)
+shot("r05", T5, K("row5-dazed-v1-soot"), push(1.04, 1.14))
 shot("r06", rs(6), K("row6-textbook-v1"), pull(1.16, 1.04)); fx("paper-slide", rs(6) + 0.2, -22)
 shot("r07", rs(7), K("row7-monster-v1"), push(1.04, 1.16), grey={"from": 1.0, "to": 3.2}); fx("riser-drone", rs(7), -26, dur=3.0)
 sting = round(chapters["ch0"]["end"] + 0.15, 2)
 shot("STING", sting, "brand:sting.mp4", static); sfx.append({"file": "brand:sting.mp4", "at": sting, "as_is": True, "dur": 1.8})
 title_at = round(sting + 1.8, 2)
-shot("TITLE", title_at, S1("s2b"), push(1.04, 1.1), darken=0.3, transition="dissolve")
+shot("TITLE", title_at, K("title-bg-v1"), push(1.04, 1.1), darken=0.3, transition="dissolve")
 ov("title", title_at + 0.2, ch("ch1") + 0.4, text="Phineas Gage: The Story Everyone Gets Wrong", sub="AN ODDLY MATT STORY")
 
 # ── 1 · The Foreman ──
 shot("r08", rs(8), K("row8-farm-v1"), slide(-2, 2)); fx("birdsong", rs(8), -26, dur=3.2)
 ov("location", W(8, "born", lead=0.2), W(8, "born") + 3.2, text="GRAFTON COUNTY, N.H.", sub="c. 1823")
-shot("r09", rs(9), S1("s2b"), keys(0.50, 0.70, 1.9, 2.0, re_(9) - rs(9) + 0.7));   # the crew; the title card holds the wide of this still
+shot("r09", rs(9), K("row9-hilltop-v1"), push(1.02, 1.12))
 fx("metal-clank", rs(9) + 0.3, -26, dur=2.0)
 shot("r10", rs(10), S1("s2a"), push(1.04, 1.16, y=2))
 shot("r11", rs(11), K("row11-keg-v1"), push(1.04, 1.14)); fx("children-laughing", rs(11) + 2.2, -26, dur=1.5)
@@ -120,7 +166,10 @@ shot("r16", rs(16), S1("s5"), push(1.3, 1.55, x=3, y=2), hit={"at": 2.2, "streng
 ov("quote", W(16, "struck", lead=0.2), re_(16) + 0.3, text="struck fire upon the rock.", source="Harlow", highlight="struck fire")
 
 # ── 2 · What Happened ──
-shot("r17", rs(17), K("row17-doc"), push(1.0, 1.1)); fx("boom-low", rs(17) + 0.4, -22)
+CB17 = W(17, "top", lead=0.1)        # callback: C3's first 1.2 s on "came out through the top of his head" (amber), then the doc again
+shot("r17", rs(17), K("row17-doc"), keys(0.5, 0.5, 1.0, 1.06, CB17 - rs(17))); fx("boom-low", rs(17) + 0.4, -22)
+callback("cb17", CB17, "amber")
+shot("r17b", CB17 + 1.2, K("row17-doc"), keys(0.5, 0.5, 1.07, 1.12, rs(18) - CB17 - 1.2), cut="same-camera cut intended")   # the doc continues its push
 shot("r18", rs(18), K("row5b-elbow-v1"), push(1.3, 1.45, x=-3)); fx("cloth-rustle", rs(18) + 1.0, -26)
 C19 = clip_len("row19-oxcart-omni-v1-1080p30")
 shot("r19", rs(19), VID("row19-oxcart-omni-v1-1080p30"), static); fx("horse-carriage", rs(19), -24, dur=C19)
@@ -165,7 +214,8 @@ shot("r38", rs(38), K("row38-slips-v1"), push(1.02, 1.12)); fx("wood-pile-fall",
 shot("r39", rs(39), K("row7-monster-v1"), keys(0.50, 0.62, 2.1, 1.5, re_(39) - rs(39) + 0.7), grey={"from": 0.0, "to": 0.1}); fx("quill-writing", rs(39) + 0.5, -26, dur=3.0)
 ov("quote", W(39, "aggressive", lead=0.3), re_(39) + 0.3, text="aggressive and boastful dissipated drunken bully.",
    source="Macmillan, 2008, on how modern writers portray Gage", highlight="drunken bully")
-shot("r40", rs(40), K("row36b-textbook-v2crop"), push(1.04, 1.14)); fx("paper-crumple", rs(40) + 2.2, -20)
+callback("cb40", rs(40), "cyan_magenta")     # in the pause before "did Phineas Gage really..."
+shot("r40", rs(40) + 1.2, K("row36b-textbook-v2crop"), push(1.04, 1.14)); fx("paper-crumple", rs(40) + 2.2, -20)
 
 # ── 5 · The Evidence ──
 shot("r41", rs(41), K("row41-boston-v2-flip"), push(1.02, 1.12)); fx("crowd-murmur", rs(41), -28, dur=3.5); fx("chair-scrape", rs(41) + 1.4, -26)
@@ -173,7 +223,7 @@ ov("location", rs(41) + 0.2, rs(41) + 3.4, text="BOSTON", sub="1849–50")
 shot("r42", rs(42), K("row42-barnum-v2paint"), push(1.02, 1.1)); fx("crowd-murmur", rs(42), -26, dur=3.5)
 ov("location", rs(42) + 0.2, rs(42) + 3.4, text="NEW YORK")
 shot("r43a", rs(43), K("row43a-shelf-v1"), push(1.02, 1.08))
-shot("r43b", W(43, "then", lead=0.1), K("row43b-shelf-v1paint"), push(1.02, 1.08), cut="same-camera cut intended")   # the iron is gone: the locked frame is the point
+shot("r43b", W(43, "then", lead=0.1), K("row43b-shelf-v2"), push(1.02, 1.08))   # the new empty shelf (a different angle from 43a)
 fx("glass-clink", W(43, "then"), -20)
 shot("r44", rs(44), K("row44-bedside-v1"), push(1.02, 1.1)); fx("watch-ticking", rs(44), -30, dur=3.0)
 ov("quote", W(44, "constant", lead=0.3), re_(44) + 0.3, text="constant companion.", source="Harlow", highlight="constant companion")
@@ -225,7 +275,8 @@ shot("r65", rs(65), VID("row65-evening-from49"), static); fx("horse-carriage", r
 shot("r65d", rs(65) + C65, K("row65-detail"), push(1.0, 1.08))      # the team, tight
 shot("r66a", rs(66), K("row55-portrait-v4paint"), keys(0.46, 0.72, 2.1, 2.2, W(66, "coach", lead=0.2) - rs(66)))   # the hand on the iron
 shot("r66b", W(66, "coach", lead=0.2), K("row50-reins-v1"), push(1.04, 1.12), transition="dissolve")
-shot("r67", rs(67), K("row55-portrait-v4paint"), push(1.0, 1.12))   # the whole case, wide
+callback("cb67", rs(67), "mono")           # "And the iron that went through his head?"
+shot("r67", rs(67) + 1.2, K("row55-portrait-v4paint"), push(1.0, 1.12))   # the whole case, wide
 outro = round(words[-1]["end"] + 0.9, 2)
 shot("OUTRO", outro, "brand:sting-outro.mp4", static); sfx.append({"file": "brand:sting-outro.mp4", "at": outro, "as_is": True, "dur": 1.8})
 shot("END", round(outro + 1.8, 2), "brand:endscreen.mp4", static)
@@ -233,6 +284,8 @@ END = round(outro + 1.8 + 20.0, 2)
 
 # clips shorter than their slot continue as a still of their own last frame ("use" = the clip's length)
 shots.sort(key=lambda s: s["start"])
+for s in shots:    # snap every start to the 30 fps grid (Remotion rounds half up, Python half to even: 5.95 s = frame 178.5 was cut one frame later than audited)
+    s["start"] = round(int(s["start"] * 30 + 0.5) / 30, 4)
 final = []
 for i, s in enumerate(shots):
     s["end"] = round(shots[i + 1]["start"] if i + 1 < len(shots) else END, 2)
@@ -241,6 +294,7 @@ for i, s in enumerate(shots):
     if m.get("type") == "keys":           # the camera must still be moving at the cut: stretch the last key to the slot (+0.4 s)
         m["keys"][-1]["t"] = round(s["end"] - s["start"] + 0.4, 2)
     final.append(s)
+ep["comic_fx"] = sorted(comic, key=lambda e: e["at"])
 ep["shots"], ep["overlays"], ep["sfx"] = final, sorted(overlays, key=lambda o: o["start"]), sorted(sfx, key=lambda x: x["at"])
 ep["music"] = {"selected": "silent", "lufs": -85, "prompts": []}      # no music in this cut (held); a near-silent bed keeps the mix step happy
 ep["captions"] = True

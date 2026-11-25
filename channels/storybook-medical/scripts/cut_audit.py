@@ -2,7 +2,7 @@
 
 For every shot boundary in episode.json (frame c = round(start x fps)) the audit reads frames c-3 .. c+2 of the render and reports:
   FLASH      a frame whose brightness jumps away from BOTH neighbours (+ or -) by more than FLASH_LEVELS (0-255 grey) and comes back
-             (declared flashes, "transition": "flash" on the shot, are listed as intended, not failed)
+             (declared flashes, "transition": "flash", a "hit", or "fx_flash": true (an impact_frame of the comic kit) on the shot, are listed as intended, not failed)
   DUPLICATE  two neighbouring frames in the window that are the same picture (mean abs. diff < DUP_DIFF) inside a shot whose camera
              moves, or a cut whose two sides are the same picture (diff < CUT_MIN_DIFF) when no dissolve / flash was declared
   BLACK      a frame that is black (mean grey < BLACK_LEVEL) outside a declared fade
@@ -34,7 +34,8 @@ BEFORE, AFTER = 3, 2
 
 
 def probe(path: Path, stream: str) -> float:
-    """Stream duration in seconds (ffprobe prints "374.86," on Windows for some muxers: keep the first number)."""
+    """Stream duration in seconds (ffprobe prints "374.86,
+" on Windows for some muxers: keep the first number)."""
     out = subprocess.run(["ffprobe", "-v", "error", "-select_streams", stream, "-show_entries", "stream=duration", "-of", "csv=p=0", str(path)],
                          capture_output=True, text=True).stdout
     for tok in re.split(r"[,\s]+", out):
@@ -148,7 +149,7 @@ def audit(pid: str, video: Path | None = None, verbose: bool = True) -> dict:
             up, dn = lum[k] - lum[k - 1], lum[k] - lum[k + 1]
             if (up > FLASH_LEVELS and dn > FLASH_LEVELS) or (up < -FLASH_LEVELS and dn < -FLASH_LEVELS):
                 msg = f"FLASH: frame {c - BEFORE + k} grey {lum[k]:.0f} vs {lum[k - 1]:.0f} / {lum[k + 1]:.0f}"
-                if declared == "flash" or s.get("hit"):
+                if declared == "flash" or s.get("hit") or s.get("fx_flash"):
                     notes.append(f"{s['id']}: declared flash/hit, " + msg)
                 else:
                     marks.append(msg)
@@ -170,7 +171,7 @@ def audit(pid: str, video: Path | None = None, verbose: bool = True) -> dict:
             marks.append(f"DUPLICATE: the cut into {s['id']} changes nothing (diff {cutd:.2f}): both sides are the same picture")
         # where the hard cut really is
         peak = int(np.argmax(dd)) - (BEFORE - 1)
-        if declared not in ("dissolve", "flash") and cutd >= CUT_MIN_DIFF and not s.get("hit") and abs(peak) >= 1 and dd[BEFORE - 1 + peak] > 2 * max(cutd, 1):
+        if declared not in ("dissolve", "flash") and cutd >= CUT_MIN_DIFF and not s.get("hit") and not s.get("fx_flash") and abs(peak) >= 1 and dd[BEFORE - 1 + peak] > 2 * max(cutd, 1):
             marks.append(f"CUT FRAME: the picture changes {peak:+d} frame(s) from the edit's cut")
         lag = lag_ms(ra, na, 16000, s["start"]) if ra is not None else None
         if lag is not None and abs(lag) > LAG_FAIL_MS:
