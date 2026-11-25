@@ -72,6 +72,8 @@ export interface Shot {
   start: number;
   end: number;
   inPoint?: number;
+  /** "through": the camera never comes to rest at the ends of the shot (long videos; see `through`). */
+  ease?: "through";
   motion: Motion;
   transitionIn?: "cut" | "whip" | "flash" | "dissolve";
   darken?: number;
@@ -131,13 +133,16 @@ export interface StorybookShortProps {
 }
 
 const ease = Easing.bezier(0.33, 0, 0.2, 1);
+// "through" (long videos, cut audit 2026-11-25): the camera keeps moving INTO the cut. The default ease comes to rest at both ends, which leaves 3-5 identical
+// frames before every cut (a stop-then-cut, read by the audit as duplicate frames). Slope at the ends is about 0.5 of the average speed, not 0.
+const through = Easing.bezier(0.25, 0.2, 0.75, 0.8);
 
 // ── Shots ────────────────────────────────────────────────────────────────
 
 export const ShotLayer: React.FC<{ shot: Shot }> = ({ shot }) => {
   const frame = useCurrentFrame();
   const dur = Math.max(1, Math.round((shot.end - shot.start) * FPS));
-  const t = interpolate(frame, [0, dur], [0, 1], { extrapolateRight: "clamp", easing: ease });
+  const t = interpolate(frame, [0, dur], [0, 1], { extrapolateRight: "clamp", easing: shot.ease === "through" ? through : ease });
   const m = shot.motion;
 
   let scale = 1.04;
@@ -488,26 +493,15 @@ const Captions: React.FC<{ words: Word[]; per: number; y: number; shots: Shot[];
       >
         {page.map((w, i) => {
           const active = t >= w.start && t < w.end + 0.05;
-          const spoken = t >= w.start;
-          const color = active ? (w.punch ? PUNCH : AMBER) : spoken ? "white" : "rgba(255,255,255,0.92)";
+          // review 2026-11-25: the highlight is a box behind the word, FULL text height (the 1 em line box) + a few px
+          const box = w.punch ? PUNCH : AMBER;
+          const fs = (w.punch ? 104 : 88) * theme.scale;     // user: "a very tiny amount" smaller (was 112 / 96)
           return (
-            <span
-              key={i}
-              style={{
-                fontFamily: theme.family,
-                fontWeight: theme.weight,
-                fontSize: (w.punch ? 104 : 88) * theme.scale,     // user: "a very tiny amount" smaller (was 112 / 96)
-                lineHeight: 1.08,
-                color,
-                textTransform: "uppercase",
-                WebkitTextStroke: `14px ${CHARCOAL}`,
-                paintOrder: "stroke fill",
-                textShadow: "0 8px 0 rgba(0,0,0,0.4)",
-                transform: active ? "scale(1.1) translateY(-6px)" : "none",
-                display: "inline-block",
-              }}
-            >
-              {w.word}
+            <span key={i} style={{ position: "relative", display: "inline-block", fontFamily: theme.family, fontWeight: theme.weight, fontSize: fs, lineHeight: 1,
+                                   transform: active ? "scale(1.06) translateY(-5px)" : "none" }}>
+              {active ? <span style={{ position: "absolute", left: -20, right: -20, top: -8, bottom: -8, background: box, borderRadius: 12 }} /> : null}
+              <span style={{ position: "relative", color: "white", textTransform: "uppercase", WebkitTextStroke: `14px ${CHARCOAL}`, paintOrder: "stroke fill",
+                             textShadow: "0 8px 0 rgba(0,0,0,0.4)" }}>{w.word}</span>
             </span>
           );
         })}

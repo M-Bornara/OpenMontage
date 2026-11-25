@@ -5,6 +5,7 @@
   - row49 clip         Kling 1920x1080 24 fps -> frame-blended to 30 fps (ffmpeg framerate), grain as for the 19 test; its last frame
   - row19 clip         the existing 1080p30 passing clip; its last frame
   - row65 clip         the row-49 clip, mirrored (the team walks home), a 1.25x crop, an evening grade, frame-blended to 30 fps; its last frame
+  - row19/49/65-detail.png  tight crops of each clip's first frame: what the row cuts to when it is longer than its clip (never a frozen last frame)
   - assets/music/silent.mp3   a near-silent bed (no music in this cut; music is held)
 Run from the repo root:  python channels/storybook-medical/editorial/episodes/HC002-phineas-gage/prep_hc002l_cut.py"""
 import json
@@ -109,6 +110,21 @@ def clips():
     last_frame(out65, K / "row65-clip-last.png")
 
 
+def details():
+    """Review 2026-11-25 (5): a clip plays at its natural speed and length and never freezes on its last frame. Where the row is longer than the
+    clip, the remainder cuts to a DIFFERENT picture of the same scene: a tight crop of the clip's first frame (a Tier A still, slow push)."""
+    for clip, png, (x, y, f) in (("row19-oxcart-omni-v1-1080p30", "row19-detail.png", (0.22, 0.20, 0.50)),
+                                  ("row49-coach-kling-1080p30", "row49-detail.png", (0.12, 0.15, 0.45)),
+                                  ("row65-evening-from49", "row65-detail.png", (0.02, 0.38, 0.55))):
+        first = Path(K / f"_{png}.first.png")
+        ff("-i", V / f"{clip}.mp4", "-frames:v", "1", first)
+        im = Image.open(first)
+        w, h = im.size
+        box = (int(x * w), int(y * h), int((x + f) * w), int((y + f) * h))
+        im.crop(box).resize((w, h), Image.LANCZOS).save(K / png)
+        first.unlink()
+
+
 def silent():
     d = P / "assets/music"
     d.mkdir(parents=True, exist_ok=True)
@@ -116,5 +132,5 @@ def silent():
 
 
 if __name__ == "__main__":
-    row17(); row47(); row57(); clips(); silent()
+    row17(); row47(); row57(); clips(); details(); silent()
     print("ok")

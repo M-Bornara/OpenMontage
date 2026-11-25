@@ -96,7 +96,7 @@ TIERS = {
     "budget": ("nano-banana-2", "h3-max"),                      # tested on episode 2, ~$2.60
 }
 PREMIUM = TIERS["premium"]
-KIT_REMOTION = ("StorybookShort.tsx", "ShortFx.tsx", "StorybookLong.tsx", "Clock.tsx", "Brand.tsx", "Fx.tsx", "Life.tsx", "Transitions.tsx", "MapScene.tsx", "Sections.tsx", "Animatic.tsx", "Puppet.tsx", "Stage.tsx", "Graphics.tsx", "Cut.tsx", "LabReels.tsx", "Three3D.tsx", "Root.tsx", "index.tsx")
+KIT_REMOTION = ("StorybookShort.tsx", "ShortFx.tsx", "StorybookLong.tsx", "ComicFx.tsx", "Clock.tsx", "Brand.tsx", "Fx.tsx", "Life.tsx", "Transitions.tsx", "MapScene.tsx", "Sections.tsx", "Animatic.tsx", "Puppet.tsx", "Stage.tsx", "Graphics.tsx", "Cut.tsx", "LabReels.tsx", "Three3D.tsx", "Root.tsx", "index.tsx")
 
 
 def model_choice(ep: dict) -> tuple[str, str]:
@@ -731,6 +731,19 @@ def step_build(pid, *_):
         print("CUT CHECK:\n  " + "\n  ".join(cuts))
         if ep.get("cut_lint", "fail") != "warn":
             raise SystemExit("cut check failed (L52 jump cut); reframe, regenerate without the set plate, or mark it intended")
+    # review 2026-11-25: every pair of shots within 6 s is compared (same background = a jump cut), and a video clip plays at its
+    # natural speed and length: a slot longer than its clip would freeze the last frame, so it fails (cut to a different picture instead)
+    import bg_similarity
+    bgs = bg_similarity.check(pid, ep)
+    if bgs:
+        print("BACKGROUND CHECK:\n  " + "\n  ".join(bgs))
+        if ep.get("bg_lint", "fail") != "warn":
+            raise SystemExit("background check failed: two shots within 6 s share a background (rows listed above)")
+    import cut_audit
+    frz = cut_audit.clip_freezes(pid, ep)
+    if frz:
+        print("CLIP FREEZE:\n  " + "\n  ".join(frz))
+        raise SystemExit("a clip would freeze on its last frame: cut to a different picture for the remainder")
     shots = []
     for s in ep["shots"]:
         # a layered shot shows its CLEAN plate (nothing that moves is painted into it); the still stays the reference
@@ -747,6 +760,7 @@ def step_build(pid, *_):
         shots.append({"id": s["id"], "src": rel, "kind": kind, "start": s["start"], "end": s["end"],
                       "inPoint": s.get("in", 0), "motion": s.get("motion", {"type": "push"}),
                       "transitionIn": s.get("transition", "cut"), "darken": s.get("darken", 0),
+                      **({"ease": "through"} if long else {}),
                       **{k: s[k] for k in ("captionY", "draw", "grey", "hit") if k in s}})
         if s.get("fx") and kind == "image":   # masks / plates go through the still's own crop, so they line up
             (pub / "fx").mkdir(exist_ok=True)
@@ -782,7 +796,8 @@ def step_build(pid, *_):
                       "breakAfter": bool(re.search(r"[.,?!]$", t)) and t.lower() != "st."})
     if long:
         props = {"totalSeconds": total, "shots": shots, "overlays": ep["overlays"], "words": words,
-                 "wordsPerPage": 4, "captionY": 900, "captions": ep.get("captions", True)}
+                 "wordsPerPage": 4, "captionY": 900, "captions": ep.get("captions", True),
+                 "fx": ep.get("comic_fx", [])}   # comic effects (ComicFx.tsx), events in episode.json "comic_fx"
     else:
         # stamps and name tags belong to their shot: they end at its cut (user, HCS04: "LEGEND" stayed into the next
         # shot). Clocks and other frame-space overlays keep their own end.
@@ -981,6 +996,12 @@ def step_render(pid, *flags):
         print(f"{out}  {duration(out):.2f}s  {li} LUFS  peak {lp} dBFS")
         w, h = check_render_size(out, ep.get("format", "short"), preview="--preview" in flags)
         print(f"size {w}x{h} OK")
+        if ep.get("format") == "long":
+            # review 2026-11-25: +/-3 frames around every cut: a flash, a duplicate or a black frame fails the render
+            import cut_audit
+            res = cut_audit.audit(pid, out)
+            if res["failures"]:
+                raise SystemExit("CUT AUDIT FAIL: " + " | ".join(res["failures"][:6]) + (" ..." if len(res["failures"]) > 6 else ""))
         if ep.get("format") == "short":
             # user 2026-11-15: "re-evaluate the text placements after each change": collisions + review/text_sheet.jpg
             import text_check

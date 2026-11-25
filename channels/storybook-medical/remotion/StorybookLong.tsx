@@ -4,6 +4,7 @@ import { loadFont } from "@remotion/google-fonts/Montserrat";
 import { loadFont as loadSerif } from "@remotion/google-fonts/LibreBaskerville";
 import { FPS, Shot, ShotLayer, Word } from "./StorybookShort";
 import { Clock } from "./Clock";
+import { FxEvent, FxLayer, FxStage } from "./ComicFx";
 
 // Long-form 16:9 (1920×1080 layout, rendered at --scale=2 for the 4K master). Same shot layer, palette, caption
 // energy and SFX grammar as the Shorts; overlays are re-laid for a wide frame. Spec: plan/probe-plan.md.
@@ -28,7 +29,7 @@ export type LongOverlay =
   | { kind: "stamp"; text: string; strike?: string; color?: "amber" | "oxblood"; start: number; end: number }
   | { kind: "counter"; from?: number; to: number; label: string; prefix?: string; start: number; end: number; countSeconds?: number }
   | { kind: "quote"; text: string; source?: string; highlight?: string; start: number; end: number }
-  | { kind: "route"; points: [number, number][]; label?: string; start: number; end: number; drawSeconds?: number }
+  | { kind: "route"; points: [number, number][]; label?: string; schematic?: string; start: number; end: number; drawSeconds?: number }
   | { kind: "stack"; items: string[]; start: number; end: number; every?: number }
   // watch hands drawn over a hand-less dial: cx/cy in % of the frame, r in px (1920 layout), hours as decimals (12 = 0)
   | { kind: "clock"; cx: number; cy: number; r: number; from: number; to: number; at?: number; spin?: number; start: number; end: number };
@@ -41,6 +42,7 @@ export interface StorybookLongProps {
   wordsPerPage?: number;
   captionY?: number;
   captions?: boolean;
+  fx?: FxEvent[];          // comic effects (ComicFx.tsx; plan/comic-fx-presets.md): layers on top, never a change to a clip's speed or length
 }
 
 const fadeOut = (frame: number, dur: number) => interpolate(frame, [dur - 8, dur], [1, 0], clamp);
@@ -167,7 +169,7 @@ const Quote: React.FC<{ text: string; source?: string; highlight?: string; dur: 
 };
 
 // A journey drawn over a map plate: points in % of the frame; a small marker rides the line.
-const Route: React.FC<{ points: [number, number][]; label?: string; dur: number; drawSeconds?: number }> = ({ points, label, dur, drawSeconds }) => {
+const Route: React.FC<{ points: [number, number][]; label?: string; schematic?: string; dur: number; drawSeconds?: number }> = ({ points, label, schematic, dur, drawSeconds }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const p = interpolate(frame, [6, (drawSeconds ?? 3) * fps], [0, 1], { ...clamp, easing: Easing.inOut(Easing.quad) });
@@ -184,13 +186,19 @@ const Route: React.FC<{ points: [number, number][]; label?: string; dur: number;
       <svg width={1920} height={1080} style={{ position: "absolute", inset: 0 }}>
         <path d={d} fill="none" stroke="rgba(10,12,14,0.55)" strokeWidth={14} strokeLinecap="round" strokeLinejoin="round"
               strokeDasharray={total} strokeDashoffset={total * (1 - p)} />
-        <path d={d} fill="none" stroke={AMBER} strokeWidth={7} strokeLinecap="round" strokeLinejoin="round"
-              strokeDasharray={`${total}`} strokeDashoffset={total * (1 - p)} />
+        {/* a dashed amber line (= schematic, not a documented track) revealed by the solid mask that draws itself */}
+        <defs><mask id="routeReveal"><path d={d} fill="none" stroke="white" strokeWidth={20} strokeLinecap="round" strokeLinejoin="round"
+              strokeDasharray={total} strokeDashoffset={total * (1 - p)} /></mask></defs>
+        <path d={d} fill="none" stroke={AMBER} strokeWidth={7} strokeLinecap="round" strokeLinejoin="round" strokeDasharray="26 16" mask="url(#routeReveal)" />
         <circle cx={head[0]} cy={head[1]} r={16} fill={BONE} stroke={CHARCOAL} strokeWidth={5} />
       </svg>
+      {/* the label sits in a fixed tag at the top left: it used to ride the marker and landed on the captions (review 2026-11-25) */}
       {label ? (
-        <div style={{ position: "absolute", left: head[0] + 26, top: head[1] - 64, fontFamily, fontWeight: 900, fontSize: 40, color: BONE,
-                      textShadow: shadow, opacity: interpolate(p, [0.05, 0.2], [0, 1], clamp) }}>{label}</div>
+        <div style={{ position: "absolute", left: 96, top: 64, background: "rgba(34,38,42,0.82)", borderLeft: `10px solid ${AMBER}`, borderRadius: 10,
+                      padding: "10px 26px 12px 22px", opacity: interpolate(p, [0.02, 0.1], [0, 1], clamp) }}>
+          <div style={{ fontFamily, fontWeight: 900, fontSize: 40, color: BONE }}>{label}</div>
+          {schematic ? <div style={{ fontFamily, fontWeight: 700, fontSize: 24, color: AMBER, letterSpacing: 2 }}>{schematic}</div> : null}
+        </div>
       ) : null}
     </AbsoluteFill>
   );
@@ -230,7 +238,7 @@ const OverlayLayer: React.FC<{ o: LongOverlay }> = ({ o }) => {
     case "stamp": return <Stamp text={o.text} strike={o.strike} color={o.color} dur={dur} />;
     case "counter": return <Counter from={o.from} to={o.to} label={o.label} prefix={o.prefix} dur={dur} countSeconds={o.countSeconds} />;
     case "quote": return <Quote text={o.text} source={o.source} highlight={o.highlight} dur={dur} />;
-    case "route": return <Route points={o.points} label={o.label} dur={dur} drawSeconds={o.drawSeconds} />;
+    case "route": return <Route points={o.points} label={o.label} schematic={o.schematic} dur={dur} drawSeconds={o.drawSeconds} />;
     case "stack": return <Stack items={o.items} dur={dur} every={o.every} />;
     case "clock": return <Clock cx={o.cx} cy={o.cy} r={o.r} from={o.from} to={o.to} at={o.at} spin={o.spin} W={1920} H={1080} />;
   }
@@ -238,6 +246,7 @@ const OverlayLayer: React.FC<{ o: LongOverlay }> = ({ o }) => {
 
 // ── Captions: the Shorts style, sized for 16:9 (lower band, 4 words a page) ──
 
+const HL_PAD = 6, HL_PADX = 14;   // caption highlight box padding (px, 1080p layout)
 const Captions: React.FC<{ words: Word[]; per: number; y: number }> = ({ words, per, y }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -255,11 +264,16 @@ const Captions: React.FC<{ words: Word[]; per: number; y: number }> = ({ words, 
                     transform: `scale(${interpolate(enter, [0, 1], [0.88, 1])})` }}>
         {page.map((w, i) => {
           const active = t >= w.start && t < w.end + 0.05;
-          const color = active ? (w.punch ? PUNCH : AMBER) : "white";
+          // review 2026-11-25: the highlight is a box behind the word, the FULL text height (the 1 em line box, lineHeight 1)
+          // plus HL_PAD px above and below, so the letters never sit in a half-height strip
+          const box = w.punch ? PUNCH : AMBER;
           return (
-            <span key={i} style={{ fontFamily, fontWeight: 900, fontSize: w.punch ? 70 : 62, lineHeight: 1.1, color, textTransform: "uppercase",
-                                   WebkitTextStroke: `10px ${CHARCOAL}`, paintOrder: "stroke fill", textShadow: "0 5px 0 rgba(0,0,0,0.4)",
-                                   transform: active ? "scale(1.08) translateY(-4px)" : "none", display: "inline-block" }}>{w.word}</span>
+            <span key={i} style={{ position: "relative", display: "inline-block", fontFamily, fontWeight: 900, fontSize: w.punch ? 70 : 62, lineHeight: 1,
+                                   transform: active ? "scale(1.04) translateY(-3px)" : "none" }}>
+              {active ? <span style={{ position: "absolute", left: -HL_PADX, right: -HL_PADX, top: -HL_PAD, bottom: -HL_PAD, background: box, borderRadius: 8 }} /> : null}
+              <span style={{ position: "relative", color: "white", textTransform: "uppercase", WebkitTextStroke: `10px ${CHARCOAL}`, paintOrder: "stroke fill",
+                             textShadow: "0 5px 0 rgba(0,0,0,0.4)" }}>{w.word}</span>
+            </span>
           );
         })}
       </div>
@@ -269,19 +283,23 @@ const Captions: React.FC<{ words: Word[]; per: number; y: number }> = ({ words, 
 
 // ── Composition ─────────────────────────────────────────────────────────────
 
-export const StorybookLong: React.FC<StorybookLongProps> = ({ shots, overlays, words, wordsPerPage, captionY, captions }) => (
+export const StorybookLong: React.FC<StorybookLongProps> = ({ shots, overlays, words, wordsPerPage, captionY, captions, fx }) => (
   <AbsoluteFill style={{ backgroundColor: CHARCOAL }}>
-    {shots.map((s) => (
-      <Sequence key={s.id} from={Math.round(s.start * FPS)} durationInFrames={Math.max(1, Math.round((s.end - s.start) * FPS))}>
-        <ShotLayer shot={s} />
-      </Sequence>
-    ))}
+    {/* a shot's length is the difference of the two ROUNDED frames: rounding the difference left a 1-frame charcoal gap before some cuts (cut audit 2026-11-25, r36b -> r36c) */}
+    <FxStage events={fx ?? []}>
+      {shots.map((s) => (
+        <Sequence key={s.id} from={Math.round(s.start * FPS)} durationInFrames={Math.max(1, Math.round(s.end * FPS) - Math.round(s.start * FPS))}>
+          <ShotLayer shot={s} />
+        </Sequence>
+      ))}
+    </FxStage>
     <AbsoluteFill style={{ background: "radial-gradient(ellipse at 50% 48%, rgba(0,0,0,0) 58%, rgba(10,12,14,0.5) 100%)" }} />
     {overlays.map((o, i) => (
       <Sequence key={i} from={Math.round(o.start * FPS)} durationInFrames={Math.max(1, Math.round((o.end - o.start) * FPS))}>
         <OverlayLayer o={o} />
       </Sequence>
     ))}
+    <FxLayer events={fx ?? []} />
     {captions === false ? null : <Captions words={words} per={wordsPerPage ?? 4} y={captionY ?? 900} />}
   </AbsoluteFill>
 );

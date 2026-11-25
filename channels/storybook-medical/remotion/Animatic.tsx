@@ -389,8 +389,10 @@ const Captions: React.FC<{ words: Word[]; shift: (t: number) => number; final?: 
   if (!w.length) return null;
   return (
     <div style={{ position: "absolute", left: 0, right: 0, bottom: 26, textAlign: "center", fontFamily: sans, fontWeight: 700, fontSize: 30 }}>
-      {w.map((x, i) => <span key={i} style={{ color: shift(x.start) <= t && t <= shift(x.end) + 0.05 ? AMBER : "rgba(255,255,255,0.75)", margin: "0 6px",
-                                              textShadow: "0 2px 6px #000" }}>{x.word}</span>)}
+      {w.map((x, i) => { const on = shift(x.start) <= t && t <= shift(x.end) + 0.05;
+        // review 2026-11-25: the active word sits on an amber box, full text height + 3 px
+        return <span key={i} style={{ color: on ? "#22262A" : "rgba(255,255,255,0.75)", background: on ? AMBER : "transparent", borderRadius: 4, margin: "0 3px", padding: "3px 6px",
+                                      lineHeight: 1, display: "inline-block", textShadow: on ? "none" : "0 2px 6px #000" }}>{x.word}</span>; })}
     </div>
   );
 };

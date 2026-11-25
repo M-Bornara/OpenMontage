@@ -366,10 +366,11 @@ EPISODES = {
                  "label": "Row 42: before (left) and after the scar paint-out (right), at 6×",
                  "note": "The scar is gone; a small soft notch in the hairline shows only at this zoom."},
             ]},
+        "review_report": [REPO / "projects/hc002-l/review/fx_report.json", REPO / "projects/hc002-l/review/review_report.json"],
         "preview_cut": {
             "src": REPO / "projects/hc002-l/renders/preview.mp4",
             "title": "FIRST FULL CUT of the long · 1080p preview, no music (waiting for your OK)",
-            "legend": "6 min 11 s, 1920×1080, 30 fps, -14 LUFS, rendered through the pipeline (size check passed 1920×1080; its own final review found nothing). All 66 rows in order on Liam's recorded narration; the chapter cards, title (after the sting), stamps, name tags and quote cards start on their key words; rows 49 (Kling) and 19 (Omni) are the two passing clips, frame-blended to 30 fps; row 65 is a free evening grade of the row-49 clip (mirrored, 1.25× crop); rows 45, 48 and 26 are Tier A stills; row 13 is the 1:34 redraw; row 55 is v4paint; the Gage stills use the Chile v3 sheet. The sound is Liam plus 70 FREE placeholder effects from the channel library (not tuned); there is NO music. Shown here in nine chapter segments (a page file must stay under 15 MB); the full 1080p file is projects/hc002-l/renders/preview.mp4 (627 MB).",
+            "legend": "6 min 15 s (re-rendered 2026-11-25 with the review fixes below), 1920×1080, 30 fps, -14 LUFS, rendered through the pipeline (size check passed 1920×1080; its own final review found nothing). All 66 rows in order on Liam's recorded narration; the chapter cards, title (after the sting), stamps, name tags and quote cards start on their key words; rows 49 (Kling) and 19 (Omni) are the two passing clips, frame-blended to 30 fps; row 65 is a free evening grade of the row-49 clip (mirrored, 1.25× crop); each clip plays at its own speed and length and the rest of its row is a tight Tier A still; rows 45, 48 and 26 are Tier A stills; row 13 is the 1:34 redraw; row 55 is v4paint; the Gage stills use the Chile v3 sheet. The sound is Liam plus 70 FREE placeholder effects from the channel library (not tuned); there is NO music. Shown here in nine chapter segments (a page file must stay under 15 MB); the full 1080p file is projects/hc002-l/renders/preview.mp4.",
             "labels": ["Cold open · sting · title", "1 · The Foreman", "2 · What Happened", "3 · No Longer Gage", "4 · The Myth", "5 · The Evidence",
                        "6 · The Other Side of the World", "7 · The Ending", "8 · Why It Matters · end screen"],
             "notes": [
@@ -378,12 +379,12 @@ EPISODES = {
                 "Row 25 (123.4 s): 'it looked like the iron might win': the candle still has no night-to-dawn grade yet.",
                 "Row 33 (165.7 s): 'many versions end': a dissolve to the row-6 textbook page, not a freeze and sepia of row 32.",
                 "Rows 39 and 40: the four stamps do not fade out and the drawing does not tear; row 40 is a push on the cropped drawing of 36b.",
-                "Row 47 (231.9 s): the map holds only 1.4 s; the route is a schematic sea route round Cape Horn, not a sourced one, and its label collides with the caption.",
-                "Row 56 (272.1 s): the monster drawing does not slide in beside the portrait; the portrait holds and the word 'exploded' appears as a card.",
-                "Row 57 (278.9 s): 12.4 s on one split still (grey doorway left, coach right); the left does not grey and the right does not warm, so it is the longest hold in the cut.",
+                "Row 47 (231.9 s): the map now holds 5.0 s (3.6 s of ship ambience added after 'He went to Chile.'); the route is a schematic dashed sea route round Cape Horn, not a sourced one, marked as such, with its label moved off the captions. Every row after it is 3.6 s later than in the first cut.",
+                "Row 56 (275.7 s): the monster drawing does not slide in beside the portrait; the portrait holds and the word 'exploded' appears as a card.",
+                "Row 57 (282.5 s): 12.4 s on one split still (grey doorway left, coach right); the left does not grey and the right does not warm, so it is the longest hold in the cut.",
                 "Quote cards sit in the middle of the frame and cover faces in rows 11, 22 and 29 (and the stamps on row 35 sit on the cartoon face): the card position is fixed in the component.",
                 "Long single-picture stretches (tempo): row 13 (10.3 s), row 29 (8.0 s), row 1 (7.7 s), row 53 (7.7 s), row 17 (7.0 s), row 52 (7.0 s), row 59 (6.9 s), row 39 (6.8 s), row 56 (6.8 s).",
-                "Clips: rows 19, 49 and 65 run 5 s and then hold their last frame for 0.9 to 1.1 s.",
+                "Clips: rows 19, 49 and 65 play at their own speed and length (5.0, 5.07, 5.07 s) and then cut to a tight still of the same scene (about 1 s); no frozen frame. Proposals are in the review block below.",
                 "Pictures you already accepted with flaws show as they are: row 44 (spearhead tip, foot of the bed), row 50 (seven reins, passenger faces), row 60 (flared foot), row 62 (the bundle is a short sack), row 64 (five faces), row 36b (a soft crop).",
             ],
             "gaps": [
@@ -802,6 +803,47 @@ def preview_block(k: str, e: dict, out: Path) -> str:
             + notes + '</ul><p class="legend"><b>Not built into this cut (it is a preview):</b></p><ul class="legend">' + gaps + '</ul></div>')
 
 
+def review_block(k: str, e: dict, out: Path, img: Path) -> str:
+    """Review fixes (user 2026-11-25): a report file with titled sections; each has paragraphs, bullet lists, a table and labelled images
+    (the cut audit contact sheets, the background-check result, the caption highlight, the map, the clip-length list, the reuse list)."""
+    specs = e.get("review_report")
+    if not specs:
+        return ""
+    return "".join(_review_one(k, e, Path(sp), out, img) for sp in (specs if isinstance(specs, list) else [specs]) if Path(sp).exists())
+
+
+def _review_one(k: str, e: dict, spec: Path, out: Path, img: Path) -> str:
+    rep = json.load(open(spec, encoding="utf-8"))
+    parts = [f'<div class="block"><h3>{html.escape(rep["title"])}</h3><p class="legend">{html.escape(rep.get("legend", ""))}</p>']
+    for n, sec in enumerate(rep["sections"]):
+        parts.append(f'<h4>{html.escape(sec["heading"])}</h4>')
+        for para in sec.get("paras", []):
+            parts.append(f'<p class="legend">{html.escape(para)}</p>')
+        if sec.get("bullets"):
+            parts.append('<ul class="legend">' + "".join(f"<li>{html.escape(b)}</li>" for b in sec["bullets"]) + "</ul>")
+        if sec.get("table"):
+            t = sec["table"]
+            parts.append('<div style="overflow-x:auto"><table class="legend" style="border-collapse:collapse;font-size:13px"><tr>'
+                         + "".join(f'<th style="text-align:left;padding:3px 10px;border-bottom:1px solid var(--line)">{html.escape(h)}</th>' for h in t["head"]) + "</tr>"
+                         + "".join("<tr>" + "".join(f'<td style="padding:3px 10px;vertical-align:top;border-bottom:1px solid var(--line)">{html.escape(str(c))}</td>' for c in r) + "</tr>"
+                                   for r in t["rows"]) + "</table></div>")
+        figs = []
+        for j, v in enumerate(sec.get("videos", [])):
+            dst = out / "video" / f"{spec.stem}-{n}-{j}.mp4"
+            if Path(v["src"]).exists() and web_preview(Path(v["src"]), dst):
+                figs.append(f'<figure class="wide2"><video class="cut" controls playsinline loop preload="metadata" src="video/{dst.name}"></video>'
+                            f'<figcaption><b>{html.escape(v["label"])}</b><span>{html.escape(v.get("note", ""))}</span></figcaption></figure>')
+        for j, im in enumerate(sec.get("images", [])):
+            if not Path(im["src"]).exists():
+                continue
+            figs.append(f'<figure class="wide2"><img src="img/{shrink(Path(im["src"]), img / f"{k}-{spec.stem}-{n}-{j}", im.get("edge", 2000))}" alt="{html.escape(im["label"])}" loading="lazy">'
+                        f'<figcaption><b>{html.escape(im["label"])}</b><span>{html.escape(im.get("note", ""))}</span></figcaption></figure>')
+        if figs:
+            parts.append('<div class="refs cliptests">' + "".join(figs) + "</div>")
+    parts.append("</div>")
+    return "".join(parts)
+
+
 def batch1_block(k: str, e: dict, ep: dict, out: Path, img: Path) -> str:
     """Gage long, story stills batch 1 (user 2026-11-23): each still with its check report, a mirrored copy where the closed eye is on
     the wrong side, the prompt, and the free S1 brow-fix attempts."""
@@ -1110,7 +1152,7 @@ def build(out: Path, keys: list[str]) -> Path:
                 stage = "rough cut · waiting for your OK"
                 stages[-1] = stage
         story = story_block(k, e, img)
-        layered = preview_block(k, e, out) + layered_block(k, e, ep, out, img) + hero_block(k, e, out, img) + clip_tests_block(k, e, out, img) + batch1_block(k, e, ep, out, img)
+        layered = preview_block(k, e, out) + review_block(k, e, out, img) + layered_block(k, e, ep, out, img) + hero_block(k, e, out, img) + clip_tests_block(k, e, out, img) + batch1_block(k, e, ep, out, img)
         if layered:
             pilots.append(e["short"])
         if story:
