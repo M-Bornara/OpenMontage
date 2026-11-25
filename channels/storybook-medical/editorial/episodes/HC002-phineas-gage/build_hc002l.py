@@ -926,6 +926,45 @@ S5("row63-case-v1", "LS", "eye level, in front of the case", "35 mm",
    size_line=sizes({"the tamping iron": "109 cm long and 3.2 cm thick, a thin pole, the case about 1.4 m wide"}))
 
 
+# ── 2026-11-25 (user, cap $0.55): row 12 inserts b, c, d (one take each; lint first). Gage sheet: Chile v3 (scar on the LEFT forehead) for
+# any later Gage shot; 12d shows him only from BEHIND in 1848 (before the accident, S1's 1848 sheet), so the sheet gives hair and clothes only.
+GCH3 = "ref:sheet-gage-chile-v3"
+R_IRON_PHOTO = ("Reference 2 is a soft period photograph of the real iron held in a hand: use it ONLY for how THIN and straight the rod is "
+                "against its length; ignore the hand, the grey and the blur. ")
+S5("row12b-pour-v1", "ECU", "from above, a little to the side", "100 mm",
+   "a hand in a worn work glove tips a small iron powder flask over a round black drill hole in flat grey rock; a thin stream of black powder runs from the flask's spout down into the hole",
+   "careful, quiet work", "the Cavendish rock cut", "September 1848",
+   "a flat grey rock top with one round black drill hole, soft rock beyond",
+   "directly above the hole, a little to the side", "down at the hole, the spout and the hand",
+   "a flat grey rock top with one round black drill hole in the middle and soft grey rock beyond it",
+   "no sky, no wall, no tools",
+   "CAST: no faces and no bodies; only ONE hand and wrist in a worn work glove and a rolled shirt cuff.",
+   size_line=scale({"the powder flask": "a small iron flask about 20 cm (8 in) tall, a hand and a half long, held in the fist",
+                    "the drill hole": "a round hole about 2 in (5 cm) across, a little wider than two fingers",
+                    "the stream of powder": "a thin dark thread as wide as a pencil"}))
+S5("row12c-fuse-v1", "CU", "low, level with the rock surface, from the side", "100 mm",
+   "two gloved fingers lay a thin pale fuse cord into a round black drill hole, the cord trailing back across the flat grey rock",
+   "tense, careful", "the Cavendish rock cut", "September 1848",
+   "a soft grey rock wall out of focus behind the hole",
+   "low at the rock surface, to the side of the hole", "along the rock surface at the hole and the fuse",
+   "the flat rock surface at eye level and a soft grey rock wall out of focus behind",
+   "no flask, no iron, no sky",
+   "CAST: no faces and no bodies; only the tips of TWO gloved fingers.",
+   size_line=scale({"the fuse": "a thin pale cord about 1 cm (3/8 in) thick, about half a finger wide, trailing about 40 cm across the rock",
+                    "the drill hole": "a round hole about 2 in (5 cm) across, a little wider than two fingers"}))
+S5("row12d-tamp-v1", "MLS", "from behind and above him", "35 mm",
+   "PHINEAS GAGE kneels on a rock ledge, seen from behind and above, and presses the tamping iron down into a drill hole with both hands; the iron is a thin upright pole standing in the hole",
+   "quiet concentration, the work that will go wrong", "the Cavendish rock cut", "13 September 1848",
+   "a grey rock ledge, a layered rock wall rising behind, a strip of pale sky",
+   "behind and above his shoulder on the ledge", "over him down at the hole",
+   "a grey rock ledge in the foreground, the layered grey rock wall rising behind him, a thin strip of pale sky at the top",
+   "no pit, no crew, no kegs",
+   cast("PHINEAS GAGE, 25, seen from BEHIND and above (the back of a low-crowned dark felt hat, his neck, a white shirt, dark braces), his face NOT visible, kneeling, both hands on the iron; no blood"),
+   refs=[G1848, IRON_REF1], roles=("Reference 1 is PHINEAS GAGE's 1848 model sheet: take ONLY his hair, hat, shirt and braces from it; his face is turned away in this picture; do NOT copy its layout, its views or its poses. " + R_IRON_PHOTO),
+   extra=f"The iron is {IRON3}; it stands upright in the hole and is SMALL in the frame, a thin pole about as tall as his chest.",
+   size_line=sizes({"the tamping iron": "109 cm long and 3.2 cm thick (34 times longer than it is thick), a thin pole as tall as his chest when he kneels", "the drill hole": "about 5 cm across"}))
+
+
 def main():
     chs = chapters()
     assert [c["id"] for c in chs] == [f"ch{i}" for i in range(9)], [c["id"] for c in chs]

@@ -143,6 +143,10 @@ EPISODES = {
                  "note": "Start frame row45-stable-v2.png. ≈ $0.14 ESTIMATE · 720p, 5 s. One man, one horse, brush stays in his hand, rope stays attached, horse nods once. But the small breath is drawn as hard white scratch marks drifting off the nostrils: a new object, so not upscaled."},
                 {"label": "E · Row 45 retake · minimal motion text · FAIL (second brush) → Tier A", "src": REPO / "projects/hc002-l/assets/video/row45-stable-omni-v2-web.mp4",
                  "note": "Same start frame, ≈ $0.14 ESTIMATE · 720p, 5 s. Nostrils and mouth are clean and the horse nods once, but from about 0.8 s to 1.3 s a SECOND brush appears in his rope hand and the lead rope hangs free before it returns. Fails no new objects, brush in hand and rope attached. No more retakes: row 45 goes to Tier A (still + slow push + sound). Not upscaled."},
+                {"label": "F · Row 48 harbour · Omni 1.2 Flash · FAIL (new gulls)", "src": REPO / "projects/hc002-l/assets/video/row48-harbour-omni-v1-web.mp4",
+                 "note": "2026-11-25. Start frame row48-valparaiso-v1.png. Prompt exactly: 'Ships sway gently and the water ripples. Locked camera. No cuts.' ≈ $0.14 ESTIMATE (live fal price checked $0.0273/s) · 720p, 5 s. Ships, coaches and houses hold, the camera is locked, no flashing (brightness step max 0.26) and no style drift. But seven SEAGULLS fly across the sky from the first second: they are not in the still and the prompt did not mention them, so it fails 'no new objects'. Not upscaled."},
+                {"label": "G · Row 26 farmhouse · Omni 1.2 Flash · FAIL (face changes, drifting leaves)", "src": REPO / "projects/hc002-l/assets/video/row26-farmhouse-omni-v1-web.mp4",
+                 "note": "2026-11-25. Start frame row26-farmhouse-v1.png. Prompt exactly: 'Gage walks slowly forward a few steps. Locked camera. No cuts.' ≈ $0.14 ESTIMATE · 720p, 5 s. One man throughout, hands empty, door, shovel, wood pile and lantern unchanged, camera locked, no flashing (step max 0.29). But his face is redrawn as he walks toward the camera (squint at the start, both eyes wide open at the end, more shading), which breaks the shut-left-eye rule, and a few leaves drift down that were not moving in the still (a leaf crosses the open door). Fails 'style drift' and 'no new objects'. Not upscaled."},
             ],
             "images": [
                 {"id": "upscale", "src": REPO / "projects/hc002-l/review/omni-tests/upscale-compare.jpg",
@@ -327,6 +331,39 @@ EPISODES = {
                 {"id": "iron13", "src": REPO / "projects/hc002-l/review/iron13-v1-v2.jpg",
                  "label": "Row 13: v1 (top) and the re-roll v2 (bottom), the rod strips",
                  "note": "Both are about 1:20 (a stout bar, not a javelin); v2 has a slightly longer taper, v1 a cleaner flat end. v2 is no nearer the target, so per your rule v1 stays."},
+            ]},
+        "batch6": {
+            "title": "2026-11-25 (third approval, cap $0.55) · free redraws and paint-outs, row 12 b / c / d, and the two Tier D clips",
+            "legend": "Spent: three stills $0.201 (actual, Gemini Batch) + two clips about $0.273 (ESTIMATE: live fal price $0.0273/s checked, 2 × 5 s; true up on fal's usage page) = about $0.47 of the $0.55 cap. hc002-l is at $5.74 actual plus the two clip estimates. Free: row 13 procedural redraw (1:34), the scar painted out of rows 27 and 42, the Chile sheet checked and repainted as v3, row 43b made from 43a. Clips: both FAILED the checklist (they are in the clip-test block above, F and G), so neither was upscaled. Held: all other clips, the Dancing stills, any more stills. No second take.",
+            "items": [
+                {"name": "row13-iron-v3redraw", "title": "Row 13 · the iron redrawn at 1:34 on v1 (free; v1 kept)",
+                 "report": "Cut out the old rod and its shadow, filled the rock behind with a gradient plus grain, and redrew the rod at the same length: 73 px thick over 2484 px long = exactly 1:34.0, straight, the other end blunt and cut flat (the old cap reused), tapering in a smooth cone over its last 621 px = 25% of the length to a point. Every column of the new rod is the OLD rod's own shading column squeezed to the new thickness; the outline is the old ink colour. One end pointed, the other blunt and flat: YES. Straight: YES. No text: YES. At film scale it does NOT look fake: a slender javelin-like rod on the rock. At 100% the patch of rock where the old rod was is a little smoother than the painted rock around it, and the new shadow is a softer, airbrushed band. Recommendation: use it as the row-13 still; v1 stays as the original."},
+                {"name": "row27-profile-v2paint", "title": "Row 27 · the scar painted off the right forehead (free; original kept)",
+                 "report": "The pale scar on the near (right) forehead is gone, nothing put in its place; the shut far eye (his left) is untouched. A tiny faint speck remains near the end of the brow at 3×; clean at film scale."},
+                {"name": "row42-barnum-v2paint", "title": "Row 42 · the scar painted off the right forehead (free; original kept)",
+                 "report": "The scar line at the picture-left hairline is gone, nothing put in its place. A small soft notch shows in the hairline at 6×; clean at film scale. His lowered lids are accepted as they are."},
+                {"name": "row43b-shelf-v1paint", "title": "Row 43 · still 2 · the empty shelf, the same label (free, from 43a)",
+                 "report": "The iron is painted out of 43a (the rod behind the card and its shadow, including the tip at the right) and the shelf wood and jars filled in; the handwritten card is untouched. No new generation. A faint grey smudge is left behind the card's right edge; otherwise a clean empty shelf."},
+                {"name": "row12b-pour-v1", "title": "Row 12 · insert b · powder poured from a flask into the hole",
+                 "report": "One hand in a worn work glove and a rolled shirt cuff, no face. A small iron flask tips its spout over a black drill hole in flat grey rock and a thin dark stream runs into the hole. Scale line L51 held for the flask (about a hand and a half long) and the stream (a pencil-thin thread); the hole is drawn a bit wider than 5 cm (about a third of the flask's length). No text. PASS."},
+                {"name": "row12c-fuse-v1", "title": "Row 12 · insert c · a fuse laid in the hole",
+                 "report": "The tips of two fingers (bare, not gloved) lay a thin pale cord into a round black hole; the cord trails back across the rock in a long curve. The cord is thin (under a centimetre), the hole about two fingers wide. A soft grey rock wall behind. A different size (CU) and camera from b. No text. PASS."},
+                {"name": "row12d-tamp-v1", "title": "Row 12 · insert d · the iron tamps the powder (small in the scene)",
+                 "report": "One man, kneeling on a rock ledge, seen from behind and above (a low-crowned dark felt hat, white shirt, dark braces); his face is not visible. Both hands on the iron, which stands upright in the drill hole: a thin straight pole, about 1:30, a little taller than his chest, the pointed end UP and the blunt end in the hole. Taper short (about the last tenth), but small in the frame as asked. Layered rock wall and a strip of sky. No blood, no text. PASS."},
+            ],
+            "images": [
+                {"id": "chile", "src": REPO / "projects/hc002-l/review/chile_v2_v3_scar.png",
+                 "label": "Free: sheet-gage-chile v2 (top) and v3 (bottom), the two views with a scar problem",
+                 "note": "Checked all four head views of v2. Top-left bust: a faint scar on his RIGHT forehead (wrong), removed in v3 and a faint pale one added on his LEFT. Top-right head: two lines, a wrong-side one on the right (removed) and the left one (kept). Bottom-left head: scar on his left (right already). Bottom-right head: no scar (left alone). So my guess that mirroring moved the scar was only half right: the top-left bust was never mirrored and still had it on the right. v2 is kept; v3 is the file for later Gage shots."},
+                {"id": "r13", "src": REPO / "projects/hc002-l/review/row13_before_after.jpg",
+                 "label": "Row 13: v1 (top) and the 1:34 redraw (bottom)",
+                 "note": "Same rock, same light; only the rod and its shadow are new."},
+                {"id": "r27", "src": REPO / "projects/hc002-l/review/row27_scar_before_after.jpg",
+                 "label": "Row 27: before (left) and after the scar paint-out (right)",
+                 "note": "Colour and path targeted, as for row 58."},
+                {"id": "r42", "src": REPO / "projects/hc002-l/review/row42_scar_zoom.jpg",
+                 "label": "Row 42: before (left) and after the scar paint-out (right), at 6×",
+                 "note": "The scar is gone; a small soft notch in the hairline shows only at this zoom."},
             ]},
         "hero_real": [],   # v2 (2026-11-23): no HERO sprite plans for rows 2, 5, 49; row 4 stays C (S1 pieces)
     },
@@ -707,7 +744,7 @@ def batch1_block(k: str, e: dict, ep: dict, out: Path, img: Path) -> str:
     the wrong side, the prompt, and the free S1 brow-fix attempts."""
     kf = e["project"] / "assets/images/keyframes16x9"
     blocks = []
-    for bk, tag in (("batch1", "b1"), ("batch2", "b2"), ("batch3", "b3"), ("batch4", "b4"), ("batch5", "b5")):   # batch4 = 2026-11-25: free crops + row 13; batch2 = the 2026-11-24 re-rolls, batch3 = row 55 v3 + batch 2a
+    for bk, tag in (("batch1", "b1"), ("batch2", "b2"), ("batch3", "b3"), ("batch4", "b4"), ("batch5", "b5"), ("batch6", "b6")):   # batch4 = 2026-11-25: free crops + row 13; batch2 = the 2026-11-24 re-rolls, batch3 = row 55 v3 + batch 2a
         b = e.get(bk)
         if not b:
             continue
