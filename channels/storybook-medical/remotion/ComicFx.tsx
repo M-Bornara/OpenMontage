@@ -24,7 +24,8 @@ export type FxEvent =
   | { preset: "zoom_punch"; at: number; dur?: number; amount?: number }
   | { preset: "whip_pan"; at: number; dur?: number; dir?: 1 | -1; px?: number }
   | { preset: "halftone_flashback"; at: number; dur: number; palette?: Palette; dot?: number }
-  | { preset: "line_boil"; at: number; dur: number; fps?: number; amount?: number };
+  | { preset: "line_boil"; at: number; dur: number; fps?: number; amount?: number }
+  | { preset: "dust"; at: number; dur: number; count?: number; x?: number; y?: number; w?: number; h?: number; color?: string; size?: number; drift?: number };
 
 const INK = "#14110F";
 const PAPER = "#F4EAD2";
@@ -284,6 +285,28 @@ const SplitPanel: React.FC<{ e: Extract<FxEvent, { preset: "split_panel" }> }> =
   );
 };
 
+// dust: soft particles that drift and thin out over a region (x, y = centre, w, h = size, in % of the frame); a layer, never a picture change
+const Dust: React.FC<{ e: Extract<FxEvent, { preset: "dust" }> }> = ({ e }) => {
+  const frame = useCurrentFrame();
+  const t = frame / FPS - e.at;
+  if (t < 0 || t > e.dur) return null;
+  const n = e.count ?? 70, cx = (e.x ?? 50) / 100 * 1920, cy = (e.y ?? 55) / 100 * 1080, w = (e.w ?? 90) / 100 * 1920, h = (e.h ?? 70) / 100 * 1080;
+  const fade = interpolate(t, [0, 0.4, e.dur - 0.8, e.dur], [0, 1, 1, 0], clamp);
+  return (
+    <AbsoluteFill style={{ pointerEvents: "none", overflow: "hidden" }}>
+      {Array.from({ length: n }, (_, i) => {
+        const x0 = cx + (rand(i + 1) - 0.5) * w, y0 = cy + (rand(i + 77) - 0.5) * h;
+        const sp = (e.drift ?? 60) * (0.4 + rand(i + 5));                               // px per second, drifting right and slowly down
+        const x = x0 + t * sp + Math.sin(t * 1.3 + i) * 14, y = y0 + t * sp * 0.25 + Math.cos(t * 1.1 + i * 2) * 8;
+        const r = (e.size ?? 9) * (0.4 + rand(i + 9) * 1.6) * (1 + t * 0.15);
+        const a = fade * (0.18 + rand(i + 13) * 0.4) * (0.7 + 0.3 * Math.sin(t * 2 + i));
+        return <div key={i} style={{ position: "absolute", left: x - r, top: y - r, width: r * 2, height: r * 2, borderRadius: "50%", opacity: a,
+                                     background: `radial-gradient(circle, ${e.color ?? "rgba(214,196,164,1)"} 0%, rgba(214,196,164,0) 70%)` }} />;
+      })}
+    </AbsoluteFill>
+  );
+};
+
 export const FxLayer: React.FC<{ events: FxEvent[] }> = ({ events }) => (
   <>
     {events.map((e, i) => {
@@ -293,6 +316,7 @@ export const FxLayer: React.FC<{ events: FxEvent[] }> = ({ events }) => (
         case "onomatopoeia": return <Onomatopoeia key={i} e={e} />;
         case "panel_wipe": return <PanelWipe key={i} e={e} />;
         case "split_panel": return <SplitPanel key={i} e={e} />;
+        case "dust": return <Dust key={i} e={e} />;
         default: return null;
       }
     })}

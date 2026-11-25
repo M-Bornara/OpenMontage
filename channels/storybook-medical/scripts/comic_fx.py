@@ -42,6 +42,7 @@ PRESETS = [
      "a beat on a word or a hit; 0.08-0.16 is a nudge, more is a shout.", "bass hit (soft)"),
     ("whip_pan", "the picture slides off with horizontal motion blur and the next one slides in; the cut is at the middle of the event",
      "a hard change of place at speed (the coach, the ship).", "whoosh"),
+    ("dust", "soft dust particles drift and thin out over a region (count, size, drift, colour); a layer on a still", "settling dust after a blast, a shaft of light, a quiet aftermath: pair it with a slow push on the still.", "wind / ringing ears (free library)"),
     ("screen_shake", "a decaying shake of the whole picture (also built into impact_frame)", "any heavy hit.", "impact"),
     ("rgb_split", "red and blue channels slide apart and re-join (also built into impact_frame)", "shock, a glitch of memory.", "none"),
 ]

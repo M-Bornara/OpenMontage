@@ -50,7 +50,7 @@ FX = [
 ]
 
 
-def main(name: str = "comic-demo", shots_in=None, fx_in=None, end_in=None, extra_cues=None) -> Path:
+def main(name: str = "comic-demo", shots_in=None, fx_in=None, end_in=None, extra_cues=None, auto_sfx=True) -> Path:
     shots_in = shots_in or SHOTS; fx = fx_in or FX; end = end_in or END
     rem = P / "remotion"
     if rem.exists():
@@ -77,7 +77,7 @@ def main(name: str = "comic-demo", shots_in=None, fx_in=None, end_in=None, extra
     subprocess.run(["npx", "remotion", "render", str(entry), "StorybookLong", str(silent), f"--props={(rem / 'props.json').resolve()}",
                     f"--public-dir={(rem / 'public').resolve()}", "--log=error"], cwd=composer, check=True, shell=sys.platform == "win32")
     # sound: the hooks from the events + a few free library cues on the scene (spark, riser, cart)
-    cues = comic_fx.sfx_for(fx) + (extra_cues if extra_cues is not None else [{"name": "riser-drone", "at": 0.3, "gain_db": -22.0, "dur": 2.7}, {"name": "metal-clank", "at": 2.32, "gain_db": -16.0},
+    cues = (comic_fx.sfx_for(fx) if auto_sfx else []) + (extra_cues if extra_cues is not None else [{"name": "riser-drone", "at": 0.3, "gain_db": -22.0, "dur": 2.7}, {"name": "metal-clank", "at": 2.32, "gain_db": -16.0},
                                     {"name": "horse-carriage", "at": 8.6, "gain_db": -24.0, "dur": 5.0}])
     lib = KIT / "library/sfx"
     ins, chains = [], []
@@ -90,7 +90,7 @@ def main(name: str = "comic-demo", shots_in=None, fx_in=None, end_in=None, extra
     mix = "".join(f"[a{i}]" for i in range(len(cues)))
     final = out / f"{name}.mp4"
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(silent), *ins, "-filter_complex",
-                    ";".join(chains) + f";{mix}amix=inputs={len(cues)}:normalize=0,atrim=0:{end},loudnorm=I=-14:TP=-1.5[m]",
+                    ";".join(chains) + f";{mix}amix=inputs={len(cues)}:normalize=0,apad,atrim=0:{end},loudnorm=I=-14:TP=-1.5[m]",
                     "-map", "0:v", "-map", "[m]", "-c:v", "copy", "-c:a", "aac", "-b:a", "160k", "-shortest", str(final)], check=True)
     print(final, f"{episode.duration(final):.2f}s", "cues:", [(c["name"], c["at"]) for c in cues])
     return final
