@@ -728,6 +728,203 @@ B4["row13-iron-v1"] = dict(aspect="16:9", refs=[STYLE_DETAIL, IRON_REF],
             + f" {SAFE_FRAMING} {PERIOD} {NO_TEXT}"))
 KEYFRAMES.update(B4)
 
+# ── 2026-11-25 (user, cap $1.00): row 13 re-roll, rows 60 + 64 re-rolls, and batch 2b (one still per row, 11) ────────────────────
+# Standing iron wording (Mahdi 2026-11-25): used by EVERY new shot that shows the iron (the earlier specs keep the text they were made with).
+IRON3 = ("a smooth, perfectly round, dull dark-grey iron rod, slender, like a javelin, about 34 times longer than it is thick (1 1/4 in thick, "
+         "3 ft 7 in long); ONE end tapering smoothly over its last QUARTER (about 12 in) to a point; the OTHER end blunt and cut flat; "
+         "no knob, no handle, no flare, no inscription")
+IRON_REF2 = "proj:refs/iron-ref-v2.png"
+IRON_REF1 = "proj:refs/iron-ref.png"
+
+
+def iron_role(n: int) -> str:
+    return (f"Reference {n} is ONLY the SHAPE of the iron: a straight round rod, pointed at ONE end and cut flat at the other, no knob, no flare; "
+            "ignore its rock and its background. Draw YOUR iron SLENDERER than in that picture (about a third thinner: 34 times longer than it "
+            "is thick) and with a LONGER taper (the last quarter of its length). ")
+
+
+R_GFACE = ("Reference 1 is PHINEAS GAGE's 1850s model sheet: take ONLY his face and hair from it (his LEFT eye shut, on the RIGHT side of the "
+           "picture in a front view); do NOT copy its clothes, layout, other views or poses, nor its smiles or winks. ")
+B5 = {}
+
+B5["row13-iron-v2"] = dict(aspect="16:9", refs=[STYLE_DETAIL, IRON_REF2, IRON_REF1],
+    roles=(STYLE_ROLE + iron_role(2) + "Reference 3 is a soft period photograph of the real iron held in a hand: use it ONLY for how THIN the rod is "
+           "against its length (very slender) and the plain flat blunt top; ignore the hand, the grey and the blur. "),
+    prompt=(f"{set_block('a flat grey rock ledge in the open air', 'September 1848', 'a flat grey rock surface, clear low morning light from the left, a soft pale sky blur behind, nothing else')} "
+            f"{framing('MS', 'dead level with the rock, a pure side view', '50 mm', 'the tamping iron lies alone on a flat rock, perfectly horizontal, its full length filling the width of the frame from the left edge to the right edge', 'quiet, plain, a small heavy object')} "
+            f"{camera('beside the rock at its own height, square on to the iron', 'straight at the side of the iron', 'a flat grey rock surface and a soft pale morning sky blur behind', 'no person, no hand, no other object')} "
+            f"{NOBODY} The iron is {IRON3}. Draw it as ONE straight, SLENDER rod with the POINTED end at the RIGHT and the BLUNT, flat-cut end at the LEFT: "
+            "it is only about one thirtieth as thick as it is long (a thin pole, like a broom handle, not a log); the thickness stays the same along the "
+            "rod until the last QUARTER at the right, where it narrows smoothly and gradually to a point; the LEFT end is cut flat and is NOT pointed, "
+            "NOT rounded, NOT flared. Dull dark-grey surface with a soft highlight along the top; no inscription, no marks and no writing on it. "
+            + sizes({"the tamping iron": "109 cm long and 3.2 cm thick (34 times longer than it is thick), as thin as a broom handle, lying on a flat rock ledge"})
+            + f" {SAFE_FRAMING} {PERIOD} {NO_TEXT}"))
+KEYFRAMES.update(B5)
+
+
+def S5(name, *a, **k):
+    """B3's S() but into B5 (then KEYFRAMES)."""
+    S(name, *a, **k)
+    B5[name] = B3.pop(name)
+    KEYFRAMES[name] = B5[name]
+
+
+R_IRON2 = lambda n: STYLE_ROLE + iron_role(n)
+S5("row60-porch-v2", "LS", "eye level", "35 mm",
+   "an empty wooden chair on a porch at evening; the tamping iron leans against the porch post beside it, its pointed end up and its flat blunt end resting on the boards",
+   "still, an ending", "a farmhouse porch in California", "May 1860, evening",
+   "a worn wooden porch floor and a railing, a whitewashed wall, a golden evening sky, crickets",
+   "on the porch steps, low", "along the porch at the chair and the post",
+   "a worn wooden porch floor and railing, a whitewashed wall with a post, a golden evening sky beyond the rail",
+   "no person, no body",
+   "CAST: no people in the frame (nobody, no body, no hands).",
+   refs=[STYLE_DETAIL, IRON_REF2], roles=R_IRON2(2),
+   extra=f"The iron is {IRON3}: it leans against the post with its POINTED end UP and its FLAT blunt end on the boards (a pole, not a club).",
+   size_line=sizes({"the tamping iron leaning on the post": "109 cm long and 3.2 cm thick (34 times longer than it is thick), thin as a broom handle, reaching up to a man's hip and well above the chair seat",
+                    "the chair": "a plain wooden chair, seat about 45 cm high"}))
+
+S5("row64-lecture-v2", "LS", "eye level, from the back of the room", "28 mm",
+   "a lecturer points his wooden pointer at the FOREHEAD of a plain skull outline on the blackboard (the front part of the skull, above the eye socket, where the front of the brain is) while the listeners lean in and some nod",
+   "attentive, a lesson landing", "a medical college lecture theatre", "the 1870s",
+   "a raked lecture theatre, curved wooden benches, tall windows, a blackboard with a drawn skull outline in side view, gaslight",
+   "at the back of the raked theatre", "down the room toward the blackboard",
+   "rows of curved wooden benches full of listeners seen from directly behind, a blackboard at the front with a plain skull outline in side view, tall arched windows either side",
+   "no bar drawn in the skull, no Boston room",
+   cast("a tall gaunt lecturer of about fifty in a black frock coat with a long grey moustache and no beard, pointing with a wooden pointer",
+        extra=crowd("the listeners on the benches", ["a young man in the front row, clean-shaven, seen in profile, nodding", "a heavy man with grey mutton-chop whiskers, arms folded, seen in profile", "a thin man with a high bald head, leaning forward, seen in profile"],
+                    rest="EVERY other listener is seen from DIRECTLY BEHIND: only the backs of heads, hats and shoulders, no profile and no face; there are exactly three faces in the whole room besides the lecturer.")),
+   extra="The pointer's tip rests on the skull outline's FOREHEAD, the high front part of the skull above the eye socket.")
+
+# ── batch 2b (one still per row) ──
+GIRON = f"the tamping iron ({IRON3})"
+S5("row12a-drill-v1", "ECU", "from the side, close", "100 mm",
+   "a hand in a worn work glove swings a small iron hammer down onto the top of a hand drill, a long plain iron rod, driving its point into bare grey rock; fine chips jump from the rock",
+   "steady work, a rhythm", "the Cavendish rock cut", "September 1848",
+   "bare grey layered rock, early morning light from the left",
+   "close beside the rock face, low", "along the rock face at the drill's point",
+   "bare grey layered schist filling the frame behind the drill, soft and out of focus at the edges",
+   "nothing above the rock, no sky, no tools lying about",
+   "CAST: no faces and no bodies; only ONE hand and wrist in a worn work glove and a rolled shirt cuff.",
+   size_line=scale({"the hand drill": "a plain iron rod about 2.5 cm (1 in) thick, a little thicker than a thumb, only its upper part is in view",
+                    "the hammer": "a short-handled iron hammer whose head is about the size of a fist"}))
+
+S5("row15-endofcut-v1", "LS", "eye level, from the far end of the cut", "35 mm",
+   "the cut seen along its length: PHINEAS GAGE stands small on the ledge at the left holding the tamping iron upright beside him; two crewmen down in the pit at the right call up to him, one with an arm raised",
+   "an ordinary moment about to be interrupted", "the Cavendish rock cut, seen along its length", "13 September 1848",
+   "a fresh rock cut, two layered grey walls, a ledge, a pit, autumn hills",
+   "at the far end of the cut, eye level, a long way back", "along the cut toward its far open end",
+   "the cut running away between its two layered rock walls, the ledge along the left wall, the pit below on the right, autumn hills at the far open end",
+   "no OTS pit camera, no close rock",
+   cast(GAGE_1848 + ', small in the frame (a wide shot, his face tiny), in a low-crowned dark felt hat, white shirt, dark braces, on the ledge at the left, the iron held upright in one hand',
+        "a grey-bearded driller in a flat cap, down in the pit, one arm raised, mouth open calling up",
+        "a heavy dark-moustached man in a billed cap, down in the pit, hands cupped round his mouth"),
+   refs=[G1848, IRON_REF2], roles=R_1848 + "The two crewmen are NOT from the reference. " + iron_role(2),
+   extra=f"The iron he holds is {IRON3}.",
+   size_line=sizes({"the tamping iron": "109 cm long and 3.2 cm thick, a thin pole about as tall as his chin, held upright"}))
+
+S5("row20-stairs-v1", "MS", "low, looking up the stairs", "28 mm",
+   "PHINEAS GAGE climbs a steep outside wooden staircase one step at a time, one hand on the rail, a crewman's hand steadying his elbow; a clean white bandage is wound round his head",
+   "slow, dazed, upright, alive", "the outside staircase of the Cavendish inn", "13 September 1848, dusk",
+   "a steep weathered wooden staircase on a white clapboard wall, a lit window at the top, a dusk sky",
+   "at the foot of the stairs, low", "up the stairs toward the lit window",
+   "a steep weathered wooden staircase on a white clapboard wall, a lit window at the top, a dusk sky",
+   "no piazza, no carriage",
+   cast("PHINEAS GAGE, 25, thick DARK hair, clean-shaven, a strong square jaw, in a white shirt and dark braces, no hat; a clean white bandage wraps his crown and passes diagonally over his LEFT eye (picture-right in a front view): his RIGHT eye is open and its brow is bare skin; no blood visible",
+        extra="At his elbow ONLY a crewman's hand and a rolled sleeve (no face, no body, no second person)."),
+   refs=[GCH2], roles=R_GFACE, extra="The shot is Rule 0b soft: a clean bandage, no blood.")
+
+S5("row27-profile-v1", "CU", "a pure profile, eye level", "85 mm",
+   "PHINEAS GAGE in profile facing RIGHT, still and quiet, his eyes on something far off; the near (right) eye is open; the far side of his face is turned away",
+   "a held breath, a question", "a quiet room, grey light", "winter 1849",
+   "a soft grey wall, out of focus",
+   "close, level with his face, to his right", "at the right side of his face",
+   "a soft grey plaster wall, out of focus, nothing else",
+   "no detail, no window, no furniture",
+   cast(GAGE_28 + ', in a plain white shirt, no hat, head and shoulders, in pure profile facing RIGHT so only the right (open) eye shows'),
+   refs=[GCH2], roles=R_GFACE)
+
+S5("row32-rim-v1", "LS", "high, from above and behind him", "28 mm",
+   "PHINEAS GAGE stands alone on the rim of the cut at dusk, seen from behind and above, looking down at the crew working far below without him; he holds nothing and his hands hang empty",
+   "left out, an outsider", "the rim of the Cavendish rock cut", "winter 1849, dusk",
+   "the rim of a rock cut at dusk, the cut deep below, an orange sky",
+   "on the rim, high behind him", "over his shoulder down into the cut",
+   "the rim of the cut at dusk, the cut deep below with tiny working figures and one lamp, an orange sky",
+   "no close rock",
+   cast(GAGE_28 + ', seen from BEHIND and above, small in the frame, dark jacket, no hat, hands empty, standing still on the rim',
+        extra="Far below in the cut there are only tiny dark specks of working figures and one lamp: no faces, no detail."),
+   refs=[GCH2], roles=R_GFACE)
+
+S5("row42-barnum-v1", "LS", "eye level", "35 mm",
+   "in a crowded museum hall PHINEAS GAGE stands beside the tamping iron laid on a waist-high stand while a boy stares up at it with his mouth open",
+   "wonder, a curiosity shown", "Barnum's museum in New York", "1850s",
+   "a crowded museum hall with gaslight, painted banners and posters (no legible words), glass cases",
+   "in the middle of the hall", "across the hall at Gage, the stand and the boy",
+   "a crowded museum hall with gaslight, painted banners and posters (pictures only, no lettering), glass cases of curiosities",
+   "no lecture room, no clocks",
+   cast(GAGE_28 + ', in a dark frock coat and waistcoat, no hat, beside the stand, face small to medium in the frame',
+        "a boy of about nine in a cap and short jacket, wide-eyed, mouth open, looking up at the iron",
+        extra="The far hall holds a few visitors seen ONLY as small soft backs in the gaslight: no faces."),
+   refs=[GCH2, IRON_REF2], roles=R_GFACE + iron_role(2),
+   extra=f"The iron lies horizontally on two brackets on the stand; it is {IRON3}. The banners show only painted pictures (a ship, a lion), never lettering.",
+   size_line=sizes({"the tamping iron": "109 cm long and 3.2 cm thick, a thin pole, longer than the boy is tall to his chest", "the stand": "waist-high, about 90 cm"}))
+
+S5("row43a-shelf-v1", "MCU", "eye level on the shelf", "50 mm",
+   "the tamping iron lies along a museum shelf in a glass-fronted cabinet, a small handwritten card propped in front of it",
+   "kept, catalogued, a curiosity", "the museum of Harvard Medical College", "1850s",
+   "a glass-fronted wooden cabinet shelf with jars soft behind",
+   "in front of the cabinet, level with the shelf", "straight at the shelf",
+   "a glass-fronted wooden cabinet shelf with rows of jars soft and out of focus behind it",
+   "no hall, no lecture room",
+   "CAST: no people in the frame (nobody, no hands).",
+   refs=[STYLE_DETAIL, IRON_REF2], roles=R_IRON2(2),
+   extra=f"The iron is {IRON3}, lying along the shelf with its pointed end at the right. The card shows only soft wavy lines. " + WAVY_WRITING,
+   size_line=sizes({"the tamping iron": "109 cm long and 3.2 cm thick, a thin pole, the shelf about 1.2 m wide", "the card": "about 8 cm by 4 cm"}))
+
+S5("row44-bedside-v1", "LS", "eye level, interior", "28 mm",
+   "morning light rises through a muslin curtain on a plain bedroom: the tamping iron leans against the wall by the head of the bed, a coat hangs on a hook",
+   "quiet, companionship", "a plain bedroom", "the 1850s, morning",
+   "a plain bedroom: a bed, a coat on a hook, morning light through a muslin curtain",
+   "at the foot of the bed", "along the bed at the head wall and the window",
+   "a plain bedroom: a narrow bed with a patchwork quilt, a coat on a wall hook, morning light through a muslin curtain",
+   "no museum, no people",
+   "CAST: no people in the frame (nobody, no body in the bed, no hands).",
+   refs=[STYLE_DETAIL, IRON_REF2], roles=R_IRON2(2),
+   extra=f"The iron is {IRON3}, leaning against the wall by the bed's head with its POINTED end up.",
+   size_line=sizes({"the tamping iron": "109 cm long and 3.2 cm thick, a thin pole, reaching to a man's hip", "the bed": "narrow, about 90 cm wide"}))
+
+S5("row50-reins-v1", "CU", "from just above and in front", "85 mm",
+   "two weathered hands in worn leather gloves hold SIX leather reins fanned between the fingers, steady and calm; behind them, soft, the coach window with the tops of passengers' hats",
+   "steady, in control", "the coach box of a Chilean stagecoach", "the 1850s",
+   "the reins and his hands, the coach window soft behind with passengers' hats",
+   "on the coach box, just above his hands", "down at the hands and the reins",
+   "the reins and two gloved hands, the coach window soft behind with the tops of passengers' hats and no faces",
+   "no landscape, no face",
+   "CAST: no faces and no bodies; only TWO adult hands in worn leather driving gloves and the cuffs of a dark jacket; behind the glass only the TOPS of hats.",
+   size_line=scale({"each of the six reins": "a flat leather strap about 2.5 cm (1 in) wide, as wide as a thumb, six of them side by side in the fingers"}))
+
+S5("row62-doorstep-v1", "MS", "eye level, at the doorstep", "50 mm",
+   "across a doorstep, a woman's hands in dark sleeves hold out a plain closed wooden box and a long slender bundle wrapped in sacking to a man's two waiting hands in a dark frock-coat cuff",
+   "solemn, a handing-over", "the doorstep of a house in San Francisco", "1867",
+   "a front door and step, a box and wrapped iron handed across",
+   "on the step, facing the door", "at the doorway and the hands",
+   "a plain wooden front door and a worn stone step, soft daylight",
+   "no interior, no faces",
+   "CAST: no faces and no bodies; only a woman's TWO hands in dark sleeves and a man's TWO hands in a dark frock-coat cuff.",
+   size_line=scale({"the closed wooden box": "plain, lid shut, about 35 cm by 30 cm by 25 cm, as big as two hands side by side",
+                    "the wrapped bundle": "a straight slender pole wrapped in sacking cloth, 109 cm long and only about 4 cm thick, one end tapering, much longer than the box"}))
+
+S5("row63-case-v1", "LS", "eye level, in front of the case", "35 mm",
+   "in a dark museum gallery a pool of light rises on the tamping iron lying in a glass case; at the edge of the case a pale rounded shape sits soft and out of focus",
+   "reverent, still, an ending", "the Warren Anatomical Museum, Boston", "night, the present day",
+   "a glass case in a dark gallery, a pool of light rising on the iron",
+   "in front of the case, a little back", "at the lit case",
+   "a glass case in a dark gallery, a pool of warm light on its velvet floor and the iron, deep darkness around",
+   "no daylight, no people",
+   "CAST: no people in the frame (nobody, no hands).",
+   refs=[STYLE_DETAIL, IRON_REF2], roles=R_IRON2(2),
+   extra=f"The iron is {IRON3}, lying along the case with its pointed end at the right. The case has NO label and no lettering.",
+   size_line=sizes({"the tamping iron": "109 cm long and 3.2 cm thick, a thin pole, the case about 1.4 m wide"}))
+
 
 def main():
     chs = chapters()
