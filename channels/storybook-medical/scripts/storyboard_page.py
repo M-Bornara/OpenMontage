@@ -366,7 +366,7 @@ EPISODES = {
                  "label": "Row 42: before (left) and after the scar paint-out (right), at 6×",
                  "note": "The scar is gone; a small soft notch in the hairline shows only at this zoom."},
             ]},
-        "review_report": [REPO / "projects/hc002-l/review/cold_open_report.json", REPO / "projects/hc002-l/review/fx_report.json", REPO / "projects/hc002-l/review/review_report.json"],
+        "review_report": [REPO / "projects/hc002-l/review/v19_report.json", REPO / "projects/hc002-l/review/cold_open_report.json", REPO / "projects/hc002-l/review/fx_report.json", REPO / "projects/hc002-l/review/review_report.json"],
         "preview_cut": {
             "src": REPO / "projects/hc002-l/renders/preview.mp4",
             "title": "FIRST FULL CUT of the long · 1080p preview, no music (waiting for your OK)",
@@ -374,6 +374,7 @@ EPISODES = {
             "labels": ["Cold open · sting · title", "1 · The Foreman", "2 · What Happened", "3 · No Longer Gage", "4 · The Myth", "5 · The Evidence",
                        "6 · The Other Side of the World", "7 · The Ending", "8 · Why It Matters · end screen"],
             "notes": [
+                "THIS PREVIEW IS THE v19 RENDER (2026-11-25, 17:18). It does NOT show today's changes: the HIT shot in the cold open and in the three callbacks (C3 is retired), row 18 cutting to the dazed soot still, the face portrait at 5:41, the new quote-card marker, the bar close-up with a glint, and the four waiting clip slots. The cut audit on those runs with the next render (held until the clips exist, per your note). The notes below describe v19.",
                 "COLD OPEN, rebuilt (0:00-0:22), the narration audio is NOT changed; only the pictures move. Pour still (0-5.95 s, slow push, powder hiss on 'powder') -> tip still on 'with a bar of iron' (5.95 s) -> the row-2 glance (plate from 7.2 s, 0.5 s before the voice so it is not a 0.1 s flash; the glance still from 'glances' 7.8 s) -> C1 spark (9.82 s) -> C2 blast (11.76 s) -> C3 rod (14.30 s) -> C4 aftermath (15.50 s) -> the dazed still with the blood painted to soot (19.98 s, on 'talking') -> row 6 (21.6 s).",
                 "Where the timing had to give: C1 was built for 3.0 s but is shown 1.94 s (9.82-11.76 s): the TCK! spark lands on 'spark' (11.12 s) and the blast has to land on 'shoots' (12.06 s), so its 1.1 s of calm after the spark is dropped. C2 (Omni, 4.0 s) plays 2.54 s (11.76-14.30 s): its blast starts 0.30 s into the clip, so the clip starts 0.30 s before 'shoots'; it stops where the rod comes 'out the top of his skull' (C3 at 14.30 s), before Gage stands up at about 3.4 s. C3 is the first 1.2 s only (the rod turns into a cross after 1.3 s). C4 (Tier A) is stretched to the narration, 4.5 s, because a still can be: the clips themselves are never stretched, frozen or sped up. Nothing in the narration was cut or moved.",
                 "C2 has an impact frame (3 frames), a comic burst over the blast and a hand-lettered BOOM!, with a shake; the burst covers the ledge where the violence would be (rule 0b). C1 has the small spark burst, TCK!, a short RGB split and a clank. Sound is free-library placeholders, untuned.",

@@ -43,6 +43,9 @@ PRESETS = [
     ("whip_pan", "the picture slides off with horizontal motion blur and the next one slides in; the cut is at the middle of the event",
      "a hard change of place at speed (the coach, the ship).", "whoosh"),
     ("dust", "soft dust particles drift and thin out over a region (count, size, drift, colour); a layer on a still", "settling dust after a blast, a shaft of light, a quiet aftermath: pair it with a slow push on the still.", "wind / ringing ears (free library)"),
+    ("hit_shot", "the iron passes through the head, the head never shown: a rigid iron sprite flies from below the jaw through the head and out the top while an orange-ink comic burst with an ink splash covers the head; sprite and burst slow to 40 % for 0.5 s, the footage under them stays at natural speed",
+     "the moment the iron goes through (the cold open, the three callbacks): put it over the C2 explosion, impact frame + shake + whoosh with it (rule 0b).", "bass hit + impact + whoosh"),
+    ("glint", "a soft white band sweeps along a region with a four-point flare at the end", "a metal object shown still (the bar of iron): a bit of life without moving the picture.", "none"),
     ("screen_shake", "a decaying shake of the whole picture (also built into impact_frame)", "any heavy hit.", "impact"),
     ("rgb_split", "red and blue channels slide apart and re-join (also built into impact_frame)", "shock, a glitch of memory.", "none"),
 ]
@@ -60,6 +63,8 @@ def sfx_for(events: list[dict]) -> list[dict]:
         p, at = e["preset"], e["at"]
         if p == "impact_frame":
             add("bass_hit", at); add("impact", at + 0.02)
+        elif p == "hit_shot":                                   # impact frame + shake are their own events; the pass gets a whoosh and a soft hit
+            add("whoosh", at + 0.25, -14.0)
         elif p == "comic_burst":
             add("impact", at, -14.0)
         elif p in ("panel_wipe", "split_panel"):
@@ -101,6 +106,37 @@ def recolor_blood(src: Path, out: Path, mode: str = "green", mask: Path | None =
     out.parent.mkdir(parents=True, exist_ok=True)
     cv2.imwrite(str(out), np.clip(res, 0, 255).astype(np.uint8))
     return out
+
+
+# ── the HIT shot (Mahdi 2026-11-25): geometry shared by fx_hit.py (the prototype) and the long's edit script ─────────────────────────────────────────────
+HIT_BASE_IN = 0.45                      # the C2 footage (a clip at natural speed) starts 0.45 s in: the blast is already big
+HIT_CROP = (0.25, 0.164, 2.2)           # crop centre (frame fractions) and zoom; the footage is shifted down 14 % of the frame (headroom = the sky_pad layer)
+HIT_HEAD = (41.0, 33.5)                 # head + jaw + neck in the crop (% of the frame)
+# where the head is, by seconds from the shot start (he sinks down and left as the blast throws him; read off a gridded sheet of the footage, +14.5 % for the shift)
+HIT_TRACK = [[tt, x, round(y + 14.5, 1)] for tt, x, y in [[0.0, 42, 18], [0.1, 39, 16], [0.2, 41, 20], [0.3, 40, 18], [0.45, 36, 18], [0.6, 34, 25],
+                                                          [0.75, 34, 28], [0.9, 34, 34], [1.05, 34, 41], [1.2, 37, 44], [1.3, 39, 47]]]
+
+
+# the footage's own top-edge sky colour by seconds from the shot start (median of the top rows of the crop's columns; the smoke darkens it from 0.6 s)
+HIT_SKY = [[0.0, 210, 225, 217], [0.3, 210, 224, 215], [0.6, 205, 222, 212], [0.9, 203, 214, 205], [1.05, 195, 195, 190], [1.2, 168, 150, 135], [1.3, 158, 135, 110]]
+
+
+def hit_events(t0: float, palette: str | None, graded_to: float, sprite: str) -> list[dict]:
+    """The comic-kit events of one HIT shot that starts at t0 (absolute seconds): sky headroom, a 3-frame impact frame, the burst + iron sprite (slow
+    window 0.5 s at 40 %), a shake and, when palette is given, a halftone grade for graded_to seconds. The C2 footage under it is its own shot (natural speed)."""
+    ev = [{"preset": "sky_pad", "at": round(t0, 2), "dur": 1.3, "pad": 14, "fade": 16, "colors": HIT_SKY},
+          {"preset": "impact_frame", "at": round(t0, 2), "frames": 3, "x": HIT_HEAD[0], "y": HIT_HEAD[1]},
+          {"preset": "hit_shot", "at": round(t0, 2), "dur": 1.3, "x": HIT_HEAD[0], "y": HIT_HEAD[1], "w": 24, "h": 26, "sprite": sprite, "sprite_len": 700,
+           "from": [35.0, 40.0], "to": [40.0, -30.0], "color": "#FF8A1F", "slow_at": 0.43, "slow_dur": 0.5, "rate": 0.4, "track": HIT_TRACK},
+          {"preset": "screen_shake", "at": round(t0 + 0.1, 2), "dur": 0.5, "strength": 12}]
+    if palette:
+        ev.append({"preset": "halftone_flashback", "at": round(t0, 2), "dur": round(graded_to, 2), "palette": palette, "dot": 9})
+    return ev
+
+
+def hit_sfx(t0: float) -> list[dict]:
+    return [{"name": "boom-low", "at": round(t0, 2), "gain_db": -8.0}, {"name": "stamp-thud", "at": round(t0 + 0.02, 2), "gain_db": -10.0},
+            {"name": "whoosh", "at": round(t0 + 0.25, 2), "gain_db": -14.0}]
 
 
 if __name__ == "__main__":

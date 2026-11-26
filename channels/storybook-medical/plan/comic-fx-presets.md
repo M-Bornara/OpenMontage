@@ -54,3 +54,18 @@ filtered in Remotion, or is one pixel pass in Python.
 ## Related build checks (same review)
 - `cut_audit.py` (after the render), `bg_similarity.py` (in the build) and the clip-freeze check are in `plan/` terms: effects layers never change a clip's speed or length.
 - Long-video shots use `ease: "through"`: the camera keeps moving into every cut. The old ease came to rest at both ends of every shot, which left 3-5 identical frames before each cut.
+
+
+## Added 2026-11-25 (cold open, preview v19 review)
+
+| Preset | What it does | Where to use it |
+|---|---|---|
+| `dust` | soft particles drift and thin out over a region (count, size, drift, colour) | settling dust after a blast on a still; pair with a slow push |
+| `glint` | a soft white band sweeps along a region with a four-point flare at the end | a metal object shown still (the bar of iron) |
+| `sky_pad` | headroom for a crop whose subject sits at the top edge of the footage: the footage is shifted down, this fills the strip above with its own sky colour (`colors` follows it over time) and fades into the picture | the HIT shot (the man stands at the very top of the C2 footage) |
+| `hit_shot` | the iron passes through the head, the head never shown (rule 0b): a rigid iron sprite rises out of the head under an orange-ink comic burst with an ink splash that FOLLOWS the head (`track`); sprite and burst run on a remapped clock, 40 % for 0.5 s; the footage under them is its own shot at natural speed | the cold open and the three callbacks (rows 17, 40, 67) |
+
+The HIT shot is one function, `edit_hc002l.hit_shot(id, t, palette, tail)`, over the geometry in `scripts/comic_fx.py` (HIT_*). The sprite is `assets/images/sprites/iron-hit-sprite.png`, cut (never redrawn) from the approved 1:34 iron of row 13 by `make_iron_sprite.py`; `iron-ref.png` itself is a noisy crop of a photograph with no clean edge to cut. Prototype: `scripts/fx_hit.py` (`projects/fx-demo/renders/hit-*.mp4`).
+Known rough: the sky extension above the footage is a soft flat band; the sprite is about 4x life size next to the figure so that it reads.
+
+Checks added: `highlight_check.py` (a 2x frame of the first quote card, the marker must cover the full text height; the crop is saved to look at), `still_frames.py` (single frames of the long without a render).

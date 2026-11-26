@@ -83,19 +83,32 @@ CHAPTERS = {"ch1": "The Foreman", "ch2": "What Happened", "ch3": "No Longer Gage
 for i in range(1, 9):
     ov("chapter", ch(f"ch{i}") + 0.1, ch(f"ch{i}") + 2.8, n=i, text=CHAPTERS[f"ch{i}"])
 
-def callback(sid, t, palette):
-    """C3's first 1.2 s again (natural speed, the next shot starts 1.2 s later) under a halftone grade and a 2-frame impact flash."""
-    shot(sid, t, VID("cold-c3-1080p30"), static, fx_flash=True)      # fx_flash: the 2-frame impact flash is declared to the cut audit
-    cfx(preset="impact_frame", at=t, frames=2, x=50, y=60)
-    cfx(preset="halftone_flashback", at=t, dur=1.2, palette=palette, dot=9)
-    cfx(preset="zoom_punch", at=t + 0.05, dur=0.3, amount=0.06)
-    fx("whoosh", t, -16)
+import sys
+sys.path.insert(0, "channels/storybook-medical/scripts")
+import comic_fx  # noqa: E402
+
+SPRITE = "proj:assets/images/sprites/iron-hit-sprite.png"
+HIT_KEYS = lambda: keys(comic_fx.HIT_CROP[0], comic_fx.HIT_CROP[1], comic_fx.HIT_CROP[2], comic_fx.HIT_CROP[2] + 0.06, 1.7)
 
 
-# ── 0 · cold open (rebuilt 2026-11-25, Mahdi): pour -> tip -> glance -> C1 spark -> C2 blast -> C3 rod -> C4 aftermath -> dazed ──
-# Clips at natural speed and length, never frozen or stretched: C2 (Omni, 4.0 s) is shown for as long as the narration needs (it ends before Gage
-# stands, at 2.5 s); C3 (Omni) only its first 1.2 s (from 1.3 s the rod turns into a cross: failed take, not retaken); C1 and C4 are Tier A (a still
-# with comic-kit effects and free-library sound). comic_fx events (ComicFx.tsx) go to episode.json "comic_fx".
+def hit_shot(sid, t, palette=None, tail=True):
+    """The HIT shot (Mahdi 2026-11-25): the C2 explosion at NATURAL speed (from 0.45 s) under a comic burst that follows and covers the head and a rigid iron
+    sprite that rises out of it (sprite + burst slowed to 40 % for 0.5 s), an impact frame, a shake and a whoosh: 1.3 s; with `tail` then 0.2 s of Gage down
+    (the callbacks, 1.5 s in all; in the cold open the next shot IS Gage down). Replaces the C3 callbacks (C3 is retired)."""
+    shot(sid, t, VID("cold-c2-1080p30"), HIT_KEYS(), fx_flash=True, **{"in": comic_fx.HIT_BASE_IN})
+    for e in comic_fx.hit_events(t, palette, 1.5 if tail else 1.3, SPRITE):
+        cfx(**e)
+    for c in comic_fx.hit_sfx(t):
+        fx(c["name"], c["at"], c["gain_db"])
+    if tail:
+        shot(sid + "g", round(t + 1.3, 2), K("cold-b5-dust-v1"), push(1.08, 1.14))      # cut to Gage down
+
+
+# ── 0 · cold open (rebuilt 2026-11-25, Mahdi): pour -> tamp -> bar close-up -> glance -> spark -> C2 blast -> HIT -> Gage down -> dazed ──
+# Four Omni clips are WAITING for their slot (CK below; not generated yet): while a clip file is missing its slot shows the still / Tier A stand-in.
+# A clip plays at its natural speed and length from its first frame and is TRIMMED to its slot, never stretched, sped up or frozen (cut_audit.clip_freezes).
+# C2 (Omni, 4.0 s) is shown for as long as the narration needs; the HIT shot (C2 footage again, tight crop) replaces C3 (retired). comic_fx events go to
+# episode.json "comic_fx".
 comic = []
 
 
@@ -103,22 +116,41 @@ def cfx(**kw):
     comic.append({k: (round(v, 2) if isinstance(v, float) else v) for k, v in kw.items()})
 
 
-T1 = round(W(3, "spark") - 1.3, 2)          # C1: the strike (1.3 s into the shot) lands on "spark"
+CK = {"pour": "cold-k1-pour-1080p30", "tamp": "cold-k2-tamp-1080p30", "glance": "cold-k3-glance-1080p30", "spark": "cold-k4-spark-1080p30"}
+have = lambda k: (P / "assets/video" / f"{CK[k]}.mp4").exists()
+T1 = round(W(3, "spark") - 1.3, 2)          # the strike (1.3 s into the Tier A spark shot) lands on "spark"; the spark CLIP slot is 9.82-11.76
 T2 = round(W(4, "shoots") - 0.30, 2)        # C2: the blast starts 0.30 s into the clip and lands on "shoots"
-T3 = W(4, "top", lead=0.08)                 # C3: the rod flies "out the top of his skull"
-T4 = round(T3 + 1.2, 2)                     # C4: the aftermath, until "talking"
+T3 = W(4, "top", lead=0.08)                 # the HIT: the iron flies "out the top of his skull"
+T4 = round(T3 + 1.3, 2)                     # C4 (Gage down): the aftermath, until "talking"
 T5 = W(5, "talking")
-shot("r01", 0.0, K("cold-r1-pour-v1"), push(1.04, 1.18)); fx("sand-pour", W(1, "powder", lead=0.2), -22, dur=2.5)
-shot("r01b", W(1, "bar", lead=0.15), K("cold-b1-tip-v1"), push(1.0, 1.05))
-shot("r02a", rs(2) - 0.5, REF("plate-r2-v2"), push(1.04, 1.12)); fx("crowd-murmur", rs(2), -26, dur=1.5)
-shot("r02b", W(2, "glances"), K("row2-glance-v1"), push(1.06, 1.16))
-# C1 (Tier A): the same still as the tip, a much tighter crop on the hole (zoom ratio > 1.5 to the tip shot), the spark on the strike
-shot("c1", T1, K("cold-b1-tip-v1"), keys(0.68, 0.49, 1.62, 1.78, T2 - T1))
-cfx(preset="zoom_punch", at=T1 + 1.3, dur=0.3, amount=0.06)
-cfx(preset="comic_burst", at=T1 + 1.32, dur=0.5, x=50, y=50, w=16, h=22, color="#FFE066", rot=-8, points=9)
-cfx(preset="onomatopoeia", at=T1 + 1.34, dur=0.6, text="TCK!", x=58, y=30, size=120, rot=-9, color="#FFFFFF")
-cfx(preset="rgb_split", at=T1 + 1.32, dur=0.35, px=9)
-cfx(preset="screen_shake", at=T1 + 1.32, dur=0.3, strength=6)
+# 0-3.0 pour (clip slot) -> 3.0-5.95 tamp (clip slot) -> 5.95-7.2 the bar close-up (always a still: push + glint) -> 7.2-9.82 glance (clip slot) -> 9.82-11.76 spark (clip slot)
+if have("pour"):
+    shot("r01", 0.0, VID(CK["pour"]), static)
+else:
+    shot("r01", 0.0, K("cold-r1-pour-v1"), push(1.04, 1.14))
+fx("sand-pour", W(1, "powder", lead=0.2), -22, dur=2.5)
+if have("tamp"):
+    shot("r01a", 3.0, VID(CK["tamp"]), static)
+else:
+    shot("r01a", 3.0, K("cold-b1-tip-v1"), push(1.0, 1.04))
+shot("r01b", W(1, "bar", lead=0.15), K("cold-b1-tip-v1"), keys(0.45, 0.5, 1.6, 1.68, 1.3))          # the close-up of the bar: a still, push and glint
+cfx(preset="glint", at=round(W(1, "bar", lead=0.15) + 0.15, 2), dur=0.95, x=0, y=30, w=100, h=36, star=[87, 48])
+if have("glance"):
+    shot("r02", 7.2, VID(CK["glance"]), static)
+else:
+    shot("r02a", 7.2, REF("plate-r2-v2"), push(1.04, 1.12))
+    shot("r02b", W(2, "glances"), K("row2-glance-v1"), push(1.06, 1.16))
+fx("crowd-murmur", rs(2), -26, dur=1.5)
+if have("spark"):
+    shot("c1", T1, VID(CK["spark"]), static)                              # the spark clip; its own effects are placed once the clip's spark frame is seen
+else:
+    # Tier A stand-in: a much tighter crop of the tip still (zoom ratio >= 1.5 to the close-up), the spark on the strike
+    shot("c1", T1, K("cold-b1-tip-v1"), keys(0.68, 0.49, 2.6, 2.8, T2 - T1))
+    cfx(preset="zoom_punch", at=T1 + 1.3, dur=0.3, amount=0.06)
+    cfx(preset="comic_burst", at=T1 + 1.32, dur=0.5, x=50, y=50, w=20, h=28, color="#FFE066", rot=-8, points=9)
+    cfx(preset="onomatopoeia", at=T1 + 1.34, dur=0.6, text="TCK!", x=58, y=30, size=120, rot=-9, color="#FFFFFF")
+    cfx(preset="rgb_split", at=T1 + 1.32, dur=0.35, px=9)
+    cfx(preset="screen_shake", at=T1 + 1.32, dur=0.3, strength=6)
 fx("metal-clank", T1 + 1.3, -12)
 # C2 (Omni 1.2 clip, natural speed): impact frame, comic burst over the blast, BOOM, shake
 shot("c2", T2, VID("cold-c2-1080p30"), static)
@@ -128,10 +160,7 @@ cfx(preset="comic_burst", at=B2 + 0.1, dur=1.3, x=31, y=24, w=34, h=46, color="#
 cfx(preset="onomatopoeia", at=B2 + 0.1, dur=1.3, text="BOOM!", x=36, y=34, size=300, rot=-7, color="#E2352B")
 cfx(preset="screen_shake", at=B2 + 0.2, dur=0.5, strength=10)
 fx("boom-low", B2, -8); fx("stamp-thud", B2 + 0.02, -10)
-# C3 (Omni 1.2 clip): only its first 1.2 s at natural speed
-shot("c3", T3, VID("cold-c3-1080p30"), static)
-cfx(preset="zoom_punch", at=T3, dur=0.3, amount=0.1)
-fx("whoosh", T3, -14)
+hit_shot("hit", T3, tail=False)                                            # C3 is retired: the HIT shot is the rod's flight (then C4, Gage down)
 # C4 (Tier A): the beat-5 still, slow push, dust, ringing ears, wind and running steps
 shot("c4", T4, K("cold-b5-dust-v1"), keys(0.5, 0.54, 1.12, 1.24, T5 - T4))
 cfx(preset="dust", at=T4, dur=T5 - T4, count=90, x=50, y=55, w=100, h=80, size=9, drift=55)
@@ -166,11 +195,11 @@ shot("r16", rs(16), S1("s5"), push(1.3, 1.55, x=3, y=2), hit={"at": 2.2, "streng
 ov("quote", W(16, "struck", lead=0.2), re_(16) + 0.3, text="struck fire upon the rock.", source="Harlow", highlight="struck fire")
 
 # ── 2 · What Happened ──
-CB17 = W(17, "top", lead=0.1)        # callback: C3's first 1.2 s on "came out through the top of his head" (amber), then the doc again
-shot("r17", rs(17), K("row17-doc"), keys(0.5, 0.5, 1.0, 1.06, CB17 - rs(17))); fx("boom-low", rs(17) + 0.4, -22)
-callback("cb17", CB17, "amber")
-shot("r17b", CB17 + 1.2, K("row17-doc"), keys(0.5, 0.5, 1.07, 1.12, rs(18) - CB17 - 1.2), cut="same-camera cut intended")   # the doc continues its push
+CB17 = round(rs(18) - 1.5, 2)        # callback: the HIT shot (amber), 1.5 s ending on row 18
+shot("r17", rs(17), K("row17-doc"), keys(0.5, 0.5, 1.0, 1.1, CB17 - rs(17))); fx("boom-low", rs(17) + 0.4, -22)
+hit_shot("cb17", CB17, "amber")
 shot("r18", rs(18), K("row5b-elbow-v1"), push(1.3, 1.45, x=-3)); fx("cloth-rustle", rs(18) + 1.0, -26)
+shot("r18b", W(18, "spoke", lead=0.1), K("row5-dazed-v1-soot"), push(1.04, 1.12))      # "he spoke": the dazed face (Mahdi, preview v19)
 C19 = clip_len("row19-oxcart-omni-v1-1080p30")
 shot("r19", rs(19), VID("row19-oxcart-omni-v1-1080p30"), static); fx("horse-carriage", rs(19), -24, dur=C19)
 shot("r19d", rs(19) + C19, K("row19-detail"), push(1.0, 1.08))      # the row is longer than its clip: cut to a tight Tier A still of the cart
@@ -214,8 +243,8 @@ shot("r38", rs(38), K("row38-slips-v1"), push(1.02, 1.12)); fx("wood-pile-fall",
 shot("r39", rs(39), K("row7-monster-v1"), keys(0.50, 0.62, 2.1, 1.5, re_(39) - rs(39) + 0.7), grey={"from": 0.0, "to": 0.1}); fx("quill-writing", rs(39) + 0.5, -26, dur=3.0)
 ov("quote", W(39, "aggressive", lead=0.3), re_(39) + 0.3, text="aggressive and boastful dissipated drunken bully.",
    source="Macmillan, 2008, on how modern writers portray Gage", highlight="drunken bully")
-callback("cb40", rs(40), "cyan_magenta")     # in the pause before "did Phineas Gage really..."
-shot("r40", rs(40) + 1.2, K("row36b-textbook-v2crop"), push(1.04, 1.14)); fx("paper-crumple", rs(40) + 2.2, -20)
+hit_shot("cb40", rs(40), "cyan_magenta")     # in the pause before "did Phineas Gage really..." (1.5 s)
+shot("r40", round(rs(40) + 1.5, 2), K("row36b-textbook-v2crop"), push(1.04, 1.14)); fx("paper-crumple", rs(40) + 2.2, -20)
 
 # ── 5 · The Evidence ──
 shot("r41", rs(41), K("row41-boston-v2-flip"), push(1.02, 1.12)); fx("crowd-murmur", rs(41), -28, dur=3.5); fx("chair-scrape", rs(41) + 1.4, -26)
@@ -273,10 +302,10 @@ shot("r64", rs(64), K("row64-lecture-v2"), push(1.02, 1.16, x=-4)); fx("tick-cli
 C65 = clip_len("row65-evening-from49")
 shot("r65", rs(65), VID("row65-evening-from49"), static); fx("horse-carriage", rs(65), -30, dur=C65)
 shot("r65d", rs(65) + C65, K("row65-detail"), push(1.0, 1.08))      # the team, tight
-shot("r66a", rs(66), K("row55-portrait-v4paint"), keys(0.46, 0.72, 2.1, 2.2, W(66, "coach", lead=0.2) - rs(66)))   # the hand on the iron
+shot("r66a", rs(66), K("row55-portrait-v4paint"), keys(0.50, 0.40, 1.7, 1.8, W(66, "coach", lead=0.2) - rs(66)))   # the framed portrait WITH his face (the hand-only crop of v19 cut it off)
 shot("r66b", W(66, "coach", lead=0.2), K("row50-reins-v1"), push(1.04, 1.12), transition="dissolve")
-callback("cb67", rs(67), "mono")           # "And the iron that went through his head?"
-shot("r67", rs(67) + 1.2, K("row55-portrait-v4paint"), push(1.0, 1.12))   # the whole case, wide
+hit_shot("cb67", rs(67), "mono")           # "And the iron that went through his head?" (1.5 s)
+shot("r67", round(rs(67) + 1.5, 2), K("row55-portrait-v4paint"), push(1.0, 1.12))   # the whole case, wide
 outro = round(words[-1]["end"] + 0.9, 2)
 shot("OUTRO", outro, "brand:sting-outro.mp4", static); sfx.append({"file": "brand:sting-outro.mp4", "at": outro, "as_is": True, "dur": 1.8})
 shot("END", round(outro + 1.8, 2), "brand:endscreen.mp4", static)

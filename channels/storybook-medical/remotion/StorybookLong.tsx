@@ -158,7 +158,10 @@ const Quote: React.FC<{ text: string; source?: string; highlight?: string; dur: 
         <div style={{ fontFamily: serif, fontStyle: "italic", fontSize: 54, lineHeight: 1.35, color: "#2B2420" }}>
           “{parts[0]}
           {parts.length > 1 ? (
-            <span style={{ background: `linear-gradient(transparent 55%, rgba(232,163,61,${0.75 * glow}) 55%)` }}>{highlight}</span>
+            /* review 2026-11-25 v19: the marker is a solid box the FULL line height of the words (inline-block at the text's own 1.35 line height), not the old
+                 gradient that painted only the lower 45% of the span; checks/highlight_check.py renders a 2x frame and measures it */
+            <span style={{ display: "inline-block", lineHeight: "inherit", padding: "0 0.14em", margin: "0 -0.06em", borderRadius: 6,
+                           background: `rgba(232,163,61,${0.62 * glow})` }}>{highlight}</span>
           ) : null}
           {parts.length > 1 ? parts[1] : ""}”
         </div>

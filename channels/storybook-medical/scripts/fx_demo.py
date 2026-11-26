@@ -59,14 +59,18 @@ def main(name: str = "comic-demo", shots_in=None, fx_in=None, end_in=None, extra
     (rem / "public/img").mkdir(parents=True, exist_ok=True)
     (rem / "public/vid").mkdir(parents=True, exist_ok=True)
     shots = []
-    for sid, a, b, src, motion in shots_in:
+    for sid, a, b, src, motion, *more in shots_in:
+        extra = more[0] if more else {}
         if src.suffix == ".mp4":
             shutil.copy(src, rem / f"public/vid/{sid}.mp4")
             kind, rel = "video", f"vid/{sid}.mp4"
         else:
             episode.fit_frame(src, rem / f"public/img/{sid}.jpg", (3840, 2160))
             kind, rel = "image", f"img/{sid}.jpg"
-        shots.append({"id": sid, "src": rel, "kind": kind, "start": a, "end": b, "inPoint": 0, "motion": motion, "transitionIn": "cut", "darken": 0})
+        shots.append({"id": sid, "src": rel, "kind": kind, "start": a, "end": b, "inPoint": extra.get("in", 0), "motion": motion, "transitionIn": "cut", "darken": 0})
+    for e in fx:                      # a sprite is copied next to the shots
+        if e.get("sprite") and not str(e["sprite"]).startswith("img/"):
+            sp = Path(e["sprite"]); shutil.copy(sp, rem / "public/img" / sp.name); e["sprite"] = f"img/{sp.name}"
     props = {"totalSeconds": end, "shots": shots, "overlays": [], "words": [], "captions": False, "fx": fx}
     json.dump(props, open(rem / "props.json", "w", encoding="utf-8"))
     composer = REPO / "remotion-composer"

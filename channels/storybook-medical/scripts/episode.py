@@ -795,9 +795,17 @@ def step_build(pid, *_):
                       "punch": re.sub(r"\W", "", t.lower()) in punch,
                       "breakAfter": bool(re.search(r"[.,?!]$", t)) and t.lower() != "st."})
     if long:
+        comic = []
+        for e in ep.get("comic_fx", []):       # a sprite (hit_shot) is a project file: copied next to the shots, the event gets its public path
+            e = dict(e)
+            if e.get("sprite") and not str(e["sprite"]).startswith("img/"):
+                sp = Path(resolve_ref(p.name, e["sprite"]))
+                shutil.copy(sp, pub / "img" / sp.name)
+                e["sprite"] = f"img/{sp.name}"
+            comic.append(e)
         props = {"totalSeconds": total, "shots": shots, "overlays": ep["overlays"], "words": words,
                  "wordsPerPage": 4, "captionY": 900, "captions": ep.get("captions", True),
-                 "fx": ep.get("comic_fx", [])}   # comic effects (ComicFx.tsx), events in episode.json "comic_fx"
+                 "fx": comic}   # comic effects (ComicFx.tsx), events in episode.json "comic_fx"
     else:
         # stamps and name tags belong to their shot: they end at its cut (user, HCS04: "LEGEND" stayed into the next
         # shot). Clocks and other frame-space overlays keep their own end.
@@ -1002,6 +1010,11 @@ def step_render(pid, *flags):
             res = cut_audit.audit(pid, out)
             if res["failures"]:
                 raise SystemExit("CUT AUDIT FAIL: " + " | ".join(res["failures"][:6]) + (" ..." if len(res["failures"]) > 6 else ""))
+            # review 2026-11-25 (v19): the highlight marker must cover the FULL text height: a 2x frame of the first quote card is measured and kept
+            import highlight_check
+            bad = highlight_check.check(pid)
+            if bad:
+                raise SystemExit("HIGHLIGHT CHECK FAIL: " + " | ".join(bad))
         if ep.get("format") == "short":
             # user 2026-11-15: "re-evaluate the text placements after each change": collisions + review/text_sheet.jpg
             import text_check

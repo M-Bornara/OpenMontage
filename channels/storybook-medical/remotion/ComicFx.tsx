@@ -25,6 +25,10 @@ export type FxEvent =
   | { preset: "whip_pan"; at: number; dur?: number; dir?: 1 | -1; px?: number }
   | { preset: "halftone_flashback"; at: number; dur: number; palette?: Palette; dot?: number }
   | { preset: "line_boil"; at: number; dur: number; fps?: number; amount?: number }
+  | { preset: "hit_shot"; at: number; dur?: number; x: number; y: number; w: number; h: number; sprite: string; sprite_len: number; from: [number, number]; to: [number, number];
+      color?: string; slow_at?: number; slow_dur?: number; rate?: number; track?: [number, number, number][] }
+  | { preset: "sky_pad"; at: number; dur: number; pad: number; fade?: number; color?: string; colors?: [number, number, number, number][] }
+  | { preset: "glint"; at: number; dur: number; x: number; y: number; w: number; h: number; star?: [number, number] }
   | { preset: "dust"; at: number; dur: number; count?: number; x?: number; y?: number; w?: number; h?: number; color?: string; size?: number; drift?: number };
 
 const INK = "#14110F";
@@ -307,6 +311,95 @@ const Dust: React.FC<{ e: Extract<FxEvent, { preset: "dust" }> }> = ({ e }) => {
   );
 };
 
+// HIT shot (Mahdi 2026-11-25): the iron passes through the head, and the head is NEVER shown (rule 0b). Layers, all above the C2 footage:
+//   1. the rigid iron SPRITE (cut from the approved 1:34 iron, never redrawn) flies in a straight line from below the jaw, through the head, out the top;
+//   2. an orange-ink comic burst with an ink splash sits on the head the whole time and covers the sprite while it is inside the head.
+// The sprite and burst run on a REMAPPED clock: `rate` (0.4) for `slow_dur` (0.5 s) from `slow_at`; the footage underneath is a separate shot at natural speed.
+// Content time (tau) is 1.0 s; the slow window starts at tau 0.43 (the bar reaches the jaw) and lasts 0.5 s of wall time (0.2 s of tau at 40 %), so `dur` = 1.3 s of wall time.
+const HitShot: React.FC<{ e: Extract<FxEvent, { preset: "hit_shot" }> }> = ({ e }) => {
+  const frame = useCurrentFrame();
+  const dur = e.dur ?? 1.3;
+  const t = frame / FPS - e.at;
+  if (t < 0 || t > dur) return null;
+  const sa = e.slow_at ?? 0.43, sd = e.slow_dur ?? 0.5, rate = e.rate ?? 0.4;
+  const tau = t < sa ? t : t < sa + sd ? sa + (t - sa) * rate : sa + sd * rate + (t - sa - sd);
+  const pops = spring({ frame: tau * FPS + 0.05 * FPS, fps: FPS, config: { damping: 10, stiffness: 240, mass: 0.6 } });
+  const fade = interpolate(tau, [0.85, 1.0], [1, 0], clamp);
+  const sc = Math.max(0, pops) * fade;
+  const u = interpolate(tau, [0.12, 0.83], [0, 1], clamp);
+  const spriteOn = tau >= 0.12 && tau <= 0.83;                       // the sprite exists only while it passes (never before the burst has popped)
+  const [fx0, fy0] = [e.from[0] / 100 * 1920, e.from[1] / 100 * 1080], [fx1, fy1] = [e.to[0] / 100 * 1920, e.to[1] / 100 * 1080];
+  const px = fx0 + (fx1 - fx0) * u, py = fy0 + (fy1 - fy0) * u;
+  const ang = Math.atan2(fy1 - fy0, fx1 - fx0) * 180 / Math.PI;            // the tip (the sprite's right end) leads
+  const spriteH = e.sprite_len * 85 / 2496;
+  // the burst FOLLOWS THE HEAD in wall time (the footage underneath runs at natural speed and the man sinks as the blast throws him): `track` = [t, x, y] points
+  const tr = e.track ?? [[0, e.x, e.y]];
+  const trk = (k: 1 | 2) => interpolate(t, tr.map((p) => p[0]), tr.map((p) => p[k]), clamp);
+  const cx = (tr.length > 1 ? trk(1) : e.x) / 100 * 1920, cy = (tr.length > 1 ? trk(2) : e.y) / 100 * 1080, w = e.w / 100 * 1920, h = e.h / 100 * 1080;
+  const col = e.color ?? "#FF8A1F";
+  const drops = Array.from({ length: 16 }, (_, i) => {
+    const a = (i / 16) * Math.PI * 2 + rand(i + 40) * 0.4, r = 0.95 + rand(i + 50) * 0.5;
+    return { x: Math.cos(a) * r * 0.5, y: Math.sin(a) * r * 0.5, size: 0.025 + rand(i + 60) * 0.06, ink: i % 3 === 0 };
+  });
+  return (
+    <AbsoluteFill style={{ pointerEvents: "none" }}>
+      {spriteOn ? <Img src={staticFile(e.sprite)} style={{ position: "absolute", left: px - e.sprite_len / 2, top: py - spriteH / 2, width: e.sprite_len, height: spriteH,
+                                               transform: `rotate(${ang}deg)`, filter: "drop-shadow(6px 8px 0 rgba(20,17,15,0.55))" }} /> : null}
+      <svg width={1920} height={1080} style={{ position: "absolute", inset: 0 }}>
+        <defs>
+          <pattern id="cfx-hdots" width="18" height="18" patternUnits="userSpaceOnUse" patternTransform="rotate(25)"><circle cx="9" cy="9" r="4.6" fill="#C2410C" opacity={0.8} /></pattern>
+          <radialGradient id="cfx-hfade"><stop offset="0.25" stopColor="#000" /><stop offset="0.95" stopColor="#fff" /></radialGradient>
+          <mask id="cfx-hmask"><rect x="-2" y="-2" width="4" height="4" fill="url(#cfx-hfade)" /></mask>
+        </defs>
+        <g transform={`translate(${cx + 14},${cy + 16}) rotate(-8) scale(${(w / 2) * sc},${(h / 2) * sc})`}><polygon points={starPoints(14, 21)} fill={INK} opacity={0.55} /></g>
+        <g transform={`translate(${cx},${cy}) rotate(-8) scale(${(w / 2) * sc},${(h / 2) * sc})`}>
+          <polygon points={starPoints(14, 21)} fill={col} stroke={INK} strokeWidth={0.05} strokeLinejoin="miter" />
+          <polygon points={starPoints(14, 21)} fill="url(#cfx-hdots)" mask="url(#cfx-hmask)" transform="scale(0.97)" />
+          {drops.map((d, i) => <circle key={i} cx={d.x * 2} cy={d.y * 2} r={d.size * 2} fill={d.ink ? INK : col} stroke={INK} strokeWidth={0.03} />)}
+        </g>
+      </svg>
+    </AbsoluteFill>
+  );
+};
+
+// glint: a soft white band sweeps across a region (the bar of iron) with a four-point flare at the end; a layer on a still or a clip
+const Glint: React.FC<{ e: Extract<FxEvent, { preset: "glint" }> }> = ({ e }) => {
+  const frame = useCurrentFrame();
+  const t = frame / FPS - e.at;
+  if (t < 0 || t > e.dur) return null;
+  const u = t / e.dur;
+  const x0 = e.x / 100 * 1920, y0 = e.y / 100 * 1080, w = e.w / 100 * 1920, h = e.h / 100 * 1080;
+  const star = e.star ? spring({ frame: frame - (e.at + e.dur * 0.55) * FPS, fps: FPS, config: { damping: 12, stiffness: 200 } }) * interpolate(u, [0.8, 1], [1, 0], clamp) : 0;
+  return (
+    <AbsoluteFill style={{ pointerEvents: "none" }}>
+      <div style={{ position: "absolute", left: x0, top: y0, width: w, height: h, overflow: "hidden" }}>
+        <div style={{ position: "absolute", top: -20, bottom: -20, width: w * 0.22, left: interpolate(u, [0, 1], [-w * 0.3, w * 1.1]), transform: "skewX(-24deg)", mixBlendMode: "screen",
+                      background: "linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,250,235,0.9) 50%, rgba(255,255,255,0) 100%)" }} />
+      </div>
+      {e.star ? (
+        <svg width={1920} height={1080} style={{ position: "absolute", inset: 0 }}>
+          <g transform={`translate(${e.star[0] / 100 * 1920},${e.star[1] / 100 * 1080}) scale(${star * 60})`} style={{ mixBlendMode: "screen" }}>
+            <polygon points="0,-1 0.12,-0.12 1,0 0.12,0.12 0,1 -0.12,0.12 -1,0 -0.12,-0.12" fill="#FFF8E6" />
+          </g>
+        </svg>
+      ) : null}
+    </AbsoluteFill>
+  );
+};
+
+// sky_pad: HEADROOM for a crop whose subject sits at the top edge of the footage. The shot is shifted down by `pad` % of the frame; this layer fills the
+// strip above it with the footage's own sky colour and fades into the picture over `fade` %, so the extension has no seam. Put it BEFORE the burst/sprite.
+const SkyPad: React.FC<{ e: Extract<FxEvent, { preset: "sky_pad" }> }> = ({ e }) => {
+  const frame = useCurrentFrame();
+  const t = frame / FPS - e.at;
+  if (t < 0 || t > e.dur) return null;
+  // `colors` = [t, r, g, b] points (t from the event start): the footage's own top-edge colour over time (the smoke darkens it), so the extension has no seam
+  const cs = e.colors ?? [[0, 207, 220, 208]];
+  const ch = (k: 1 | 2 | 3) => Math.round(interpolate(t, cs.map((q) => q[0]), cs.map((q) => q[k]), clamp));
+  const c = `${ch(1)},${ch(2)},${ch(3)}`, pad = e.pad, fade = e.fade ?? 9;
+  return <AbsoluteFill style={{ pointerEvents: "none", background: `linear-gradient(to bottom, rgb(${c}) 0%, rgb(${c}) ${pad}%, rgba(${c},0) ${pad + fade}%)` }} />;
+};
+
 export const FxLayer: React.FC<{ events: FxEvent[] }> = ({ events }) => (
   <>
     {events.map((e, i) => {
@@ -317,6 +410,9 @@ export const FxLayer: React.FC<{ events: FxEvent[] }> = ({ events }) => (
         case "panel_wipe": return <PanelWipe key={i} e={e} />;
         case "split_panel": return <SplitPanel key={i} e={e} />;
         case "dust": return <Dust key={i} e={e} />;
+        case "hit_shot": return <HitShot key={i} e={e} />;
+        case "glint": return <Glint key={i} e={e} />;
+        case "sky_pad": return <SkyPad key={i} e={e} />;
         default: return null;
       }
     })}
