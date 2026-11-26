@@ -46,6 +46,23 @@ This is a first-class workflow in OpenMontage.
 
 If a model misses this distinction, it will often fall back to plain search + guesswork. That is incorrect for OpenMontage.
 
+## Channel Entry Point — Oddly Matt / The Human Casebook (`channels/storybook-medical/`)
+
+Work on this channel (episodes HC0xx / HCSxx, Shorts, long videos, packages) follows the channel's own rules on top
+of this guide. Route by what is being produced:
+
+| Request | Load first | Gate before the user sees it |
+|---|---|---|
+| Publish package, captions, title, description, first / pinned comment | `oddly-matt-platform-captions` skill | claim-ID lint (`scripts/claim_tags.py`, in the publish script) + **fact gate** |
+| Script (Short or long), story, storyboard | `story-doctor` skill (storyboard: also `layered-shot`) | **fact gate** on the script / storyboard text |
+| Comments | `oddly-matt-comment-sweep` skill | replies use claims.csv only |
+| "How are we doing", weekly numbers | `oddly-matt-weekly-review` skill | — |
+
+**Fact gate** (`channels/storybook-medical/plan/fact-gate.md`, HARD RULE): before showing the user any script,
+caption set or package, a fresh sub-agent (`fact-gate`, `.claude/agents/fact-gate.md`) gets ONLY the episode's
+claims.csv + the text and returns sentence → claim ID → claim wording → PASS / STRONGER THAN CLAIM / NO CLAIM. Fix
+every flag, re-run until clean, and show the user its table with the text. The writer never grades their own facts.
+
 ## Rule Zero — All Production Goes Through a Pipeline
 
 **Every video production request MUST go through the pipeline system. No exceptions.**
@@ -523,6 +540,10 @@ Before committing to execution, present:
 6. **Music plan** — mandatory for every pipeline that has audio. See below.
 7. Production plan by stage.
 8. Approval gate before asset generation.
+9. **For any narrated / story-driven video: a beat sheet and a free animatic (wireframe storyboard with the real
+   transitions, effects, overlays and narration) BEFORE any paid generation.** Follow
+   `skills/creative/cinematic-production-standard.md`: it is the cross-project standard for images, motion, camera,
+   sync, focus effects, transitions, structure, rhythm and review.
 
 If a user prefers a specific vendor and that tool is available, surface it directly. Do not hide provider choice.
 
@@ -703,6 +724,7 @@ The `.agents/skills/` directory is large. When you're not coming in through a to
 | How does a tool actually work? | the tool's `usage_location` from the registry |
 | How should this pipeline stage behave? | `skills/pipelines/<pipeline>/...` |
 | What is the checkpoint/review policy? | `skills/meta/` |
+| How should a story video be planned, shot, cut and reviewed? | `skills/creative/cinematic-production-standard.md` |
 
 ## What Not To Do
 

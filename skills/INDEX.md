@@ -97,6 +97,7 @@ Key capability families to look for in the output:
 
 | Skill | File | Trigger | Agent Skills (Layer 3) |
 |-------|------|---------|----------------------|
+| **Cinematic Production Standard** | `creative/cinematic-production-standard.md` | Cross-project bar: beat sheet → free animatic before spending, action-led images, living stills, target camera, key-word sync, focus effects, transition choice, hook / structure / rhythm, director review | `remotion`, `remotion-best-practices` |
 | Video Editing | `creative/video-editing.md` | Cut decisions, pacing, rhythm | `ffmpeg`, `video-toolkit` |
 | Enhancement Strategy | `creative/enhancement-strategy.md` | Overlay placement and density | `ffmpeg` |
 | Data Visualization | `creative/data-visualization.md` | Chart type selection, animation, label placement | `d3-viz`, `remotion-best-practices` |

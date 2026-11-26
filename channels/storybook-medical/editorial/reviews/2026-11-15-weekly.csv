@@ -1,0 +1,14 @@
+read_at,platform,video,posted,age_days,length_s,views,engaged_or_reach,avg_watch_s,likes,comments,shares,saves,subs_gained,source
+2026-11-15,YouTube,HC001-L Window Into His Stomach,2026-11-08,7,528,17,11,63,1,,0,,0,vidIQ YT Analytics (thru Nov 15)
+2026-11-15,YouTube,HC001-S2 Food on a String,2026-11-09,6,60,17,9,82,1,,0,,0,vidIQ YT Analytics
+2026-11-15,YouTube,HC001-S1 Hole in His Stomach,2026-11-11,4,49,589,193,25,16,,0,,3,vidIQ YT Analytics
+2026-11-15,YouTube,HC001-S3 Walked Away,2026-11-13,2,58,149,72,40,6,,0,,0,vidIQ YT Analytics
+2026-11-15,TikTok,HC001-S2 Food on a String,2026-11-10,5,60,665,,15,18,0,0,4,,vidIQ public + Metricool avg watch
+2026-11-15,TikTok,HC001-S1 Hole in His Stomach,2026-11-12,3,48,638,,,9,0,0,0,,vidIQ public
+2026-11-15,TikTok,HC001-S3 Walked Away,2026-11-14,1,57,702,,,10,1,0,1,,vidIQ public
+2026-11-15,Instagram,HC001-S2 Food on a String,2026-11-09,6,60,302,227,25.2,0,1,0,0,,Metricool
+2026-11-15,Instagram,HC001-S1 Hole in His Stomach,2026-11-12,3,49,137,100,16.9,0,1,0,1,,Metricool
+2026-11-15,Instagram,HC001-S3 Walked Away,2026-11-14,1,58,1969,1495,20.7,15,1,0,2,,Metricool
+2026-11-15,Facebook,HC001-S2 Food on a String,2026-11-09,6,60,226,,10,0,,,,,Metricool
+2026-11-15,Facebook,HC001-S1 Hole in His Stomach,2026-11-12,3,49,220,,6,0,,,,,Metricool
+2026-11-15,Facebook,HC001-S3 Walked Away,2026-11-14,1,58,312,271,10,1,,0,,,Business Suite (Metricool missed it)
