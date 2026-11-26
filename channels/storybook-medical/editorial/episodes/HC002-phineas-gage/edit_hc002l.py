@@ -51,6 +51,7 @@ pull = lambda a=1.14, b=1.04, x=0, y=0: {"type": "pull", "from": a, "to": b, "x"
 slide = lambda a=-2, b=2, s=1.12: {"type": "slide", "from": a, "to": b, "scale": s}
 static = {"type": "static"}
 shots, overlays, sfx = [], [], []
+KX = lambda n, old: K(n) if (P / f"assets/images/keyframes16x9/{n}.png").exists() else K(old)   # a new still when it exists, else the old picture
 
 
 def clip_len(name):   # a clip plays at its natural speed and length (review 2026-11-25): the row is cut to its length, never slowed, sped up or frozen
@@ -142,7 +143,15 @@ else:
     shot("r02b", W(2, "glances"), K("row2-glance-v1"), push(1.06, 1.16))
 fx("crowd-murmur", rs(2), -26, dur=1.5)
 if have("spark"):
-    shot("c1", T1, VID(CK["spark"]), static)                              # the spark clip; its own effects are placed once the clip's spark frame is seen
+    # the Omni spark clip (cold-k4, 3.0 s, plays from its first frame, trimmed to the 1.94 s slot): the bar strikes at 0.5 s, the big spark burst is in the clip,
+    # sparks fly to ~2 s. Over it only a small TCK!, a short RGB split, a tiny shake and the clank on the strike.
+    # the spark clip starts on the SAME tip frame as the tamp (Mahdi chose both from cold-b1-tip) after the close-up and the glance: a deliberate return to the same hole
+    shot("c1", T1, VID(CK["spark"]), static, cut="same-camera cut intended")
+    S0 = T1 + 0.5
+    cfx(preset="onomatopoeia", at=S0 + 0.05, dur=0.6, text="TCK!", x=60, y=28, size=120, rot=-9, color="#FFFFFF")
+    cfx(preset="rgb_split", at=S0, dur=0.3, px=7)
+    cfx(preset="screen_shake", at=S0, dur=0.3, strength=5)
+    fx("metal-clank", S0, -12)
 else:
     # Tier A stand-in: a much tighter crop of the tip still (zoom ratio >= 1.5 to the close-up), the spark on the strike
     shot("c1", T1, K("cold-b1-tip-v1"), keys(0.68, 0.49, 2.6, 2.8, T2 - T1))
@@ -151,7 +160,7 @@ else:
     cfx(preset="onomatopoeia", at=T1 + 1.34, dur=0.6, text="TCK!", x=58, y=30, size=120, rot=-9, color="#FFFFFF")
     cfx(preset="rgb_split", at=T1 + 1.32, dur=0.35, px=9)
     cfx(preset="screen_shake", at=T1 + 1.32, dur=0.3, strength=6)
-fx("metal-clank", T1 + 1.3, -12)
+    fx("metal-clank", T1 + 1.3, -12)
 # C2 (Omni 1.2 clip, natural speed): impact frame, comic burst over the blast, BOOM, shake
 shot("c2", T2, VID("cold-c2-1080p30"), static)
 B2 = T2 + 0.30
@@ -202,7 +211,7 @@ shot("r18", rs(18), K("row5b-elbow-v1"), push(1.3, 1.45, x=-3)); fx("cloth-rustl
 shot("r18b", W(18, "spoke", lead=0.1), K("row5-dazed-v1-soot"), push(1.04, 1.12))      # "he spoke": the dazed face (Mahdi, preview v19)
 C19 = clip_len("row19-oxcart-omni-v1-1080p30")
 shot("r19", rs(19), VID("row19-oxcart-omni-v1-1080p30"), static); fx("horse-carriage", rs(19), -24, dur=C19)
-shot("r19d", rs(19) + C19, K("row19-detail"), push(1.0, 1.08))      # the row is longer than its clip: cut to a tight Tier A still of the cart
+shot("r19d", rs(19) + C19, KX("row19-sitting-v2fix", "row19-detail"), push(1.0, 1.08))      # the row is longer than its clip: cut to a tight Tier A still of the cart
 shot("r20", rs(20), K("row20-stairs-v1"), {"type": "tilt", "from": 4, "to": -4}); fx("footsteps-hall", rs(20), -24, dur=3.0)
 shot("r21", rs(21), K("row21-s10-fix"), push(1.02, 1.12)); fx("horse-carriage", rs(21), -26, dur=1.5)
 ov("nameTag", W(21, "edward", lead=0.4), re_(21), text="Dr Edward Williams", sub="first doctor on the scene")
@@ -230,7 +239,12 @@ shot("r33", rs(33), K("row6-textbook-v1"), push(1.0, 1.08), transition="dissolve
 
 # ── 4 · The Myth ──
 shot("r34", rs(34), K("row7-monster-v1"), keys(0.50, 0.50, 1.3, 1.4, re_(34) - rs(34) + 0.7)); fx("riser-drone", rs(34), -26, dur=3.0)
-shot("r35", rs(35), K("row7-monster-v1"), keys(0.56, 0.36, 2.3, 2.45, re_(35) - rs(35) + 0.7))   # the eye
+A35 = (P / "assets/images/keyframes16x9/myth-angry-a-v1.png").exists() and (P / "assets/images/keyframes16x9/myth-angry-b-v1.png").exists()
+if A35:    # two new angry stills (Mahdi 2026-11-25): different in pose, camera angle and background from each other and from the cartoon; A until "liar", then B
+    shot("r35", rs(35), K("myth-angry-a-v1"), push(1.04, 1.12))
+    shot("r35b", W(35, "liar", lead=0.3), K("myth-angry-b-v1"), push(1.04, 1.12))
+else:
+    shot("r35", rs(35), K("row7-monster-v1"), keys(0.56, 0.36, 2.3, 2.45, re_(35) - rs(35) + 0.7))   # the eye
 for k, wd in enumerate(("violent", "drunk", "liar", "drifter")):
     t0 = W(35, wd, lead=0.05)
     ov("stamp", t0, t0 + (1.2 if wd == "drifter" else 0.75), text=wd.upper(), color="oxblood"); fx("stamp-thud", t0 + 0.04, -14)
@@ -272,7 +286,7 @@ fx("gulls-water", rs(47) + 0.9, -27, dur=3.6); fx("rope-creak", rs(47) + 1.3, -2
 shot("r48", rs(48), K("row48-valparaiso-v1"), slide(-2, 2, 1.1)); fx("gulls-water", rs(48), -24, dur=3.7); fx("rope-creak", rs(48) + 0.5, -30, dur=2.0)
 C49 = clip_len("row49-coach-kling-1080p30")
 shot("r49", rs(49), VID("row49-coach-kling-1080p30"), static); fx("horse-carriage", rs(49), -22, dur=5.5)
-shot("r49d", rs(49) + C49, K("row49-detail"), push(1.0, 1.08))      # coach and driver, tight
+shot("r49d", rs(49) + C49, KX("row49-coach-v3", "row49-detail"), push(1.0, 1.08))      # coach and driver, tight
 ov("location", rs(49) + 0.3, rs(49) + 3.8, text="VALPARAÍSO – SANTIAGO")
 shot("r50", rs(50), K("row50-reins-v1"), push(1.04, 1.14)); fx("rope-creak", rs(50), -24, dur=3.5)
 shot("r52", rs(52), K("row52-innyard-v1-flip"), push(1.02, 1.1))

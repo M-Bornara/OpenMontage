@@ -769,7 +769,14 @@ time,project,item,usd,note
 2026-11-25 09:28:21,hc002-l,keyframes:row9-hilltop-v1:gemini-3-pro-image:google-batch,0.0670,
 2026-11-25 09:28:21,hc002-l,keyframes:row43b-shelf-v2:gemini-3-pro-image:google-batch,0.0670,
 2026-11-25 09:28:21,hc002-l,keyframes:title-bg-v1:gemini-3-pro-image:google-batch,0.0670,
-2026-11-25 09:40:00,hc002-l,CORRECTION: fal prices Omni 1.2 per second by resolution (360p 0.0273; 720p 0.0819; 1080p 0.1229). Earlier Omni rows at 0.1400 used the 360p rate; if called at 720p each was about 0.41. Check fal usage page,0.0000,correction note only
+2026-11-25 09:40:00,hc002-l,note:omni-720p-rate,0.0000,"CORRECTION: fal prices Omni 1.2 per second by resolution (360p 0.0273; 720p 0.0819; 1080p 0.1229). Earlier Omni rows at 0.1400 used the 360p rate; if called at 720p each was about 0.41. Check fal usage page. Note only."
 2026-11-25 13:09:00,hc002-l,clip:cold-c3-rod-omni-v1:gemini-omni-1.2-flash-fal-720p,0.2457,
 2026-11-25 13:09:00,hc002-l,clip:cold-c2-blast-omni-v1:gemini-omni-1.2-flash-fal-720p,0.3276,
-2026-11-25 10:20:00,hc002-l,NOTE: the five earlier Omni 1.2 clips (rows 19, 45 x2, 48, 26) may have been billed at 720p (about 0.41 each, not 0.14). Numbers NOT changed until Mahdi confirms the actual charges on fal usage page,0.0000,note only
+2026-11-25 10:20:00,hc002-l,note:omni-earlier-clips,0.0000,"NOTE: the five earlier Omni 1.2 clips (rows 19, 45 x2, 48, 26) may have been billed at 720p (about 0.41 each, not 0.14). Numbers NOT changed until Mahdi confirms the actual charges on fal usage page. Note only."
+2026-11-25 21:43:25,hc002-l,clip:cold-k4-spark-omni-v1:gemini-omni-1.2-flash-fal-720p,0.2457,
+2026-11-25 21:43:25,hc002-l,clip:cold-k1-pour-omni-v1:gemini-omni-1.2-flash-fal-720p,0.2457,
+2026-11-25 21:43:30,hc002-l,clip:cold-k2-tamp-omni-v1:gemini-omni-1.2-flash-fal-720p,0.2457,
+2026-11-25 21:47:51,hc002-l,keyframes:row19-sitting-v2:gemini-3-pro-image:google-batch,0.0670,
+2026-11-25 21:47:51,hc002-l,keyframes:row49-coach-v3:gemini-3-pro-image:google-batch,0.0670,
+2026-11-25 21:47:51,hc002-l,keyframes:myth-angry-a-v1:gemini-3-pro-image:google-batch,0.0670,
+2026-11-25 21:47:51,hc002-l,keyframes:myth-angry-b-v1:gemini-3-pro-image:google-batch,0.0670,

@@ -21,6 +21,7 @@ for raw, dst in (("cold-k1-pour-omni-v1", "cold-k1-pour-1080p30"), ("cold-k2-tam
         subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(V / f"{raw}.mp4"), "-vf", "scale=1920:1080:flags=lanczos,framerate=fps=30,noise=alls=5:allf=t",
                         "-c:v", "libx264", "-crf", "17", "-pix_fmt", "yuv420p", "-an", str(V / f"{dst}.mp4")], check=True)
         print(dst, "(slot filled)")
-for n in ("cold-r1-pour-v1", "cold-b1-tip-v1", "cold-b5-dust-v1", "row5-dazed-v1-soot", "row9-hilltop-v1", "row43b-shelf-v2", "title-bg-v1"):
-    shutil.copy(K / f"{n}.png", K16 / f"{n}.png")
-    print(n)
+for n in ("cold-r1-pour-v1", "cold-b1-tip-v1", "cold-b5-dust-v1", "row5-dazed-v1-soot", "row19-sitting-v2fix", "row49-coach-v3", "myth-angry-a-v1", "myth-angry-b-v1", "row9-hilltop-v1", "row43b-shelf-v2", "title-bg-v1"):
+    if (K / f"{n}.png").exists():
+        shutil.copy(K / f"{n}.png", K16 / f"{n}.png")
+        print(n)

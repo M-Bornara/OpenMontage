@@ -118,12 +118,13 @@ def sheet(frames: list[np.ndarray], c: int, label: str, marks: list[str]) -> np.
     return np.vstack([bar, row])
 
 
-def audit(pid: str, video: Path | None = None, verbose: bool = True) -> dict:
+def audit(pid: str, video: Path | None = None, verbose: bool = True, until: float | None = None, out_name: str = "cut_audit") -> dict:
+    """`until`: audit only the cuts before that many seconds (a short preview of the first seconds); `out_name`: the review folder for the sheets."""
     p = REPO / "projects" / pid
     video = video or p / "renders/preview.mp4"
     ep = json.load(open(p / "episode.json", encoding="utf-8"))
     shots = ep["shots"]
-    cuts = [(round(s["start"] * FPS), s, shots[i - 1]) for i, s in enumerate(shots) if i > 0]
+    cuts = [(round(s["start"] * FPS), s, shots[i - 1]) for i, s in enumerate(shots) if i > 0 and (until is None or s["start"] < until - 0.2)]
     frames = grab(video, [c for c, _, _ in cuts])
     fails, notes, rows, sheets = [], [], [], {}
     try:
@@ -132,7 +133,7 @@ def audit(pid: str, video: Path | None = None, verbose: bool = True) -> dict:
     except Exception as e:                       # noqa: BLE001
         ra = na = None
         notes.append(f"audio lag not measured: {e}")
-    out_dir = p / "review/cut_audit"
+    out_dir = p / "review" / out_name
     out_dir.mkdir(parents=True, exist_ok=True)
     chap = {c["id"]: c for c in json.load(open(p / "artifacts/chapters.json", encoding="utf-8"))}
     for c, s, prev in cuts:

@@ -1078,6 +1078,64 @@ S5("title-bg-v1", "ELS", "wide, from the far side of the cut, a diagonal view", 
    NOBODY)
 
 
+# ── 2026-11-25 (Mahdi, $1.00 for 3 clips + 4 stills): four stills, one take each, lint first, Google batch (2K, half price).
+# Re-rolls of the shots at ~1:42 (Gage sitting up in the ox cart) and ~4:06 (the coach): the v19 pictures there were CROPS of the clips' first frames (soft),
+# so these are new full stills from a different camera. Two new ANGRY Gage stills for ~2:53 (rows 35 and 39: the "monster" myth): different from each other and
+# from the cartoon head in pose, camera angle and background. 1848 face (both eyes open, no scar) from S1's sheet; faces only where shown.
+GAGE_AFTER = ("PHINEAS GAGE, 25, thick DARK hair, clean-shaven, a strong square jaw, BOTH eyes open and steady, NO scar; a clean white cloth held to the left "
+              "side of his head with one hand, no blood visible anywhere on him or the cloth; a dark coat over a white shirt, no hat")
+GAGE_ANGRY = ("PHINEAS GAGE, about 25, thick DARK hair, clean-shaven, a strong square jaw, BOTH eyes open, NO scar, no bandage, no wound; a white shirt and "
+              "dark braces, no hat; a furious face: brows pulled down hard, teeth bared, mouth open shouting")
+S5("row19-sitting-v2", "MS", "low, from the lane beside the cart at wheel height", "35 mm",
+   "PHINEAS GAGE sits upright on a plank seat in the back of a rough wooden ox cart, one hand holding a clean white cloth to the left side of his head, his eyes open and steady, while a farmhand walks beside the cart",
+   "dazed but upright, alive, the quiet ride", "a farm lane near Cavendish, Vermont", "13 September 1848, late afternoon",
+   "golden autumn hay fields, a dirt lane, a low stone wall, low warm light from the left",
+   "on the lane beside the cart, low at wheel height", "along the cart at the man sitting in its back",
+   "a rough wooden ox cart with large spoked wooden wheels on a dirt lane, the rump of an ox and its wooden yoke at the left edge, golden hay fields and a low stone wall behind, low warm light",
+   "no town, no hotel, no hills with houses, no crowd, no children",
+   cast(GAGE_AFTER + ", sitting upright in the back of the cart, his face about a third of the frame height",
+        "a lean farmhand of about forty in a straw hat and a patched shirt, grey stubble, seen in three-quarter profile, walking beside the cart with one hand on its side"),
+   refs=[G1848], roles=R_1848 + "His coat is dark (not on the sheet); the farmhand is NOT from the reference. ",
+   extra="No blood anywhere in the picture. The ox is only a rump and a wooden yoke at the left edge.")
+
+S5("row49-coach-v3", "MS", "behind and above the driver's box, over his shoulder", "35 mm",
+   "PHINEAS GAGE sits on the driver's box of a Concord stagecoach seen from BEHIND and a little above, his gloved hands holding the reins fanned forward over the backs of the horses of the team trotting ahead of him along a dusty mountain road",
+   "steady, in control, going somewhere", "a mountain coach road above the coast near Valparaíso, Chile", "the 1850s, late afternoon",
+   "a dusty pale road along a dry slope with cactus and boulders, hazy coastal hills and a distant strip of sea far ahead, soft warm light",
+   "on the roof of the coach behind the box, looking forward over his shoulder", "forward over the driver and the team along the road",
+   "the dusty road curving ahead along the dry slope, cactus and thorny scrub, the coastal range in hazy layers and a strip of sea far ahead",
+   "no town, no ship, no second coach, no passengers on the roof",
+   cast("PHINEAS GAGE seen ONLY from BEHIND: a low-crowned dark hat, the back of his neck, a scarf and a dark jacket, broad shoulders; his face is NOT visible at all"),
+   refs=["ref:sheet-gage-chile-v3", "proj:refs/concord_coach.jpg"],
+   roles=("Reference 1 is PHINEAS GAGE's 1850s model sheet: take ONLY his hat, scarf, jacket and build; his face is not shown in this picture; do NOT copy its layout, other views or poses. "
+          "Reference 2 is a photograph of an 1852 Concord stagecoach: its SHAPE only (the driver's box, the leather thoroughbraces), painted in our storybook style; never its lettering or the museum around it. "),
+   extra="The team ahead is SIX horses in three pairs, all bay and brown, each clearly separate (count them: 1, 2, 3, 4, 5, 6), seen from behind trotting away; the reins are visibly drawn from his hands to the horses.")
+
+S5("myth-angry-a-v1", "MS", "low, looking up from table height, a three-quarter front view", "35 mm",
+   "PHINEAS GAGE leans over a plank tavern table and slams his fist down on it, shouting, a pewter mug jumping off the table",
+   "rage, the barroom brute of the myth", "a village tavern", "the 1850s",
+   "a low-beamed tavern room, dark wood, one hanging oil lantern, warm amber light",
+   "at table height across the table from him, low", "up at his face and the fist on the table",
+   "a low-beamed tavern room with a plank table, a pewter mug and a plain glass bottle on it, dark wood walls and one hanging lantern, other patrons only as soft dark shapes far behind",
+   "no street, no outdoors, no second face in focus",
+   cast(GAGE_ANGRY + ", leaning forward over the table on his clenched right fist, his left arm out"),
+   refs=[G1848], roles=R_1848,
+   extra="This is the MYTH of a violent man (not a documented event): no blood, no weapon, no other person's face. No lettering on the bottle.")
+
+S5("myth-angry-b-v1", "MLS", "from a wagon bed above head height, looking down, a side view", "50 mm",
+   "PHINEAS GAGE stands upright in a muddy village street, his right arm raised high and a finger jabbed forward, shouting down the street at a thin man who shrinks back",
+   "rage, a quarrel in the street, the myth", "a New England village street", "the 1850s, dusk",
+   "a muddy village street at dusk, white clapboard houses, a hitching rail, a grey-orange sky, a yellow lantern glow",
+   "up on a wagon bed at the side of the street, above head height", "down at him in profile with the street behind",
+   "a muddy village street at dusk, white clapboard houses with one lit window, a hitching rail, a grey-orange sky",
+   "no tavern, no indoors, no coach",
+   cast(GAGE_ANGRY + ", standing straight in profile facing LEFT, right arm raised pointing",
+        "a thin man in a tall black hat seen from BEHIND, shrinking back with both hands up, no face visible"),
+   refs=[G1848], roles=R_1848 + "The thin man is NOT from the reference. ",
+   extra="This is the MYTH of a violent man (not a documented event): no blood, no weapon. The pose is upright with a raised pointing arm, NOT leaning over a table.")
+KEYFRAMES.update({k: B5[k] for k in B5})
+
+
 def main():
     chs = chapters()
     assert [c["id"] for c in chs] == [f"ch{i}" for i in range(9)], [c["id"] for c in chs]
