@@ -25,3 +25,10 @@ for n in ("cold-r1-pour-v1", "cold-b1-tip-v1", "cold-b5-dust-v1", "row5-dazed-v1
     if (K / f"{n}.png").exists():
         shutil.copy(K / f"{n}.png", K16 / f"{n}.png")
         print(n)
+
+# v22 (Mahdi 2026-11-25): the tamp slot (3.0-5.0 s) uses only the CLEAN first 2.0 s of the failed clip (stone chips start at 2.2 s), natural speed, no stretch
+if (V / "cold-k2-tamp-omni-v1.FAILED.mp4").exists() and not (V / "cold-k2-tamp-omni-v1.mp4").exists():
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(V / "cold-k2-tamp-omni-v1.FAILED.mp4"), "-t", "2.0", "-vf",
+                    "scale=1920:1080:flags=lanczos,framerate=fps=30,noise=alls=5:allf=t", "-c:v", "libx264", "-crf", "17", "-pix_fmt", "yuv420p", "-an",
+                    str(V / "cold-k2-tamp-first2s-1080p30.mp4")], check=True)
+    print("cold-k2-tamp-first2s-1080p30 (first 2.0 s of the failed clip; tried in v22, join rejected, NOT in a slot)")

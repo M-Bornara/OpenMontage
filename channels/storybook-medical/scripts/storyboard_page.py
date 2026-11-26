@@ -366,7 +366,7 @@ EPISODES = {
                  "label": "Row 42: before (left) and after the scar paint-out (right), at 6×",
                  "note": "The scar is gone; a small soft notch in the hairline shows only at this zoom."},
             ]},
-        "review_report": [REPO / "projects/hc002-l/review/k_report.json", REPO / "projects/hc002-l/review/v19_report.json", REPO / "projects/hc002-l/review/cold_open_report.json", REPO / "projects/hc002-l/review/fx_report.json", REPO / "projects/hc002-l/review/review_report.json"],
+        "review_report": [REPO / "projects/hc002-l/review/v22_report.json", REPO / "projects/hc002-l/review/k_report.json", REPO / "projects/hc002-l/review/v19_report.json", REPO / "projects/hc002-l/review/cold_open_report.json", REPO / "projects/hc002-l/review/fx_report.json", REPO / "projects/hc002-l/review/review_report.json"],
         "preview_cut": {
             "src": REPO / "projects/hc002-l/renders/preview.mp4",
             "title": "FIRST FULL CUT of the long · 1080p preview, no music (waiting for your OK)",

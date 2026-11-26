@@ -109,25 +109,28 @@ def recolor_blood(src: Path, out: Path, mode: str = "green", mask: Path | None =
 
 
 # ── the HIT shot (Mahdi 2026-11-25): geometry shared by fx_hit.py (the prototype) and the long's edit script ─────────────────────────────────────────────
-HIT_BASE_IN = 0.45                      # the C2 footage (a clip at natural speed) starts 0.45 s in: the blast is already big
+HIT_BASE_IN = 1.0                       # the HIT uses C2 frames from 1.0 s on; the blast shot (c2) shows only 0.15-1.0 s, so no frame is shown twice
 HIT_CROP = (0.25, 0.164, 2.2)           # crop centre (frame fractions) and zoom; the footage is shifted down 14 % of the frame (headroom = the sky_pad layer)
-HIT_HEAD = (41.0, 33.5)                 # head + jaw + neck in the crop (% of the frame)
-# where the head is, by seconds from the shot start (he sinks down and left as the blast throws him; read off a gridded sheet of the footage, +14.5 % for the shift)
-HIT_TRACK = [[tt, x, round(y + 14.5, 1)] for tt, x, y in [[0.0, 42, 18], [0.1, 39, 16], [0.2, 41, 20], [0.3, 40, 18], [0.45, 36, 18], [0.6, 34, 25],
-                                                          [0.75, 34, 28], [0.9, 34, 34], [1.05, 34, 41], [1.2, 37, 44], [1.3, 39, 47]]]
-
-
-# the footage's own top-edge sky colour by seconds from the shot start (median of the top rows of the crop's columns; the smoke darkens it from 0.6 s)
-HIT_SKY = [[0.0, 210, 225, 217], [0.3, 210, 224, 215], [0.6, 205, 222, 212], [0.9, 203, 214, 205], [1.05, 195, 195, 190], [1.2, 168, 150, 135], [1.3, 158, 135, 110]]
+HIT_HEAD = (36.4, 33.0)                 # the hat/head in the crop at the shot start (% of the frame)
+# where the head is, by seconds from the shot start (C2 clip 1.0 s on: he stands with his arms up until ~1.3 s, then sinks into the smoke; read off a sheet of the
+# footage, % of the HIT frame, shift included)
+HIT_TRACK = [[0.0, 36.4, 33.0], [0.1, 34.6, 36.7], [0.2, 34.5, 37.6], [0.3, 33.5, 39.0], [0.4, 35.0, 45.4], [0.5, 35.3, 48.1], [0.6, 34.2, 51.3],
+             [0.7, 38.3, 56.7], [0.8, 39.4, 60.8], [0.9, 39.9, 61.3], [1.0, 38.3, 61.3], [1.1, 39.1, 61.8], [1.2, 39.3, 62.7], [1.3, 40.4, 62.7]]
+# the footage's own top-edge sky colour by seconds from the shot start (median of the top rows of the crop's columns; the smoke darkens it from 0.7 s)
+HIT_SKY = [[0.0, 207, 223, 213], [0.1, 208, 224, 214], [0.2, 208, 224, 213], [0.3, 208, 223, 212], [0.4, 207, 222, 212], [0.5, 206, 221, 210], [0.6, 205, 220, 208],
+           [0.7, 200, 213, 202], [0.8, 180, 164, 153], [0.9, 177, 152, 140], [1.0, 171, 133, 106], [1.1, 168, 128, 99], [1.2, 165, 127, 102], [1.3, 160, 126, 103]]
 
 
 def hit_events(t0: float, palette: str | None, graded_to: float, sprite: str) -> list[dict]:
-    """The comic-kit events of one HIT shot that starts at t0 (absolute seconds): sky headroom, a 3-frame impact frame, the burst + iron sprite (slow
-    window 0.5 s at 40 %), a shake and, when palette is given, a halftone grade for graded_to seconds. The C2 footage under it is its own shot (natural speed)."""
+    """The comic-kit events of one HIT shot that starts at t0 (absolute seconds): sky headroom, a 1-frame impact frame, the iron sprite flying through the head
+    (a head-following ellipse mask hides the bar wherever it overlaps the head; a small spark where it enters and one where it leaves, no wider than the head, with a few
+    orange-ink flecks; the slow window is 0.5 s at 40 %), a shake and, when palette is given, a halftone grade for graded_to seconds. The C2 footage under it is its own
+    shot (natural speed)."""
     ev = [{"preset": "sky_pad", "at": round(t0, 2), "dur": 1.3, "pad": 14, "fade": 16, "colors": HIT_SKY},
-          {"preset": "impact_frame", "at": round(t0, 2), "frames": 3, "x": HIT_HEAD[0], "y": HIT_HEAD[1]},
-          {"preset": "hit_shot", "at": round(t0, 2), "dur": 1.3, "x": HIT_HEAD[0], "y": HIT_HEAD[1], "w": 24, "h": 26, "sprite": sprite, "sprite_len": 700,
-           "from": [35.0, 40.0], "to": [40.0, -30.0], "color": "#FF8A1F", "slow_at": 0.43, "slow_dur": 0.5, "rate": 0.4, "track": HIT_TRACK},
+          {"preset": "impact_frame", "at": round(t0, 2), "frames": 1, "x": HIT_HEAD[0], "y": HIT_HEAD[1]},
+          {"preset": "hit_shot", "at": round(t0, 2), "dur": 1.3, "x": HIT_HEAD[0], "y": HIT_HEAD[1], "w": 4.4, "h": 7.8, "sprite": sprite, "sprite_len": 700,
+           "from": [35.0, 40.0], "to": [40.0, -30.0], "color": "#FF8A1F", "slow_at": 0.43, "slow_dur": 0.5, "rate": 0.4, "track": HIT_TRACK,
+           "mask": [50, 62, 8], "speed": 1750, "pass_tau": 0.45},
           {"preset": "screen_shake", "at": round(t0 + 0.1, 2), "dur": 0.5, "strength": 12}]
     if palette:
         ev.append({"preset": "halftone_flashback", "at": round(t0, 2), "dur": round(graded_to, 2), "palette": palette, "dot": 9})

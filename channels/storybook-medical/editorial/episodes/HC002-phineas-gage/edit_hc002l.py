@@ -96,7 +96,7 @@ def hit_shot(sid, t, palette=None, tail=True):
     """The HIT shot (Mahdi 2026-11-25): the C2 explosion at NATURAL speed (from 0.45 s) under a comic burst that follows and covers the head and a rigid iron
     sprite that rises out of it (sprite + burst slowed to 40 % for 0.5 s), an impact frame, a shake and a whoosh: 1.3 s; with `tail` then 0.2 s of Gage down
     (the callbacks, 1.5 s in all; in the cold open the next shot IS Gage down). Replaces the C3 callbacks (C3 is retired)."""
-    shot(sid, t, VID("cold-c2-1080p30"), HIT_KEYS(), fx_flash=True, **{"in": comic_fx.HIT_BASE_IN})
+    shot(sid, t, VID("cold-c2-1080p30"), HIT_KEYS(), fx_flash=True, **{"in": comic_fx.HIT_BASE_IN})   # C2 from 1.0 s on
     for e in comic_fx.hit_events(t, palette, 1.5 if tail else 1.3, SPRITE):
         cfx(**e)
     for c in comic_fx.hit_sfx(t):
@@ -119,9 +119,14 @@ def cfx(**kw):
 
 CK = {"pour": "cold-k1-pour-1080p30", "tamp": "cold-k2-tamp-1080p30", "glance": "cold-k3-glance-1080p30", "spark": "cold-k4-spark-1080p30"}
 have = lambda k: (P / "assets/video" / f"{CK[k]}.mp4").exists()
-T1 = round(W(3, "spark") - 1.3, 2)          # the strike (1.3 s into the Tier A spark shot) lands on "spark"; the spark CLIP slot is 9.82-11.76
-T2 = round(W(4, "shoots") - 0.30, 2)        # C2: the blast starts 0.30 s into the clip and lands on "shoots"
-T3 = W(4, "top", lead=0.08)                 # the HIT: the iron flies "out the top of his skull"
+# v22 (Mahdi 2026-11-25): the spark clip's burst peak (0.5 s into the clip) lands on "spark" (11.12 s) and the clip ends 0.5 s after the peak (clip 1.0 s); the
+# clip's START is trimmed (in 0.2), never stretched; the glance still holds until then. C2 plays clip 0.15-1.0 s (the blast from 0.30 s: 0.7 s of it, before he
+# falls), then straight to the HIT shot, which uses C2 frames from 1.0 s on (none shown twice). The HIT's iron leaves his head around "through his cheek".
+SPARK_IN, SPARK_PEAK, SPARK_END = 0.2, 0.5, 1.0
+T1 = round(W(3, "spark") - (SPARK_PEAK - SPARK_IN), 2)      # c1 start (clip in=0.2): the burst peak lands on "spark"
+T2 = round(T1 + (SPARK_END - SPARK_IN), 2)                  # C2 starts when the spark clip ends
+C2_IN, C2_END = 0.15, 1.0
+T3 = round(T2 + (C2_END - C2_IN), 2)                        # the HIT: straight after the blast
 T4 = round(T3 + 1.3, 2)                     # C4 (Gage down): the aftermath, until "talking"
 T5 = W(5, "talking")
 # 0-3.0 pour (clip slot) -> 3.0-5.95 tamp (clip slot) -> 5.95-7.2 the bar close-up (always a still: push + glint) -> 7.2-9.82 glance (clip slot) -> 9.82-11.76 spark (clip slot)
@@ -133,9 +138,9 @@ fx("sand-pour", W(1, "powder", lead=0.2), -22, dur=2.5)
 if have("tamp"):
     shot("r01a", 3.0, VID(CK["tamp"]), static)
 else:
-    shot("r01a", 3.0, K("cold-b1-tip-v1"), push(1.0, 1.04))
-shot("r01b", W(1, "bar", lead=0.15), K("cold-b1-tip-v1"), keys(0.45, 0.5, 1.6, 1.68, 1.3))          # the close-up of the bar: a still, push and glint
-cfx(preset="glint", at=round(W(1, "bar", lead=0.15) + 0.15, 2), dur=0.95, x=0, y=30, w=100, h=36, star=[87, 48])
+    shot("r01a", 3.0, K("cold-b1-tip-v1"), push(1.0, 1.05))   # Tier A: v22 tried the clean first 2.0 s of the failed tamp clip here; the join to the close-up jumps (steep bar -> flat bar), so it is back to the still
+shot("r01b", 5.0, K("cold-b1-tip-v1"), keys(0.45, 0.5, 1.6, 1.7, 2.2))          # the close-up of the bar from 5.0 s: a still, push and the glint flare (no light sweep)
+cfx(preset="glint", at=round(W(1, "bar") - 0.52, 2), dur=0.95, x=0, y=30, w=100, h=36, star=[87, 48], sweep=False)     # the flare lands on "bar"
 if have("glance"):
     shot("r02", 7.2, VID(CK["glance"]), static)
 else:
@@ -146,9 +151,9 @@ if have("spark"):
     # the Omni spark clip (cold-k4, 3.0 s, plays from its first frame, trimmed to the 1.94 s slot): the bar strikes at 0.5 s, the big spark burst is in the clip,
     # sparks fly to ~2 s. Over it only a small TCK!, a short RGB split, a tiny shake and the clank on the strike.
     # the spark clip starts on the SAME tip frame as the tamp (Mahdi chose both from cold-b1-tip) after the close-up and the glance: a deliberate return to the same hole
-    shot("c1", T1, VID(CK["spark"]), static, cut="same-camera cut intended")
-    S0 = T1 + 0.5
-    cfx(preset="onomatopoeia", at=S0 + 0.05, dur=0.6, text="TCK!", x=60, y=28, size=120, rot=-9, color="#FFFFFF")
+    shot("c1", T1, VID(CK["spark"]), static, cut="same-camera cut intended", **{"in": SPARK_IN})
+    S0 = T1 + (SPARK_PEAK - SPARK_IN)
+    cfx(preset="onomatopoeia", at=S0 + 0.05, dur=0.45, text="TCK!", x=60, y=28, size=120, rot=-9, color="#FFFFFF")
     cfx(preset="rgb_split", at=S0, dur=0.3, px=7)
     cfx(preset="screen_shake", at=S0, dur=0.3, strength=5)
     fx("metal-clank", S0, -12)
@@ -162,12 +167,12 @@ else:
     cfx(preset="screen_shake", at=T1 + 1.32, dur=0.3, strength=6)
     fx("metal-clank", T1 + 1.3, -12)
 # C2 (Omni 1.2 clip, natural speed): impact frame, comic burst over the blast, BOOM, shake
-shot("c2", T2, VID("cold-c2-1080p30"), static)
-B2 = T2 + 0.30
+shot("c2", T2, VID("cold-c2-1080p30"), static, **{"in": C2_IN})
+B2 = T2 + (0.30 - C2_IN)
 cfx(preset="impact_frame", at=B2, frames=3, x=32, y=24)
-cfx(preset="comic_burst", at=B2 + 0.1, dur=1.3, x=31, y=24, w=34, h=46, color="#FFC43D", rot=-6)
-cfx(preset="onomatopoeia", at=B2 + 0.1, dur=1.3, text="BOOM!", x=36, y=34, size=300, rot=-7, color="#E2352B")
-cfx(preset="screen_shake", at=B2 + 0.2, dur=0.5, strength=10)
+cfx(preset="comic_burst", at=B2 + 0.1, dur=round(T3 - B2 - 0.1, 2), x=31, y=24, w=34, h=46, color="#FFC43D", rot=-6)
+cfx(preset="onomatopoeia", at=B2 + 0.1, dur=round(T3 - B2 - 0.1, 2), text="BOOM!", x=36, y=34, size=300, rot=-7, color="#E2352B")
+cfx(preset="screen_shake", at=B2 + 0.2, dur=round(T3 - B2 - 0.2, 2), strength=10)
 fx("boom-low", B2, -8); fx("stamp-thud", B2 + 0.02, -10)
 hit_shot("hit", T3, tail=False)                                            # C3 is retired: the HIT shot is the rod's flight (then C4, Gage down)
 # C4 (Tier A): the beat-5 still, slow push, dust, ringing ears, wind and running steps
